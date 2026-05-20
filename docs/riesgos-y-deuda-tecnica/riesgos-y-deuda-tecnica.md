@@ -1,0 +1,137 @@
+# Riesgos y deuda tecnica
+
+Inventario de riesgos vivos y deuda conocida. Cada entrada es
+observable o trazable a una iniciativa de gestion. Lo que no se puede
+demostrar, no se lista.
+
+## Riesgos abiertos
+
+### riesgo-divergencia-mocks-vs-contrato-real
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Alto |
+| Probabilidad | Alta |
+| Descripcion | Los mocks de `src/mocks/` pueden divergir del contrato real del backend sin que ningun test lo detecte. Un cambio en la API de Django (anadir campo, cambiar tipo de un enum, renombrar) deja el UI roto en `real` pero verde en `mock`. |
+| Mitigacion actual | Ninguna automatica. Solo revisiones manuales. |
+| Mitigacion propuesta | Contrato OpenAPI compartido + generador de mocks desde el spec. Posible iniciativa futura. |
+| Evidencia | Estructura de mocks en `src/mocks/`, ausencia de tests de contrato en `tests/`. |
+
+### riesgo-bundle-construido-con-API-URL-equivocada
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Alto (sitio caido visible al usuario) |
+| Probabilidad | Media |
+| Descripcion | Como `API_URL` se inyecta en build time, construir con un `.env.production` mal configurado produce un bundle que apunta a un backend incorrecto o inexistente. El error solo aparece al desplegar. |
+| Mitigacion actual | El commit `c9c3465` (rama pendiente) corrigio un bug de resolucion silenciosa. No hay validacion adicional. |
+| Mitigacion propuesta | Smoke test post-build que verifique que el bundle contiene la `API_URL` esperada. |
+| Evidencia | `webpack.config.js`, ver `decisiones-de-arquitectura/` entrada `dec-api-url-resuelta-en-build-time`. |
+
+### riesgo-ausencia-de-ci-cd-automatizado
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Medio |
+| Probabilidad | Alta |
+| Descripcion | El pipeline de despliegue es manual (`git pull`, `npm install`, `npm run build`, `scp dist/`). Cualquier paso puede fallar o ejecutarse en una maquina con estado distinto. |
+| Mitigacion actual | Ninguna. Husky pre-commit cubre solo la maquina del desarrollador. |
+| Mitigacion propuesta | GitHub Actions u otro runner que reproduzca el build en host limpio y publique artefactos versionados. |
+| Evidencia | Ausencia de carpetas `.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`. |
+
+### riesgo-rama-pendiente-no-integrada
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Bajo a medio |
+| Probabilidad | Alta |
+| Descripcion | La rama `claude/resume-ecommerce-project-Dm3ab` tiene 7 commits propios con valor (UC-AUTH-16, listener 401, provisioner Node, check-no-lazy-imports) y un conflicto previsible en `package.json` (script `check:lazy` vs el script `prepare`, y bloque `engines` agregado). Mientras siga sin integrar, el equipo no se beneficia de esos guardrails. |
+| Mitigacion actual | El conflicto es mecanico, resoluble en minutos. |
+| Mitigacion propuesta | Ejecutar la iniciativa `pm/iniciativas/analizar-ramas-pendientes-de-integracion/`. |
+| Evidencia | `git log origin/develop..origin/claude/resume-ecommerce-project-Dm3ab`. Ver iniciativa correspondiente. |
+
+### riesgo-release-candidate-acumulado-en-develop
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Medio |
+| Probabilidad | Alta |
+| Descripcion | `develop` esta 149 commits adelante de `main`, con 86 UCs nuevos implementados y ~37k lineas cambiadas. Cuanto mas tiempo pasa sin promover a `main`, mayor el riesgo de regresion en un solo rollout y mas dificil identificar la causa de un fallo en produccion. |
+| Mitigacion actual | Ninguna. |
+| Mitigacion propuesta | Estrategia de release explicita (semver, changelog, tag) y promocion `develop` -> `main` por lotes. |
+| Evidencia | `git rev-list --count origin/main..origin/develop` = 149. |
+
+### riesgo-sin-cobertura-de-tests-medida
+
+| Campo | Valor |
+|-------|-------|
+| Impacto | Medio |
+| Probabilidad | Media |
+| Descripcion | Hay 123 archivos de test y el comando `npm run test:coverage` existe, pero no se publica un threshold de cobertura ni un reporte historico. Imposible decir si la cobertura crece o decae con cada PR. |
+| Mitigacion actual | `jest --coverage` puede correrse manualmente. |
+| Mitigacion propuesta | Definir cobertura minima en `jest.config.cjs` y exponer el reporte en cada PR. |
+| Evidencia | `jest.config.cjs`, `package.json#scripts.test:coverage`. |
+
+## Deuda tecnica conocida
+
+### deuda-sin-typescript-en-src
+
+`tsconfig` y `@typescript-eslint/*` estan en devDependencies, pero
+`src/` es todo `.jsx` y `.js`. La unica carpeta con `.ts` es
+`src/types/`. Esto crea expectativa sin entrega: hay infraestructura
+de TypeScript que no se usa.
+
+- Decision pendiente: o se elimina la dependencia o se migra `src/` a TypeScript.
+- No es bloqueante; es deuda de coherencia.
+
+### deuda-decorators-experimental
+
+`src/decorators/` tiene 4 archivos sin documentacion. Su uso real en
+el codigo es opaco — requiere busqueda manual para confirmar si se
+importan desde produccion o son legado.
+
+- Tarea: auditar uso, decidir mantener o eliminar.
+
+### deuda-tipos-en-src-types
+
+`src/types/` tiene un solo archivo. O bien es legado de una migracion
+incompleta a TypeScript, o es algo intencionalmente unico. No hay
+documentacion que lo explique.
+
+### deuda-de-allowlist-color-no-hex
+
+PR #4 redujo los `#hex` literales de 525 a 17, todos en allowlist.
+Cada entrada de allowlist tiene justificacion. Tarea continua:
+mantener la allowlist plana o decreciente, no creciente.
+
+- Disparador de revision: cada nuevo `#hex` agregado.
+
+### deuda-de-tareas-sprint-4-sin-trazar
+
+El commit en `main` (`feat(admin): Sprint 4 - Gestion de usuarios admin
+(UC-AUTH-12/13/14/15)`) sugiere un sistema de sprints que no esta
+trazado en este repositorio. No hay carpeta `pm/` previa, no hay
+referencia a iniciativas. Esta documentacion es el primer paso para
+remediar eso.
+
+### deuda-readme-sin-actualizar-tras-cambios
+
+`README.md` del repo lista solo los docs SCSS. No menciona arc42 ni
+`pm/`. Tras crear esta documentacion, hay que decidir si el `README.md`
+raiz se actualiza o si se deja como esta (que toca a la documentacion
+del UI especificamente, no a la documentacion arquitectonica).
+
+## Como agregar una entrada a este documento
+
+Cada entrada se nombra `riesgo-<slug>` o `deuda-<slug>`. Slug
+autoexplicativo. Sin numeracion.
+
+Para riesgos: rellenar los siete campos (Impacto, Probabilidad,
+Descripcion, Mitigacion actual, Mitigacion propuesta, Evidencia, y
+opcionalmente Decision asociada en `decisiones-de-arquitectura/`).
+
+Para deuda: descripcion + decision pendiente + bloqueante o no.
+
+Una entrada se elimina **solo cuando la mitigacion se ejecuta**. Si
+el riesgo simplemente "se asume", se reescribe la entrada para
+declarar que esta aceptado y por que.
