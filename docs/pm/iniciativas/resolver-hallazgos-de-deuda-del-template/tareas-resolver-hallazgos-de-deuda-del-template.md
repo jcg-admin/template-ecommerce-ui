@@ -34,11 +34,7 @@
 | T-012 | Aplicar withLogging + withValidation a thunks de paymentsSlice | H-01 | 4 | hecha | (siguiente commit) |
 | T-013 | Aplicar withValidation a cartSlice.applyVoucher | H-01 | 4 | hecha | (siguiente commit) |
 | T-014 | Aplicar withCaching a catalogSlice.searchProducts | H-01 | 4 | hecha | (siguiente commit) |
-| T-015 | Aplicar ProductShape a ProductCard, VariantSelector y ProductPage | H-02 | 5 | pendiente | |
-| T-016 | Aplicar CartItemShape a CartPage | H-02 | 5 | pendiente | |
-| T-017 | Aplicar OrderShape a OrderDetailPage y OrdersPage | H-02 | 5 | pendiente | |
-| T-018 | Aplicar AddressShape a AddressesPage | H-02 | 5 | pendiente | |
-| T-019 | Aplicar UserShape, VoucherShape y ToastShape a sus componentes | H-02 | 5 | pendiente | |
+| T-015 | Reemplazar PropShapes por tipos de dominio canonicos en TypeScript | H-02 | 5 | pendiente | |
 | T-020 | Crear scripts/verify-build.mjs | H-08 | 6 | pendiente | |
 | T-021 | Anadir npm script verify-build | H-08 | 6 | pendiente | |
 | T-022 | Exponer window.__APP_CONFIG__ via webpack DefinePlugin | H-08 | 6 | pendiente | |
@@ -50,7 +46,7 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 11 |
+| pendiente | 7 |
 | en curso | 0 |
 | hecha | 14 |
 

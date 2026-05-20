@@ -43,7 +43,7 @@ flowchart TD
     F0[Fase 0: Limpieza inventario] --> F1[Fase 1: Documentacion sin codigo]
     F0 --> F2[Fase 2: Preparar TypeScript progresivo]
     F2 --> F3[Fase 3: Migrar modulos compartidos a TS]
-    F3 --> F5[Fase 5: Aplicar PropShapes a componentes]
+    F3 --> F5[Fase 5: Tipos de dominio en TypeScript]
     F0 --> F4[Fase 4: Integrar decorators]
     F0 --> F6deploy[Fase 6: Endurecer build vs API_URL]
     F1 --> F7[Fase 7: Cierre]
@@ -240,62 +240,34 @@ ser huerfanos.
 | Criterio de hecho | `searchProducts` esta envuelto con `withCaching` usando `CACHE_TTL.SHORT` (1 min) y key por query string. Test verifica que una segunda llamada con la misma query devuelve resultado cacheado sin ir al backend. |
 | Costo | 25 min |
 
-## Fase 5: Aplicar PropShapes a componentes consumidores
+## Fase 5: Sustituir PropShapes por tipos de dominio en TypeScript
 
-**Proposito**: cada componente que recibe entidades del dominio
-declara sus prop-types con el shape correspondiente.
+**Proposito**: cerrar H-02 reemplazando el aparato `prop-types` por
+tipos TypeScript canonicos en `src/types/`, y retirar `prop-types`
+y `@types/prop-types` del repositorio.
 
-**Hallazgos cubiertos**: H-02 (aplicacion).
+**Replan**: esta fase se reformulo el 2026-05-21 tras descubrir,
+durante el inicio de la ejecucion original, que (1) la mayoria de
+componentes que el plan asumia no existen (el template usa Redux +
+selectors, no prop-drilling de entidades), y (2) las interfaces
+heredadas en `PropShapes` no reflejan el dominio comun del
+e-commerce. Las cinco tareas T-015 a T-019 originales se sustituyen
+por una sola T-015 reformada. Las entidades faltantes
+(`Address` como entidad reutilizable, `ProductVariant`, `Review`,
+`User` extendido) se delegan a la iniciativa registrada en backlog
+[`completar-dominio-de-ecommerce`](../completar-dominio-de-ecommerce/index.md).
 
-### T-015 — Aplicar ProductShape a ProductCard, VariantSelector y ProductPage
+**Hallazgos cubiertos**: H-02.
 
-| Campo | Valor |
-|-------|-------|
-| Hallazgo | H-02 |
-| Depende de | T-008 |
-| Archivos | `src/components/catalog/ProductCard.jsx`, `src/components/catalog/VariantSelector/VariantSelector.jsx`, `src/pages/catalog/ProductPage.jsx` |
-| Criterio de hecho | Cada componente importa `ProductShape` desde `@types/PropShapes` y declara `Componente.propTypes = { product: ProductShape.isRequired }`. `npm test` pasa. |
-| Costo | 25 min |
-
-### T-016 — Aplicar CartItemShape a CartPage
-
-| Campo | Valor |
-|-------|-------|
-| Hallazgo | H-02 |
-| Depende de | T-008 |
-| Archivos | `src/pages/cart/CartPage.jsx` |
-| Criterio de hecho | El componente que renderiza cada item del carrito declara `propTypes = { item: CartItemShape.isRequired }`. |
-| Costo | 15 min |
-
-### T-017 — Aplicar OrderShape a OrderDetailPage y OrdersPage
+### T-015 — Reemplazar PropShapes por tipos de dominio canonicos
 
 | Campo | Valor |
 |-------|-------|
 | Hallazgo | H-02 |
 | Depende de | T-008 |
-| Archivos | `src/pages/account/OrderDetailPage.jsx`, `src/pages/account/OrdersPage.jsx` |
-| Criterio de hecho | Las paginas declaran propTypes con `OrderShape` para sus props relevantes. |
-| Costo | 15 min |
-
-### T-018 — Aplicar AddressShape a AddressesPage
-
-| Campo | Valor |
-|-------|-------|
-| Hallazgo | H-02 |
-| Depende de | T-008 |
-| Archivos | `src/pages/account/AddressesPage.jsx` |
-| Criterio de hecho | La pagina declara `propTypes = { address: AddressShape }`. |
-| Costo | 10 min |
-
-### T-019 — Aplicar UserShape, VoucherShape y ToastShape a sus componentes
-
-| Campo | Valor |
-|-------|-------|
-| Hallazgo | H-02 |
-| Depende de | T-008 |
-| Archivos | `src/pages/admin/AdminUserDetailPage.jsx`, `src/pages/admin/AdminVouchersPage.jsx`, `src/components/common/Toast/ToastContainer.jsx` |
-| Criterio de hecho | Cada componente importa su shape y lo declara en `propTypes`. |
-| Costo | 20 min |
+| Archivos | `src/types/PropShapes.ts` (eliminar), `src/types/domain.ts` (crear), `package.json`, `package-lock.json`, `src/**` y `tests/**` (limpiar imports residuales si los hay) |
+| Criterio de hecho | (1) Existe `src/types/domain.ts` con los tipos canonicos del dominio comun del e-commerce que el template **ya implementa** (al menos `User`, `Product` con campos reales `base_price`, `price_with_tax`, `category_name`, `is_featured`, `highlighted_name`, `sku`, `CartItem`, `Voucher` con `VoucherType`, `Order`, `Toast` con `ToastKind`, `PaginatedResponse<T>`, `SerializedApiError` re-exportado). (2) Cada tipo lleva JSDoc breve indicando si es completo o parcial respecto al dominio comun (las entidades parciales o ausentes referencian la iniciativa `completar-dominio-de-ecommerce` por slug). (3) `src/types/PropShapes.ts` eliminado. (4) `prop-types` y `@types/prop-types` eliminados de `package.json` y `package-lock.json`. (5) `grep -rE "prop-types\|PropTypes\|UserShape\|ProductShape\|CartItemShape\|VoucherShape\|OrderShape\|AddressShape\|ToastShape\|CategoryShape" src/ tests/` retorna cero matches. (6) `npx tsc --noEmit` exit 0. (7) `npx jest tests/unit src/redux/slices src/utils` pasa todos los tests. |
+| Costo | 60 min |
 
 ## Fase 6: Endurecer build vs API_URL
 
@@ -376,20 +348,22 @@ declara sus prop-types con el shape correspondiente.
 | 2 | T-005, T-006, T-007 | H-03 (preparacion) | 60 min |
 | 3 | T-008, T-009 | H-03, H-02 (preparacion) | 55 min |
 | 4 | T-010 a T-014 | H-01 | 125 min |
-| 5 | T-015 a T-019 | H-02 | 85 min |
+| 5 | T-015 | H-02 | 60 min |
 | 6 | T-020 a T-023 | H-08 | 80 min |
 | 7 | T-024, T-025 | (cierre) | 70 min |
 
-**Total**: 25 tareas atomicas, 7 fases productivas mas 1 fase de
-cierre, costo agregado aproximado **545 minutos** (~9 horas
-efectivas).
+**Total**: 21 tareas atomicas, 7 fases productivas mas 1 fase de
+cierre, costo agregado aproximado **520 minutos** (~8.5 horas
+efectivas). El plan original declaraba 25 tareas; tras el replan
+del 2026-05-21 que sustituyo T-015 a T-019 por una sola T-015
+reformada, el total bajo a 21.
 
 **Tareas atomicas por hallazgo**:
 
 | Hallazgo | Tareas | Estado en esta iniciativa |
 |----------|--------|---------------------------|
 | H-01 | T-010, T-011, T-012, T-013, T-014 (5 tareas) | Cubierto |
-| H-02 | T-008 (compartida con H-03), T-015, T-016, T-017, T-018, T-019 (6 tareas) | Cubierto |
+| H-02 | T-008 (compartida con H-03), T-015 (replanificada) (2 tareas) | Cubierto parcialmente; las entidades faltantes (Address como entidad, ProductVariant, Review, User extendido) se delegan a `completar-dominio-de-ecommerce` |
 | H-03 | T-005, T-006, T-007, T-008 (compartida con H-02), T-009 (5 tareas) | Cubierto |
 | H-04 | T-004 (1 tarea) | Cubierto |
 | H-05 | T-003 (marcado de delegacion) | Delegado a `monitorear-y-reducir-allowlist-hex` |

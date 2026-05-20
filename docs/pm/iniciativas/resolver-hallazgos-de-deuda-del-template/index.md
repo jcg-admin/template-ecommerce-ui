@@ -45,8 +45,8 @@ cuales es "lo dejamos como esta":
 |-----------|-----------|
 | [alcance-resolver-hallazgos-de-deuda-del-template.md](alcance-resolver-hallazgos-de-deuda-del-template.md) | Que cubre la iniciativa, criterio de completitud, fuera de alcance, inventario de hallazgos H-01 a H-20. |
 | [analisis-resolver-hallazgos-de-deuda-del-template.md](analisis-resolver-hallazgos-de-deuda-del-template.md) | Analisis por hallazgo con opciones de resolucion, recomendacion y decision aprobada. |
-| [plan-resolver-hallazgos-de-deuda-del-template.md](plan-resolver-hallazgos-de-deuda-del-template.md) | Plan de ejecucion en 7 fases productivas mas cierre, con 25 tareas atomicas T-NNN, dependencias y diagrama mermaid del DAG. |
-| [tareas-resolver-hallazgos-de-deuda-del-template.md](tareas-resolver-hallazgos-de-deuda-del-template.md) | Lista plana de las 25 tareas con su estado actual (pendiente, en curso, hecha). |
+| [plan-resolver-hallazgos-de-deuda-del-template.md](plan-resolver-hallazgos-de-deuda-del-template.md) | Plan de ejecucion en 7 fases productivas mas cierre, con 21 tareas atomicas T-NNN, dependencias y diagrama mermaid del DAG. |
+| [tareas-resolver-hallazgos-de-deuda-del-template.md](tareas-resolver-hallazgos-de-deuda-del-template.md) | Lista plana de las 21 tareas con su estado actual (pendiente, en curso, hecha). |
 | [progreso-resolver-hallazgos-de-deuda-del-template.md](progreso-resolver-hallazgos-de-deuda-del-template.md) | Log temporal del avance, con una entrada por evento relevante. |
 | decisiones-resolver-hallazgos-de-deuda-del-template.md | Pendiente. Se crea al cierre con las tres secciones obligatorias por PROC-GESTION-001. |
 

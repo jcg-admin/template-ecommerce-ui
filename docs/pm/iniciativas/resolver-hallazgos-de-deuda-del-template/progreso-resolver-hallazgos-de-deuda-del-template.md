@@ -51,6 +51,9 @@
 | 2026-05-21T00:08:00 | Cierre de tarea | T-013 | En `src/redux/slices/cartSlice.js` importados `withValidation` y `CommonValidators`. Envuelto `applyVoucher` con `withValidation(payloadCreator, CommonValidators.validateNonEmpty('voucher code'), { throwOnError: true, fnName: 'cart/applyVoucher' })`. El validator encaja directamente porque `applyVoucher(code)` recibe un string como primer arg (no objeto): no requiere wrapper como `validatePaymentPayload` en T-012. Creado `tests/unit/reducers/cartSlice.applyVoucher.test.js` con 6 tests: 5 rechazos (string vacio, whitespace, undefined, null, numero) que verifican que `apiService.post` no se llama; 1 camino feliz con `WELCOME10`. Tests cartSlice totales: 20/20 pasan (14 previos + 6 nuevos). Cubre H-01 (cuarta tarea). |
 | 2026-05-21T00:18:00 | Cierre de tarea | T-014 | En `src/redux/slices/catalogSlice.js` importados `withCaching` y `CACHE_TTL`. Envuelto `searchProducts` con `withCaching(payloadCreator, CACHE_TTL.SHORT, (params = {}) => JSON.stringify(params || {}))`. La `keyFn` solo serializa el primer argumento (`params`) y descarta el thunkAPI (segundo argumento del payloadCreator de Redux Toolkit) para que cambios irrelevantes del API store no invaliden el cache. Creado `tests/unit/reducers/catalogSlice.searchProducts.test.js` con 4 tests: (1) miss inicial llama `apiService.get`, (2) hit con mismos params no llama API, (3) queries distintas generan claves distintas, (4) cambio de filtros con misma `q` tambien. 4/4 pasan. Cubre H-01 (quinta y ultima tarea). |
 | 2026-05-21T00:18:00 | Fase cerrada | Fase 4 | Cinco tareas cerradas (T-010 a T-014). Resultado: los tres decoradores tienen consumidores reales en el codigo. `withLogging` cubre todas las requests HTTP (apiService) y los tres thunks que tocan credenciales (loginUser, registerUser, changePassword); `withLogging + withValidation` se componen sobre los thunks de pago (initiateMercadoPagoPayment, retryPayment); `withValidation` aislada guarda applyVoucher; `withCaching` con TTL corto cubre searchProducts. **H-01 (`deuda-decorators-experimental`) resuelto en el inventario**: los decoradores dejan de ser deuda inerte. Se anadieron 21 tests nuevos en esta fase: 4 (apiService) + 4 (authSlice.logging) + 7 (payments) + 6 (cart.applyVoucher) + 4 (catalog.searchProducts). Continua fase 5 (aplicar PropShapes en componentes). |
+| 2026-05-21T00:30:00 | Hallazgo durante la ejecucion | (Fase 5 inicio) | Al iniciar Fase 5 con T-015 (aplicar ProductShape a componentes), inspeccion del codebase revelo dos problemas de fondo. (1) La mayoria de componentes que el plan asumia no existen: el template usa Redux + selectors, no prop-drilling de entidades (no hay CartItem/OrderSummary/OrderList/UserCard/UserBadge como componentes que reciban la entidad por prop; ToastContainer existe pero usa `useSelector(selectToasts)` directo). (2) Las interfaces heredadas en `PropShapes` no reflejan el dominio comun del e-commerce ni los campos reales que el template implementa (por ejemplo `ProductShape` tiene `price`, `original_price`, mientras `ProductCard` real consume `base_price`, `price_with_tax`, `category_name`, `is_featured`, `highlighted_name`, `sku`). Las cinco tareas T-015 a T-019 del plan original son inviables tal como estan. |
+| 2026-05-21T00:35:00 | Cambio de alcance | T-015..T-019 | Las cinco tareas originales de Fase 5 se sustituyen por una sola tarea T-015 reformada: "Reemplazar PropShapes por tipos de dominio canonicos en TypeScript". El cambio se decidio tras analizar el dominio comun del e-commerce y consultar al usuario. La razon: extender el dominio (completar `User`, anadir `Address` como entidad, `ProductVariant`, `Review`) excede el scope de una iniciativa de limpieza y es trabajo propio de la iniciativa registrada en backlog como [`completar-dominio-de-ecommerce`](../completar-dominio-de-ecommerce/index.md). Esta iniciativa cierra H-02 con honestidad: tipos canonicos para lo que el template ya implementa, prop-types retirado, y referencia cruzada al backlog. |
+| 2026-05-21T00:40:00 | Replan | T-015 (reformada) | Plan revisado a 21 tareas atomicas. Fase 5 baja de 5 tareas (85 min) a 1 tarea (60 min). Costo agregado total baja de ~545 min a ~520 min. `plan-*.md` actualizado: nueva T-015, nuevo nodo del diagrama mermaid ("Tipos de dominio en TypeScript"), tabla agregada por fase, total de tareas, trazabilidad H-02. `tareas-*.md` actualizado: 5 filas eliminadas, 1 fila nueva, conteo pendientes 11 -> 7. `index.md` de la iniciativa actualizado de "25 tareas" a "21 tareas" en las descripciones de los enlaces a `plan-*.md` y `tareas-*.md`. Las entradas historicas previas del log (del 2026-05-20T21:30 que mencionan "25 tareas") se preservan tal cual como log inmutable; reflejan el estado en ese momento. |
 
 ## Eventos por tipo
 
@@ -60,15 +63,15 @@
 | Analisis | 1 |
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
-| Replan | 2 |
+| Replan | 3 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 9 |
+| Hallazgo durante la ejecucion | 10 |
 | Inicio de tarea | 0 |
 | Cierre de tarea | 14 |
 | Fase cerrada | 5 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
-| Cambio de alcance | 0 |
+| Cambio de alcance | 1 |
 | Cierre de iniciativa | 0 |
 
 ## Tipos de evento validos
