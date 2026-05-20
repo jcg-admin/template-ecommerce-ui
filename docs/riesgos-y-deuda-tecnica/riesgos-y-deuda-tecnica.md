@@ -28,50 +28,6 @@ demostrar, no se lista.
 | Mitigacion propuesta | Smoke test post-build que verifique que el bundle contiene la `API_URL` esperada. |
 | Evidencia | `webpack.config.js`, ver `decisiones-de-arquitectura/` entrada `dec-api-url-resuelta-en-build-time`. |
 
-### riesgo-ausencia-de-ci-cd-automatizado
-
-| Campo | Valor |
-|-------|-------|
-| Impacto | Medio |
-| Probabilidad | Alta |
-| Descripcion | El pipeline de despliegue es manual (`git pull`, `npm install`, `npm run build`, `scp dist/`). Cualquier paso puede fallar o ejecutarse en una maquina con estado distinto. |
-| Mitigacion actual | Ninguna. Husky pre-commit cubre solo la maquina del desarrollador. |
-| Mitigacion propuesta | GitHub Actions u otro runner que reproduzca el build en host limpio y publique artefactos versionados. |
-| Evidencia | Ausencia de carpetas `.github/workflows/`, `.gitlab-ci.yml`, `Jenkinsfile`. |
-
-### riesgo-rama-pendiente-no-integrada
-
-| Campo | Valor |
-|-------|-------|
-| Impacto | Bajo a medio |
-| Probabilidad | Alta |
-| Descripcion | La rama `claude/resume-ecommerce-project-Dm3ab` tiene 7 commits propios con valor (UC-AUTH-16, listener 401, provisioner Node, check-no-lazy-imports) y un conflicto previsible en `package.json` (script `check:lazy` vs el script `prepare`, y bloque `engines` agregado). Mientras siga sin integrar, el equipo no se beneficia de esos guardrails. |
-| Mitigacion actual | El conflicto es mecanico, resoluble en minutos. |
-| Mitigacion propuesta | Ejecutar la iniciativa `pm/iniciativas/analizar-ramas-pendientes-de-integracion/`. |
-| Evidencia | `git log origin/develop..origin/claude/resume-ecommerce-project-Dm3ab`. Ver iniciativa correspondiente. |
-
-### riesgo-release-candidate-acumulado-en-develop
-
-| Campo | Valor |
-|-------|-------|
-| Impacto | Medio |
-| Probabilidad | Alta |
-| Descripcion | `develop` esta 149 commits adelante de `main`, con 86 UCs nuevos implementados y ~37k lineas cambiadas. Cuanto mas tiempo pasa sin promover a `main`, mayor el riesgo de regresion en un solo rollout y mas dificil identificar la causa de un fallo en produccion. |
-| Mitigacion actual | Ninguna. |
-| Mitigacion propuesta | Estrategia de release explicita (semver, changelog, tag) y promocion `develop` -> `main` por lotes. |
-| Evidencia | `git rev-list --count origin/main..origin/develop` = 149. |
-
-### riesgo-sin-cobertura-de-tests-medida
-
-| Campo | Valor |
-|-------|-------|
-| Impacto | Medio |
-| Probabilidad | Media |
-| Descripcion | Hay 123 archivos de test y el comando `npm run test:coverage` existe, pero no se publica un threshold de cobertura ni un reporte historico. Imposible decir si la cobertura crece o decae con cada PR. |
-| Mitigacion actual | `jest --coverage` puede correrse manualmente. |
-| Mitigacion propuesta | Definir cobertura minima en `jest.config.cjs` y exponer el reporte en cada PR. |
-| Evidencia | `jest.config.cjs`, `package.json#scripts.test:coverage`. |
-
 ## Deuda tecnica conocida
 
 ### deuda-sin-typescript-en-src
@@ -105,14 +61,6 @@ Cada entrada de allowlist tiene justificacion. Tarea continua:
 mantener la allowlist plana o decreciente, no creciente.
 
 - Disparador de revision: cada nuevo `#hex` agregado.
-
-### deuda-de-tareas-sprint-4-sin-trazar
-
-El commit en `main` (`feat(admin): Sprint 4 - Gestion de usuarios admin
-(UC-AUTH-12/13/14/15)`) sugiere un sistema de sprints que no esta
-trazado en este repositorio. No hay carpeta `pm/` previa, no hay
-referencia a iniciativas. Esta documentacion es el primer paso para
-remediar eso.
 
 ### deuda-readme-sin-actualizar-tras-cambios
 
