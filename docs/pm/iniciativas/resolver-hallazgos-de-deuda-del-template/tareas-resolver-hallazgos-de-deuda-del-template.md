@@ -23,7 +23,7 @@
 | T-001 | Retirar 5 entradas historicas del inventario de riesgos y deuda | H-06, H-09, H-10, H-11, H-12 | 0 | hecha | (siguiente commit) |
 | T-002 | Retirar 4 historicos y consolidar 4 duplicados de la iniciativa previa | H-13, H-14, H-15, H-16, H-17, H-18, H-19, H-20 | 0 | hecha | (siguiente commit) |
 | T-003 | Marcar H-05 y H-07 como delegados a iniciativa propia | H-05, H-07 | 0 | hecha | (siguiente commit) |
-| T-004 | Anadir seccion de documentacion completa al README raiz | H-04 | 1 | pendiente | |
+| T-004 | Anadir seccion de documentacion completa al README raiz | H-04 | 1 | hecha | (siguiente commit) |
 | T-005 | Crear tsconfig.json con allowJs y strict | H-03 | 2 | pendiente | |
 | T-006 | Verificar babel-jest procesa .ts/.tsx y anadir babel.config.cjs si falta | H-03 | 2 | pendiente | |
 | T-007 | Smoke test compilando un dummy.ts | H-03 | 2 | pendiente | |
@@ -50,9 +50,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 22 |
+| pendiente | 21 |
 | en curso | 0 |
-| hecha | 3 |
+| hecha | 4 |
 
 ## Valores validos del campo Estado
 

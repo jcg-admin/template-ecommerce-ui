@@ -85,11 +85,38 @@ CATALOG_SOURCE=real   # llama al backend
 
 ## Documentación
 
+La documentación del template está organizada en tres planos:
+arquitectura (arc42 adaptado), project management (`pm/`) y guías
+operativas (pipeline SCSS, adopción).
+
+### Punto de entrada para adoptantes
+
+| Documento | Cuándo leerlo |
+|-----------|---------------|
+| [docs/como-adaptar-este-template.md](docs/como-adaptar-este-template.md) | **Primero al hacer fork.** Qué cambiar al adoptar, extensiones que el template está preparado para acomodar (B2B, marketplace, suscripciones, etc.), qué dejar como está, qué el template no resuelve, checklist de verificación. |
+
+### Arquitectura
+
 | Documento | Tema |
 |-----------|------|
-| [docs/scss-pipeline.md](docs/scss-pipeline.md) | Arquitectura de estilos, stylelint, sass-check y pre-push hook |
-| [docs/scss-audit.md](docs/scss-audit.md) | Auditoría de uso real de SCSS: tokens, duplicación, imports |
-| [docs/scss-remediation-plan.md](docs/scss-remediation-plan.md) | Plan de remediación SCSS por fases y tareas atómicas |
+| [docs/README.md](docs/README.md) | Índice arc42 completo (introducción, restricciones, contexto, estrategia, vistas, conceptos, decisiones, riesgos, glosario). |
+| [docs/decisiones-de-arquitectura/](docs/decisiones-de-arquitectura/) | Registro de decisiones técnicas (ADR) con su justificación. |
+| [docs/riesgos-y-deuda-tecnica/](docs/riesgos-y-deuda-tecnica/) | Inventario vivo de riesgos y deuda con estado y mitigación. |
+
+### Project management
+
+| Documento | Tema |
+|-----------|------|
+| [docs/pm/](docs/pm/) | Iniciativas con alcance, análisis, tareas atómicas, progreso y decisiones según PROC-GESTION-001. |
+| [docs/pm/iniciativas/](docs/pm/iniciativas/) | Índice de iniciativas registradas y previstas. |
+
+### Pipeline de estilos
+
+| Documento | Tema |
+|-----------|------|
+| [docs/scss-pipeline.md](docs/scss-pipeline.md) | Arquitectura de estilos, stylelint, sass-check y pre-push hook. |
+| [docs/scss-audit.md](docs/scss-audit.md) | Auditoría de uso real de SCSS: tokens, duplicación, imports. |
+| [docs/scss-remediation-plan.md](docs/scss-remediation-plan.md) | Plan de remediación SCSS por fases y tareas atómicas. |
 
 ## Relación con el backend
 

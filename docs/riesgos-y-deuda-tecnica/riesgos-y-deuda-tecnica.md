@@ -76,10 +76,14 @@ mantener la allowlist plana o decreciente, no creciente.
 
 ### deuda-readme-sin-actualizar-tras-cambios
 
-`README.md` del repo lista solo los docs SCSS. No menciona arc42 ni
-`pm/`. Tras crear esta documentacion, hay que decidir si el `README.md`
-raiz se actualiza o si se deja como esta (que toca a la documentacion
-del UI especificamente, no a la documentacion arquitectonica).
+**Estado: resuelto** en T-004 de la iniciativa
+`resolver-hallazgos-de-deuda-del-template` (2026-05-20). El
+`README.md` raiz ahora tiene una seccion "Documentacion" estructurada
+en cuatro grupos: punto de entrada para adoptantes
+(`como-adaptar-este-template.md`), arquitectura (indice arc42 en
+`docs/README.md`, decisiones, riesgos y deuda), project management
+(`pm/` y su indice de iniciativas), y pipeline de estilos
+(documentos `scss-*`).
 
 ## Como agregar una entrada a este documento
 
