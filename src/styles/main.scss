@@ -1,0 +1,30 @@
+// ═══════════════════════════════════════════════════════════════════════
+// MAIN SCSS — PracticaYoruba E-commerce
+// ═══════════════════════════════════════════════════════════════════════
+//
+// Este archivo SOLO carga estilos verdaderamente globales:
+// selectores de elemento (body, h1-h6, *, :focus-visible, @keyframes).
+//
+// Toda clase reutilizable (.btn, .badge, .page-container, etc.) vive en
+// src/styles/abstracts/ como MIXIN y se usa desde cada .module.scss
+// con @include. No hay clases globales de componentes.
+//
+// Arquitectura CSS Modules:
+//   main.scss (globales mínimos)
+//       └── base/         reset + typography + keyframes
+//       └── accessibility/ :focus-visible
+//
+//   ComponenteName.module.scss (estilos de componente)
+//       └── @use '../../styles/abstracts' as *;
+//       └── .root { @include page-container; }
+//       └── .btn  { @include btn-primary; }
+//
+// ═══════════════════════════════════════════════════════════════════════
+
+// 1. Reset y base de elementos
+@use 'base/reset';
+@use 'base/typography';
+@use 'base/animations';
+
+// 2. Accesibilidad — :focus-visible global (WCAG AA)
+@use 'accessibility/index';
