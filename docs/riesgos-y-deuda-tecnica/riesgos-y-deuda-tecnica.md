@@ -63,9 +63,28 @@ ruido en `src/decorators/` para ser una capa transversal viva.
 
 ### deuda-tipos-en-src-types
 
-`src/types/` tiene un solo archivo. O bien es legado de una migracion
-incompleta a TypeScript, o es algo intencionalmente unico. No hay
-documentacion que lo explique.
+**Estado: resuelto (parcialmente) con delegacion** en la fase 5 de la
+iniciativa `resolver-hallazgos-de-deuda-del-template` (T-015
+replanificada, cerrada el 2026-05-21). El modulo `src/types/` ahora
+contiene `domain.ts` con tipos canonicos del dominio comun del
+e-commerce que el template **ya implementa** (`User`, `Category`,
+`Product`, `CartItem`, `Voucher` con `VoucherType`, `Order` con
+`OrderStatus`, `Toast` con `ToastKind`, `PaginatedResponse<T>`, mas
+re-export del `SerializedApiError`). El modulo previo `PropShapes.ts`
+y el paquete `@types/prop-types` se retiraron del repositorio.
+
+Cada tipo lleva JSDoc explicito indicando si es **completo** o
+**parcial** respecto al dominio comun. Las entidades parciales o
+ausentes (`Address` como entidad reutilizable, `ProductVariant` con
+sku y stock por variante, `Review` agregada, `User` extendido con
+verificacion y roles granulares) se delegan a la iniciativa
+[`completar-dominio-de-ecommerce`](../pm/iniciativas/completar-dominio-de-ecommerce/index.md)
+registrada en backlog.
+
+Resultado: el modulo `src/types/` deja de ser deuda inerte (un
+archivo unico sin consumidores y con un contrato teorico equivocado)
+y pasa a ser la fuente canonica de tipos del dominio para cualquier
+consumidor `.ts`/`.tsx` del template.
 
 ### deuda-de-allowlist-color-no-hex
 
