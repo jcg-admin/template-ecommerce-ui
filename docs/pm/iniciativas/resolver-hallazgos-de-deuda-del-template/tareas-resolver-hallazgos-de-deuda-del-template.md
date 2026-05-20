@@ -25,7 +25,7 @@
 | T-003 | Marcar H-05 y H-07 como delegados a iniciativa propia | H-05, H-07 | 0 | hecha | (siguiente commit) |
 | T-004 | Anadir seccion de documentacion completa al README raiz | H-04 | 1 | hecha | (siguiente commit) |
 | T-005 | Crear tsconfig.json con allowJs y strict | H-03 | 2 | hecha | (siguiente commit) |
-| T-006 | Verificar babel-jest procesa .ts/.tsx y anadir babel.config.cjs si falta | H-03 | 2 | pendiente | |
+| T-006 | Verificar babel-jest procesa .ts/.tsx y anadir babel.config.cjs si falta | H-03 | 2 | hecha | (siguiente commit) |
 | T-007 | Smoke test compilando un dummy.ts | H-03 | 2 | pendiente | |
 | T-008 | Migrar PropShapes.js a PropShapes.ts con interfaces y prop-types exportados | H-03, H-02 | 3 | pendiente | |
 | T-009 | Migrar serializeApiError.js a serializeApiError.ts con tipo del error normalizado | H-03 | 3 | pendiente | |
@@ -50,9 +50,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 20 |
+| pendiente | 19 |
 | en curso | 0 |
-| hecha | 5 |
+| hecha | 6 |
 
 ## Valores validos del campo Estado
 

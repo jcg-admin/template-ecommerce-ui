@@ -31,6 +31,8 @@
 | 2026-05-20T22:15:00 | Cierre de tarea | T-004 | Reemplazada la seccion "Documentacion" del `README.md` raiz. La seccion ahora se estructura en cuatro bloques: punto de entrada para adoptantes (`docs/como-adaptar-este-template.md`), arquitectura (`docs/README.md` con el indice arc42, decisiones, riesgos), project management (`docs/pm/`), pipeline de estilos (docs `scss-*`). `grep -cE 'como-adaptar\|docs/README\|pm/' README.md` retorna 5, criterio del plan satisfecho. La entrada `deuda-readme-sin-actualizar-tras-cambios` en `riesgos-y-deuda-tecnica.md` se marca como **resuelta** con referencia a esta tarea. Cubre H-04. |
 | 2026-05-20T22:15:00 | Fase cerrada | Fase 1 | T-004 es la unica tarea de la fase 1. Cerrada. Continua fase 2 (preparar TypeScript progresivo). |
 | 2026-05-20T22:25:00 | Cierre de tarea | T-005 | Creado `tsconfig.json` con `compilerOptions` que cumple el criterio del plan: `allowJs: true, checkJs: false, strict: true, jsx: "preserve", target: "ES2022", module: "ESNext", moduleResolution: "bundler", esModuleInterop: true, skipLibCheck: true, noEmit: true`. Los `paths` replican los 21 alias declarados en `jsconfig.json` (y a su vez en `jest.config.cjs` y `webpack.config.js`). `include` cubre `.ts`, `.tsx`, `.js`, `.jsx` bajo `src/`. JSON valido confirmado. Cubre H-03 (preparacion). |
+| 2026-05-20T22:30:00 | Hallazgo durante la ejecucion | T-006 | `babel.config.cjs` ya contiene `@babel/preset-typescript` en presets, tanto en el root como en `env.test` (este ultimo es el que usa babel-jest). El paquete esta declarado en `devDependencies` de `package.json`. La preparacion del stack TS para tests estaba ya completa en el template heredado; T-006 se reduce a verificacion funcional, sin cambios al archivo. |
+| 2026-05-20T22:32:00 | Cierre de tarea | T-006 | Ejecutados dos `node -e` que confirman que `@babel/core` con `@babel/preset-typescript` transpila `const x: number = 1` y un componente TSX correctamente. Output validado. `babel.config.cjs` no requiere cambios; queda como estaba. La unica modificacion documental es esta entrada de progreso y el cambio de estado en `tareas-*.md`. |
 
 ## Eventos por tipo
 
@@ -42,9 +44,9 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 1 |
+| Hallazgo durante la ejecucion | 2 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 5 |
+| Cierre de tarea | 6 |
 | Fase cerrada | 2 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
