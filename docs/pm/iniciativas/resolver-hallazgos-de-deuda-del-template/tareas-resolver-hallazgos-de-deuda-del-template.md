@@ -35,7 +35,7 @@
 | T-013 | Aplicar withValidation a cartSlice.applyVoucher | H-01 | 4 | hecha | (siguiente commit) |
 | T-014 | Aplicar withCaching a catalogSlice.searchProducts | H-01 | 4 | hecha | (siguiente commit) |
 | T-015 | Reemplazar PropShapes por tipos de dominio canonicos en TypeScript | H-02 | 5 | hecha | (siguiente commit) |
-| T-020 | Crear scripts/verify-build.mjs | H-08 | 6 | pendiente | |
+| T-020 | Crear scripts/verify-build.mjs | H-08 | 6 | hecha | (siguiente commit) |
 | T-021 | Anadir npm script verify-build | H-08 | 6 | pendiente | |
 | T-022 | Exponer window.__APP_CONFIG__ via webpack DefinePlugin | H-08 | 6 | pendiente | |
 | T-023 | Documentar el procedimiento de verificacion del build | H-08 | 6 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 6 |
+| pendiente | 5 |
 | en curso | 0 |
-| hecha | 15 |
+| hecha | 16 |
 
 ## Valores validos del campo Estado
 
