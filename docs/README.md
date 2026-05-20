@@ -1,4 +1,4 @@
-# Documentacion de e-comerce-ui (e-comerce-ui)
+# Documentacion de e-comerce-ui
 
 Este directorio contiene la documentacion de arquitectura y gestion del
 frontend e-commerce **e-comerce-ui** (React 19 + Redux Toolkit 2 +
@@ -10,6 +10,12 @@ modulo de project management (`pm/`) que sigue el procedimiento interno
 > nombre del cajon que contiene, en castellano, autodescriptivo.
 
 ## Indice
+
+### Punto de entrada para adoptantes
+
+| Documento | Que contiene |
+|-----------|--------------|
+| [como-adaptar-este-template](como-adaptar-este-template.md) | Guia de adopcion: que cambiar al adoptar, tres ejes que pueden requerir extension, que dejar como esta, que el template no resuelve, checklist de verificacion. **Leer primero al hacer fork del template.** |
 
 ### Documentacion de arquitectura
 
