@@ -43,6 +43,9 @@
 | 2026-05-20T23:10:00 | Fase cerrada | Fase 3 | T-008 y T-009 cerradas. Los dos modulos compartidos mas establemente nombrados de `src/` (`PropShapes` y `serializeApiError`) estan ahora en TypeScript con tipos exportados. H-03 (`deuda-sin-typescript-en-src`) **resuelto en el inventario**: el stack TypeScript ya tiene dos consumidores reales del template; futuras migraciones de slices, hooks, paginas o componentes se ejecutan a discrecion en iniciativas propias. H-02 queda preparado para fase 5 (aplicar PropShapes a componentes). Continua fase 4 (integrar decorators). |
 | 2026-05-20T23:18:00 | Hallazgo durante la ejecucion | T-010 | El plan dice "aplicar withLogging a `apiService.fetch`", pero `APIService` no expone un metodo llamado `fetch`: el unico orquestador de requests HTTP es el metodo privado `_request(method, path, options, attempt)` (lineas 53 a 140 de `apiService.js`), llamado desde los publicos `get/post/put/patch/delete`. El `fetch` nativo se usa internamente. Decision: envolver `_request` con `withLogging` en el constructor del singleton, asi todos los requests HTTP de la app pasan por el log. Sin renaming del metodo: sigue siendo `_request` para no romper firma interna. |
 | 2026-05-20T23:25:00 | Cierre de tarea | T-010 | Anadido `import { withLogging } from '@decorators/withLogging'` a `src/services/apiService.js`. En el constructor, despues de inicializar interceptors, se reemplaza `this._request` con `withLogging(this._request.bind(this), 'apiService._request', { logArgs: true, logResult: false, logTime: true })`. Creado `tests/unit/services/apiService.test.js` con 4 tests: (1) loguea inicio con el nombre canonico, (2) loguea duracion al completar, (3) NO loguea resultado por `logResult: false`, (4) sanitiza `password/token/apiKey` del primer argumento objeto. `mockInterceptor` mockeado a nivel modulo para evitar red. 4/4 tests pasan. `tsc --noEmit` exit 0. Otros 120 tests previos (reducers + slices) siguen verdes. Cubre primera tarea de H-01 (integrar decorators). |
+| 2026-05-20T23:35:00 | Hallazgo durante la ejecucion | T-011 | El plan menciona thunks "login, register, deactivateAccount" pero `deactivateAccount` no existe en `src/redux/slices/authSlice.js`. Los thunks reales son `loginUser`, `logoutUser`, `registerUser`, `fetchProfile`, `updateProfile`, `changePassword`, `verifyEmail`, `resendVerificationEmail`. La intencion del plan es proteger thunks que tocan credenciales: los candidatos reales son `loginUser`, `registerUser`, `changePassword`. Se aplica withLogging a esos tres. |
+| 2026-05-20T23:37:00 | Hallazgo durante la ejecucion | T-011 | El sanitizer de `withLogging` busca campos literalmente llamados `password`, `token`, `apiKey` en propiedades de primer nivel del primer arg objeto. Funciona para `loginUser({username, password})` y `registerUser({...,password})`, pero NO para `changePassword({currentPassword, newPassword, confirmPassword})` porque los nombres no son `password` literal. Decision: `loginUser` y `registerUser` con `logArgs: true` (sanitiza); `changePassword` con `logArgs: false` (no loguea ningun arg, mas conservador que loguearlos en claro). Mejorar el sanitizer para detectar variantes queda como follow-up latente. |
+| 2026-05-20T23:42:00 | Cierre de tarea | T-011 | Importado `withLogging` en `src/redux/slices/authSlice.js`. Envueltos los `payloadCreator` de `loginUser`, `registerUser`, `changePassword` con `withLogging`, con configuraciones distintas segun el comportamiento del sanitizer. Creado `tests/unit/reducers/authSlice.logging.test.js` con 4 tests: (1) loginUser sanitiza password en log, (2) registerUser sanitiza password, (3) changePassword no loguea args (logArgs:false), (4) los tres loguean duracion. Tests: 24/24 pasan (20 previos + 4 nuevos). Cubre H-01 (segunda tarea). |
 
 ## Eventos por tipo
 
@@ -54,9 +57,9 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 6 |
+| Hallazgo durante la ejecucion | 8 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 10 |
+| Cierre de tarea | 11 |
 | Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

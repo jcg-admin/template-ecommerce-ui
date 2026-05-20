@@ -12,20 +12,25 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
 import { serializeApiError } from '@utils/serializeApiError';
+import { withLogging } from '@decorators/withLogging';
 
 // ─── Thunks — Sprint 1 ────────────────────────────────────────────────
 
 /** Inicia sesion y obtiene tokens JWT. */
 export const loginUser = createAsyncThunk(
   'auth/login',
-  async ({ username, password }, { rejectWithValue }) => {
-    try {
-      const response = await apiService.post('/api/v1/auth/login/', { username, password });
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message || 'Error al iniciar sesion');
-    }
-  }
+  withLogging(
+    async ({ username, password }, { rejectWithValue }) => {
+      try {
+        const response = await apiService.post('/api/v1/auth/login/', { username, password });
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.message || 'Error al iniciar sesion');
+      }
+    },
+    'auth/loginUser',
+    { logArgs: true, logResult: false, logTime: true },
+  ),
 );
 
 /** Cierra sesion e invalida el refresh token en blacklist. */
@@ -45,14 +50,18 @@ export const logoutUser = createAsyncThunk(
 /** Registra una nueva cuenta de comprador (is_active=False hasta verificar email). */
 export const registerUser = createAsyncThunk(
   'auth/register',
-  async (data, { rejectWithValue }) => {
-    try {
-      const response = await apiService.post('/api/v1/auth/register/', data);
-      return response.data;
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
+  withLogging(
+    async (data, { rejectWithValue }) => {
+      try {
+        const response = await apiService.post('/api/v1/auth/register/', data);
+        return response.data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    },
+    'auth/registerUser',
+    { logArgs: true, logResult: false, logTime: true },
+  ),
 );
 
 // ─── Thunks — Sprint 2 ────────────────────────────────────────────────
@@ -86,18 +95,26 @@ export const updateProfile = createAsyncThunk(
 /** Cambia la contrasena del comprador autenticado (UC-AUTH-08). */
 export const changePassword = createAsyncThunk(
   'auth/changePassword',
-  async ({ currentPassword, newPassword, confirmPassword }, { rejectWithValue }) => {
-    try {
-      const response = await apiService.post('/api/v1/auth/change-password/', {
-        current_password: currentPassword,
-        new_password:     newPassword,
-        confirm_password: confirmPassword,
-      });
-      return response.data;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  }
+  withLogging(
+    async ({ currentPassword, newPassword, confirmPassword }, { rejectWithValue }) => {
+      try {
+        const response = await apiService.post('/api/v1/auth/change-password/', {
+          current_password: currentPassword,
+          new_password:     newPassword,
+          confirm_password: confirmPassword,
+        });
+        return response.data;
+      } catch (err) {
+        return rejectWithValue(serializeApiError(err));
+      }
+    },
+    'auth/changePassword',
+    // logArgs: false porque los campos del payload se llaman
+    // `currentPassword`/`newPassword`, no `password`; el sanitizer
+    // de withLogging busca `password` literal y no los ocultaria.
+    // Mejor no loguear ningun arg que loguearlos en claro.
+    { logArgs: false, logResult: false, logTime: true },
+  ),
 );
 
 /** Verifica el email del usuario con el token recibido (UC-AUTH-10). */
