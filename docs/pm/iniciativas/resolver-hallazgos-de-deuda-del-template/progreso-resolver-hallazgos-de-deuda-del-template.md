@@ -33,6 +33,8 @@
 | 2026-05-20T22:25:00 | Cierre de tarea | T-005 | Creado `tsconfig.json` con `compilerOptions` que cumple el criterio del plan: `allowJs: true, checkJs: false, strict: true, jsx: "preserve", target: "ES2022", module: "ESNext", moduleResolution: "bundler", esModuleInterop: true, skipLibCheck: true, noEmit: true`. Los `paths` replican los 21 alias declarados en `jsconfig.json` (y a su vez en `jest.config.cjs` y `webpack.config.js`). `include` cubre `.ts`, `.tsx`, `.js`, `.jsx` bajo `src/`. JSON valido confirmado. Cubre H-03 (preparacion). |
 | 2026-05-20T22:30:00 | Hallazgo durante la ejecucion | T-006 | `babel.config.cjs` ya contiene `@babel/preset-typescript` en presets, tanto en el root como en `env.test` (este ultimo es el que usa babel-jest). El paquete esta declarado en `devDependencies` de `package.json`. La preparacion del stack TS para tests estaba ya completa en el template heredado; T-006 se reduce a verificacion funcional, sin cambios al archivo. |
 | 2026-05-20T22:32:00 | Cierre de tarea | T-006 | Ejecutados dos `node -e` que confirman que `@babel/core` con `@babel/preset-typescript` transpila `const x: number = 1` y un componente TSX correctamente. Output validado. `babel.config.cjs` no requiere cambios; queda como estaba. La unica modificacion documental es esta entrada de progreso y el cambio de estado en `tareas-*.md`. |
+| 2026-05-20T22:40:00 | Cierre de tarea | T-007 | Creados temporalmente `src/__smoke__/dummy.ts` y `src/__smoke__/dummy.test.ts` con un export tipado (`DummyShape`, `buildDummy`, `sumIds`) y dos test cases. `npx jest src/__smoke__/` paso con `Test Suites: 1 passed, 1 total / Tests: 2 passed, 2 total`, confirmando que jest carga `babel.config.cjs#env.test`, aplica `@babel/preset-typescript`, transpila el `.ts` y ejecuta los tests. Tras la confirmacion, el directorio `src/__smoke__/` se elimino en la misma tarea (criterio del plan). El git tree de este commit por tanto no contiene los archivos del smoke; el registro de su paso vive en esta entrada del log. Cubre H-03 (verificacion del toolchain). |
+| 2026-05-20T22:40:00 | Fase cerrada | Fase 2 | Las tres tareas (T-005, T-006, T-007) cerradas. Resultado: `tsconfig.json` agregado en raiz con allowJs y strict; `babel.config.cjs` verificado ya configurado para .ts/.tsx; smoke test de jest pasando para un .ts dummy. El stack TypeScript instalado por package.json deja de ser deuda inerte: a partir de aqui se puede migrar archivos progresivamente. Continua fase 3 (migrar modulos compartidos a TypeScript: PropShapes y serializeApiError). |
 
 ## Eventos por tipo
 
@@ -46,8 +48,8 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 2 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 6 |
-| Fase cerrada | 2 |
+| Cierre de tarea | 7 |
+| Fase cerrada | 3 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
