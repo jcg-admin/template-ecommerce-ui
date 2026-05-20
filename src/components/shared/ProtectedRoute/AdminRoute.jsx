@@ -1,5 +1,5 @@
 /**
- * AdminRoute — PracticaYoruba
+ * AdminRoute — e-comerce-ui
  * Solo usuarios con is_staff = true. Redirige al inicio si no es admin.
  */
 

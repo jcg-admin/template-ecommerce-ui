@@ -1,5 +1,5 @@
 /**
- * questionsSlice — PracticaYoruba
+ * questionsSlice — e-comerce-ui
  *
  *   UC-QST-01 — Hacer pregunta sobre producto (publico, opt auth)
  *   UC-QST-02 — Ver preguntas y respuestas (publico, hook React Query)

@@ -1,5 +1,5 @@
 /**
- * OrderSuccessPage — PracticaYoruba
+ * OrderSuccessPage — e-comerce-ui
  * Confirmación de orden tras pago exitoso
  *
  * STUB: implementar en el sprint correspondiente.

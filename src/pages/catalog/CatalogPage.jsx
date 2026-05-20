@@ -1,5 +1,5 @@
 /**
- * CatalogPage — PracticaYoruba
+ * CatalogPage — e-comerce-ui
  * UC-CAT-01: listado de productos
  * UC-CAT-03 + UC-SRCH-01: búsqueda FULLTEXT (search redirige a /search)
  * UC-CAT-04: filtrar por categoria via ?category=<slug>
@@ -89,7 +89,7 @@ export default function CatalogPage() {
       {/* Cabecera */}
       <header className={styles.header}>
         <h1 className={styles.title}>
-          {mode === 'search' ? 'Resultados de búsqueda' : 'Catálogo Yoruba'}
+          {mode === 'search' ? 'Resultados de búsqueda' : 'Catálogo'}
         </h1>
         {mode === 'search' && searchQuery && (
           <p className={styles.searchInfo}>

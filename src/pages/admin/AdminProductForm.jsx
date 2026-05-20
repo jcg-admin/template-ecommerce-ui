@@ -1,9 +1,9 @@
 /**
- * AdminProductForm — PracticaYoruba
+ * AdminProductForm — e-comerce-ui
  *
  * Formulario compartido entre UC-CAT-09 (Crear) y UC-CAT-10 (Editar)
- * para productos del catalogo Yoruba. Los nombres pueden contener
- * caracteres con tildes y diacriticos del idioma Yoruba.
+ * para productos del catalogo. Los nombres pueden contener
+ * caracteres con tildes y diacriticos del idiomas con tildes y diacriticos.
  *
  * Props:
  *   initialValues {object}  campos pre-cargados (caso editar)

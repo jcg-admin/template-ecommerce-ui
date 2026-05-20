@@ -1,5 +1,5 @@
 /**
- * Jest Setup — PracticaYoruba UI
+ * Jest Setup — e-comerce-ui UI
  * Configuración global para todos los tests
  */
 

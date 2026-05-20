@@ -1,5 +1,5 @@
 /**
- * CheckoutPage — PracticaYoruba
+ * CheckoutPage — e-comerce-ui
  * UC-ORD-01: Crear orden desde el carrito (checkout).
  *
  * Recoge direccion de envio + opcionalmente shipping_method_id y notas,

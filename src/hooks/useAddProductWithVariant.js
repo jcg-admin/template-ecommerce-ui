@@ -1,7 +1,7 @@
 /**
- * useAddProductWithVariant — PracticaYoruba
+ * useAddProductWithVariant — e-comerce-ui
  * UC-CHT-02: Encapsula la validacion y agregado al carrito para productos
- * Yoruba con variantes:
+ * con variantes:
  *
  *   1. Si el producto tiene variantes pero ninguna esta seleccionada,
  *      devuelve { ok:false, error:'VARIANTE_REQUERIDA' }.

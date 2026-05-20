@@ -1,5 +1,5 @@
 /**
- * AdminProductsPage — PracticaYoruba (D-011)
+ * AdminProductsPage — e-comerce-ui (D-011)
  *
  * Listado administrativo de productos con busqueda, filtro por
  * estado activo/inactivo y paginacion. Cada fila expone los enlaces

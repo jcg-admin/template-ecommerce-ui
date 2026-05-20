@@ -32,7 +32,7 @@ const wrap = (ui, store) => (
 );
 
 const ITEMS = [
-  { variant_id: 10, product_id: 1, product_name: 'Vela Yoruba Roja',
+  { variant_id: 10, product_id: 1, product_name: 'Producto del catálogo Roja',
     sku: 'SKU-001', stock: 12, min_threshold: 5, status: 'NORMAL' },
   { variant_id: 11, product_id: 2, product_name: 'Ifa Tablero',
     sku: 'SKU-002', stock: 2,  min_threshold: 5, status: 'BAJO' },
@@ -62,7 +62,7 @@ describe('AdminInventoryPage (UC-INV-01)', () => {
     expect(await screen.findByText('SKU-001')).toBeInTheDocument();
     expect(screen.getByText('SKU-002')).toBeInTheDocument();
     expect(screen.getByText('SKU-003')).toBeInTheDocument();
-    expect(screen.getByText('Vela Yoruba Roja')).toBeInTheDocument();
+    expect(screen.getByText('Producto del catálogo Roja')).toBeInTheDocument();
   });
 
   it('muestra el panel resumen con conteos por estado', async () => {

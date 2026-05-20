@@ -1,5 +1,5 @@
 /**
- * RegisterPage — PracticaYoruba
+ * RegisterPage — e-comerce-ui
  * Registro de comprador (UC-AUTH-01).
  *
  * Sprint 1 (completado en Sprint 2):
@@ -81,7 +81,7 @@ export default function RegisterPage() {
       <div className={styles.card}>
         <h1 className={styles.title}>Crear cuenta</h1>
         <p className={styles.subtitle}>
-          Crea tu cuenta en PracticaYoruba
+          Crea tu cuenta en e-comerce-ui
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

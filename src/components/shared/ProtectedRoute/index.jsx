@@ -1,5 +1,5 @@
 /**
- * ProtectedRoute — PracticaYoruba
+ * ProtectedRoute — e-comerce-ui
  * Requiere autenticación. Si no está autenticado, redirige a /auth/login
  * preservando la ruta original en el state para redirigir al volver.
  */

@@ -1,5 +1,5 @@
 /**
- * inventorySlice — PracticaYoruba
+ * inventorySlice — e-comerce-ui
  * Gestión de inventario administrativo (UC-INV-01..05)
  *
  *   UC-INV-01 — Ver stock actual de productos (admin)

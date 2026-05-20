@@ -1,5 +1,5 @@
 /**
- * Tests — useAdminProductVariants (Yoruba CHT-03)
+ * Tests — useAdminProductVariants (CHT-03)
  * Patron canonico React Query + apiService mock.
  */
 import { renderHook, waitFor } from '@testing-library/react';

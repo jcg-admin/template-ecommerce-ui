@@ -1,5 +1,5 @@
 /**
- * CartPage — PracticaYoruba
+ * CartPage — e-comerce-ui
  * UC-CART-01..04: visualizacion + edicion del carrito.
  *
  * Componentes internos:

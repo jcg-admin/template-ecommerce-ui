@@ -90,7 +90,7 @@ describe('CatalogPage — listado (UC-CAT-01)', () => {
   it('muestra el título del catálogo', async () => {
     apiService.get.mockResolvedValue(pageOf());
     render(wrap(<CatalogPage />, makeStore()));
-    expect(await screen.findByRole('heading', { name: /Catálogo Yoruba/i }))
+    expect(await screen.findByRole('heading', { name: /Catálogo/i }))
       .toBeInTheDocument();
   });
 

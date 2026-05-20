@@ -1,5 +1,5 @@
 /**
- * VerifyEmailPage — PracticaYoruba
+ * VerifyEmailPage — e-comerce-ui
  * UC-AUTH-10: Verifica el email del usuario tras registro.
  *
  * El correo enviado contiene un enlace a /auth/verify-email?token=...

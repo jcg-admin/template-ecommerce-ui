@@ -55,7 +55,7 @@ function renderHome(products = []) {
 describe('HomePage — landing anonima', () => {
   it('renderiza el hero con el titulo principal', () => {
     renderHome();
-    expect(screen.getByRole('heading', { name: /practica yoruba/i, level: 1 }))
+    expect(screen.getByRole('heading', { name: /e-comerce template/i, level: 1 }))
       .toBeInTheDocument();
   });
 

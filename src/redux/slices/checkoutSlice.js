@@ -1,5 +1,5 @@
 /**
- * Checkout Slice — PracticaYoruba
+ * Checkout Slice — e-comerce-ui
  * Gestiona el flujo de compra: dirección → envío → pago → confirmación
  */
 

@@ -1,5 +1,5 @@
 /**
- * serializeApiError — PracticaYoruba
+ * serializeApiError — e-comerce-ui
  *
  * Convierte cualquier error capturado en un thunk en un objeto plano
  * y serializable apto para `rejectWithValue`. Preserva los campos

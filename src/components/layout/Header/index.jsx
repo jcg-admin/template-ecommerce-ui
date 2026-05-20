@@ -1,5 +1,5 @@
 /**
- * Header — PracticaYoruba
+ * Header — e-comerce-ui
  * Cabecera de la tienda: logo, navegación, búsqueda, carrito y cuenta.
  */
 
@@ -37,7 +37,7 @@ export default function Header() {
       <div className={styles.inner}>
         {/* Logo */}
         <Link to="/" className={styles.brand}>
-          <span className={styles.brandName}>PracticaYoruba</span>
+          <span className={styles.brandName}>e-comerce-ui</span>
         </Link>
 
         {/* Navegación principal */}

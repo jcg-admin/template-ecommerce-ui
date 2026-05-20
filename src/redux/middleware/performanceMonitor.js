@@ -1,5 +1,5 @@
 /**
- * Redux Performance Monitor -- PracticaYoruba
+ * Redux Performance Monitor -- e-comerce-ui
  * Alerta en dev cuando un reducer tarda mas de 16ms (un frame).
  */
 

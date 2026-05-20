@@ -1,5 +1,5 @@
 /**
- * Cart Slice — PracticaYoruba
+ * Cart Slice — e-comerce-ui
  *
  * UC-CART-01: Agregar producto al carrito (anonimo + autenticado).
  *

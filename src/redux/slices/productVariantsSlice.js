@@ -1,6 +1,6 @@
 /**
- * productVariantsSlice — PracticaYoruba
- * Estado de variantes Yoruba (Orisha/saints/configuraciones rituales):
+ * productVariantsSlice — e-comerce-ui
+ * Estado de variantes de producto (Orisha/saints/configuraciones rituales):
  *
  *   UC-CHT-01 — Ver variantes disponibles del producto (Visitante)
  *   UC-CHT-02 — Seleccionar variante al agregar al carrito (Visitante)
@@ -11,7 +11,7 @@
  *   - "Variante" = combinacion concreta (Tamano: Grande, Material: Cobre) con
  *     stock y posible precio diferenciado. Ej.: collar de Yemayá tamaño grande.
  *   - "Tipo de variante" = atributo (Tamano, Presentacion, Material).
- *   - Aunque las identidades del dominio Yoruba (Yemayá, Ogún, Oshún) son
+ *   - Aunque las identidades del dominio del catálogo son
  *     nombres del producto, las variantes describen la presentación física.
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';

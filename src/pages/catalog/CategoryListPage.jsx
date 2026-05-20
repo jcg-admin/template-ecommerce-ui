@@ -71,7 +71,7 @@ export default function CategoryListPage() {
       <header className={styles.header}>
         <h1 className={styles.title}>Categorias</h1>
         <p className={styles.subtitle}>
-          Explora el catalogo Yoruba por familias de productos.
+          Explora el catalogo por familias de productos.
         </p>
       </header>
 

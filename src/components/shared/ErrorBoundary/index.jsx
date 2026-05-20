@@ -1,5 +1,5 @@
 /**
- * ErrorBoundary — PracticaYoruba
+ * ErrorBoundary — e-comerce-ui
  * Captura errores de renderizado y muestra un fallback amigable.
  */
 

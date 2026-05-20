@@ -1,5 +1,5 @@
 /**
- * queryClient — PracticaYoruba
+ * queryClient — e-comerce-ui
  * Configuración de React Query para el e-commerce
  */
 

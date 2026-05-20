@@ -1,5 +1,5 @@
 /**
- * AddressesPage — PracticaYoruba
+ * AddressesPage — e-comerce-ui
  * UC-AUTH-07: Libreta de direcciones de envio del comprador.
  *
  * Lecturas via useAddresses (React Query); mutaciones via addressesSlice

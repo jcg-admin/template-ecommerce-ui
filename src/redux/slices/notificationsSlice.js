@@ -1,5 +1,5 @@
 /**
- * notificationsSlice — PracticaYoruba
+ * notificationsSlice — e-comerce-ui
  * Notificaciones del comprador y administrador.
  *
  *   UC-NOT-06 — Gestionar preferencias de notificacion

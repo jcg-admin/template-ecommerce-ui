@@ -1,5 +1,5 @@
 /**
- * Mock Interceptor — PracticaYoruba
+ * Mock Interceptor — e-comerce-ui
  *
  * Intercepta requests HTTP y retorna datos mock cuando
  * el feature flag correspondiente está en 'mock'.
@@ -96,7 +96,7 @@ class MockInterceptor {
     if (body.username === 'comprador@test.mx' && body.password === 'Test1234!') {
       return this._ok({ user: this._mockUser(1, false) });
     }
-    if (body.username === 'admin@practicayoruba.mx' && body.password === 'Admin1234!') {
+    if (body.username === 'admin@e-comerce.example.com' && body.password === 'Admin1234!') {
       return this._ok({ user: this._mockUser(2, true) });
     }
     return this._error(401, 'Credenciales inválidas.');
@@ -110,7 +110,7 @@ class MockInterceptor {
   }
 
   _mockUser(id, isStaff, email = 'comprador@test.mx') {
-    return { id, email, first_name: 'Demo', last_name: 'Yoruba',
+    return { id, email, first_name: 'Demo', last_name: 'User',
              is_staff: isStaff, date_joined: new Date().toISOString() };
   }
 
@@ -161,7 +161,7 @@ class MockInterceptor {
       id: i + 1, slug: slug || `producto-${i}`,
       name: nombres[i % nombres.length],
       category: { id: (i % 5) + 1, name: 'Collares', slug: 'collares' },
-      description: 'Elaborado a mano con cuentas auténticas siguiendo la tradición Yoruba.',
+      description: 'Producto de ejemplo del catálogo.',
       price: precios[i], original_price: i % 3 === 0 ? precios[i] * 1.3 : null,
       stock: i % 4 === 0 ? 0 : Math.floor(Math.random() * 20) + 1,
       images: [{ id: 1, url: '/mock-images/product.jpg', is_main: true }],
@@ -214,7 +214,7 @@ class MockInterceptor {
   _applyVoucher(body) {
     const code = body?.code?.toUpperCase();
     const vouchers = {
-      'YORUBA10': { code: 'YORUBA10', type: 'PERCENT', value: 10 },
+      'DEMO10': { code: 'DEMO10', type: 'PERCENT', value: 10 },
       'DESCUENTO50': { code: 'DESCUENTO50', type: 'FIXED', value: 50 },
     };
     if (!vouchers[code]) return this._error(400, 'Voucher inválido o expirado.');

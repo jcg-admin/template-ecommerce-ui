@@ -33,7 +33,7 @@ const wrap = (ui, store) => (
 
 const TICKETS = [
   { id: 100, subject: 'Pedido perdido',     status: 'OPEN',    created_at: '2026-05-10T10:00:00Z',
-    customer: { id: 1, email: 'comprador@test.mx', name: 'Demo Yoruba' }, replies_count: 0 },
+    customer: { id: 1, email: 'comprador@test.mx', name: 'Demo User' }, replies_count: 0 },
   { id: 101, subject: 'Producto defectuoso', status: 'REPLIED', created_at: '2026-05-12T10:00:00Z',
     customer: { id: 2, email: 'maria@test.mx',     name: 'Maria Lopez' }, replies_count: 2 },
   { id: 102, subject: 'Caso resuelto',       status: 'CLOSED',  created_at: '2026-05-05T10:00:00Z',

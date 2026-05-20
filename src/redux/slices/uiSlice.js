@@ -1,5 +1,5 @@
 /**
- * UI Slice — PracticaYoruba
+ * UI Slice — e-comerce-ui
  * Estado de la interfaz: sidebar, modals, toasts, darkMode
  */
 

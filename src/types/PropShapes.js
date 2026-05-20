@@ -1,5 +1,5 @@
 /**
- * PropShapes -- PracticaYoruba
+ * PropShapes -- e-comerce-ui
  * Definiciones centralizadas de prop-types para los dominios del e-commerce.
  * Evita duplicar definiciones en cada componente.
  */

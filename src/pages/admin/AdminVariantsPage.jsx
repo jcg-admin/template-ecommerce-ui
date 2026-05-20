@@ -1,6 +1,6 @@
 /**
- * AdminVariantsPage — PracticaYoruba
- * UC-CHT-03: Gestionar variantes de un producto Yoruba (Admin).
+ * AdminVariantsPage — e-comerce-ui
+ * UC-CHT-03: Gestionar variantes de un producto del catálogo (Admin).
  *
  * - Lista las variantes actuales (tipo, opcion, stock, precio, estado).
  * - Permite crear una variante nueva (tipo + opcion + stock inicial).

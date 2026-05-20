@@ -1,5 +1,5 @@
 /**
- * LoginPage — PracticaYoruba
+ * LoginPage — e-comerce-ui
  * Inicio de sesion JWT (UC-AUTH-02).
  *
  * Sprint 1 (completado en Sprint 2):
@@ -59,7 +59,7 @@ export default function LoginPage() {
       <div className={styles.card}>
         <h1 className={styles.title}>Iniciar sesion</h1>
         <p className={styles.subtitle}>
-          Bienvenido a PracticaYoruba
+          Bienvenido a e-comerce-ui
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

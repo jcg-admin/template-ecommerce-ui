@@ -1,5 +1,5 @@
 /**
- * Auth Slice — PracticaYoruba
+ * Auth Slice — e-comerce-ui
  *
  * SEGURIDAD:
  *   - NO se guardan tokens en Redux ni en localStorage.

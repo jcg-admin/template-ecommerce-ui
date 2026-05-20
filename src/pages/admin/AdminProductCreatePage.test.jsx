@@ -100,7 +100,7 @@ describe('AdminProductCreatePage (UC-CAT-09)', () => {
     fireEvent.change(screen.getByLabelText(/Nombre/i),
       { target: { value: 'Collar Oshun dorado' } });
     fireEvent.change(screen.getByLabelText(/Descripcion corta/i),
-      { target: { value: 'Collar artesanal Yoruba' } });
+      { target: { value: 'Collar artesanal' } });
     fireEvent.change(screen.getByLabelText(/Descripcion completa/i),
       { target: { value: 'Collar de cuentas amarillas para Oshun.' } });
     fireEvent.change(screen.getByLabelText(/Precio sin IVA/i),

@@ -1,5 +1,5 @@
 /**
- * AppRouter — PracticaYoruba
+ * AppRouter — e-comerce-ui
  * Rutas de la tienda con lazy loading por página
  */
 
@@ -250,7 +250,7 @@ export default function AppRouter() {
               <Route path="admin/inventory/import"                element={<AdminInventoryImportPage />} />
               <Route path="admin/inventory/:variantId/movements"  element={<AdminInventoryMovementsPage />} />
               <Route path="admin/inventory/:variantId/adjust"     element={<AdminInventoryAdjustPage />} />
-              {/* UC-CHT-03 / UC-CHT-04 — Variantes Yoruba */}
+              {/* UC-CHT-03 / UC-CHT-04 — Variantes de producto */}
               <Route path="admin/products/:productId/variants"    element={<AdminVariantsPage />} />
               <Route path="admin/variants/:variantId/price"       element={<AdminVariantPricePage />} />
               {/* UC-NOT-07 — Compositor de notificacion manual */}

@@ -1,5 +1,5 @@
 /**
- * Admin Slice — PracticaYoruba
+ * Admin Slice — e-comerce-ui
  * Gestión de usuarios desde el panel admin.
  *
  * Sprint 4:

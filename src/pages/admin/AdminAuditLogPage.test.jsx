@@ -17,13 +17,13 @@ import AdminAuditLogPage from './AdminAuditLogPage';
 const ENTRIES = [
   {
     id: 1, timestamp: '2026-05-19T12:00:00Z',
-    actor_id: 42, actor_email: 'admin@yoruba.mx',
+    actor_id: 42, actor_email: 'admin@example.com',
     action: 'product.created', resource_type: 'product', resource_id: 99,
     correlation_id: 'abc-123',
   },
   {
     id: 2, timestamp: '2026-05-19T13:00:00Z',
-    actor_id: 42, actor_email: 'admin@yoruba.mx',
+    actor_id: 42, actor_email: 'admin@example.com',
     action: 'product.deactivated', resource_type: 'product', resource_id: 99,
     correlation_id: 'abc-124',
   },

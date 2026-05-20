@@ -1,5 +1,5 @@
 /**
- * VoucherCreateForm — PracticaYoruba
+ * VoucherCreateForm — e-comerce-ui
  * UC-PRO-01: Crear voucher / cupon (Admin)
  *
  * Modal con formulario para crear un cupon de descuento.

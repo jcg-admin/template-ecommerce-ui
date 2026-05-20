@@ -1,5 +1,5 @@
 /**
- * returnStatus — PracticaYoruba
+ * returnStatus — e-comerce-ui
  * Etiquetas y clases compartidas para los estados de ReturnRequest.
  */
 

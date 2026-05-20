@@ -1,5 +1,5 @@
 /**
- * ProductCard — PracticaYoruba
+ * ProductCard — e-comerce-ui
  * Tarjeta de producto para el catálogo y resultados de búsqueda.
  * Muestra base_price + precio con IVA, disponibilidad y categoría.
  */

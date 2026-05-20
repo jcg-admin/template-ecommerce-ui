@@ -1,5 +1,5 @@
 /**
- * AccountPage — PracticaYoruba
+ * AccountPage — e-comerce-ui
  * Hub de la cuenta del comprador. Muestra resumen y navegacion
  * a las secciones de perfil, direcciones y ordenes.
  *

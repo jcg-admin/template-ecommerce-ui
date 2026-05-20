@@ -1,5 +1,5 @@
 /**
- * Returns mock interceptor — PracticaYoruba (D-007).
+ * Returns mock interceptor — e-comerce-ui (D-007).
  *
  * Cubre UC-RET-01..06 sobre los endpoints:
  *   /api/v1/returns/             (comprador: listar, detalle, crear)
@@ -27,7 +27,7 @@ function buildSeedReturn(id, overrides = {}) {
   return {
     id,
     order_id:    `ORD-${1000 + id}`,
-    customer:    { name: 'Demo Yoruba', email: 'comprador@test.mx' },
+    customer:    { name: 'Demo User', email: 'comprador@test.mx' },
     reason:      'DAMAGED_ON_ARRIVAL',
     description: 'Llegó dañado en la caja externa.',
     status:      'PENDIENTE_REVISION',

@@ -1,5 +1,5 @@
 /**
- * OrdersPage — PracticaYoruba
+ * OrdersPage — e-comerce-ui
  * UC-ORD-03: Listado paginado de ordenes del comprador autenticado.
  *
  * Lectura: useCustomerOrders (React Query).

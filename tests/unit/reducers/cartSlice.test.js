@@ -1,6 +1,6 @@
 /**
  * Tests — cartSlice reducer
- * PracticaYoruba UI
+ * e-comerce-ui UI
  */
 
 import cartReducer, {
@@ -94,7 +94,7 @@ describe('cartSlice', () => {
 
   describe('applyVoucher thunk', () => {
     it('fulfilled — debe aplicar el voucher y recalcular totales', () => {
-      const voucher = { code: 'YORUBA10', type: 'PERCENT', value: 10 };
+      const voucher = { code: 'DEMO10', type: 'PERCENT', value: 10 };
       const cartPayload = {
         items:   [ITEM_A],   // 350 * 2 = 700 subtotal
         voucher,

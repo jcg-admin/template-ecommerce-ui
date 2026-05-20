@@ -22,9 +22,9 @@ import adminUsersReducer from '@redux/slices/adminUsersSlice';
 import AdminUsersPage    from './AdminUsersPage';
 
 const USERS = [
-  { id: 1, username: 'comprador1', email: 'c1@yoruba.mx',
+  { id: 1, username: 'comprador1', email: 'c1@example.com',
     is_staff: false, is_active: true, date_joined: '2026-01-10T00:00:00Z' },
-  { id: 2, username: 'admin1',     email: 'a1@yoruba.mx',
+  { id: 2, username: 'admin1',     email: 'a1@example.com',
     is_staff: true,  is_active: true, date_joined: '2025-12-01T00:00:00Z' },
 ];
 

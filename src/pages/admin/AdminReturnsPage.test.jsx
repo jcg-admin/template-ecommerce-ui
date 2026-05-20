@@ -33,7 +33,7 @@ const wrap = (ui, store) => (
 
 const RETURNS = [
   { id: 200, order_id: 'ORD-A', status: 'PENDIENTE_REVISION', created_at: '2026-05-01T10:00:00Z',
-    customer: { id: 1, email: 'demo@test.mx', name: 'Demo Yoruba' }, reason: 'PRODUCTO_DANADO' },
+    customer: { id: 1, email: 'demo@test.mx', name: 'Demo User' }, reason: 'PRODUCTO_DANADO' },
   { id: 201, order_id: 'ORD-B', status: 'APROBADA',           created_at: '2026-05-02T10:00:00Z',
     customer: { id: 2, email: 'maria@test.mx', name: 'María L.' }, reason: 'NO_COINCIDE_DESCRIPCION' },
   { id: 202, order_id: 'ORD-C', status: 'PENDIENTE_INFORMACION', created_at: '2026-05-03T10:00:00Z',

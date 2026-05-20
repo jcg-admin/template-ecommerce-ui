@@ -1,5 +1,5 @@
 /**
- * AdminUsersPage — PracticaYoruba
+ * AdminUsersPage — e-comerce-ui
  * UC-AUTH-11: Listado de usuarios con búsqueda y paginación
  * UC-AUTH-15: Crear usuario administrador (modal)
  */

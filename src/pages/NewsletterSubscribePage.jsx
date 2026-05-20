@@ -1,5 +1,5 @@
 /**
- * NewsletterSubscribePage — PracticaYoruba
+ * NewsletterSubscribePage — e-comerce-ui
  * UC-NEW-01: suscripcion publica al newsletter (doble optin).
  */
 import { useState } from 'react';
@@ -70,7 +70,7 @@ export default function NewsletterSubscribePage() {
           Suscribete al newsletter
         </h1>
         <p className={styles.description}>
-          Recibe novedades, promociones y contenido del dominio Yoruba.
+          Recibe novedades y promociones del catálogo.
         </p>
       </header>
 

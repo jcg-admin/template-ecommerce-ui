@@ -1,5 +1,5 @@
 /**
- * API Service - PracticaYoruba
+ * API Service - e-comerce-ui
  *
  * Maneja todas las llamadas REST al backend Django con:
  *   - Errores tipados (apiErrors.js)

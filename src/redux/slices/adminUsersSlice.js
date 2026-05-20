@@ -1,5 +1,5 @@
 /**
- * adminUsersSlice — PracticaYoruba
+ * adminUsersSlice — e-comerce-ui
  *
  * Mutaciones admin sobre usuarios. UC-ADM-01.
  *

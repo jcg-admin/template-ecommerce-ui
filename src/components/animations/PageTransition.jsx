@@ -1,5 +1,5 @@
 /**
- * PageTransition -- PracticaYoruba
+ * PageTransition -- e-comerce-ui
  * Envuelve el contenido de una pagina con una animacion fade-in suave.
  * Usado en los layouts para transiciones entre rutas.
  */

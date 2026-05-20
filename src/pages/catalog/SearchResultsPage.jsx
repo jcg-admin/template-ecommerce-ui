@@ -123,7 +123,7 @@ export default function SearchResultsPage() {
                     <Link to="/catalog">Explora el catalogo completo</Link>.
                   </li>
                   <li>
-                    Si buscas un articulo Yoruba especifico,{' '}
+                    Si buscas un articulo del catalogo especifico,{' '}
                     <Link to="/contact">contactanos</Link>.
                   </li>
                 </ul>

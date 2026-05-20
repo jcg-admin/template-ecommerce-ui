@@ -1,5 +1,5 @@
 /**
- * AccountLayout — PracticaYoruba
+ * AccountLayout — e-comerce-ui
  * Layout de la cuenta del comprador: sidebar de navegación + contenido.
  * Usado por: AccountPage, OrdersPage, WishlistPage, ProfilePage.
  */

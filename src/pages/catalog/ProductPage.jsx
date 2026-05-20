@@ -1,5 +1,5 @@
 /**
- * ProductPage — PracticaYoruba
+ * ProductPage — e-comerce-ui
  * UC-CAT-02: Ficha completa de un producto.
  */
 import { useEffect, useState } from 'react';
@@ -190,7 +190,7 @@ export default function ProductPage() {
             )}
           </div>
 
-          {/* UC-CHT-01: selector de variantes Yoruba (Tamano, Presentacion, Material) */}
+          {/* UC-CHT-01: selector de variantes de producto (Tamano, Presentacion, Material) */}
           {hasVariants && <VariantSelector variants={variants} />}
 
           {/* CTA */}

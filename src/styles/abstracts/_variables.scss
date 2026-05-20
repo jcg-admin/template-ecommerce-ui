@@ -1,11 +1,11 @@
 // ═══════════════════════════════════════════════════════════════════════
-// VARIABLES SCSS — PracticaYoruba E-commerce
+// VARIABLES SCSS — e-comerce-ui
 // ═══════════════════════════════════════════════════════════════════════
-// Paleta Yoruba: oros, tierra, coral, crema — estética sagrada y cálida
+// Paleta principal: tonos cálidos (oros, tierra, coral, crema)
 // ═══════════════════════════════════════════════════════════════════════
 
 // ─────────────────────────────────────────────────────────────────────
-// 1. COLORES PRIMARIOS — Paleta Yoruba
+// 1. COLORES PRIMARIOS — Paleta principal
 // ─────────────────────────────────────────────────────────────────────
 
 // Primario: oro sagrado
@@ -20,7 +20,7 @@ $secondary-color:   #3D1F0D;    // Caoba oscuro — texto principal, headers
 $secondary-light:   #6B3A2A;    // Caoba medio — sidebar, nav
 $secondary-dark:    #1A0C05;    // Casi negro caoba
 
-// Acento: coral yoruba
+// Acento: coral cálido
 $accent-color:      #CC4A1B;    // Coral-rojo — badges, alertas, urgencia
 $accent-light:      #E8704A;    // Coral claro — hover
 $accent-dark:       #A33514;    // Coral oscuro
@@ -45,7 +45,7 @@ $text-inverse:      #FAFAF7;    // Crema — texto sobre fondos oscuros
 $text-link:         $primary-color;
 $text-link-hover:   $primary-dark;
 
-// Escala de grises neutrales — paralela a la paleta cálida Yoruba
+// Escala de grises neutrales — paralela a la paleta principal
 // para los componentes que necesitan un gris frío (admin, tablas,
 // indicadores de estado). Frecuencia y uso documentados en
 // docs/scss-audit.md.
@@ -334,7 +334,7 @@ $badge-font-size:     $font-size-xs;
 $badge-font-weight:   $font-weight-semibold;
 
 // ═══════════════════════════════════════════════════════════════════════
-// Fin variables — PracticaYoruba
+// Fin variables — e-comerce-ui
 // ═══════════════════════════════════════════════════════════════════════
 
 // ─────────────────────────────────────────────────────────────────────

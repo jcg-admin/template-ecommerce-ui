@@ -1,5 +1,5 @@
 /**
- * ProductQuestionsListPage — PracticaYoruba
+ * ProductQuestionsListPage — e-comerce-ui
  * UC-QST-02: lista publica de preguntas con respuesta aprobada.
  */
 import { useParams, Link } from 'react-router-dom';

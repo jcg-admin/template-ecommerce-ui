@@ -1,5 +1,5 @@
 /**
- * AdminInventoryImportPage — PracticaYoruba
+ * AdminInventoryImportPage — e-comerce-ui
  * UC-INV-05: Importar productos desde CSV.
  */
 import { useEffect, useState } from 'react';

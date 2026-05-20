@@ -1,5 +1,5 @@
 /**
- * NotificationPreferencesPage — PracticaYoruba
+ * NotificationPreferencesPage — e-comerce-ui
  * UC-NOT-06: Gestionar preferencias de notificacion por email.
  *
  * Lectura inicial via React Query (`useNotificationPreferences`). La

@@ -1,5 +1,5 @@
 /**
- * productsSlice — PracticaYoruba
+ * productsSlice — e-comerce-ui
  *
  * Mutaciones administrativas sobre el catalogo de productos.
  *

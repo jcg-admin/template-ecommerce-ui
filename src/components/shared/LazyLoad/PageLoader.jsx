@@ -1,5 +1,5 @@
 /**
- * PageLoader — PracticaYoruba
+ * PageLoader — e-comerce-ui
  * Loader fullscreen para Suspense y rutas protegidas en carga.
  */
 

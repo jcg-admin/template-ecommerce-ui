@@ -1,5 +1,5 @@
 /**
- * Redux Store — PracticaYoruba
+ * Redux Store — e-comerce-ui
  * Estado centralizado del e-commerce
  *
  * Slices:

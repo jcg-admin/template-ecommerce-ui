@@ -12,7 +12,7 @@ import ProfilePage from '../../../src/pages/account/ProfilePage';
 
 const MOCK_USER = {
   id: 1, username: 'demouser', email: 'demo@test.mx',
-  first_name: 'Demo', last_name: 'Yoruba', phone: '5551234567',
+  first_name: 'Demo', last_name: 'User', phone: '5551234567',
   avatar_url: null, profile_completeness: 60,
   pending_fields: ['avatar', 'addresses'],
 };

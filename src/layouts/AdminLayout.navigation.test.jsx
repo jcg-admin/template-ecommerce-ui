@@ -33,7 +33,7 @@ function buildStore() {
     preloadedState: {
       auth: {
         isAuthenticated: true,
-        user: { id: 1, email: 'admin@yoruba.mx', first_name: 'Ada', last_name: 'L', is_staff: true },
+        user: { id: 1, email: 'admin@example.com', first_name: 'Ada', last_name: 'L', is_staff: true },
         isLoading: false,
         error: null,
       },

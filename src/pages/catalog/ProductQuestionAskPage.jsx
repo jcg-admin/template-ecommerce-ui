@@ -1,5 +1,5 @@
 /**
- * ProductQuestionAskPage — PracticaYoruba
+ * ProductQuestionAskPage — e-comerce-ui
  * UC-QST-01: el visitante hace una pregunta sobre un producto.
  */
 import { useState } from 'react';

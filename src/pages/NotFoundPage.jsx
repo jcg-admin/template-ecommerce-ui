@@ -1,5 +1,5 @@
 /**
- * NotFoundPage — PracticaYoruba
+ * NotFoundPage — e-comerce-ui
  * Página 404 — ruta no encontrada
  *
  * STUB: implementar en el sprint correspondiente.

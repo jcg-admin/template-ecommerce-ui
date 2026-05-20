@@ -1,5 +1,5 @@
 /**
- * ReturnCreatePage — PracticaYoruba
+ * ReturnCreatePage — e-comerce-ui
  * UC-RET-01: Solicitar devolucion (Comprador)
  */
 import { useState } from 'react';

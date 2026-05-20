@@ -1,5 +1,5 @@
 /**
- * ContactPage — PracticaYoruba
+ * ContactPage — e-comerce-ui
  * UC-COM-01: formulario publico de contacto.
  */
 import { useState } from 'react';

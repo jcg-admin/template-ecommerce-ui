@@ -1,5 +1,5 @@
 /**
- * ordersSlice — PracticaYoruba
+ * ordersSlice — e-comerce-ui
  *
  * Mutaciones del dominio Orders:
  *   UC-ORD-01 — Checkout (crear orden desde carrito)

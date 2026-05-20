@@ -1,5 +1,5 @@
 /**
- * useForm -- PracticaYoruba
+ * useForm -- e-comerce-ui
  * Manejo de formularios con validacion.
  * Usado en: LoginPage, RegisterPage, CheckoutPage (address step),
  *           ProfilePage.

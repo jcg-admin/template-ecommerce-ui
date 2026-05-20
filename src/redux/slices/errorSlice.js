@@ -1,5 +1,5 @@
 /**
- * Error Slice — PracticaYoruba
+ * Error Slice — e-comerce-ui
  *
  * Manejo centralizado de errores de la aplicación.
  * Usado por errorHandlingMiddleware para capturar automáticamente

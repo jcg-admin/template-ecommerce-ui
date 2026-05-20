@@ -1,7 +1,7 @@
 /**
- * VariantSelector — PracticaYoruba
+ * VariantSelector — e-comerce-ui
  * UC-CHT-01: Selector visual de variantes (Tamano/Presentacion/Material) del
- * producto Yoruba. Muestra nombre, precio y disponibilidad. Marca la variante
+ * producto del catálogo. Muestra nombre, precio y disponibilidad. Marca la variante
  * seleccionada via aria-pressed y deshabilita las que no tienen stock.
  *
  * El estado de seleccion vive en productVariantsSlice para que UC-CHT-02

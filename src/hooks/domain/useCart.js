@@ -1,5 +1,5 @@
 /**
- * useCart — PracticaYoruba
+ * useCart — e-comerce-ui
  * Hook del carrito de compras.
  */
 

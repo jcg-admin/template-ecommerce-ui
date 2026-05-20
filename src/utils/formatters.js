@@ -1,5 +1,5 @@
 /**
- * Formatters — PracticaYoruba
+ * Formatters — e-comerce-ui
  * Funciones utilitarias de formateo para el e-commerce
  */
 

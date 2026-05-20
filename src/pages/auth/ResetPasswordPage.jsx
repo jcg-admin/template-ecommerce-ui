@@ -1,5 +1,5 @@
 /**
- * ResetPasswordPage — PracticaYoruba
+ * ResetPasswordPage — e-comerce-ui
  * Restablecer contrasena con token del email (UC-AUTH-09 Fase 2).
  */
 

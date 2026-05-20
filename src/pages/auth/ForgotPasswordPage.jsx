@@ -1,5 +1,5 @@
 /**
- * ForgotPasswordPage — PracticaYoruba
+ * ForgotPasswordPage — e-comerce-ui
  * Solicitar recuperacion de contrasena (UC-AUTH-09 Fase 1).
  */
 

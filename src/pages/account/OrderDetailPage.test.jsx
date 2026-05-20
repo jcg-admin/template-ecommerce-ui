@@ -43,7 +43,7 @@ const ORDER = {
   created_at: '2026-05-10T10:00:00Z',
   shipping_method_name: 'Estandar',
   items: [
-    { id: 11, product_name: 'Camisa Yoruba', variant_label: 'M / Rojo',
+    { id: 11, product_name: 'Camisa', variant_label: 'M / Rojo',
       sku: 'YOR-001', unit_price: '500.00', quantity: 2, subtotal: '1000.00' },
   ],
   value: {
@@ -71,7 +71,7 @@ describe('OrderDetailPage (UC-ORD-02 detalle)', () => {
   it('renderiza items, totales y direccion', async () => {
     apiService.get.mockResolvedValue({ data: ORDER });
     render(wrap(<OrderDetailPage />));
-    expect(await screen.findByText(/Camisa Yoruba/)).toBeInTheDocument();
+    expect(await screen.findByText(/Camisa/)).toBeInTheDocument();
     expect(screen.getByText(/Juana Perez/)).toBeInTheDocument();
     expect(screen.getByText(/Av\. Reforma 123/)).toBeInTheDocument();
   });

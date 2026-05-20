@@ -1,5 +1,5 @@
 /**
- * HomePage — PracticaYoruba
+ * HomePage — e-comerce-ui
  * Landing publica de la tienda (UC-CAT-01 entrada).
  *
  * Estructura:
@@ -40,7 +40,7 @@ export default function HomePage() {
       <section className={styles.hero} aria-labelledby="hero-title">
         <div className={styles.heroInner}>
           <h1 id="hero-title" className={styles.heroTitle}>
-            Practica Yoruba
+            E-comerce Template
           </h1>
           <p className={styles.heroSubtitle}>
             Articulos religiosos y ceremoniales hechos con tradicion.

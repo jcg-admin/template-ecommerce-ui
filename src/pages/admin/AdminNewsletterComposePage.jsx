@@ -1,5 +1,5 @@
 /**
- * AdminNewsletterComposePage — PracticaYoruba
+ * AdminNewsletterComposePage — e-comerce-ui
  * UC-NEW-04: el admin compone y envia (o programa) una campana.
  */
 import { useState } from 'react';

@@ -1,5 +1,5 @@
 /**
- * Mock Registry — PracticaYoruba
+ * Mock Registry — e-comerce-ui
  *
  * Registro central de todos los mocks por dominio.
  * Cada dominio tiene su loader y su validador de esquema.
@@ -21,7 +21,7 @@ const MOCKS = {
   auth: {
     data: {
       user: { id: 1, email: 'comprador@test.mx', first_name: 'Demo',
-              last_name: 'Yoruba', is_staff: false }
+              last_name: 'User', is_staff: false }
     },
     validate: (d) => d && d.user,
     description: 'Datos de sesión del comprador mock',
@@ -81,7 +81,7 @@ const MOCKS = {
       username: 'comprador_demo',
       email: 'comprador@test.mx',
       first_name: 'Demo',
-      last_name: 'Yoruba',
+      last_name: 'User',
       phone: '5551234567',
       avatar_url: null,
       date_joined: '2026-01-15T08:00:00Z',
@@ -97,7 +97,7 @@ const MOCKS = {
       {
         id: 1,
         alias: 'Casa',
-        recipient_name: 'Demo Yoruba',
+        recipient_name: 'Demo User',
         street: 'Insurgentes Sur 1234 Int 5',
         city: 'Ciudad de Mexico',
         state: 'CDMX',

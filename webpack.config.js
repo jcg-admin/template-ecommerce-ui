@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// Feature flags PracticaYoruba — controlan si el backend es real o mock
+// Feature flags e-comerce-ui — controlan si el backend es real o mock
 const defaultFlags = {
   CATALOG_SOURCE: 'mock',
   AUTH_SOURCE: 'mock',
@@ -81,7 +81,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
-        // Aliases PracticaYoruba-UI — sincronizar con jest.config.cjs moduleNameMapper
+        // Aliases e-comerce-ui-UI — sincronizar con jest.config.cjs moduleNameMapper
         '@app':        path.resolve(__dirname, 'src/app'),
         '@modules':    path.resolve(__dirname, 'src/modules'),
         '@components': path.resolve(__dirname, 'src/components'),

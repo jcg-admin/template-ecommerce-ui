@@ -110,20 +110,20 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     apiService.post.mockResolvedValue({
       data: {
         ...CART_PAYLOAD,
-        voucher: { code: 'YORUBA10', type: 'PERCENT', value: 10 },
+        voucher: { code: 'DEMO10', type: 'PERCENT', value: 10 },
       },
     });
     render(wrap(<CartPage />, makeStore()));
 
     await screen.findByText(/Collar Yemaya/);
     fireEvent.change(screen.getByLabelText(/C[oó]digo de cup[oó]n/i),
-      { target: { value: 'YORUBA10' } });
+      { target: { value: 'DEMO10' } });
     fireEvent.click(screen.getByRole('button', { name: /Aplicar/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/cart/voucher/',
-        { code: 'YORUBA10' },
+        { code: 'DEMO10' },
       );
     });
   });

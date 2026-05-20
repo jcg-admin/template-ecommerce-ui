@@ -22,7 +22,7 @@ import AdminProductDiscountsPage from './AdminProductDiscountsPage';
 
 const DISCOUNTS = [
   {
-    id: 1, product_id: 10, product_name: 'Camiseta Yoruba',
+    id: 1, product_id: 10, product_name: 'Camiseta del catálogo',
     discount_pct: 15.0, valid_from: '2026-01-01', valid_until: '2026-12-31',
     status: 'CURRENT', is_active: true,
     original_price: 100, discounted_price: 85,
@@ -71,7 +71,7 @@ describe('AdminProductDiscountsPage — listado (UC-DASH-04)', () => {
   it('renderiza la tabla con los descuentos clasificados', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    expect(await screen.findByText('Camiseta Yoruba')).toBeInTheDocument();
+    expect(await screen.findByText('Camiseta del catálogo')).toBeInTheDocument();
     expect(screen.getByText('Libro de gramatica')).toBeInTheDocument();
     expect(screen.getByText('Curso online')).toBeInTheDocument();
   });
@@ -79,7 +79,7 @@ describe('AdminProductDiscountsPage — listado (UC-DASH-04)', () => {
   it('muestra los porcentajes y precios con descuento', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
     expect(screen.getByText(/15(\.0+)?%/)).toBeInTheDocument();
     expect(screen.getByText(/85/)).toBeInTheDocument();
   });
@@ -103,7 +103,7 @@ describe('AdminProductDiscountsPage — listado (UC-DASH-04)', () => {
   it('permite filtrar por estado de vigencia', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     const select = screen.getByLabelText(/Estado/i);
     fireEvent.change(select, { target: { value: 'CURRENT' } });
@@ -131,9 +131,9 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
   it('muestra un boton de desactivar por cada descuento', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
     expect(screen.getByRole('button', {
-      name: /Desactivar descuento Camiseta Yoruba/i,
+      name: /Desactivar descuento Camiseta del catálogo/i,
     })).toBeInTheDocument();
   });
 
@@ -146,10 +146,10 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
-      name: /Desactivar descuento Camiseta Yoruba/i,
+      name: /Desactivar descuento Camiseta del catálogo/i,
     }));
 
     await waitFor(() => {
@@ -166,10 +166,10 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
 
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
-      name: /Desactivar descuento Camiseta Yoruba/i,
+      name: /Desactivar descuento Camiseta del catálogo/i,
     }));
     expect(apiService.post).not.toHaveBeenCalled();
 
@@ -187,10 +187,10 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
     const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
-      name: /Desactivar descuento Camiseta Yoruba/i,
+      name: /Desactivar descuento Camiseta del catálogo/i,
     }));
 
     expect(
@@ -205,7 +205,7 @@ describe('AdminProductDiscountsPage — crear (UC-DASH-01)', () => {
   it('abre el modal al pulsar Nuevo descuento', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', { name: /Nuevo descuento/i }));
     expect(
@@ -218,19 +218,19 @@ describe('AdminProductDiscountsPage — editar (UC-DASH-02)', () => {
   it('muestra un boton de editar por cada descuento', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
     expect(screen.getByRole('button', {
-      name: /Editar descuento Camiseta Yoruba/i,
+      name: /Editar descuento Camiseta del catálogo/i,
     })).toBeInTheDocument();
   });
 
   it('abre el modal de edicion al pulsar Editar', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
-    await screen.findByText('Camiseta Yoruba');
+    await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
-      name: /Editar descuento Camiseta Yoruba/i,
+      name: /Editar descuento Camiseta del catálogo/i,
     }));
 
     expect(

@@ -1,5 +1,5 @@
 /**
- * paymentsSlice — PracticaYoruba
+ * paymentsSlice — e-comerce-ui
  *
  * Pagos: thunks para mutaciones del dominio payments.
  *

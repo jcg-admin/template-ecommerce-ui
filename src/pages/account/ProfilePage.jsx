@@ -1,5 +1,5 @@
 /**
- * ProfilePage — PracticaYoruba
+ * ProfilePage — e-comerce-ui
  * Ver y editar el perfil del comprador (UC-AUTH-05 y UC-AUTH-06).
  *
  * Sprint 2:

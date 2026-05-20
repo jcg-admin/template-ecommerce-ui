@@ -1,5 +1,5 @@
 /**
- * AdminNotificationComposePage — PracticaYoruba
+ * AdminNotificationComposePage — e-comerce-ui
  * UC-NOT-07: Enviar notificacion manual a usuario(s) desde el admin.
  *
  * Permite tres tipos de destinatario:

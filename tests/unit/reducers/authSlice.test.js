@@ -17,8 +17,8 @@ const INITIAL_STATE = {
 };
 
 const MOCK_USER = {
-  id: 1, email: 'test@practicayoruba.mx',
-  first_name: 'Demo', last_name: 'Yoruba',
+  id: 1, email: 'test@e-comerce.example.com',
+  first_name: 'Demo', last_name: 'User',
   is_staff: false, profile_completeness: 60,
   pending_fields: ['avatar', 'addresses'],
 };

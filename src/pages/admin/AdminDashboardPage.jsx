@@ -1,5 +1,5 @@
 /**
- * AdminDashboardPage — PracticaYoruba
+ * AdminDashboardPage — e-comerce-ui
  * Landing del panel admin (ruta `/admin`).
  *
  * Centraliza:

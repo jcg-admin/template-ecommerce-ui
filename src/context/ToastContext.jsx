@@ -1,5 +1,5 @@
 /**
- * ToastContext — PracticaYoruba
+ * ToastContext — e-comerce-ui
  * Notificaciones globales (añadir al carrito, errores, éxito de orden, etc.)
  */
 

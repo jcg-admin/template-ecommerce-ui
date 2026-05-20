@@ -1,5 +1,5 @@
 /**
- * productDiscountsSlice — PracticaYoruba
+ * productDiscountsSlice — e-comerce-ui
  * Gestión de descuentos de producto (ProductDiscount) desde el panel admin.
  *
  *   UC-DASH-01 — Crear descuento de producto

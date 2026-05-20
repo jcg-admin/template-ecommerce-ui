@@ -1,5 +1,5 @@
 /**
- * Inventory mock interceptor — PracticaYoruba (D-007).
+ * Inventory mock interceptor — e-comerce-ui (D-007).
  *
  * Cubre UC-INV-01..05 sobre los endpoints:
  *   GET    /api/v1/admin/inventory/

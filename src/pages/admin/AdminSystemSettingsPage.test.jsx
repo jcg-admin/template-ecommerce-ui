@@ -19,8 +19,8 @@ import settingsReducer from '@redux/slices/settingsSlice';
 import AdminSystemSettingsPage from './AdminSystemSettingsPage';
 
 const SETTINGS = {
-  site_name: 'PracticaYoruba',
-  contact_email: 'hola@yoruba.mx',
+  site_name: 'e-comerce-ui',
+  contact_email: 'hola@example.com',
   support_phone: '+52 55 0000 0000',
   tax_rate: 16,
   currency: 'MXN',
@@ -48,8 +48,8 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     expect(
       await screen.findByRole('heading', { name: /Configuracion del Sistema/i }),
     ).toBeInTheDocument();
-    expect(await screen.findByDisplayValue('PracticaYoruba')).toBeInTheDocument();
-    expect(screen.getByDisplayValue('hola@yoruba.mx')).toBeInTheDocument();
+    expect(await screen.findByDisplayValue('e-comerce-ui')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('hola@example.com')).toBeInTheDocument();
   });
 
   it('envia PATCH /api/v1/admin/settings/ con los cambios', async () => {
@@ -57,14 +57,14 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     apiService.patch.mockResolvedValue({ data: SETTINGS });
 
     render(wrap());
-    const input = await screen.findByDisplayValue('PracticaYoruba');
-    fireEvent.change(input, { target: { value: 'PracticaYoruba MX' } });
+    const input = await screen.findByDisplayValue('e-comerce-ui');
+    fireEvent.change(input, { target: { value: 'e-comerce-ui MX' } });
     fireEvent.click(screen.getByRole('button', { name: /Guardar cambios/i }));
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
         '/api/v1/admin/settings/',
-        expect.objectContaining({ site_name: 'PracticaYoruba MX' }),
+        expect.objectContaining({ site_name: 'e-comerce-ui MX' }),
       );
     });
   });

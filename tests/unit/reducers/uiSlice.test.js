@@ -1,6 +1,6 @@
 /**
  * Tests — uiSlice reducer
- * PracticaYoruba UI
+ * e-comerce-ui UI
  */
 
 import uiReducer, {

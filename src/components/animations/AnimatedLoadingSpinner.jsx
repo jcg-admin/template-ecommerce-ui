@@ -1,5 +1,5 @@
 /**
- * AnimatedLoadingSpinner -- PracticaYoruba
+ * AnimatedLoadingSpinner -- e-comerce-ui
  * Spinner con animacion para estados de carga inline.
  */
 

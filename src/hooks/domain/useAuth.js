@@ -1,5 +1,5 @@
 /**
- * useAuth — PracticaYoruba
+ * useAuth — e-comerce-ui
  * Hook de autenticación. Combina Redux auth + acciones.
  */
 

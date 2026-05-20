@@ -25,7 +25,7 @@ const RESPONSE = {
     { bucket: '2026-05-18', revenue: '800.00' },
   ],
   top_products: [
-    { product_id: 1, name: 'Falda Yoruba',   units: 18 },
+    { product_id: 1, name: 'Falda',   units: 18 },
     { product_id: 2, name: 'Camisa Africana', units: 12 },
   ],
   open_tickets:     4,
@@ -64,7 +64,7 @@ describe('AdminReportDashboardPage (UC-REP-03)', () => {
   it('muestra el numero de tickets abiertos', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportDashboardPage />));
-    await screen.findByText('Falda Yoruba');
+    await screen.findByText('Falda');
     expect(screen.getByText(/Tickets de soporte abiertos/i)).toBeInTheDocument();
     const ops = screen.getByLabelText(/Métricas operativas/i);
     expect(ops).toHaveTextContent('4');
@@ -80,14 +80,14 @@ describe('AdminReportDashboardPage (UC-REP-03)', () => {
   it('renderiza el top 5 productos del mes', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportDashboardPage />));
-    expect(await screen.findByText('Falda Yoruba')).toBeInTheDocument();
+    expect(await screen.findByText('Falda')).toBeInTheDocument();
     expect(screen.getByText('Camisa Africana')).toBeInTheDocument();
   });
 
   it('tiene accesos directos a los reportes detallados', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportDashboardPage />));
-    await screen.findByText('Falda Yoruba');
+    await screen.findByText('Falda');
     expect(screen.getByRole('link', { name: /Ver reporte de ventas/i }))
       .toHaveAttribute('href', '/admin/reports/sales');
     expect(screen.getByRole('link', { name: /Ver top sellers/i }))

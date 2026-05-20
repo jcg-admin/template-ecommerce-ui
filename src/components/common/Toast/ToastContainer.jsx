@@ -1,5 +1,5 @@
 /**
- * ToastContainer — PracticaYoruba
+ * ToastContainer — e-comerce-ui
  * Renderiza las notificaciones toast del store.
  */
 

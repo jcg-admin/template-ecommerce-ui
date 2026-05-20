@@ -1,7 +1,7 @@
 /**
  * useProductVariants / useAdminProductVariants — hooks React Query.
  *
- * Familia Yoruba (CHARTSIZE):
+ * Familia de variantes (CHARTSIZE):
  *   UC-CHT-01 — Variantes del producto (publico): se sirve via useProduct
  *               (ProductPage) que ya consume el detalle del catalogo y
  *               recibe el campo `variants` cuando la API lo expone.

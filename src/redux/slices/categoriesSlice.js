@@ -1,5 +1,5 @@
 /**
- * categoriesSlice — PracticaYoruba
+ * categoriesSlice — e-comerce-ui
  *
  * Mutaciones administrativas sobre el arbol de categorias (UC-CAT-06).
  *

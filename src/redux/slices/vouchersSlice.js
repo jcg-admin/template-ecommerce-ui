@@ -1,5 +1,5 @@
 /**
- * vouchersSlice — PracticaYoruba
+ * vouchersSlice — e-comerce-ui
  * Gestión de cupones / vouchers desde el panel admin.
  *
  *   UC-PRO-01 — Crear voucher

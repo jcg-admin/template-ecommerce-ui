@@ -1,5 +1,5 @@
 /**
- * AdminLayout — PracticaYoruba
+ * AdminLayout — e-comerce-ui
  * Layout del panel admin: sidebar oscuro + header + contenido.
  * Acceso exclusivo para is_staff = true.
  */
@@ -71,7 +71,7 @@ export default function AdminLayout() {
       {/* Sidebar */}
       <aside className={`${styles.sidebar} ${isSidebarOpen ? styles.sidebarOpen : ''}`}>
         <div className={styles.brand}>
-          <span className={styles.brandName}>PracticaYoruba</span>
+          <span className={styles.brandName}>e-comerce-ui</span>
           <span className={styles.brandLabel}>Admin</span>
         </div>
 

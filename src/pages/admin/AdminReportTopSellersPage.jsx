@@ -1,5 +1,5 @@
 /**
- * AdminReportTopSellersPage — PracticaYoruba
+ * AdminReportTopSellersPage — e-comerce-ui
  * UC-REP-02: Reporte de productos mas vendidos (top sellers).
  * UC-REP-05: Exportar a CSV/PDF.
  */

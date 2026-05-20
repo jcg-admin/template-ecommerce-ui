@@ -1,5 +1,5 @@
 /**
- * StorefrontLayout — PracticaYoruba
+ * StorefrontLayout — e-comerce-ui
  * Layout público: Header + contenido + Footer.
  * Usado por: HomePage, CatalogPage, ProductPage, CartPage.
  */

@@ -1,5 +1,5 @@
 /**
- * AdminQuestionsModerationPage — PracticaYoruba
+ * AdminQuestionsModerationPage — e-comerce-ui
  * UC-QST-04: aprobar / rechazar preguntas pendientes de moderacion.
  */
 import { useState } from 'react';

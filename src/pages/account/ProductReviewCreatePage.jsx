@@ -1,5 +1,5 @@
 /**
- * ProductReviewCreatePage — PracticaYoruba
+ * ProductReviewCreatePage — e-comerce-ui
  * UC-REV-01: el comprador deja una resena del producto comprado.
  *
  * Captura calificacion (1-5), titulo y texto. POSTea a

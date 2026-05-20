@@ -20,7 +20,7 @@ import addressesReducer from '../../redux/slices/addressesSlice';
 import AddressesPage from './AddressesPage';
 
 const ADDR_1 = {
-  id: 1, recipient: 'Demo Yoruba', street: 'Av. Reforma', exterior_number: '42',
+  id: 1, recipient: 'Demo User', street: 'Av. Reforma', exterior_number: '42',
   interior_number: '', neighborhood: 'Centro', city: 'CDMX', state: 'CDMX',
   postal_code: '06000', country: 'MX', phone: '5551234567',
   is_default: true,
@@ -55,14 +55,14 @@ describe('AddressesPage (UC-AUTH-07)', () => {
     expect(
       await screen.findByRole('heading', { name: /direcciones de envio/i }),
     ).toBeInTheDocument();
-    expect(await screen.findByText('Demo Yoruba')).toBeInTheDocument();
+    expect(await screen.findByText('Demo User')).toBeInTheDocument();
     expect(screen.getByText('Otra Persona')).toBeInTheDocument();
   });
 
   it('marca la direccion predeterminada con badge', async () => {
     apiService.get.mockResolvedValue({ data: { results: [ADDR_1, ADDR_2] } });
     renderPage();
-    await screen.findByText('Demo Yoruba');
+    await screen.findByText('Demo User');
     // El badge "Predeterminada" no es boton; existe solo en la primera direccion
     const matches = screen.getAllByText(/predeterminada/i);
     expect(matches.length).toBeGreaterThan(0);
@@ -88,7 +88,7 @@ describe('AddressesPage (UC-AUTH-07)', () => {
     fireEvent.click(screen.getByRole('button', { name: /agregar direccion/i }));
 
     fireEvent.change(screen.getByLabelText(/destinatario/i),
-      { target: { value: 'Demo Yoruba', name: 'recipient' } });
+      { target: { value: 'Demo User', name: 'recipient' } });
     fireEvent.change(screen.getByLabelText(/^calle/i),
       { target: { value: 'Av. Reforma', name: 'street' } });
     fireEvent.change(screen.getByLabelText(/numero exterior/i),
@@ -109,7 +109,7 @@ describe('AddressesPage (UC-AUTH-07)', () => {
     await waitFor(() => expect(apiService.post).toHaveBeenCalledWith(
       '/api/v1/auth/addresses/',
       expect.objectContaining({
-        recipient: 'Demo Yoruba', street: 'Av. Reforma',
+        recipient: 'Demo User', street: 'Av. Reforma',
         exterior_number: '42', neighborhood: 'Centro',
         city: 'CDMX', state: 'CDMX', postal_code: '06000',
         phone: '5551234567', country: 'MX',

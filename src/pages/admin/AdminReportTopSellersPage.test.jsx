@@ -16,7 +16,7 @@ import AdminReportTopSellersPage from './AdminReportTopSellersPage';
 
 const RESPONSE = {
   results: [
-    { product_id: 1, name: 'Falda Yoruba',   sku: 'FAL-001', units: 50, revenue: '5000.00', share_pct: 40 },
+    { product_id: 1, name: 'Falda',   sku: 'FAL-001', units: 50, revenue: '5000.00', share_pct: 40 },
     { product_id: 2, name: 'Camisa Africana', sku: 'CAM-002', units: 30, revenue: '3000.00', share_pct: 24 },
   ],
   inactive_no_sales_pct: 18.5,
@@ -45,7 +45,7 @@ describe('AdminReportTopSellersPage (UC-REP-02)', () => {
   it('renderiza el ranking en una tabla', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportTopSellersPage />));
-    expect(await screen.findByText('Falda Yoruba')).toBeInTheDocument();
+    expect(await screen.findByText('Falda')).toBeInTheDocument();
     expect(screen.getByText('Camisa Africana')).toBeInTheDocument();
     expect(screen.getByText('FAL-001')).toBeInTheDocument();
   });
@@ -60,7 +60,7 @@ describe('AdminReportTopSellersPage (UC-REP-02)', () => {
   it('cambia los parametros al cambiar el periodo', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportTopSellersPage />));
-    await screen.findByText('Falda Yoruba');
+    await screen.findByText('Falda');
     fireEvent.change(
       screen.getByRole('combobox', { name: /Periodo/i }),
       { target: { value: 'quarter' } },

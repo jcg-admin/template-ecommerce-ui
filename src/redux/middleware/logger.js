@@ -1,5 +1,5 @@
 /**
- * Redux Logger Middleware -- PracticaYoruba
+ * Redux Logger Middleware -- e-comerce-ui
  * Solo activo en development.
  */
 

@@ -1,6 +1,6 @@
-# PracticaYoruba UI
+# e-comerce-ui UI
 
-Frontend del e-commerce de productos Yoruba. Construido con React 19 + Redux Toolkit + Webpack 5.
+Frontend del e-commerce de productos del e-commerce. Construido con React 19 + Redux Toolkit + Webpack 5.
 
 ## Stack
 
@@ -9,7 +9,7 @@ Frontend del e-commerce de productos Yoruba. Construido con React 19 + Redux Too
 | UI | React 19 + JSX |
 | Estado global | Redux Toolkit 2 + React Query 5 |
 | Routing | React Router 6 |
-| Estilos | SCSS Modules + sistema de design tokens Yoruba |
+| Estilos | SCSS Modules + sistema de design tokens |
 | Tests | Jest 29 + React Testing Library 16 |
 | Build | Webpack 5 (code splitting, contenthash, tree shaking) |
 
@@ -35,7 +35,7 @@ src/
 ├── router/           AppRouter con rutas públicas, protegidas y admin
 ├── services/         apiService (fetch con retry y timeout)
 ├── styles/
-│   ├── abstracts/    _variables.scss, _mixins.scss (paleta Yoruba)
+│   ├── abstracts/    _variables.scss, _mixins.scss (paleta principal)
 │   ├── base/         _reset.scss, _typography.scss
 │   ├── components/   _buttons.scss, _cards.scss, _forms.scss...
 │   ├── layouts/      _header.scss, _sidebar.scss
@@ -74,7 +74,7 @@ AUTH_SOURCE=mock      # usa datos locales
 CATALOG_SOURCE=real   # llama al backend
 ```
 
-## Paleta de colores Yoruba
+## Paleta de colores del template
 
 | Token | Valor | Uso |
 |-------|-------|-----|
@@ -93,8 +93,8 @@ CATALOG_SOURCE=real   # llama al backend
 
 ## Relación con el backend
 
-Este proyecto consume la API REST de `PracticaYoruba-api` (Django 5 + DRF).
-Ver la documentación completa de UCs y endpoints en `PracticaYoruba-doc`.
+Este proyecto consume la API REST de `e-comerce-api` (Django 5 + DRF).
+Ver la documentación completa de UCs y endpoints en `e-comerce-doc`.
 
 Los tokens JWT los maneja el backend en **httpOnly cookies** — nunca
 se almacenan en Redux ni en localStorage.

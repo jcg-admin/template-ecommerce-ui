@@ -1,5 +1,5 @@
 /**
- * SupportTicketCreatePage — PracticaYoruba
+ * SupportTicketCreatePage — e-comerce-ui
  * UC-SUPP-01: Crear ticket de soporte (Comprador)
  */
 import { useState } from 'react';

@@ -1,5 +1,5 @@
 /**
- * AdminInventoryPage — PracticaYoruba
+ * AdminInventoryPage — e-comerce-ui
  * UC-INV-01: Ver stock actual de productos
  */
 import { useMemo, useState } from 'react';

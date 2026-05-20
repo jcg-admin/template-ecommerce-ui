@@ -9,7 +9,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import productVariantsReducer from '@redux/slices/productVariantsSlice';
 import VariantSelector from './VariantSelector';
 
-const makeStore = (preloadedYoruba = {}) =>
+const makeStore = (preloadedState = {}) =>
   configureStore({
     reducer: { productVariants: productVariantsReducer },
     preloadedState: {
@@ -21,7 +21,7 @@ const makeStore = (preloadedYoruba = {}) =>
         error:             null,
         actionError:       null,
         lastAction:        null,
-        ...preloadedYoruba,
+        ...preloadedState,
       },
     },
   });

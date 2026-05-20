@@ -1,5 +1,5 @@
 /**
- * Constantes globales — PracticaYoruba
+ * Constantes globales — e-comerce-ui
  */
 
 // API endpoints base

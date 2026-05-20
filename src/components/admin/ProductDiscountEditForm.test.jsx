@@ -16,7 +16,7 @@ import productDiscountsReducer from '@redux/slices/productDiscountsSlice';
 import ProductDiscountEditForm from './ProductDiscountEditForm';
 
 const DISCOUNT = {
-  id: 1, product_id: 10, product_name: 'Camiseta Yoruba',
+  id: 1, product_id: 10, product_name: 'Camiseta del catálogo',
   discount_pct: 15.0, valid_from: '2026-01-01', valid_until: '2026-12-31',
   status: 'CURRENT', is_active: true,
   original_price: 100, discounted_price: 85,
@@ -46,7 +46,7 @@ describe('ProductDiscountEditForm (UC-DASH-02)', () => {
       makeStore(),
     ));
     const productField = screen.getByLabelText('Producto');
-    expect(productField).toHaveValue('Camiseta Yoruba');
+    expect(productField).toHaveValue('Camiseta del catálogo');
     expect(productField).toHaveAttribute('readonly');
   });
 

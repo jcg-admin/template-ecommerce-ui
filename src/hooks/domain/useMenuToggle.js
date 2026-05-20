@@ -1,5 +1,5 @@
 /**
- * useMenuToggle -- PracticaYoruba
+ * useMenuToggle -- e-comerce-ui
  * Controla el sidebar mobile de la tienda y el panel admin.
  * Sincronizado con uiSlice de Redux.
  */

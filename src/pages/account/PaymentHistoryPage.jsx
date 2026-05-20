@@ -1,5 +1,5 @@
 /**
- * PaymentHistoryPage — PracticaYoruba
+ * PaymentHistoryPage — e-comerce-ui
  * UC-PAY-06: Listado cronologico de intentos de pago de una orden propia,
  * incluyendo fallidos y reembolsos.
  */

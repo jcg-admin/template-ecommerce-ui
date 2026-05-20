@@ -1,5 +1,5 @@
 /**
- * Selectors — PracticaYoruba
+ * Selectors — e-comerce-ui
  * Selectores memoizados con reselect para evitar re-renders innecesarios
  */
 

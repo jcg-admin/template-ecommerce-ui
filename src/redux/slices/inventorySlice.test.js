@@ -23,7 +23,7 @@ const makeStore = () =>
   configureStore({ reducer: { inventory: inventoryReducer } });
 
 const ITEM = {
-  variant_id: 10, product_id: 1, product_name: 'Vela Yoruba',
+  variant_id: 10, product_id: 1, product_name: 'Producto del catálogo',
   sku: 'SKU-001', stock: 3, min_threshold: 5, status: 'BAJO',
 };
 
