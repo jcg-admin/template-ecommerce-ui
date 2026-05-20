@@ -41,6 +41,8 @@
 | 2026-05-20T23:05:00 | Hallazgo durante la ejecucion | T-009 | El constructor de `APIError` en `src/utils/apiErrors.js` no declara `validationErrors`; solo la subclase `ValidationError` la anade. Con `strict: true`, `tsc` falla con `TS2339: Property 'validationErrors' does not exist on type 'APIError'` al copiar la propiedad en el ramo `instanceof APIError`. Solucion aplicada: cast tipado `err as APIError & { validationErrors?: Record<string, string[]> }` antes de leer, con comentario explicando que cuando `apiErrors.js` migre a `.ts`, el cast se elimina sin cambios al consumidor. |
 | 2026-05-20T23:10:00 | Cierre de tarea | T-009 | `git mv src/utils/serializeApiError.js src/utils/serializeApiError.ts`. Archivo reescrito con `interface SerializedApiError` (estructura del retorno) y `type ErrorLike` (forma minima del input). Firma cambia de `(err)` implicito a `(err: unknown): SerializedApiError`. Compatibilidad runtime preservada al 100%; los 10 tests de `tests/unit/utils/serializeApiError` pasan sin modificar nada. `tsc --noEmit` exit 0. Cubre H-03 (segunda migracion). |
 | 2026-05-20T23:10:00 | Fase cerrada | Fase 3 | T-008 y T-009 cerradas. Los dos modulos compartidos mas establemente nombrados de `src/` (`PropShapes` y `serializeApiError`) estan ahora en TypeScript con tipos exportados. H-03 (`deuda-sin-typescript-en-src`) **resuelto en el inventario**: el stack TypeScript ya tiene dos consumidores reales del template; futuras migraciones de slices, hooks, paginas o componentes se ejecutan a discrecion en iniciativas propias. H-02 queda preparado para fase 5 (aplicar PropShapes a componentes). Continua fase 4 (integrar decorators). |
+| 2026-05-20T23:18:00 | Hallazgo durante la ejecucion | T-010 | El plan dice "aplicar withLogging a `apiService.fetch`", pero `APIService` no expone un metodo llamado `fetch`: el unico orquestador de requests HTTP es el metodo privado `_request(method, path, options, attempt)` (lineas 53 a 140 de `apiService.js`), llamado desde los publicos `get/post/put/patch/delete`. El `fetch` nativo se usa internamente. Decision: envolver `_request` con `withLogging` en el constructor del singleton, asi todos los requests HTTP de la app pasan por el log. Sin renaming del metodo: sigue siendo `_request` para no romper firma interna. |
+| 2026-05-20T23:25:00 | Cierre de tarea | T-010 | Anadido `import { withLogging } from '@decorators/withLogging'` a `src/services/apiService.js`. En el constructor, despues de inicializar interceptors, se reemplaza `this._request` con `withLogging(this._request.bind(this), 'apiService._request', { logArgs: true, logResult: false, logTime: true })`. Creado `tests/unit/services/apiService.test.js` con 4 tests: (1) loguea inicio con el nombre canonico, (2) loguea duracion al completar, (3) NO loguea resultado por `logResult: false`, (4) sanitiza `password/token/apiKey` del primer argumento objeto. `mockInterceptor` mockeado a nivel modulo para evitar red. 4/4 tests pasan. `tsc --noEmit` exit 0. Otros 120 tests previos (reducers + slices) siguen verdes. Cubre primera tarea de H-01 (integrar decorators). |
 
 ## Eventos por tipo
 
@@ -52,9 +54,9 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 5 |
+| Hallazgo durante la ejecucion | 6 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 9 |
+| Cierre de tarea | 10 |
 | Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

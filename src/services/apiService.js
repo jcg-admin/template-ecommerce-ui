@@ -18,6 +18,7 @@ import {
 } from '@utils/apiErrors';
 
 import mockInterceptor from '@mocks/mockInterceptor';
+import { withLogging } from '@decorators/withLogging';
 
 const DEFAULT_TIMEOUT        = 30_000;
 const DEFAULT_RETRY_ATTEMPTS = 3;
@@ -37,6 +38,17 @@ class APIService {
       ...options.headers,
     };
     this._interceptors = { request: [], response: [], error: [] };
+
+    // Envolver _request con withLogging: cubre todas las requests
+    // HTTP que pasan por get/post/put/patch/delete. Sanitiza args
+    // de primer nivel; el `body` viaja como `options.body` y no se
+    // expone directamente (cualquier campo sensible deberia ir en
+    // un objeto interno, no en la opcion superior).
+    this._request = withLogging(this._request.bind(this), 'apiService._request', {
+      logArgs:   true,
+      logResult: false,
+      logTime:   true,
+    });
   }
 
   setAuthToken(token) {
