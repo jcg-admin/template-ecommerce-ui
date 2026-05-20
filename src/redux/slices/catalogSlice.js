@@ -8,6 +8,7 @@
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
+import { withCaching, CACHE_TTL } from '@decorators/withCaching';
 
 // =============================================================================
 // Thunks
@@ -39,14 +40,23 @@ export const fetchProduct = createAsyncThunk(
 
 export const searchProducts = createAsyncThunk(
   'catalog/searchProducts',
-  async (params = {}, { rejectWithValue }) => {
-    try {
-      const res = await apiService.get('/api/v1/catalogue/search/', { params });
-      return { ...res.data, query: params.q };
-    } catch (error) {
-      return rejectWithValue(error.message);
-    }
-  }
+  withCaching(
+    async (params = {}, { rejectWithValue }) => {
+      try {
+        const res = await apiService.get('/api/v1/catalogue/search/', { params });
+        return { ...res.data, query: params.q };
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    },
+    CACHE_TTL.SHORT,
+    // Key por query: serializa los parametros canonicos para que la
+    // misma busqueda con los mismos filtros caiga en la misma entrada
+    // de cache. El segundo argumento del payloadCreator es el thunkAPI
+    // de Redux Toolkit (no estable entre dispatches), por eso lo
+    // excluimos del calculo de la clave.
+    (params = {}) => JSON.stringify(params || {}),
+  ),
 );
 
 // =============================================================================

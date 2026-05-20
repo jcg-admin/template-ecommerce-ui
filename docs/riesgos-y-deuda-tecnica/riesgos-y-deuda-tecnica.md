@@ -48,11 +48,18 @@ deja de bloquearlas.
 
 ### deuda-decorators-experimental
 
-`src/decorators/` tiene 4 archivos sin documentacion. Su uso real en
-el codigo es opaco — requiere busqueda manual para confirmar si se
-importan desde produccion o son legado.
-
-- Tarea: auditar uso, decidir mantener o eliminar.
+**Estado: resuelto** en la fase 4 de la iniciativa
+`resolver-hallazgos-de-deuda-del-template` (T-010 a T-014, cerrada
+el 2026-05-21). Los tres decoradores (`withCaching`, `withLogging`,
+`withValidation`) tienen ahora consumidores reales en el codigo del
+template: `withLogging` cubre todas las requests HTTP via
+`apiService._request` y los thunks que tocan credenciales en
+`authSlice` (`loginUser`, `registerUser`, `changePassword`);
+`withLogging + withValidation` componen sobre `initiateMercadoPagoPayment`
+y `retryPayment` en `paymentsSlice`; `withValidation` sola guarda
+`applyVoucher` en `cartSlice`; `withCaching` aplica TTL corto a
+`searchProducts` en `catalogSlice`. Los decoradores dejan de ser
+ruido en `src/decorators/` para ser una capa transversal viva.
 
 ### deuda-tipos-en-src-types
 
