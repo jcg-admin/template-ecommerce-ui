@@ -1,9 +1,10 @@
-# Project Management (pm)
+# Como gestionar iniciativas
 
-Este modulo gestiona el **trabajo del proyecto** mediante iniciativas
-que siguen el procedimiento normativo interno
-**PROC-GESTION-001 v4.0.0** ("Procedimiento: Crear una Nueva
-Iniciativa en source/gestion/pm/").
+Este documento describe **como se gestiona el trabajo del proyecto**
+mediante iniciativas en el modulo `pm/`. Sigue el procedimiento
+normativo interno **PROC-GESTION-001 v4.0.0** ("Procedimiento: Crear
+una Nueva Iniciativa en source/gestion/pm/") adaptado al stack
+markdown local.
 
 > Este repositorio es el submodulo `ui` del monorepo conceptual
 > `e-comerce`. Por convencion del procedimiento, las iniciativas de
@@ -83,8 +84,9 @@ trazabilidad.
 8. Ejecutar. Actualizar progreso despues de cada tarea.
 9. Cerrar con el documento de decisiones obligatorio.
 
-## Iniciativas existentes
+## Catalogo de iniciativas
 
-| Iniciativa | Estado | Resumen |
-|-----------|--------|---------|
-| [analizar-ramas-pendientes-de-integracion](iniciativas/analizar-ramas-pendientes-de-integracion/) | COMPLETADA | Inventariar las seis ramas remotas del repo, clasificarlas por estado de integracion y documentar tanto las pendientes como las ya integradas para futuro referencia. |
+El listado vivo de iniciativas (en backlog, en analisis, en ejecucion
+y cerradas) vive en su propio documento para evitar duplicacion:
+
+[indice-de-iniciativas.md](iniciativas/indice-de-iniciativas.md)
