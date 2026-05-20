@@ -10,6 +10,17 @@ verbo en infinitivo mas objeto de trabajo.
 | Iniciativa | Estado | Propósito |
 |-----------|--------|-----------|
 | [analizar-ramas-pendientes-de-integracion](analizar-ramas-pendientes-de-integracion/) | COMPLETADA | Inventariar las seis ramas remotas del repo, clasificarlas por estado de integracion y documentar tanto las pendientes como las ya integradas para referencia futura. |
+| [resolver-hallazgos-de-deuda-del-template](resolver-hallazgos-de-deuda-del-template/) | EN EJECUCION | Resolver los 5 hallazgos aplicables al template (H-01 a H-04, H-08), delegar 2 a iniciativas propias (H-05, H-07), retirar 13 historicos o duplicados (H-06, H-09 a H-20). Plan en 7 fases productivas mas cierre, 25 tareas atomicas. |
+
+## Iniciativas previstas para abrirse cuando esta cierre
+
+Salen del documento de alcance de `resolver-hallazgos-de-deuda-del-template`.
+Se listan aqui para trazabilidad antes de que existan sus directorios.
+
+| Slug previsto | Hallazgo origen | Orden previsto |
+|---------------|-----------------|----------------|
+| `validar-contrato-de-mocks-vs-backend-real` | H-07 | Primera proxima iniciativa |
+| `monitorear-y-reducir-allowlist-hex` | H-05 | Segunda proxima iniciativa |
 
 ## Iniciativas mencionadas en commits pero sin directorio aqui
 
