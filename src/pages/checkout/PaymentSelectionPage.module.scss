@@ -1,0 +1,80 @@
+@use '@styles/abstracts' as *;
+
+.page {
+  max-width: 720px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+}
+
+.header {
+  margin-bottom: 1.5rem;
+}
+
+.title {
+  font-size: 1.75rem;
+  margin: 0 0 .25rem;
+  color: $text-strong;
+}
+
+.subtitle {
+  color: $text-soft;
+  margin: 0;
+}
+
+.gateway {
+  border: 1px solid $border-color;
+  border-radius: .5rem;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1rem;
+  background: $bg-page;
+}
+
+.gatewayTitle {
+  font-size: 1.15rem;
+  margin: 0 0 .75rem;
+  color: $text-strong;
+}
+
+.installments {
+  display: flex;
+  flex-direction: column;
+  gap: .25rem;
+  margin-bottom: .75rem;
+  font-size: .9rem;
+  color: $text-secondary;
+
+  select {
+    padding: .4rem .5rem;
+    border-radius: .25rem;
+    /* stylelint-disable-next-line color-no-hex */
+    border: 1px solid #cfc4b3;
+  }
+}
+
+.primaryBtn,
+.secondaryBtn {
+  display: inline-block;
+  padding: .6rem 1.2rem;
+  border-radius: .35rem;
+  border: 0;
+  font-weight: 600;
+  cursor: pointer;
+  &:disabled { opacity: .55; cursor: not-allowed; }
+}
+
+.primaryBtn  { background: $primary-color; color: $bg-surface; }
+.secondaryBtn { background: $indigo-900; color: $bg-surface; }
+
+.legal {
+  font-size: .85rem;
+  color: $text-soft;
+  margin-top: 1rem;
+}
+
+.error {
+  background: $danger-bg;
+  color: $danger-deep;
+  padding: .6rem .8rem;
+  border-radius: .35rem;
+  margin-bottom: 1rem;
+}

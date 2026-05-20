@@ -1,0 +1,206 @@
+@use '@styles/abstracts' as *;
+
+.page {
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+  padding: $spacing-8 $spacing-4;
+}
+
+.header {
+  margin-bottom: $spacing-4;
+}
+
+.title {
+  margin: 0 0 $spacing-1;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  color: $text-secondary;
+}
+
+.subtitle {
+  margin: 0;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+.loading,
+.empty {
+  text-align: center;
+  padding: $spacing-6;
+  color: $text-muted;
+}
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: $spacing-3;
+}
+
+.item {
+  display: flex;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $bg-surface;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  align-items: flex-start;
+}
+
+.info {
+  flex: 1;
+}
+
+.recipient {
+  margin: 0 0 $spacing-1;
+  font-weight: 600;
+}
+
+.badge {
+  margin-left: $spacing-2;
+  display: inline-block;
+  padding: 2px 8px;
+  background: $primary-color;
+  color: $bg-surface;
+  border-radius: 12px;
+  font-size: $font-size-xs;
+}
+
+.line {
+  margin: 2px 0;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.form {
+  background: $bg-surface;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: $spacing-4;
+  display: grid;
+  gap: $spacing-3;
+}
+
+.formTitle {
+  margin: 0 0 $spacing-2;
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+}
+
+.field {
+  display: grid;
+  gap: 4px;
+
+  label {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+
+  input {
+    padding: $spacing-2 $spacing-3;
+    /* stylelint-disable-next-line color-no-hex */
+    border: 1px solid #d4c4a8;
+    border-radius: 4px;
+  }
+}
+
+.fieldError {
+  color: $error-color;
+  font-size: $font-size-xs;
+}
+
+.zoneError {
+  background: $danger-bg;
+  color: $accent-dark;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+}
+
+.formActions {
+  display: flex;
+  gap: $spacing-3;
+}
+
+.footer {
+  margin-top: $spacing-4;
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+}
+
+.btnPrimary {
+  background: $primary-color;
+  color: $bg-surface;
+  border: none;
+  padding: $spacing-2 $spacing-4;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    /* stylelint-disable-next-line color-no-hex */
+    background: #c8b88a;
+    cursor: not-allowed;
+  }
+}
+
+.btnSecondary {
+  background: transparent;
+  color: $text-secondary;
+  /* stylelint-disable-next-line color-no-hex */
+  border: 1px solid #d4c4a8;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background: $amber-bg;
+  }
+}
+
+.btnDanger {
+  background: transparent;
+  color: $error-color;
+  border: 1px solid $error-border;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.success {
+  background: $success-bg;
+  color: $success-strong;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  margin-bottom: $spacing-3;
+}
+
+.error {
+  background: $danger-bg;
+  color: $accent-dark;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  margin-bottom: $spacing-3;
+}
+
+.cancelLink {
+  color: $text-muted;
+  text-decoration: none;
+  font-size: $font-size-sm;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

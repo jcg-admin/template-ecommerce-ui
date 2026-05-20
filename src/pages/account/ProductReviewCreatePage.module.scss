@@ -1,0 +1,85 @@
+@use '@styles/abstracts' as *;
+
+.page {
+  max-width: 720px;
+  margin:    0 auto;
+  padding:   1.5rem 1rem;
+}
+
+.header {
+  margin-bottom: 1.25rem;
+}
+
+.title {
+  font-size:    1.5rem;
+  font-weight:  600;
+  margin:       0 0 0.5rem 0;
+}
+
+.description {
+  color:     $gray-700;
+  font-size: 0.95rem;
+  margin:    0;
+}
+
+.form {
+  display:        flex;
+  flex-direction: column;
+  gap:            1rem;
+}
+
+.field {
+  display:        flex;
+  flex-direction: column;
+  gap:            0.35rem;
+
+  label {
+    font-weight: 500;
+  }
+
+  input,
+  select,
+  textarea {
+    padding:       0.55rem 0.7rem;
+    border:        1px solid $gray-400;
+    border-radius: 6px;
+    font-size:     0.95rem;
+  }
+}
+
+.fieldError {
+  color:     $danger-strong;
+  font-size: 0.85rem;
+}
+
+.error {
+  color:        $danger-strong;
+  font-weight:  500;
+  margin:       0.25rem 0 0;
+}
+
+.actions {
+  display:        flex;
+  gap:            0.5rem;
+  margin-top:     0.5rem;
+}
+
+.primaryBtn {
+  background:    $indigo-600;
+  color:         $bg-surface;
+  border:        none;
+  padding:       0.6rem 1.2rem;
+  border-radius: 6px;
+  cursor:        pointer;
+
+  &:disabled {
+    opacity: 0.6;
+    cursor:  not-allowed;
+  }
+}
+
+.successMessage {
+  color:     $success-strong;
+  font-size: 1rem;
+  margin:    1rem 0;
+}

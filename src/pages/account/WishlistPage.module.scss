@@ -1,0 +1,186 @@
+@use '@styles/abstracts' as *;
+
+.page {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: $spacing-8 $spacing-4;
+}
+
+.header {
+  margin-bottom: $spacing-4;
+}
+
+.title {
+  margin: 0 0 $spacing-1;
+  font-family: $font-family-display;
+  font-size: $font-size-2xl;
+  color: $text-secondary;
+}
+
+.subtitle {
+  margin: 0;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+.filters {
+  display: flex;
+  gap: $spacing-2;
+  margin-bottom: $spacing-4;
+}
+
+.filterBtn {
+  padding: $spacing-1 $spacing-3;
+  /* stylelint-disable-next-line color-no-hex */
+  border: 1px solid #d4c4a8;
+  background: $bg-surface;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: $font-size-sm;
+}
+
+.filterActive {
+  background: $primary-color;
+  border-color: $primary-color;
+  color: $bg-surface;
+}
+
+.loading {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  color: $text-muted;
+}
+
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid $border-color;
+  border-top-color: $primary-color;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.empty {
+  text-align: center;
+  padding: $spacing-8;
+  color: $text-muted;
+}
+
+.items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: grid;
+  gap: $spacing-3;
+}
+
+.item {
+  display: flex;
+  gap: $spacing-4;
+  padding: $spacing-4;
+  background: $bg-surface;
+  border: 1px solid $border-color;
+  border-radius: 8px;
+}
+
+.image {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.info {
+  flex: 1;
+}
+
+.itemTitle {
+  margin: 0 0 $spacing-2;
+  font-size: $font-size-base;
+}
+
+.priceRow {
+  display: flex;
+  gap: $spacing-2;
+  align-items: center;
+}
+
+.price {
+  color: $primary-color;
+  font-size: $font-size-lg;
+}
+
+.priceDrop {
+  background: $success-color;
+  color: $bg-surface;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: $font-size-xs;
+}
+
+.inStock {
+  color: $success-color;
+  font-size: $font-size-sm;
+}
+
+.outOfStock {
+  color: $error-color;
+  font-size: $font-size-sm;
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+
+.moveBtn {
+  background: $primary-color;
+  color: $bg-surface;
+  border: none;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    /* stylelint-disable-next-line color-no-hex */
+    background: #c8b88a;
+    cursor: not-allowed;
+  }
+}
+
+.removeBtn {
+  background: transparent;
+  color: $error-color;
+  border: 1px solid $error-border;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.error {
+  background: $danger-bg;
+  color: $accent-dark;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  margin-bottom: $spacing-3;
+}
+
+.success {
+  background: $success-bg;
+  color: $success-strong;
+  padding: $spacing-2 $spacing-3;
+  border-radius: 4px;
+  margin-bottom: $spacing-3;
+}
