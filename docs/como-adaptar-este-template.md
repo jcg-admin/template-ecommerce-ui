@@ -27,41 +27,52 @@ ejemplo** que tu adopcion debe sustituir por los tuyos.
 | `docs/introduccion-y-objetivos/` | Reescribir los stakeholders y los cinco objetivos en lenguaje de tu producto. |
 | `docs/contexto-y-alcance-del-sistema/` | Actualizar el diagrama mermaid de contexto con tus sistemas externos reales (pasarelas de pago, correo, analytics). |
 
-## Los tres ejes que pueden requerir extension
+## Extensiones que el template esta preparado para acomodar
 
-El template asume un e-commerce **B2C** de **productos fisicos** sin
-**regulacion especifica**. Si tu caso cae fuera de cualquiera de los
-tres ejes, lo que sigue te dice donde tocar.
+El template **implementa** un set core de e-commerce B2C de productos
+fisicos: catalogo, carrito, checkout, cuenta del comprador, pagos,
+devoluciones, soporte, reviews, preguntas, panel admin. Esos UCs
+estan ya en el codigo.
 
-### Eje uno: modelo de negocio
+Lo que sigue son **variantes del dominio e-commerce** que aparecen en
+muchas adopciones reales. Ninguna esta implementada en el codigo
+actual, pero **la arquitectura del template las soporta** sin tocar
+la espina dorsal: cada una se anade como uno o varios slices nuevos en
+`src/redux/slices/`, su hook de dominio en `src/hooks/domain/`, sus
+paginas en `src/pages/` y, si aplica, su area dedicada en
+`src/pages/admin/`. El patron de extension es el mismo que siguen los
+UCs existentes.
 
-| Modelo | Que anadir |
-|--------|------------|
-| **B2B** | Precios negociados por cliente, tabulador por volumen, aprobaciones multi-nivel antes de confirmar una orden, terminos de credito y pago a plazos, ordenes recurrentes. Nuevo `src/redux/slices/contractsSlice.js` y `src/pages/account/CreditTermsPage.jsx`. |
-| **Marketplace** (multiples vendedores) | Modelo de seller separado del usuario, comisiones, payouts, dashboard del seller, ratings de seller. Suele requerir su propio panel paralelo a `pages/admin`. |
-| **Suscripciones** | Ciclo de facturacion recurrente, pausar y reanudar, prorrateo al cambiar de plan, cancelacion con periodo de gracia. Webhooks del gateway de pago son centrales aqui. |
-| **Subastas o pujas** | Estado en tiempo real (WebSocket o polling), historial de pujas, snipe protection. El catalogo cambia de "comprar ya" a "pujar hasta X". |
-| **Reservas con calendario** | Disponibilidad por slot, conflictos de reserva, politica de cancelacion ligada al tiempo. Sustituye el carrito por un selector de slot. |
+Documentar estas variantes aqui sirve dos propositos: como
+**catalogo de UCs candidatos** que tu adopcion puede activar segun el
+modelo de tu producto, y como **prueba de adecuacion arquitectonica**
+para que ningun adoptante descubra a mitad de camino que el template
+no puede acomodar su modelo.
 
-### Eje dos: tipo de producto
+### Eje uno: variantes del modelo de negocio
 
-| Tipo | Que cambia |
-|------|------------|
-| **Digital descargable** (claves, archivos, NFTs) | Sin envio. Sin devoluciones tradicionales (devolucion = revocar acceso). Entrega instantanea post-pago. Eliminar `src/pages/account/Return*Page.jsx`, mantener `src/redux/slices/returnsSlice.js` si se quiere conservar reembolso de pago. |
-| **Perecedero** (food delivery, flores) | Time-to-expire por item, slot de entrega obligatorio, restriccion geografica del envio. La hoja de checkout cambia para forzar slot. |
-| **Restringido por edad o pais** (alcohol, tabaco, armas) | Verificacion de edad como gate antes del catalogo. Bloqueo del checkout segun geolocalizacion. Tarjeta del comprador en `authSlice` con campo de edad verificada. |
-| **Custom-made** (artesanal, bajo pedido) | Tiempo de fabricacion declarado por producto, formulario de personalizacion antes de anadir al carrito, estado "en produccion" entre pago y envio. |
-| **Servicios** (consultorias, clases) | El "producto" es una reserva o un acceso temporal. Mucho del catalogo se vacia y la cuenta del comprador gana mas peso. |
+| Modelo | UCs que el template puede acomodar | Donde tocar |
+|--------|------------------------------------|-------------|
+| **B2B** | Precios negociados por cliente, tabulador por volumen, aprobaciones multi-nivel antes de confirmar una orden, terminos de credito y pago a plazos, ordenes recurrentes. | Slice nuevo `contractsSlice`, hook `useContracts`, paginas `pages/account/CreditTermsPage`, `pages/admin/AdminApprovalsPage`. |
+| **Marketplace** (multiples vendedores) | Modelo de seller separado del usuario, comisiones por venta, payouts programados, dashboard del seller, ratings de seller, disputas entre comprador y seller. | Layout nuevo `SellerLayout` paralelo a `AdminLayout`, slices `sellersSlice` y `payoutsSlice`, hooks correspondientes, area `pages/seller/`. |
+| **Suscripciones** | Ciclo de facturacion recurrente, pausar y reanudar, prorrateo al cambiar de plan, cancelacion con periodo de gracia, dunning (reintento de cobro). | Slice `subscriptionsSlice`, hook `useSubscriptions`, paginas `pages/account/SubscriptionsPage` y `SubscriptionDetailPage`. El gateway de pago expone webhooks de ciclo que el backend debe atender. |
+| **Subastas o pujas** | Estado en tiempo real (WebSocket o polling), historial de pujas, snipe protection, cierre programado. El catalogo cambia de "comprar ya" a "pujar hasta X". | Slice `auctionsSlice`, hook `useAuction` con suscripcion live, pagina `pages/catalog/AuctionPage`. |
+| **Reservas con calendario** | Disponibilidad por slot, conflictos de reserva, politica de cancelacion ligada al tiempo, recordatorios. Sustituye el carrito por un selector de slot. | Slice `reservationsSlice`, hook `useAvailability`, paginas `pages/catalog/ReservationPage` y `pages/account/MyReservationsPage`. |
 
-### Eje tres: contexto regulatorio
+### Eje dos: variantes del tipo de producto
 
-| Regulacion | Que anadir |
-|------------|------------|
-| **GDPR** (UE) | Consentimiento explicito antes de cualquier cookie no estricta, banner de cookies obligatorio, derecho al olvido (UC nuevo para borrar cuenta y datos vinculados), portabilidad de datos (export a JSON). |
-| **LFPDPPP** (Mexico) | Aviso de privacidad enlazado en cada formulario que captura datos, consentimiento explicito para uso secundario. |
-| **Factura electronica** (Mexico CFDI, Brasil NF-e, Chile DTE) | Captura de RFC o equivalente en checkout, integracion con PAC, descarga de XML y PDF desde la cuenta del comprador. Slice nuevo `src/redux/slices/invoicesSlice.js`. |
-| **18+ verification** (alcohol, tabaco) | Modal de verificacion al entrar al sitio (no solo al checkout). Persistencia del consentimiento por sesion. |
-| **Impuestos por jurisdiccion** | Calculo de IVA o similar por estado o pais en el checkout, antes de la pasarela de pago. |
+| Tipo | UCs que el template puede acomodar | Donde tocar |
+|------|------------------------------------|-------------|
+| **Digital descargable** (claves, archivos, licencias) | Sin envio, sin devoluciones tradicionales (devolucion = revocar acceso), entrega instantanea post-pago, generacion de claves unicas, descarga con expiracion. | Slice nuevo `digitalDeliverySlice`, hook `useDownloads`, pagina `pages/account/DownloadsPage`. `returnsSlice` se reutiliza solo para reembolso de pago. |
+| **Perecedero** (comida, flores) | Time-to-expire por item, slot de entrega obligatorio, restriccion geografica del envio, ventana de produccion. | Extender `cartSlice` con campo de slot, `checkoutSlice` con seleccion obligatoria, slice nuevo `deliveryWindowsSlice`. |
+| **Restringido por edad o pais** (alcohol, tabaco, armas) | Verificacion de edad como gate antes del catalogo, bloqueo del checkout segun geolocalizacion, persistencia del consentimiento por sesion. | Extender `authSlice` con campo de edad verificada, componente nuevo `AgeGate` montado arriba del router, hook `useGeoEligibility`. |
+| **Custom-made** (artesanal, bajo pedido) | Tiempo de fabricacion declarado por producto, formulario de personalizacion antes de anadir al carrito, estado "en produccion" entre pago y envio. | Extender `productsSlice` con leadTime, slice nuevo `customizationsSlice`, pagina `pages/catalog/ProductCustomizePage` antes de `CartPage`. |
+| **Servicios** (consultorias, clases, sesiones) | El "producto" es una reserva o un acceso temporal. Mucho del catalogo se vacia y la cuenta del comprador gana mas peso (mis sesiones, materiales, notas). | Combina elementos de "reservas con calendario" y "digital descargable". Slices `sessionsSlice`, `materialsSlice`. |
+
+Tu adopcion puede activar uno o varios de estos ejes a la vez. No son
+mutuamente excluyentes: un marketplace de suscripciones digitales con
+restriccion 18+ es un caso real que combina cuatro variantes y la
+arquitectura del template las soporta.
 
 ## Que dejar como esta
 
@@ -90,6 +101,7 @@ produccion.
 
 | Hueco | Por que no esta resuelto |
 |-------|--------------------------|
+| **Contexto regulatorio** (GDPR, LFPDPPP, factura electronica, 18+ verification, impuestos por jurisdiccion) | Depende del pais y del producto de cada adopcion. Un template que asuma una regulacion concreta queda mal ajustado para cualquier otra. El adoptante anade los componentes que su jurisdiccion exija: banner de cookies, aviso de privacidad, captura de RFC y descarga de CFDI, gate de edad, calculo de IVA. Estos componentes encajan en los puntos de extension habituales (slices, hooks, paginas) sin renegociar la espina dorsal. |
 | **CI/CD automatizado** | No hay `.github/workflows/`, `.gitlab-ci.yml` ni `Jenkinsfile`. El deploy es manual: `npm run build` + scp. Registrado como riesgo en `riesgos-y-deuda-tecnica/`. |
 | **Observabilidad en produccion** | No hay integracion con Sentry, Datadog, OpenTelemetry ni similar. El UI loguea a `console` en desarrollo y silencia en produccion. Errores fatales del usuario no llegan a ningun lado. |
 | **Internacionalizacion (i18n)** | El UI esta en castellano hardcodeado en JSX y SCSS. No hay `react-intl`, `i18next` ni archivos de mensajes. Si tu mercado es multi-idioma, esto es un proyecto propio. |
