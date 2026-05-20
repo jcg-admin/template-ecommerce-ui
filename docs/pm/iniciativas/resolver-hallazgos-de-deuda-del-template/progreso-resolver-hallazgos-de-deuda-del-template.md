@@ -22,6 +22,8 @@
 | 2026-05-20T21:30:00 | Decisiones aprobadas | (n/a) | Usuario aprobo: Opcion A para H-01, H-02, H-04. Opcion B para H-03. Opciones A+C para H-08. Diferida a iniciativa propia para H-05 (slug `monitorear-y-reducir-allowlist-hex`) y H-07 (slug `validar-contrato-de-mocks-vs-backend-real`, proxima iniciativa). Retirada mecanica para H-06 y H-09 a H-20. |
 | 2026-05-20T21:30:00 | Replan | (n/a) | Plan revisado a 7 fases productivas mas cierre, 25 tareas. Eliminadas T-004 (era para H-07) y T-024/T-025/T-026 (eran para H-05). Renumeradas las tareas posteriores. Costo agregado paso de ~10 a ~9 horas. |
 | 2026-05-20T21:30:00 | Cambio de estado | (n/a) | Iniciativa transiciona de "En analisis" a "En ejecucion". Creados `tareas-*.md` (lista plana de las 25 tareas) y `progreso-*.md` (este documento). |
+| 2026-05-20T21:42:00 | Hallazgo durante la ejecucion | T-001, T-002 | Al verificar el contenido de los archivos a tocar antes de ejecutar T-001, se descubre que los 13 hallazgos a retirar y consolidar viven en **dos archivos** distintos, pero T-001 y T-002 estaban agrupadas por categoria conceptual (historicos vs duplicados) sin tener en cuenta la distribucion fisica. Reparto correcto: `riesgos-y-deuda-tecnica.md` contiene 5 entradas a retirar (H-06, H-09, H-10, H-11, H-12); `decisiones-analizar-ramas-pendientes-*.md` contiene 8 entradas (4 historicos H-13, H-14, H-15, H-20 + 4 duplicados H-16, H-17, H-18, H-19). Se redistribuyen las tareas por archivo. Total de tareas y hallazgos cubiertos no cambia. |
+| 2026-05-20T21:42:00 | Replan | T-001, T-002 | Ajustadas las descripciones de T-001 y T-002 en `plan-*.md` y `tareas-*.md` para reflejar la distribucion por archivo. T-001 pasa de 9 hallazgos a 5; T-002 pasa de 4 a 8. Costo agregado de Fase 0 sube de 40 min a 50 min (T-002 sube de 10 a 20 min). Costo total de la iniciativa pasa de ~535 min a ~545 min. |
 
 ## Eventos por tipo
 
@@ -31,8 +33,9 @@
 | Analisis | 1 |
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
-| Replan | 1 |
+| Replan | 2 |
 | Cambio de estado | 1 |
+| Hallazgo durante la ejecucion | 1 |
 | Inicio de tarea | 0 |
 | Cierre de tarea | 0 |
 | Bloqueo | 0 |

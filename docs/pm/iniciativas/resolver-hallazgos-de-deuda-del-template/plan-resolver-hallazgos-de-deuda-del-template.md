@@ -67,25 +67,25 @@ codigo y desbloquea todo lo demas.
 H-09, H-10, H-11, H-12, H-13, H-14, H-15, H-16, H-17, H-18, H-19,
 H-20 (retiro).
 
-### T-001 — Retirar 9 hallazgos historicos y fuera-de-scope del inventario
+### T-001 — Retirar 5 entradas historicas del inventario de riesgos y deuda
 
 | Campo | Valor |
 |-------|-------|
-| Hallazgos | H-06, H-09, H-10, H-11, H-12, H-13, H-14, H-15, H-20 |
+| Hallazgos | H-06, H-09, H-10, H-11, H-12 |
 | Depende de | (ninguna) |
 | Archivos | `docs/riesgos-y-deuda-tecnica/riesgos-y-deuda-tecnica.md` |
 | Criterio de hecho | Las secciones `### riesgo-rama-pendiente-no-integrada`, `### riesgo-release-candidate-acumulado-en-develop`, `### deuda-de-tareas-sprint-4-sin-trazar`, `### riesgo-ausencia-de-ci-cd-automatizado`, `### riesgo-sin-cobertura-de-tests-medida` han sido eliminadas. La introduccion del documento se actualiza para reflejar el nuevo conteo. |
 | Costo | 15 min |
 
-### T-002 — Consolidar 4 hallazgos duplicados de la iniciativa previa
+### T-002 — Retirar 4 historicos y consolidar 4 duplicados de la iniciativa previa
 
 | Campo | Valor |
 |-------|-------|
-| Hallazgos | H-16, H-17, H-18, H-19 |
+| Hallazgos | H-13, H-14, H-15, H-20 (historicos), H-16, H-17, H-18, H-19 (duplicados) |
 | Depende de | T-001 |
 | Archivos | `docs/pm/iniciativas/analizar-ramas-pendientes-de-integracion/decisiones-analizar-ramas-pendientes-de-integracion.md` |
-| Criterio de hecho | Las secciones `### hallazgo-deuda-en-src-decorators-y-src-types`, `### hallazgo-readme-raiz-no-menciona-arc42-ni-pm`, `### hallazgo-stack-de-typescript-sin-uso-en-src`, `### hallazgo-ausencia-de-ci-cd` se reemplazan por nota cruzada hacia la iniciativa actual. |
-| Costo | 10 min |
+| Criterio de hecho | Las secciones `### hallazgo-pr-uno-no-aparece-como-rama-remota`, `### hallazgo-conflicto-en-package-json-de-la-rama-pendiente`, `### hallazgo-rama-pendiente-tiene-36-commits-de-atraso`, `### hallazgo-149-commits-en-develop-sin-promover` se eliminan (historicos). Las secciones `### hallazgo-deuda-en-src-decorators-y-src-types`, `### hallazgo-readme-raiz-no-menciona-arc42-ni-pm`, `### hallazgo-stack-de-typescript-sin-uso-en-src`, `### hallazgo-ausencia-de-ci-cd` se sustituyen por nota cruzada hacia la iniciativa actual (duplicados consolidados). |
+| Costo | 20 min |
 
 ### T-003 — Marcar H-05 y H-07 como delegados a iniciativa propia
 
@@ -371,7 +371,7 @@ declara sus prop-types con el shape correspondiente.
 
 | Fase | Tareas | Hallazgos cubiertos | Costo agregado |
 |------|--------|---------------------|----------------|
-| 0 | T-001, T-002, T-003 | H-05 y H-07 (marcado de delegacion), H-06, H-09 a H-20 | 40 min |
+| 0 | T-001, T-002, T-003 | H-05 y H-07 (marcado de delegacion), H-06, H-09 a H-20 | 50 min |
 | 1 | T-004 | H-04 | 20 min |
 | 2 | T-005, T-006, T-007 | H-03 (preparacion) | 60 min |
 | 3 | T-008, T-009 | H-03, H-02 (preparacion) | 55 min |
@@ -381,7 +381,7 @@ declara sus prop-types con el shape correspondiente.
 | 7 | T-024, T-025 | (cierre) | 70 min |
 
 **Total**: 25 tareas atomicas, 7 fases productivas mas 1 fase de
-cierre, costo agregado aproximado **535 minutos** (~9 horas
+cierre, costo agregado aproximado **545 minutos** (~9 horas
 efectivas).
 
 **Tareas atomicas por hallazgo**:
