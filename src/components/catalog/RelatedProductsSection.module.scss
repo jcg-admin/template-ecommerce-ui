@@ -1,0 +1,14 @@
+@use '@styles/abstracts' as *;
+
+.section {
+  margin: 48px 0 24px;
+  padding-top: 24px;
+  border-top: 1px solid $gray-200;
+}
+.title { font-size: 1.25rem; margin: 0 0 16px; }
+.grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+}
+.loading { color: $gray-600; font-size: 0.95rem; }

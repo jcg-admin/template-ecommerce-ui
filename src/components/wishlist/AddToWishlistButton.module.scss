@@ -1,0 +1,55 @@
+@use '@styles/abstracts' as *;
+
+.wrapper {
+  margin-top: 12px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
+  border: 1px solid $primary-color;
+  background: transparent;
+  color: $primary-color;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover:not(:disabled) {
+    background: $primary-color;
+    color: $bg-surface;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.85;
+  }
+
+  &.added {
+    background: $primary-color;
+    color: $bg-surface;
+  }
+}
+
+.icon {
+  font-size: 18px;
+  line-height: 1;
+}
+
+.label {
+  font-weight: 500;
+}
+
+.warn {
+  margin: 6px 0 0;
+  color: $amber-900;
+  font-size: 13px;
+}
+
+.error {
+  margin: 6px 0 0;
+  color: $error-color;
+  font-size: 13px;
+}
