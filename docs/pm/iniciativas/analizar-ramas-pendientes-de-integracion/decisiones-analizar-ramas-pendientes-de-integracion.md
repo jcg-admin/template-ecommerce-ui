@@ -92,113 +92,29 @@ Problemas o realidades descubiertas al ejecutar que no estaban en el
 plan inicial. Cada hallazgo indica si fue resuelto en esta iniciativa
 o si queda pendiente y donde.
 
-### hallazgo-pr-uno-no-aparece-como-rama-remota
+### Hallazgos historicos retirados del log
 
-Al inventariar las ramas remotas, el PR #1 (`feature/server-fase0-build-produccion`)
-**no aparece**. Solo se ve el commit de merge en `main` (`58a64ea`).
-La rama remota ya fue borrada despues del merge.
+Cuatro hallazgos de esta seccion eran especificos del repositorio
+fuente y no aplican al template (rama pendiente, divergencia
+develop a main, PR fusionado). Otros cuatro eran duplicados con
+distinto wording de las entradas que esta iniciativa ya cubre.
+Todos se retiran de este log en la ejecucion de T-002 de la
+iniciativa `resolver-hallazgos-de-deuda-del-template`.
 
-- **Impacto**: bajo. PR #1 quedo fusionado en `main` desde el principio.
-- **Accion**: documentado en `analisis-delta-develop-a-main.md`
-  declarando que `main` arranca con PR #1 ya aplicado.
-- **Resuelto en**: esta iniciativa.
+| ID | Nombre original | Por que se retira |
+|----|-----------------|--------------------|
+| H-13 | `hallazgo-pr-uno-no-aparece-como-rama-remota` | Historico del repositorio fuente. La rama fusionada no aplica al template. |
+| H-14 | `hallazgo-conflicto-en-package-json-de-la-rama-pendiente` | Historico. No hay rama pendiente en el template. |
+| H-15 | `hallazgo-rama-pendiente-tiene-36-commits-de-atraso` | Historico. |
+| H-16 | `hallazgo-deuda-en-src-decorators-y-src-types` | Duplicado. Cubierto por H-01 y H-02 en la iniciativa `resolver-hallazgos-de-deuda-del-template`. |
+| H-17 | `hallazgo-readme-raiz-no-menciona-arc42-ni-pm` | Duplicado de H-04 en la iniciativa actual. |
+| H-18 | `hallazgo-stack-de-typescript-sin-uso-en-src` | Duplicado de H-03 en la iniciativa actual. |
+| H-19 | `hallazgo-ausencia-de-ci-cd` | Duplicado de H-09 (que tambien se retiro por estar CI/CD fuera del scope del template). |
+| H-20 | `hallazgo-149-commits-en-develop-sin-promover` | Historico. El template tiene historia lineal en main. |
 
-### hallazgo-conflicto-en-package-json-de-la-rama-pendiente
-
-`git merge-tree origin/develop origin/claude/resume-ecommerce-project-Dm3ab`
-muestra conflicto en `package.json` entre el script `prepare` (de
-develop) y el script `check:lazy` (de la rama). Es mecanico, no
-semantico.
-
-- **Impacto**: bajo. Resoluble en dos minutos.
-- **Accion**: documentado en `analisis-rama-claude-resume-ecommerce-project.md`
-  con el diff exacto y la resolucion recomendada (conservar ambos
-  scripts).
-- **Resuelto en**: la iniciativa futura `integrar-rama-resume-ecommerce-project-en-develop`,
-  que esta listada como Must en la priorizacion MoSCoW del analisis
-  principal.
-
-### hallazgo-rama-pendiente-tiene-36-commits-de-atraso
-
-Aunque tiene 7 commits propios, la rama pendiente esta **36 commits
-atras** de develop (basada en `8d04a61`, no en el HEAD actual). Esto
-significa que un merge naive puede arrastrar conflictos mas alla del
-de `package.json` si hubo cambios en `webpack.config.js` u otros
-archivos que la rama tambien toca.
-
-- **Impacto**: medio. El conflicto principal (`package.json`) es
-  trivial; secundarios posibles en `webpack.config.js` y `AppRouter.jsx`.
-- **Accion**: documentado en `analisis-rama-claude-resume-ecommerce-project.md`
-  como nota antes del bloque de "Conflicto previsto al hacer merge".
-- **Resuelto en**: la iniciativa futura de integracion debera hacer
-  rebase contra develop antes del merge para detectar conflictos
-  secundarios.
-
-### hallazgo-deuda-en-src-decorators-y-src-types
-
-Al mapear `src/`, se encontraron las carpetas `src/decorators/` (4
-archivos) y `src/types/` (1 archivo) sin documentacion ni uso obvio.
-No esta claro si son legado, experimentales o producto vivo.
-
-- **Impacto**: bajo. No bloquea nada.
-- **Accion**: registrado como deuda tecnica en
-  `docs/riesgos-y-deuda-tecnica/` (`deuda-decorators-experimental` y
-  `deuda-tipos-en-src-types`).
-- **Resuelto en**: pendiente. Requiere auditoria de uso para decidir
-  mantener o eliminar. No se abre iniciativa nueva todavia; se deja
-  en el inventario de deuda.
-
-### hallazgo-readme-raiz-no-menciona-arc42-ni-pm
-
-El `README.md` del repositorio solo menciona los tres documentos
-`scss-*.md`. Tras crear `docs/README.md`, el `README.md` raiz queda
-desactualizado: invita a ir a `docs/` pero no menciona que ahora hay
-una estructura arc42 + pm/ completa.
-
-- **Impacto**: medio. Cualquiera que llegue al repo por primera vez
-  no sabra que existe esta documentacion.
-- **Accion**: registrado como deuda en `docs/riesgos-y-deuda-tecnica/`
-  (`deuda-readme-sin-actualizar-tras-cambios`).
-- **Resuelto en**: pendiente. La decision (actualizar o dejar como
-  esta) es del owner del repo, no de esta iniciativa.
-
-### hallazgo-stack-de-typescript-sin-uso-en-src
-
-`tsconfig`, `@typescript-eslint/*`, `babel-preset-typescript` estan en
-devDependencies. `src/` es todo `.jsx` y `.js`. La unica carpeta con
-`.ts` es `src/types/` (1 archivo).
-
-- **Impacto**: bajo. Es ruido en `package.json`.
-- **Accion**: registrado como deuda en `docs/riesgos-y-deuda-tecnica/`
-  (`deuda-sin-typescript-en-src`).
-- **Resuelto en**: pendiente. Decision pendiente: migrar a TypeScript
-  o eliminar el stack TS.
-
-### hallazgo-ausencia-de-ci-cd
-
-No hay `.github/workflows/`, `.gitlab-ci.yml` ni `Jenkinsfile`. El
-pipeline de despliegue es manual.
-
-- **Impacto**: medio. Cualquier paso del build puede fallar o
-  ejecutarse en una maquina con estado distinto, sin auditoria.
-- **Accion**: registrado como riesgo en `docs/riesgos-y-deuda-tecnica/`
-  (`riesgo-ausencia-de-ci-cd-automatizado`).
-- **Resuelto en**: pendiente. Listado como Could en la priorizacion
-  MoSCoW del analisis principal.
-
-### hallazgo-149-commits-en-develop-sin-promover
-
-Al contar commits, develop esta **149 commits adelante** de main con
-86 UCs nuevos. No hay tag de release, no hay changelog, no hay
-estrategia documentada de promocion.
-
-- **Impacto**: alto. Cuanto mas tiempo pasa, mayor el riesgo de un
-  rollout monolitico con regresiones dificiles de localizar.
-- **Accion**: registrado como riesgo
-  (`riesgo-release-candidate-acumulado-en-develop`) y como iniciativa
-  futura sugerida (`definir-proceso-promocion-develop-a-main`, Must
-  en MoSCoW).
-- **Resuelto en**: iniciativa futura.
+El contenido detallado de cada entrada se preserva en el historial
+git de este archivo (commit que ejecuta T-002 de
+`resolver-hallazgos-de-deuda-del-template`).
 
 ---
 
