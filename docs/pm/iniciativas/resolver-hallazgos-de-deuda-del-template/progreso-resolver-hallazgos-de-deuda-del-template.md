@@ -46,6 +46,8 @@
 | 2026-05-20T23:35:00 | Hallazgo durante la ejecucion | T-011 | El plan menciona thunks "login, register, deactivateAccount" pero `deactivateAccount` no existe en `src/redux/slices/authSlice.js`. Los thunks reales son `loginUser`, `logoutUser`, `registerUser`, `fetchProfile`, `updateProfile`, `changePassword`, `verifyEmail`, `resendVerificationEmail`. La intencion del plan es proteger thunks que tocan credenciales: los candidatos reales son `loginUser`, `registerUser`, `changePassword`. Se aplica withLogging a esos tres. |
 | 2026-05-20T23:37:00 | Hallazgo durante la ejecucion | T-011 | El sanitizer de `withLogging` busca campos literalmente llamados `password`, `token`, `apiKey` en propiedades de primer nivel del primer arg objeto. Funciona para `loginUser({username, password})` y `registerUser({...,password})`, pero NO para `changePassword({currentPassword, newPassword, confirmPassword})` porque los nombres no son `password` literal. Decision: `loginUser` y `registerUser` con `logArgs: true` (sanitiza); `changePassword` con `logArgs: false` (no loguea ningun arg, mas conservador que loguearlos en claro). Mejorar el sanitizer para detectar variantes queda como follow-up latente. |
 | 2026-05-20T23:42:00 | Cierre de tarea | T-011 | Importado `withLogging` en `src/redux/slices/authSlice.js`. Envueltos los `payloadCreator` de `loginUser`, `registerUser`, `changePassword` con `withLogging`, con configuraciones distintas segun el comportamiento del sanitizer. Creado `tests/unit/reducers/authSlice.logging.test.js` con 4 tests: (1) loginUser sanitiza password en log, (2) registerUser sanitiza password, (3) changePassword no loguea args (logArgs:false), (4) los tres loguean duracion. Tests: 24/24 pasan (20 previos + 4 nuevos). Cubre H-01 (segunda tarea). |
+| 2026-05-20T23:53:00 | Hallazgo durante la ejecucion | T-012 | El plan dice "thunks `initiateMercadoPago` y `retryPayment`", pero los nombres reales son `initiateMercadoPagoPayment` y `retryPayment` (paymentsSlice exporta tambien `initiatePayPalPayment` y `requestAdminRefund`, fuera del scope). Sustituido por los nombres reales. Tambien, `CommonValidators.validateId('orderId')` espera un valor escalar pero el primer arg del thunk es un objeto `{order_id, ...}`. Solucion: definir `validatePaymentPayload(payload)` que valida que el payload es objeto y delega en `validateId('order_id')(payload.order_id)`. La composicion es `withLogging(withValidation(payloadCreator, validatePaymentPayload), ...)` para que ValidationError se loguee y se propague como rejected del thunk. |
+| 2026-05-20T23:58:00 | Cierre de tarea | T-012 | En `src/redux/slices/paymentsSlice.js` importados `withLogging`, `withValidation` y `CommonValidators`. Definido `validatePaymentPayload`. Envueltos `initiateMercadoPagoPayment` y `retryPayment` con la composicion `withLogging(withValidation(payloadCreator, validatePaymentPayload), ...)`. Creado `tests/unit/reducers/paymentsSlice.test.js` con 7 tests: 3 de validacion (rechaza sin order_id, con null, en ambos thunks), 2 de camino feliz (apiService.post invocado con body correcto), 2 de logging (inicio + duracion con nombre canonico). 7/7 pasan. Cubre H-01 (tercera tarea). |
 
 ## Eventos por tipo
 
@@ -57,9 +59,9 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 8 |
+| Hallazgo durante la ejecucion | 9 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 11 |
+| Cierre de tarea | 12 |
 | Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

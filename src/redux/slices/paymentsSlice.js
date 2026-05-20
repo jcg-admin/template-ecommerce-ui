@@ -14,6 +14,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
 import { serializeApiError } from '@utils/serializeApiError';
+import { withLogging } from '@decorators/withLogging';
+import { withValidation, CommonValidators } from '@decorators/withValidation';
+
+/**
+ * Valida que el payload de un thunk de pago contenga un `order_id`
+ * con forma de identificador (string o numero no vacio). Se usa para
+ * `initiateMercadoPagoPayment` y `retryPayment`, que dependen de ese
+ * campo para construir la request HTTP.
+ */
+const validatePaymentPayload = (payload) => {
+  if (!payload || typeof payload !== 'object') {
+    return { valid: false, message: 'Payment payload is required' };
+  }
+  return CommonValidators.validateId('order_id')(payload.order_id);
+};
 
 const MP_CHECKOUT_URL     = '/api/v1/payments/mercadopago/checkout';
 const PAYPAL_CHECKOUT_URL = '/api/v1/payments/paypal/checkout';
@@ -31,16 +46,24 @@ const ADMIN_REFUND_URL    = '/api/v1/admin/payments';
  */
 export const initiateMercadoPagoPayment = createAsyncThunk(
   'payments/initiateMercadoPago',
-  async ({ order_id, installments }, { rejectWithValue }) => {
-    try {
-      const payload = { order_id };
-      if (installments) payload.installments = Number(installments);
-      const res = await apiService.post(MP_CHECKOUT_URL, payload);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  }
+  withLogging(
+    withValidation(
+      async ({ order_id, installments }, { rejectWithValue }) => {
+        try {
+          const payload = { order_id };
+          if (installments) payload.installments = Number(installments);
+          const res = await apiService.post(MP_CHECKOUT_URL, payload);
+          return res.data;
+        } catch (err) {
+          return rejectWithValue(serializeApiError(err));
+        }
+      },
+      validatePaymentPayload,
+      { throwOnError: true, fnName: 'payments/initiateMercadoPagoPayment' },
+    ),
+    'payments/initiateMercadoPagoPayment',
+    { logArgs: true, logResult: false, logTime: true },
+  ),
 );
 
 /**
@@ -66,14 +89,22 @@ export const initiatePayPalPayment = createAsyncThunk(
  */
 export const retryPayment = createAsyncThunk(
   'payments/retry',
-  async ({ order_id, gateway }, { rejectWithValue }) => {
-    try {
-      const res = await apiService.post(RETRY_URL, { order_id, gateway });
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  }
+  withLogging(
+    withValidation(
+      async ({ order_id, gateway }, { rejectWithValue }) => {
+        try {
+          const res = await apiService.post(RETRY_URL, { order_id, gateway });
+          return res.data;
+        } catch (err) {
+          return rejectWithValue(serializeApiError(err));
+        }
+      },
+      validatePaymentPayload,
+      { throwOnError: true, fnName: 'payments/retryPayment' },
+    ),
+    'payments/retryPayment',
+    { logArgs: true, logResult: false, logTime: true },
+  ),
 );
 
 /**
