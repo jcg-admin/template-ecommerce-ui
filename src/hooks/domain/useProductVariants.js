@@ -1,5 +1,5 @@
 /**
- * useYorubaVariants / useAdminProductVariants — hooks React Query.
+ * useProductVariants / useAdminProductVariants — hooks React Query.
  *
  * Familia Yoruba (CHARTSIZE):
  *   UC-CHT-01 — Variantes del producto (publico): se sirve via useProduct
@@ -8,7 +8,7 @@
  *   UC-CHT-03 — Variantes del producto en el panel admin.
  *
  * Las mutaciones (crear, activar/desactivar, fijar precio) siguen en el
- * slice `yorubaVariantsSlice` para preservar lastAction; estos hooks
+ * slice `productVariantsSlice` para preservar lastAction; estos hooks
  * cubren solo las lecturas con cache compartido entre montajes.
  */
 import { useQuery } from '@tanstack/react-query';
@@ -17,7 +17,7 @@ import apiService from '@services/apiService';
 const ADMIN_VARIANTS_URL = (productId) =>
   `/api/v1/admin/products/${productId}/variants/`;
 
-export const YORUBA_VARIANTS_KEY = ['yoruba-variants'];
+export const PRODUCT_VARIANTS_KEY = ['product-variants'];
 
 /**
  * Lista las variantes administrables de un producto. UC-CHT-03.
@@ -26,7 +26,7 @@ export const YORUBA_VARIANTS_KEY = ['yoruba-variants'];
  */
 export function useAdminProductVariants(productId) {
   return useQuery({
-    queryKey: [...YORUBA_VARIANTS_KEY, 'admin', productId],
+    queryKey: [...PRODUCT_VARIANTS_KEY, 'admin', productId],
     enabled:  Boolean(productId),
     queryFn:  async ({ signal }) => {
       const { data } = await apiService.get(

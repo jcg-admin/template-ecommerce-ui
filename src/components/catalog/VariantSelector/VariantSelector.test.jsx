@@ -6,14 +6,14 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 
-import yorubaVariantsReducer from '@redux/slices/yorubaVariantsSlice';
+import productVariantsReducer from '@redux/slices/productVariantsSlice';
 import VariantSelector from './VariantSelector';
 
 const makeStore = (preloadedYoruba = {}) =>
   configureStore({
-    reducer: { yorubaVariants: yorubaVariantsReducer },
+    reducer: { productVariants: productVariantsReducer },
     preloadedState: {
-      yorubaVariants: {
+      productVariants: {
         selectedVariantId: null,
         adminVariants:     [],
         isLoading:         false,
@@ -68,7 +68,7 @@ describe('VariantSelector (UC-CHT-01)', () => {
     const store = makeStore();
     render(wrap(<VariantSelector variants={VARIANTS} />, store));
     fireEvent.click(screen.getByRole('button', { name: /Mediano/ }));
-    expect(store.getState().yorubaVariants.selectedVariantId).toBe(102);
+    expect(store.getState().productVariants.selectedVariantId).toBe(102);
   });
 
   it('marca visualmente la variante seleccionada con aria-pressed', () => {
@@ -85,7 +85,7 @@ describe('VariantSelector (UC-CHT-01)', () => {
     ];
     const store = makeStore();
     render(wrap(<VariantSelector variants={oneAvailable} />, store));
-    expect(store.getState().yorubaVariants.selectedVariantId).toBe(1);
+    expect(store.getState().productVariants.selectedVariantId).toBe(1);
   });
 
   it('expone un grupo accesible con aria-label', () => {
@@ -100,6 +100,6 @@ describe('VariantSelector (UC-CHT-01)', () => {
     ];
     const store = makeStore();
     render(wrap(<VariantSelector variants={allOut} />, store));
-    expect(store.getState().yorubaVariants.selectedVariantId).toBeNull();
+    expect(store.getState().productVariants.selectedVariantId).toBeNull();
   });
 });

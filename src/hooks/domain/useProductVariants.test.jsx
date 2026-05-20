@@ -13,8 +13,8 @@ jest.mock('@services/apiService', () => ({
 import apiService from '@services/apiService';
 import {
   useAdminProductVariants,
-  YORUBA_VARIANTS_KEY,
-} from './useYorubaVariants';
+  PRODUCT_VARIANTS_KEY,
+} from './useProductVariants';
 
 const makeWrapper = () => {
   const client = new QueryClient({
@@ -29,7 +29,7 @@ afterEach(() => jest.clearAllMocks());
 
 describe('useAdminProductVariants', () => {
   it('expone la clave canonica de cache', () => {
-    expect(YORUBA_VARIANTS_KEY).toEqual(['yoruba-variants']);
+    expect(PRODUCT_VARIANTS_KEY).toEqual(['product-variants']);
   });
 
   it('lista las variantes admin del producto indicado', async () => {

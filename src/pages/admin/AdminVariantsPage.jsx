@@ -15,7 +15,7 @@ import {
   createVariant,
   toggleVariantActive,
   clearVariantActionState,
-} from '@redux/slices/yorubaVariantsSlice';
+} from '@redux/slices/productVariantsSlice';
 import styles from './AdminVariantsPage.module.scss';
 
 const TYPE_OPTIONS = ['Tamano', 'Presentacion', 'Material'];
@@ -24,7 +24,7 @@ export default function AdminVariantsPage() {
   const { productId } = useParams();
   const dispatch = useDispatch();
   const { adminVariants, isLoading, isActioning, actionError } =
-    useSelector((s) => s.yorubaVariants);
+    useSelector((s) => s.productVariants);
 
   const [variantType, setVariantType] = useState('Tamano');
   const [optionName,  setOptionName]  = useState('');

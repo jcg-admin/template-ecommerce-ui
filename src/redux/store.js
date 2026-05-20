@@ -28,7 +28,7 @@ import vouchersReducer from './slices/vouchersSlice';
 import supportTicketsReducer from './slices/supportTicketsSlice';
 import returnsReducer        from './slices/returnsSlice';
 import inventoryReducer      from './slices/inventorySlice';
-import yorubaVariantsReducer from './slices/yorubaVariantsSlice';
+import productVariantsReducer from './slices/productVariantsSlice';
 import notificationsReducer    from './slices/notificationsSlice';
 import productDiscountsReducer from './slices/productDiscountsSlice';
 import contactReducer          from './slices/contactSlice';
@@ -66,7 +66,7 @@ const store = configureStore({
     supportTickets: supportTicketsReducer,
     returns:        returnsReducer,
     inventory:      inventoryReducer,
-    yorubaVariants: yorubaVariantsReducer,
+    productVariants: productVariantsReducer,
     notifications:  notificationsReducer,
     productDiscounts: productDiscountsReducer,
     contact:          contactReducer,

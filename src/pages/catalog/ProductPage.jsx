@@ -9,7 +9,7 @@ import {
   fetchProduct,
   clearCurrentProduct,
 } from '@redux/slices/catalogSlice';
-import { clearSelectedVariant } from '@redux/slices/yorubaVariantsSlice';
+import { clearSelectedVariant } from '@redux/slices/productVariantsSlice';
 import VariantSelector from '@components/catalog/VariantSelector';
 import AddToWishlistButton from '@components/wishlist/AddToWishlistButton';
 import RelatedProductsSection from '@components/catalog/RelatedProductsSection';
@@ -23,7 +23,7 @@ export default function ProductPage() {
 
   const { currentProduct: product, isLoading, error } = useSelector((s) => s.catalog);
   const selectedVariantId = useSelector(
-    (s) => s.yorubaVariants?.selectedVariantId ?? null,
+    (s) => s.productVariants?.selectedVariantId ?? null,
   );
 
   const { addProduct } = useAddProductWithVariant();

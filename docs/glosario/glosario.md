@@ -21,7 +21,7 @@ devoluciones, vouchers, configuracion, auditoria y backups.
 
 **Yoruba.** Identificador comercial del proyecto y de la paleta de
 colores. Aparece como prefijo en flags (`PY_*_SOURCE`), nombres de
-modulos (`yorubaVariantsSlice`), tokens de diseno y nombre del
+modulos (`productVariantsSlice`), tokens de diseno y nombre del
 producto (PracticaYoruba).
 
 **Dar de baja (deactivate).** Operacion de baja logica de la cuenta

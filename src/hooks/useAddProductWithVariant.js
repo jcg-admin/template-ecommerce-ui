@@ -26,7 +26,7 @@ const errorCode = {
 export default function useAddProductWithVariant() {
   const dispatch = useDispatch();
   const selectedVariantId = useSelector(
-    (state) => state.yorubaVariants?.selectedVariantId ?? null,
+    (state) => state.productVariants?.selectedVariantId ?? null,
   );
 
   const addProduct = useCallback(

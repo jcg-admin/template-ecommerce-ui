@@ -4,7 +4,7 @@
  * producto Yoruba. Muestra nombre, precio y disponibilidad. Marca la variante
  * seleccionada via aria-pressed y deshabilita las que no tienen stock.
  *
- * El estado de seleccion vive en yorubaVariantsSlice para que UC-CHT-02
+ * El estado de seleccion vive en productVariantsSlice para que UC-CHT-02
  * (agregar al carrito) pueda leerlo desde otros componentes.
  *
  * Contrato de variante: el backend `ProductVariantSerializer`
@@ -15,7 +15,7 @@
  */
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectVariant } from '@redux/slices/yorubaVariantsSlice';
+import { selectVariant } from '@redux/slices/productVariantsSlice';
 import styles from './VariantSelector.module.scss';
 
 const formatPrice = (value) =>
@@ -31,7 +31,7 @@ const variantDisplayPrice = (v) =>
 export default function VariantSelector({ variants }) {
   const dispatch = useDispatch();
   const selectedVariantId = useSelector(
-    (state) => state.yorubaVariants.selectedVariantId,
+    (state) => state.productVariants.selectedVariantId,
   );
 
   // Preseleccion automatica cuando solo una variante tiene stock.

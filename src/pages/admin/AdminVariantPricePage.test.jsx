@@ -16,11 +16,11 @@ jest.mock('@services/apiService', () => ({
 }));
 
 import apiService from '@services/apiService';
-import yorubaVariantsReducer from '@redux/slices/yorubaVariantsSlice';
+import productVariantsReducer from '@redux/slices/productVariantsSlice';
 import AdminVariantPricePage from './AdminVariantPricePage';
 
 const makeStore = () =>
-  configureStore({ reducer: { yorubaVariants: yorubaVariantsReducer } });
+  configureStore({ reducer: { productVariants: productVariantsReducer } });
 
 const wrap = (variantId, store) => (
   <Provider store={store}>

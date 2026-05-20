@@ -14,7 +14,7 @@ import {
   setVariantPrice,
   clearVariantPrice,
   clearVariantActionState,
-} from '@redux/slices/yorubaVariantsSlice';
+} from '@redux/slices/productVariantsSlice';
 import styles from './AdminVariantPricePage.module.scss';
 
 const isValidPrice = (raw) => {
@@ -27,7 +27,7 @@ export default function AdminVariantPricePage() {
   const { variantId } = useParams();
   const dispatch = useDispatch();
   const { isActioning, actionError, lastAction } =
-    useSelector((s) => s.yorubaVariants);
+    useSelector((s) => s.productVariants);
 
   const [price,     setPrice]     = useState('');
   const [localError, setLocalError] = useState(null);

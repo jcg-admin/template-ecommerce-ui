@@ -1,5 +1,5 @@
 /**
- * yorubaVariantsSlice — PracticaYoruba
+ * productVariantsSlice — PracticaYoruba
  * Estado de variantes Yoruba (Orisha/saints/configuraciones rituales):
  *
  *   UC-CHT-01 — Ver variantes disponibles del producto (Visitante)
@@ -27,7 +27,7 @@ const ADMIN_VARIANT_PRICE_URL = (variantId) => `/api/v1/admin/variants/${variant
 
 /** UC-CHT-03: lista de variantes de un producto desde el panel admin. */
 export const fetchAdminVariants = createAsyncThunk(
-  'yorubaVariants/fetchAdminVariants',
+  'productVariants/fetchAdminVariants',
   async (productId, { rejectWithValue }) => {
     try {
       const res = await apiService.get(ADMIN_VARIANTS_URL(productId));
@@ -40,7 +40,7 @@ export const fetchAdminVariants = createAsyncThunk(
 
 /** UC-CHT-03: crea una nueva variante (tipo + opcion + stock inicial). */
 export const createVariant = createAsyncThunk(
-  'yorubaVariants/createVariant',
+  'productVariants/createVariant',
   async ({ productId, variantType, optionName, initialStock = 0 }, { rejectWithValue }) => {
     try {
       const res = await apiService.post(ADMIN_VARIANTS_URL(productId), {
@@ -57,7 +57,7 @@ export const createVariant = createAsyncThunk(
 
 /** UC-CHT-03: activa o desactiva una variante existente. */
 export const toggleVariantActive = createAsyncThunk(
-  'yorubaVariants/toggleActive',
+  'productVariants/toggleActive',
   async ({ productId, variantId, isActive }, { rejectWithValue }) => {
     try {
       const res = await apiService.patch(
@@ -73,7 +73,7 @@ export const toggleVariantActive = createAsyncThunk(
 
 /** UC-CHT-04: configura el precio diferenciado de una variante. */
 export const setVariantPrice = createAsyncThunk(
-  'yorubaVariants/setPrice',
+  'productVariants/setPrice',
   async ({ variantId, price }, { rejectWithValue }) => {
     try {
       const res = await apiService.put(ADMIN_VARIANT_PRICE_URL(variantId), {
@@ -88,7 +88,7 @@ export const setVariantPrice = createAsyncThunk(
 
 /** UC-CHT-04: quita el precio diferenciado (vuelve al precio base). */
 export const clearVariantPrice = createAsyncThunk(
-  'yorubaVariants/clearPrice',
+  'productVariants/clearPrice',
   async (variantId, { rejectWithValue }) => {
     try {
       const res = await apiService.delete(ADMIN_VARIANT_PRICE_URL(variantId));
@@ -113,8 +113,8 @@ const initialState = {
   lastAction:        null,   // 'created' | 'toggled' | 'priced' | 'price_cleared'
 };
 
-const yorubaVariantsSlice = createSlice({
-  name: 'yorubaVariants',
+const productVariantsSlice = createSlice({
+  name: 'productVariants',
   initialState,
 
   reducers: {
@@ -210,6 +210,6 @@ export const {
   selectVariant,
   clearSelectedVariant,
   clearVariantActionState,
-} = yorubaVariantsSlice.actions;
+} = productVariantsSlice.actions;
 
-export default yorubaVariantsSlice.reducer;
+export default productVariantsSlice.reducer;

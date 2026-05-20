@@ -15,9 +15,9 @@ jest.mock('@services/apiService', () => ({
 import apiService from '@services/apiService';
 import catalogReducer from '@redux/slices/catalogSlice';
 import cartReducer from '@redux/slices/cartSlice';
-import yorubaVariantsReducer, {
+import productVariantsReducer, {
   selectVariant,
-} from '@redux/slices/yorubaVariantsSlice';
+} from '@redux/slices/productVariantsSlice';
 import ProductPage from './ProductPage';
 
 const makeStore = () =>
@@ -25,7 +25,7 @@ const makeStore = () =>
     reducer: {
       catalog:        catalogReducer,
       cart:           cartReducer,
-      yorubaVariants: yorubaVariantsReducer,
+      productVariants: productVariantsReducer,
     },
   });
 

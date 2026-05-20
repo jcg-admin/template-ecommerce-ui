@@ -1,5 +1,5 @@
 /**
- * Tests — yorubaVariantsSlice (D-010)
+ * Tests — productVariantsSlice (D-010)
  * Verifica el patron canonico: errores tipados via serializeApiError
  * preservan code / statusCode / validationErrors.
  */
@@ -15,7 +15,7 @@ jest.mock('@services/apiService', () => ({
 
 import apiService from '@services/apiService';
 
-import yorubaVariantsReducer, {
+import productVariantsReducer, {
   fetchAdminVariants,
   createVariant,
   toggleVariantActive,
@@ -23,7 +23,7 @@ import yorubaVariantsReducer, {
   clearVariantPrice,
   selectVariant,
   clearSelectedVariant,
-} from './yorubaVariantsSlice';
+} from './productVariantsSlice';
 
 // Reproducimos la APIError minima que apiService propaga.
 class APIError extends Error {
@@ -38,12 +38,12 @@ class APIError extends Error {
 }
 
 const makeStore = () => configureStore({
-  reducer: { yorubaVariants: yorubaVariantsReducer },
+  reducer: { productVariants: productVariantsReducer },
 });
 
 afterEach(() => jest.clearAllMocks());
 
-describe('yorubaVariantsSlice — error propagation (D-010)', () => {
+describe('productVariantsSlice — error propagation (D-010)', () => {
   it('fetchAdminVariants.rejected preserva statusCode y code', async () => {
     apiService.get.mockRejectedValue(new APIError({
       message: 'no autorizado',
@@ -52,7 +52,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     }));
     const store = makeStore();
     await store.dispatch(fetchAdminVariants(7));
-    const { error } = store.getState().yorubaVariants;
+    const { error } = store.getState().productVariants;
     expect(error).toMatchObject({
       message: 'no autorizado',
       code: 'AUTH_REQUIRED',
@@ -71,7 +71,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     await store.dispatch(createVariant({
       productId: 7, variantType: 'TAMAÑO', optionName: 'Grande',
     }));
-    const { actionError } = store.getState().yorubaVariants;
+    const { actionError } = store.getState().productVariants;
     expect(actionError).toMatchObject({
       code: 'VARIANTE_DUPLICADA',
       statusCode: 409,
@@ -87,7 +87,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     await store.dispatch(toggleVariantActive({
       productId: 7, variantId: 1, isActive: false,
     }));
-    const { actionError } = store.getState().yorubaVariants;
+    const { actionError } = store.getState().productVariants;
     expect(actionError).toMatchObject({ statusCode: 403, code: 'FORBIDDEN' });
   });
 
@@ -97,7 +97,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     }));
     const store = makeStore();
     await store.dispatch(setVariantPrice({ variantId: 1, price: -10 }));
-    const { actionError } = store.getState().yorubaVariants;
+    const { actionError } = store.getState().productVariants;
     expect(actionError).toMatchObject({
       statusCode: 400, code: 'PRECIO_INVALIDO',
     });
@@ -106,9 +106,9 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
   it('reducers de seleccion siguen funcionando (no regresion)', () => {
     const store = makeStore();
     store.dispatch(selectVariant(42));
-    expect(store.getState().yorubaVariants.selectedVariantId).toBe(42);
+    expect(store.getState().productVariants.selectedVariantId).toBe(42);
     store.dispatch(clearSelectedVariant());
-    expect(store.getState().yorubaVariants.selectedVariantId).toBe(null);
+    expect(store.getState().productVariants.selectedVariantId).toBe(null);
   });
 
   it('fetchAdminVariants.fulfilled popula adminVariants (no regresion)', async () => {
@@ -117,7 +117,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     });
     const store = makeStore();
     await store.dispatch(fetchAdminVariants(7));
-    expect(store.getState().yorubaVariants.adminVariants).toEqual(
+    expect(store.getState().productVariants.adminVariants).toEqual(
       [{ id: 1, option_name: 'Grande' }],
     );
   });
@@ -129,7 +129,7 @@ describe('yorubaVariantsSlice — error propagation (D-010)', () => {
     await store.dispatch(fetchAdminVariants(7));
     apiService.delete.mockResolvedValue({ data: {} });
     await store.dispatch(clearVariantPrice(9));
-    expect(store.getState().yorubaVariants.adminVariants[0]).toMatchObject({
+    expect(store.getState().productVariants.adminVariants[0]).toMatchObject({
       id: 9, price: null,
     });
   });

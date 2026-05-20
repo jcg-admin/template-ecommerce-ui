@@ -95,7 +95,7 @@ Store global con 31 slices. Tres familias:
 | Familia | Slices |
 |---------|--------|
 | Sesion y usuarios | `authSlice`, `adminUsersSlice`, `permissionsSlice` |
-| Comercio | `catalogSlice`, `cartSlice`, `checkoutSlice`, `ordersSlice`, `paymentsSlice`, `wishlistSlice`, `productsSlice`, `productDiscountsSlice`, `yorubaVariantsSlice` |
+| Comercio | `catalogSlice`, `cartSlice`, `checkoutSlice`, `ordersSlice`, `paymentsSlice`, `wishlistSlice`, `productsSlice`, `productDiscountsSlice`, `productVariantsSlice` |
 | Operaciones | `inventorySlice`, `logisticsSlice`, `returnsSlice`, `supportTicketsSlice`, `priceSyncSlice`, `vouchersSlice`, `searchHistorySlice` |
 | Soporte y configuracion | `reviewsSlice`, `questionsSlice`, `notificationsSlice`, `contactSlice`, `newsletterSlice`, `settingsSlice`, `backupsSlice`, `addressesSlice`, `categoriesSlice`, `adminSlice`, `uiSlice`, `errorSlice` |
 
