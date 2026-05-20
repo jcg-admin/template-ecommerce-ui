@@ -27,7 +27,7 @@
 | T-005 | Crear tsconfig.json con allowJs y strict | H-03 | 2 | hecha | (siguiente commit) |
 | T-006 | Verificar babel-jest procesa .ts/.tsx y anadir babel.config.cjs si falta | H-03 | 2 | hecha | (siguiente commit) |
 | T-007 | Smoke test compilando un dummy.ts | H-03 | 2 | hecha | (siguiente commit) |
-| T-008 | Migrar PropShapes.js a PropShapes.ts con interfaces y prop-types exportados | H-03, H-02 | 3 | pendiente | |
+| T-008 | Migrar PropShapes.js a PropShapes.ts con interfaces y prop-types exportados | H-03, H-02 | 3 | hecha | (siguiente commit) |
 | T-009 | Migrar serializeApiError.js a serializeApiError.ts con tipo del error normalizado | H-03 | 3 | pendiente | |
 | T-010 | Aplicar withLogging a apiService.fetch | H-01 | 4 | pendiente | |
 | T-011 | Aplicar withLogging a thunks de authSlice | H-01 | 4 | pendiente | |
@@ -50,9 +50,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 18 |
+| pendiente | 17 |
 | en curso | 0 |
-| hecha | 7 |
+| hecha | 8 |
 
 ## Valores validos del campo Estado
 

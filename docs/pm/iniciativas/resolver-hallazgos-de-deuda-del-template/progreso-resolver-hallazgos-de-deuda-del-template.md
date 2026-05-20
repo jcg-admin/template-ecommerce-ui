@@ -35,6 +35,9 @@
 | 2026-05-20T22:32:00 | Cierre de tarea | T-006 | Ejecutados dos `node -e` que confirman que `@babel/core` con `@babel/preset-typescript` transpila `const x: number = 1` y un componente TSX correctamente. Output validado. `babel.config.cjs` no requiere cambios; queda como estaba. La unica modificacion documental es esta entrada de progreso y el cambio de estado en `tareas-*.md`. |
 | 2026-05-20T22:40:00 | Cierre de tarea | T-007 | Creados temporalmente `src/__smoke__/dummy.ts` y `src/__smoke__/dummy.test.ts` con un export tipado (`DummyShape`, `buildDummy`, `sumIds`) y dos test cases. `npx jest src/__smoke__/` paso con `Test Suites: 1 passed, 1 total / Tests: 2 passed, 2 total`, confirmando que jest carga `babel.config.cjs#env.test`, aplica `@babel/preset-typescript`, transpila el `.ts` y ejecuta los tests. Tras la confirmacion, el directorio `src/__smoke__/` se elimino en la misma tarea (criterio del plan). El git tree de este commit por tanto no contiene los archivos del smoke; el registro de su paso vive en esta entrada del log. Cubre H-03 (verificacion del toolchain). |
 | 2026-05-20T22:40:00 | Fase cerrada | Fase 2 | Las tres tareas (T-005, T-006, T-007) cerradas. Resultado: `tsconfig.json` agregado en raiz con allowJs y strict; `babel.config.cjs` verificado ya configurado para .ts/.tsx; smoke test de jest pasando para un .ts dummy. El stack TypeScript instalado por package.json deja de ser deuda inerte: a partir de aqui se puede migrar archivos progresivamente. Continua fase 3 (migrar modulos compartidos a TypeScript: PropShapes y serializeApiError). |
+| 2026-05-20T22:48:00 | Hallazgo durante la ejecucion | T-008 | TypeScript 6.0.3 trata `baseUrl` como **error deprecado** (TS5101). El `tsconfig.json` creado en T-005 falla con `tsc --noEmit`. Solucion aplicada: anadir `"ignoreDeprecations": "6.0"` al `compilerOptions`. Migracion a TS 7.0 con `paths` sin `baseUrl` queda registrada como deuda futura latente (no se eleva a iniciativa propia todavia, pero conviene rastrearla si en algun momento se actualiza a TS 7). |
+| 2026-05-20T22:49:00 | Hallazgo durante la ejecucion | T-008 | El paquete `prop-types` no expone tipos TypeScript; con `strict: true`, importarlo desde un `.ts` genera `TS7016: Could not find a declaration file`. Solucion aplicada: `npm install --save-dev @types/prop-types` (1 paquete anadido a devDependencies). La instalacion modifica `package.json` y `package-lock.json`; ambos se incluyen en el commit de T-008. |
+| 2026-05-20T22:55:00 | Cierre de tarea | T-008 | `git mv src/types/PropShapes.js src/types/PropShapes.ts`. Archivo reescrito con `interface` o `type` por dominio (`User`, `Category`, `Product` mas `ProductImage` anidada, `CartItem`, `Voucher` con `VoucherType`, `Order`, `Address`, `Toast` con `ToastKind`) **junto a** los `PropTypes.shape({...})` originales preservados. Doble export: tipos TS para `.ts`/`.tsx`, prop-types para `.jsx`. `tsc --noEmit` cierra en verde (exit 0). `npx jest tests/unit/reducers/authSlice` pasa 20/20 tests verificando que la suite no se rompio. Cubre H-03 (primera migracion real) y H-02 (PropShapes ya consumible desde TS y JS). |
 
 ## Eventos por tipo
 
@@ -46,9 +49,9 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 2 |
+| Hallazgo durante la ejecucion | 4 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 7 |
+| Cierre de tarea | 8 |
 | Fase cerrada | 3 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
