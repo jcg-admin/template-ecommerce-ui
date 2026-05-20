@@ -1,0 +1,17 @@
+# Editores
+.vscode/
+.idea/
+*.swp
+*~
+.DS_Store
+
+# Sistema operativo
+Thumbs.db
+Desktop.ini
+
+# Logs locales
+*.log
+
+# Archivos temporales
+*.tmp
+*.bak
