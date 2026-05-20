@@ -21,6 +21,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
 import { serializeApiError } from '@utils/serializeApiError';
+import { withValidation, CommonValidators } from '@decorators/withValidation';
 
 // ─── Endpoints ────────────────────────────────────────────────────────
 const CART_URL          = '/api/cart/';
@@ -86,14 +87,18 @@ export const removeCartItem = createAsyncThunk(
 
 export const applyVoucher = createAsyncThunk(
   'cart/applyVoucher',
-  async (code, { rejectWithValue }) => {
-    try {
-      const res = await apiService.post(CART_VOUCHER_URL, { code });
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  },
+  withValidation(
+    async (code, { rejectWithValue }) => {
+      try {
+        const res = await apiService.post(CART_VOUCHER_URL, { code });
+        return res.data;
+      } catch (err) {
+        return rejectWithValue(serializeApiError(err));
+      }
+    },
+    CommonValidators.validateNonEmpty('voucher code'),
+    { throwOnError: true, fnName: 'cart/applyVoucher' },
+  ),
 );
 
 export const removeVoucher = createAsyncThunk(

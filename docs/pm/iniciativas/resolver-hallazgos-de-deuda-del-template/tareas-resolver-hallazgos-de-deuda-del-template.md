@@ -32,7 +32,7 @@
 | T-010 | Aplicar withLogging a apiService.fetch | H-01 | 4 | hecha | (siguiente commit) |
 | T-011 | Aplicar withLogging a thunks de authSlice | H-01 | 4 | hecha | (siguiente commit) |
 | T-012 | Aplicar withLogging + withValidation a thunks de paymentsSlice | H-01 | 4 | hecha | (siguiente commit) |
-| T-013 | Aplicar withValidation a cartSlice.applyVoucher | H-01 | 4 | pendiente | |
+| T-013 | Aplicar withValidation a cartSlice.applyVoucher | H-01 | 4 | hecha | (siguiente commit) |
 | T-014 | Aplicar withCaching a catalogSlice.searchProducts | H-01 | 4 | pendiente | |
 | T-015 | Aplicar ProductShape a ProductCard, VariantSelector y ProductPage | H-02 | 5 | pendiente | |
 | T-016 | Aplicar CartItemShape a CartPage | H-02 | 5 | pendiente | |
@@ -50,9 +50,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 13 |
+| pendiente | 12 |
 | en curso | 0 |
-| hecha | 12 |
+| hecha | 13 |
 
 ## Valores validos del campo Estado
 

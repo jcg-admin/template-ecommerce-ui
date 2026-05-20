@@ -48,6 +48,7 @@
 | 2026-05-20T23:42:00 | Cierre de tarea | T-011 | Importado `withLogging` en `src/redux/slices/authSlice.js`. Envueltos los `payloadCreator` de `loginUser`, `registerUser`, `changePassword` con `withLogging`, con configuraciones distintas segun el comportamiento del sanitizer. Creado `tests/unit/reducers/authSlice.logging.test.js` con 4 tests: (1) loginUser sanitiza password en log, (2) registerUser sanitiza password, (3) changePassword no loguea args (logArgs:false), (4) los tres loguean duracion. Tests: 24/24 pasan (20 previos + 4 nuevos). Cubre H-01 (segunda tarea). |
 | 2026-05-20T23:53:00 | Hallazgo durante la ejecucion | T-012 | El plan dice "thunks `initiateMercadoPago` y `retryPayment`", pero los nombres reales son `initiateMercadoPagoPayment` y `retryPayment` (paymentsSlice exporta tambien `initiatePayPalPayment` y `requestAdminRefund`, fuera del scope). Sustituido por los nombres reales. Tambien, `CommonValidators.validateId('orderId')` espera un valor escalar pero el primer arg del thunk es un objeto `{order_id, ...}`. Solucion: definir `validatePaymentPayload(payload)` que valida que el payload es objeto y delega en `validateId('order_id')(payload.order_id)`. La composicion es `withLogging(withValidation(payloadCreator, validatePaymentPayload), ...)` para que ValidationError se loguee y se propague como rejected del thunk. |
 | 2026-05-20T23:58:00 | Cierre de tarea | T-012 | En `src/redux/slices/paymentsSlice.js` importados `withLogging`, `withValidation` y `CommonValidators`. Definido `validatePaymentPayload`. Envueltos `initiateMercadoPagoPayment` y `retryPayment` con la composicion `withLogging(withValidation(payloadCreator, validatePaymentPayload), ...)`. Creado `tests/unit/reducers/paymentsSlice.test.js` con 7 tests: 3 de validacion (rechaza sin order_id, con null, en ambos thunks), 2 de camino feliz (apiService.post invocado con body correcto), 2 de logging (inicio + duracion con nombre canonico). 7/7 pasan. Cubre H-01 (tercera tarea). |
+| 2026-05-21T00:08:00 | Cierre de tarea | T-013 | En `src/redux/slices/cartSlice.js` importados `withValidation` y `CommonValidators`. Envuelto `applyVoucher` con `withValidation(payloadCreator, CommonValidators.validateNonEmpty('voucher code'), { throwOnError: true, fnName: 'cart/applyVoucher' })`. El validator encaja directamente porque `applyVoucher(code)` recibe un string como primer arg (no objeto): no requiere wrapper como `validatePaymentPayload` en T-012. Creado `tests/unit/reducers/cartSlice.applyVoucher.test.js` con 6 tests: 5 rechazos (string vacio, whitespace, undefined, null, numero) que verifican que `apiService.post` no se llama; 1 camino feliz con `WELCOME10`. Tests cartSlice totales: 20/20 pasan (14 previos + 6 nuevos). Cubre H-01 (cuarta tarea). |
 
 ## Eventos por tipo
 
@@ -61,7 +62,7 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 9 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 12 |
+| Cierre de tarea | 13 |
 | Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
