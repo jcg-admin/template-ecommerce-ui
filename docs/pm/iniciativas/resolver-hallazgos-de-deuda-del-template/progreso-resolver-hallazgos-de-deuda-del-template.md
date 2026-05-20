@@ -38,6 +38,9 @@
 | 2026-05-20T22:48:00 | Hallazgo durante la ejecucion | T-008 | TypeScript 6.0.3 trata `baseUrl` como **error deprecado** (TS5101). El `tsconfig.json` creado en T-005 falla con `tsc --noEmit`. Solucion aplicada: anadir `"ignoreDeprecations": "6.0"` al `compilerOptions`. Migracion a TS 7.0 con `paths` sin `baseUrl` queda registrada como deuda futura latente (no se eleva a iniciativa propia todavia, pero conviene rastrearla si en algun momento se actualiza a TS 7). |
 | 2026-05-20T22:49:00 | Hallazgo durante la ejecucion | T-008 | El paquete `prop-types` no expone tipos TypeScript; con `strict: true`, importarlo desde un `.ts` genera `TS7016: Could not find a declaration file`. Solucion aplicada: `npm install --save-dev @types/prop-types` (1 paquete anadido a devDependencies). La instalacion modifica `package.json` y `package-lock.json`; ambos se incluyen en el commit de T-008. |
 | 2026-05-20T22:55:00 | Cierre de tarea | T-008 | `git mv src/types/PropShapes.js src/types/PropShapes.ts`. Archivo reescrito con `interface` o `type` por dominio (`User`, `Category`, `Product` mas `ProductImage` anidada, `CartItem`, `Voucher` con `VoucherType`, `Order`, `Address`, `Toast` con `ToastKind`) **junto a** los `PropTypes.shape({...})` originales preservados. Doble export: tipos TS para `.ts`/`.tsx`, prop-types para `.jsx`. `tsc --noEmit` cierra en verde (exit 0). `npx jest tests/unit/reducers/authSlice` pasa 20/20 tests verificando que la suite no se rompio. Cubre H-03 (primera migracion real) y H-02 (PropShapes ya consumible desde TS y JS). |
+| 2026-05-20T23:05:00 | Hallazgo durante la ejecucion | T-009 | El constructor de `APIError` en `src/utils/apiErrors.js` no declara `validationErrors`; solo la subclase `ValidationError` la anade. Con `strict: true`, `tsc` falla con `TS2339: Property 'validationErrors' does not exist on type 'APIError'` al copiar la propiedad en el ramo `instanceof APIError`. Solucion aplicada: cast tipado `err as APIError & { validationErrors?: Record<string, string[]> }` antes de leer, con comentario explicando que cuando `apiErrors.js` migre a `.ts`, el cast se elimina sin cambios al consumidor. |
+| 2026-05-20T23:10:00 | Cierre de tarea | T-009 | `git mv src/utils/serializeApiError.js src/utils/serializeApiError.ts`. Archivo reescrito con `interface SerializedApiError` (estructura del retorno) y `type ErrorLike` (forma minima del input). Firma cambia de `(err)` implicito a `(err: unknown): SerializedApiError`. Compatibilidad runtime preservada al 100%; los 10 tests de `tests/unit/utils/serializeApiError` pasan sin modificar nada. `tsc --noEmit` exit 0. Cubre H-03 (segunda migracion). |
+| 2026-05-20T23:10:00 | Fase cerrada | Fase 3 | T-008 y T-009 cerradas. Los dos modulos compartidos mas establemente nombrados de `src/` (`PropShapes` y `serializeApiError`) estan ahora en TypeScript con tipos exportados. H-03 (`deuda-sin-typescript-en-src`) **resuelto en el inventario**: el stack TypeScript ya tiene dos consumidores reales del template; futuras migraciones de slices, hooks, paginas o componentes se ejecutan a discrecion en iniciativas propias. H-02 queda preparado para fase 5 (aplicar PropShapes a componentes). Continua fase 4 (integrar decorators). |
 
 ## Eventos por tipo
 
@@ -49,10 +52,10 @@
 | Decisiones aprobadas | 1 |
 | Replan | 2 |
 | Cambio de estado | 1 |
-| Hallazgo durante la ejecucion | 4 |
+| Hallazgo durante la ejecucion | 5 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 8 |
-| Fase cerrada | 3 |
+| Cierre de tarea | 9 |
+| Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |

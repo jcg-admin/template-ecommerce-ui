@@ -35,13 +35,16 @@ demostrar, no se lista.
 
 ### deuda-sin-typescript-en-src
 
-`tsconfig` y `@typescript-eslint/*` estan en devDependencies, pero
-`src/` es todo `.jsx` y `.js`. La unica carpeta con `.ts` es
-`src/types/`. Esto crea expectativa sin entrega: hay infraestructura
-de TypeScript que no se usa.
-
-- Decision pendiente: o se elimina la dependencia o se migra `src/` a TypeScript.
-- No es bloqueante; es deuda de coherencia.
+**Estado: resuelto** en la fase 3 de la iniciativa
+`resolver-hallazgos-de-deuda-del-template` (T-005, T-006, T-007,
+T-008, T-009, cerrada el 2026-05-20). El stack TypeScript instalado
+en `devDependencies` deja de ser deuda inerte: el template ahora
+soporta `.ts` y `.tsx` end to end (tsconfig.json, babel preset,
+jest), y dos modulos compartidos (`PropShapes` y `serializeApiError`)
+ya estan migrados como prueba de la cadena. Las migraciones
+adicionales de slices, hooks, paginas o componentes se ejecutan a
+discrecion en iniciativas propias cuando aporten valor; el toolchain
+deja de bloquearlas.
 
 ### deuda-decorators-experimental
 
