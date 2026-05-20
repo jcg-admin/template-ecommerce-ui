@@ -20,7 +20,7 @@ y rutas protegidas bajo `/account/*`.
 devoluciones, vouchers, configuracion, auditoria y backups.
 
 **Yoruba.** Identificador comercial del proyecto y de la paleta de
-colores. Aparece como prefijo en flags (`PY_*_SOURCE`), nombres de
+colores. Aparece como prefijo en flags (`*_SOURCE`), nombres de
 modulos (`productVariantsSlice`), tokens de diseno y nombre del
 producto (PracticaYoruba).
 
@@ -70,7 +70,7 @@ regla `color-no-hex`. Cada entrada tiene justificacion en
 para JavaScript via `document.cookie`. El JWT del backend viaja
 exclusivamente en cookies httpOnly; el UI nunca lo lee.
 
-**`py:unauthorized`.** Nombre del `CustomEvent` global que `apiService`
+**`app:unauthorized`.** Nombre del `CustomEvent` global que `apiService`
 dispara cuando una respuesta HTTP es 401. `UnauthorizedListener` lo
 escucha y redirige al login. El prefijo `py:` (PracticaYoruba) evita
 colisiones con eventos de terceros.

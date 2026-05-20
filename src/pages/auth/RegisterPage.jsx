@@ -3,8 +3,8 @@
  * Registro de comprador (UC-AUTH-01).
  *
  * Sprint 1 (completado en Sprint 2):
- *   - Con PY_AUTH_SOURCE=mock simula el registro y muestra confirmacion.
- *   - Con PY_AUTH_SOURCE=real llama a POST /api/v1/auth/register/.
+ *   - Con AUTH_SOURCE=mock simula el registro y muestra confirmacion.
+ *   - Con AUTH_SOURCE=real llama a POST /api/v1/auth/register/.
  */
 
 import { useState } from 'react';
@@ -14,7 +14,7 @@ import { registerUser } from '@redux/slices/authSlice';
 import { selectAuthLoading, selectAuthError } from '@redux/selectors';
 import styles from './RegisterPage.module.scss';
 
-const USE_MOCK = process.env.PY_AUTH_SOURCE === 'mock';
+const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
 
 export default function RegisterPage() {
   const dispatch  = useDispatch();

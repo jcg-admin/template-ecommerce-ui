@@ -70,8 +70,8 @@ npm run build:analyze   # con reporte de bundle
 En `.env.local`, cada dominio puede usar `mock` o `real`:
 
 ```
-PY_AUTH_SOURCE=mock      # usa datos locales
-PY_CATALOG_SOURCE=real   # llama al backend
+AUTH_SOURCE=mock      # usa datos locales
+CATALOG_SOURCE=real   # llama al backend
 ```
 
 ## Paleta de colores Yoruba

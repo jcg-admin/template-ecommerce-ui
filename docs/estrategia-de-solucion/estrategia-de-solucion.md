@@ -52,8 +52,8 @@ afectan estado local.
 | Implementacion | `src/mocks/mockInterceptor.js` invocado por `apiService` antes de la peticion HTTP real |
 
 **Por que.** Permite construir y testear el UI sin depender del backend.
-Cada desarrollador puede tener `PY_AUTH_SOURCE=mock` y trabajar offline
-en el catalogo, mientras otro tiene `PY_CATALOG_SOURCE=real` validando
+Cada desarrollador puede tener `AUTH_SOURCE=mock` y trabajar offline
+en el catalogo, mientras otro tiene `CATALOG_SOURCE=real` validando
 contratos contra el Django de staging.
 
 **Consecuencia.** Hay dos verdades por dominio: la del mock y la del
@@ -68,7 +68,7 @@ actualizar el mock — esto es un riesgo conocido (ver
 | Almacenamiento del token | Cookie httpOnly emitida por el backend |
 | Envio en cada peticion | Automatico por el navegador (`credentials: 'include'`) |
 | Estado de sesion en el UI | Reducido a `isAuthenticated: boolean` + perfil de usuario, **sin** el JWT |
-| Manejo de expiracion | Backend devuelve 401 -> `apiService` dispara `py:unauthorized` -> `UnauthorizedListener` redirige a `/auth/login` |
+| Manejo de expiracion | Backend devuelve 401 -> `apiService` dispara `app:unauthorized` -> `UnauthorizedListener` redirige a `/auth/login` |
 
 **Por que.** XSS no puede robar lo que no esta en `document.cookie` ni
 en `localStorage`. El UI no tiene control sobre el token, solo sobre
@@ -85,7 +85,7 @@ Esto es aceptado.
 | Aspecto | Decision |
 |---------|----------|
 | `API_URL` | Inyectada en build time via `DefinePlugin` |
-| Feature flags `PY_*_SOURCE` | Inyectadas en build time |
+| Feature flags `*_SOURCE` | Inyectadas en build time |
 | Resultado | El bundle es un artefacto inmutable por entorno |
 | Cambio de URL | Requiere rebuild + redeploy |
 
@@ -123,8 +123,8 @@ flowchart TB
 
     RTK -->|"thunks"| APIS
     RQ -->|"queryFn"| APIS
-    APIS -->|"si PY_*_SOURCE=mock"| MOCK
-    APIS -->|"si PY_*_SOURCE=real"| Backend["PracticaYoruba API<br/>(Django + DRF)"]
+    APIS -->|"si *_SOURCE=mock"| MOCK
+    APIS -->|"si *_SOURCE=real"| Backend["PracticaYoruba API<br/>(Django + DRF)"]
 
     Backend -->|"Set-Cookie: httpOnly"| UI
     Backend -.->|"401"| Listener["UnauthorizedListener"]

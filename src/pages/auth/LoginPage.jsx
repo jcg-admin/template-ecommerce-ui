@@ -3,8 +3,8 @@
  * Inicio de sesion JWT (UC-AUTH-02).
  *
  * Sprint 1 (completado en Sprint 2):
- *   - Con PY_AUTH_SOURCE=mock usa datos del MockRegistry.
- *   - Con PY_AUTH_SOURCE=real llama a POST /api/v1/auth/login/.
+ *   - Con AUTH_SOURCE=mock usa datos del MockRegistry.
+ *   - Con AUTH_SOURCE=real llama a POST /api/v1/auth/login/.
  */
 
 import { useState } from 'react';
@@ -15,7 +15,7 @@ import { selectAuthLoading, selectAuthError } from '@redux/selectors';
 import { loadMock } from '@mocks/registry';
 import styles from './LoginPage.module.scss';
 
-const USE_MOCK = process.env.PY_AUTH_SOURCE === 'mock';
+const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
 
 export default function LoginPage() {
   const dispatch   = useDispatch();
@@ -110,7 +110,7 @@ export default function LoginPage() {
 
         {USE_MOCK && (
           <p className={styles.mockBadge}>
-            Modo mock activo (PY_AUTH_SOURCE=mock)
+            Modo mock activo (AUTH_SOURCE=mock)
           </p>
         )}
       </div>

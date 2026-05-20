@@ -8,10 +8,10 @@ const TerserPlugin = require('terser-webpack-plugin');
 
 // Feature flags PracticaYoruba — controlan si el backend es real o mock
 const defaultFlags = {
-  PY_CATALOG_SOURCE: 'mock',
-  PY_AUTH_SOURCE: 'mock',
-  PY_CART_SOURCE: 'mock',
-  PY_PAYMENTS_SOURCE: 'mock',
+  CATALOG_SOURCE: 'mock',
+  AUTH_SOURCE: 'mock',
+  CART_SOURCE: 'mock',
+  PAYMENTS_SOURCE: 'mock',
 };
 
 // Lee .env.{NODE_ENV} y .env en ese orden

@@ -64,7 +64,7 @@ La configuracion sensible se inyecta en build time via `DefinePlugin`:
 |----------|--------|----------------|
 | `API_URL` | shell env > `.env.production` > fallback `http://localhost:8000` | `process.env.API_URL` (string literal) |
 | `APP_VERSION` | `package.json#version` | `process.env.APP_VERSION` |
-| `PY_*_SOURCE` | `.env*` files o defaults | `process.env.PY_*_SOURCE` |
+| `*_SOURCE` | `.env*` files o defaults | `process.env.*_SOURCE` |
 | `NODE_ENV` | argumento `--mode` | `process.env.NODE_ENV` |
 
 > Hallazgo de la rama pendiente: el commit `c9c3465` mueve la
@@ -96,7 +96,7 @@ estaticos para `/` y `/static/*`, y proxy-pasa `/api/*` a Django.
 
 | Entorno | Comando | Variables de entorno |
 |---------|---------|----------------------|
-| Desarrollo local | `npm run dev` (webpack-dev-server, puerto 3001) | `.env.local` (gitignored) + `.env.example` como plantilla. `PY_*_SOURCE=mock` por defecto. |
+| Desarrollo local | `npm run dev` (webpack-dev-server, puerto 3001) | `.env.local` (gitignored) + `.env.example` como plantilla. `*_SOURCE=mock` por defecto. |
 | Build de produccion | `npm run build` con `NODE_ENV=production` | `.env.production` (gitignored) + `.env.production.example` como plantilla. `API_URL` apunta al dominio real. |
 | Staging | Mismo build que produccion pero con `API_URL` apuntando al backend de staging | Plantilla propia (no en repo). |
 

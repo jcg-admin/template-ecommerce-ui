@@ -8,7 +8,7 @@
  *
  * Responsabilidades:
  *   1. Registrar el error en errorSlice por dominio (context).
- *   2. Detectar 401 y disparar el evento py:unauthorized para que
+ *   2. Detectar 401 y disparar el evento app:unauthorized para que
  *      authSlice limpie la sesión sin imports circulares.
  *   3. Log estructurado en desarrollo.
  */
@@ -33,7 +33,7 @@ export const errorHandlingMiddleware = (store) => (next) => (action) => {
 
   // 401 → limpiar sesión via evento global (evita circular import)
   if (error?.statusCode === 401 || error?.code === 'UNAUTHORIZED') {
-    window.dispatchEvent(new CustomEvent('py:unauthorized'));
+    window.dispatchEvent(new CustomEvent('app:unauthorized'));
   }
 
   // Registrar en el slice de errores

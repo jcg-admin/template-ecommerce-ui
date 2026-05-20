@@ -72,7 +72,7 @@ afirmaciones son verdaderas. Cada una es comprobable mecanicamente.
    afectados y la naturaleza del conflicto previsto al hacer merge.
 6. El analisis incluye un diagrama mermaid del topology de ramas y
    un diagrama mermaid de secuencia para al menos un flujo del codigo
-   afectado por la rama pendiente (el listener `py:unauthorized`).
+   afectado por la rama pendiente (el listener `app:unauthorized`).
 7. La documentacion no contiene emojis ni iconos en ningun archivo de
    la iniciativa.
 8. Todos los nombres de archivos en la iniciativa contienen el slug

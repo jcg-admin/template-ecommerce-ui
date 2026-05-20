@@ -3,8 +3,8 @@
  * Ver y editar el perfil del comprador (UC-AUTH-05 y UC-AUTH-06).
  *
  * Sprint 2:
- *   - Con PY_PROFILE_SOURCE=mock usa datos del MockRegistry.
- *   - Con PY_PROFILE_SOURCE=real usa GET/PATCH /api/v1/auth/profile/.
+ *   - Con PROFILE_SOURCE=mock usa datos del MockRegistry.
+ *   - Con PROFILE_SOURCE=real usa GET/PATCH /api/v1/auth/profile/.
  */
 
 import { useEffect, useState } from 'react';
@@ -14,7 +14,7 @@ import { selectUser, selectAuthLoading } from '@redux/selectors';
 import { loadMock } from '@mocks/registry';
 import styles from './ProfilePage.module.scss';
 
-const USE_MOCK = process.env.PY_PROFILE_SOURCE === 'mock';
+const USE_MOCK = process.env.PROFILE_SOURCE === 'mock';
 
 function CompletenessBar({ value }) {
   const color = value === 100 ? '#5a9e5a' : value >= 60 ? '#B8860B' : '#c0392b';
@@ -139,7 +139,7 @@ export default function ProfilePage() {
         )}
 
         {USE_MOCK && (
-          <p className={styles.mockBadge}>Modo mock activo (PY_PROFILE_SOURCE=mock)</p>
+          <p className={styles.mockBadge}>Modo mock activo (PROFILE_SOURCE=mock)</p>
         )}
       </div>
     </div>

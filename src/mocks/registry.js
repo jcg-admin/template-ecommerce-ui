@@ -9,7 +9,7 @@
  *     id: 'catalog',
  *     endpoint: '/api/products/',
  *     mockDataLoader: () => loadMock('catalog'),
- *     shouldUseMock: () => process.env.PY_CATALOG_SOURCE === 'mock',
+ *     shouldUseMock: () => process.env.CATALOG_SOURCE === 'mock',
  *   });
  */
 

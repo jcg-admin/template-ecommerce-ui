@@ -9,8 +9,8 @@ una sola vez, vive aqui.
 | Pieza | Responsabilidad |
 |-------|-----------------|
 | Backend Django | Emite JWT como cookie httpOnly al login. Renueva con refresh token (cookie aparte). |
-| `apiService` | Envia `credentials: 'include'` en cada peticion. Si recibe 401, dispara `window.dispatchEvent(new CustomEvent('py:unauthorized'))`. |
-| `UnauthorizedListener` | Componente montado bajo `<App>`. Escucha `py:unauthorized`, limpia el estado de auth en Redux y redirige a `/auth/login` preservando la ruta de origen en `state.from`. |
+| `apiService` | Envia `credentials: 'include'` en cada peticion. Si recibe 401, dispara `window.dispatchEvent(new CustomEvent('app:unauthorized'))`. |
+| `UnauthorizedListener` | Componente montado bajo `<App>`. Escucha `app:unauthorized`, limpia el estado de auth en Redux y redirige a `/auth/login` preservando la ruta de origen en `state.from`. |
 | `LoginPage` | Tras login exitoso, lee `state.from` y redirige de vuelta. |
 | `ProtectedRoute` / `AdminRoute` | Bloquean acceso a rutas privadas si `isAuthenticated` es `false` o si el rol no es admin. |
 
@@ -31,7 +31,7 @@ sequenceDiagram
     H->>S: GET /api/v1/recurso
     S->>B: fetch con cookie
     B-->>S: 401 Unauthorized
-    S->>S: dispatchEvent('py:unauthorized')
+    S->>S: dispatchEvent('app:unauthorized')
     S-->>H: error
     L->>L: recibe evento
     L->>R: navigate('/auth/login',<br/>{state:{from: location}})
@@ -47,7 +47,7 @@ sesion invalidada en una pestana abandonada quedaba en pantallas
 
 | Aspecto | Detalle |
 |---------|---------|
-| Granularidad | Por dominio (`PY_AUTH_SOURCE`, `PY_CATALOG_SOURCE`, `PY_CART_SOURCE`, `PY_PAYMENTS_SOURCE`). |
+| Granularidad | Por dominio (`AUTH_SOURCE`, `CATALOG_SOURCE`, `CART_SOURCE`, `PAYMENTS_SOURCE`). |
 | Punto de decision | `src/mocks/mockInterceptor.js` consulta el flag y devuelve respuesta mock o pasa la llamada al fetch real. |
 | Default en desarrollo | Todos en `mock`. |
 | Default en produccion | Todos en `real` (el `.env.production.example` no los define, el fallback de `apiService` apunta al backend real). |

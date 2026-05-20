@@ -75,7 +75,7 @@
 | Tareas pendientes | 0 |
 | Tareas no previstas que aparecieron durante la ejecucion | 0 |
 | Archivos creados en `docs/` | 24 |
-| Diagramas mermaid embebidos | 16 (contexto del sistema, estrategia de solucion, bloques de construccion x2, despliegue topologia, despliegue pipeline, conceptos transversales 401, decisiones arquitectura, gitGraph topology de ramas, sequenceDiagram listener py:unauthorized, flowchart rama PR #2, before/after PR #4, gantt + pie del delta, DAG de tareas, alcance del sistema) |
+| Diagramas mermaid embebidos | 16 (contexto del sistema, estrategia de solucion, bloques de construccion x2, despliegue topologia, despliegue pipeline, conceptos transversales 401, decisiones arquitectura, gitGraph topology de ramas, sequenceDiagram listener app:unauthorized, flowchart rama PR #2, before/after PR #4, gantt + pie del delta, DAG de tareas, alcance del sistema) |
 
 ## Historial de versiones
 

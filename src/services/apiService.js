@@ -6,7 +6,7 @@
  *   - Retry automatico en errores transitorios
  *   - Timeout con AbortController
  *   - Interceptores de request/response
- *   - Mock-first via mockInterceptor (PY_*_SOURCE=mock)
+ *   - Mock-first via mockInterceptor (*_SOURCE=mock)
  *   - httpOnly cookies para JWT (credentials: 'include')
  */
 
@@ -118,7 +118,7 @@ class APIService {
 
       if (response.status === 401) {
         this.clearAuthToken();
-        window.dispatchEvent(new CustomEvent('py:unauthorized'));
+        window.dispatchEvent(new CustomEvent('app:unauthorized'));
       }
 
       const error = createErrorFromResponse({ status: response.status, data: errorBody });

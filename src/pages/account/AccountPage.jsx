@@ -4,8 +4,8 @@
  * a las secciones de perfil, direcciones y ordenes.
  *
  * Sprint 2:
- *   - Con PY_PROFILE_SOURCE=mock usa datos del MockRegistry.
- *   - Con PY_PROFILE_SOURCE=real usa GET /api/v1/auth/profile/.
+ *   - Con PROFILE_SOURCE=mock usa datos del MockRegistry.
+ *   - Con PROFILE_SOURCE=real usa GET /api/v1/auth/profile/.
  */
 
 import { useEffect } from 'react';
@@ -16,7 +16,7 @@ import { selectUser, selectAuthLoading } from '@redux/selectors';
 import { loadMock } from '@mocks/registry';
 import styles from './AccountPage.module.scss';
 
-const USE_MOCK = process.env.PY_PROFILE_SOURCE === 'mock';
+const USE_MOCK = process.env.PROFILE_SOURCE === 'mock';
 
 const NAV_ITEMS = [
   { to: '/account/profile',   label: 'Mi perfil',          desc: 'Datos personales y avatar' },
@@ -70,7 +70,7 @@ export default function AccountPage() {
       </nav>
 
       {USE_MOCK && (
-        <p className={styles.mockBadge}>Modo mock activo (PY_PROFILE_SOURCE=mock)</p>
+        <p className={styles.mockBadge}>Modo mock activo (PROFILE_SOURCE=mock)</p>
       )}
     </div>
   );

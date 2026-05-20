@@ -74,7 +74,7 @@ Commit central de la rama. Introduce:
 - Cambios en `src/pages/catalog/ProductPage.test.jsx` para alinear el
   test con el codigo donde se elimino algun lazy import.
 
-### Commit `7129b8d` — Close FU-3: listen to py:unauthorized and redirect
+### Commit `7129b8d` — Close FU-3: listen to app:unauthorized and redirect
 
 Fecha: 2026-05-20T16:21:54Z
 
@@ -84,7 +84,7 @@ Fecha: 2026-05-20T16:21:54Z
 ```
 
 Crea el componente `UnauthorizedListener` (60 lineas) que escucha el
-evento global `py:unauthorized` y, cuando lo recibe:
+evento global `app:unauthorized` y, cuando lo recibe:
 
 1. Limpia el estado de auth en Redux (`isAuthenticated: false`,
    `user: null`) sin llamar a `/logout/` (el JWT ya esta invalido;
@@ -231,7 +231,7 @@ para regenerar el lock.
 | Corrige bug silencioso de webpack/env | Resoluciones de `API_URL` con `.env.production` ahora funcionan |
 | Aprovisiona Node 22 LTS de forma reproducible para WSL2 | Onboarding nuevo desarrollador con un solo comando con sudo |
 
-## Diagrama de secuencia: comportamiento del listener `py:unauthorized`
+## Diagrama de secuencia: comportamiento del listener `app:unauthorized`
 
 Este es el flujo que la rama habilita y que justifica integrarla.
 
@@ -252,7 +252,7 @@ sequenceDiagram
     Hook->>API: GET /api/v1/returns/
     API->>Backend: fetch + cookie expirada
     Backend-->>API: 401 Unauthorized
-    API->>API: dispatchEvent(<br/>new CustomEvent('py:unauthorized'))
+    API->>API: dispatchEvent(<br/>new CustomEvent('app:unauthorized'))
     API-->>Hook: throw UnauthorizedError
     L->>L: window.addEventListener escucha
     L->>L: dispatch(clearError())

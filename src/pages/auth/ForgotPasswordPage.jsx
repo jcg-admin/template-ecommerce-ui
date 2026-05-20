@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom';
 import styles from './ForgotPasswordPage.module.scss';
 
 const API_URL = '/api/v1/auth/password-reset/';
-const USE_MOCK = process.env.PY_AUTH_SOURCE === 'mock';
+const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail]         = useState('');

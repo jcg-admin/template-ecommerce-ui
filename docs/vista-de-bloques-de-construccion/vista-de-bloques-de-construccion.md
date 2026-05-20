@@ -43,7 +43,7 @@ Componente raiz (`App.jsx`) y listeners globales montados una sola vez
 arriba del router. Contiene:
 
 - `App.jsx`: providers (Redux, React Query, Toast) + `AppRouter`.
-- `UnauthorizedListener.jsx`: escucha el evento `py:unauthorized` y
+- `UnauthorizedListener.jsx`: escucha el evento `app:unauthorized` y
   redirige al login (introducido en la rama pendiente
   `claude/resume-ecommerce-project-Dm3ab`).
 
@@ -113,7 +113,7 @@ exponer una API estable a las paginas. Ejemplos: `useAuth`, `useCart`,
 
 | Archivo | Responsabilidad |
 |---------|-----------------|
-| `apiService.js` | Cliente HTTP unico. Timeout (30s), retry (3 intentos con backoff), interceptores request/response/error, mock-first via `mockInterceptor`. Dispara evento global `py:unauthorized` en 401. |
+| `apiService.js` | Cliente HTTP unico. Timeout (30s), retry (3 intentos con backoff), interceptores request/response/error, mock-first via `mockInterceptor`. Dispara evento global `app:unauthorized` en 401. |
 | `createResilientService.js` | Factoria para servicios con politicas adicionales (circuit breaker). |
 | `secureStorage.js` | Wrapper sobre storage del navegador para datos no sensibles. |
 | `utils/apiErrors.js` | Tipos de error tipados (`TimeoutError`, `NetworkError`, `createErrorFromResponse`). |

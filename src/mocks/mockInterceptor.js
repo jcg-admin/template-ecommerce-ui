@@ -4,7 +4,7 @@
  * Intercepta requests HTTP y retorna datos mock cuando
  * el feature flag correspondiente está en 'mock'.
  *
- * Activación: PY_*_SOURCE=mock en .env.local
+ * Activación: *_SOURCE=mock en .env.local
  * USAR SOLO EN DEVELOPMENT.
  *
  * Endpoints cubiertos:

@@ -67,7 +67,7 @@ gitGraph
     commit id: "Node.js provisioner WSL2"
     commit id: "webpack .env resolution fix"
     commit id: "UC-AUTH-16 Dar de baja"
-    commit id: "UnauthorizedListener py:unauthorized"
+    commit id: "UnauthorizedListener app:unauthorized"
     commit id: "check-no-lazy-imports + pre-commit hook"
 ```
 

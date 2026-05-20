@@ -146,11 +146,11 @@ class SecureStorage {
 const getSecretKey = () => {
   // En development, usar key estatica
   if (process.env.NODE_ENV === 'development') {
-    return process.env.PY_STORAGE_SECRET || 'dev-secret-key-change-in-production';
+    return process.env.STORAGE_SECRET || 'dev-secret-key-change-in-production';
   }
 
   // En production, obtener del backend o environment
-  return process.env.PY_STORAGE_SECRET || '';
+  return process.env.STORAGE_SECRET || '';
 };
 
 const secureStorage = new SecureStorage(getSecretKey());

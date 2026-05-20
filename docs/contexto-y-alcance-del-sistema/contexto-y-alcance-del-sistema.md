@@ -52,7 +52,7 @@ flowchart LR
 | Navegador del comprador | HTTPS | Carga de `index.html`, bundle JS+CSS desde Apache. Cookies httpOnly enviadas automaticamente. |
 | Navegador del administrador | HTTPS | Igual que comprador, mas acceso a rutas `/admin/*` segun rol. |
 | Backend Django (respuestas HTTP) | JSON | Cuerpos de respuesta a peticiones REST iniciadas por el UI. |
-| Eventos `py:unauthorized` | `CustomEvent` interno | `apiService` dispara este evento cuando una respuesta es 401; `UnauthorizedListener` lo escucha y redirige al login (introducido en rama pendiente `claude/resume-ecommerce-project-Dm3ab`). |
+| Eventos `app:unauthorized` | `CustomEvent` interno | `apiService` dispara este evento cuando una respuesta es 401; `UnauthorizedListener` lo escucha y redirige al login (introducido en rama pendiente `claude/resume-ecommerce-project-Dm3ab`). |
 
 ### Interfaces de salida (lo que el UI produce)
 
