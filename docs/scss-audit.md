@@ -75,7 +75,7 @@ representativa de colores duplicados que ya tienen token:
 | `#4a5fc1`       | (sin token)                      | ReturnDetailPage |
 
 Ejemplo concreto: `src/components/catalog/CatalogFilters.module.scss`
-declara seis colores hex propios sin tocar la paleta Yoruba.
+declara seis colores hex propios sin tocar la paleta del template.
 `src/pages/catalog/ProductPage.module.scss:230` y `:236` definen
 `color: #b00020` y `color: #1b5e20` cuando existen `$error-color` y
 `$success-color`.

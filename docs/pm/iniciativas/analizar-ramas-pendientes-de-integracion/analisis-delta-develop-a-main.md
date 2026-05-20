@@ -48,7 +48,7 @@ Conteo de `<scope>` en `feat(<scope>): ...`:
 | `support` | 5 |
 | `inventory` | 5 |
 | `dashboard` | 5 |
-| `yoruba` | 4 |
+| `variants` | 4 |
 | `reports` | 4 |
 | `questions` | 4 |
 | `newsletter` | 4 |
@@ -78,7 +78,7 @@ Conteo de `<scope>` en `feat(<scope>): ...`:
 | Reportes (`UC-REP`) | 01, 02, 04 | 4 (incluye `UC-REP-01..05` en uno) |
 | Preguntas (`UC-QST`) | 01..04 | 4 |
 | Newsletter (`UC-NEW`) | 01..04 | 4 |
-| Chat/Yoruba (`UC-CHT`) | 01..04 | 4 |
+| Variantes (`UC-CHT`) | 01..04 | 4 |
 | Wishlist (`UC-WISH`) | 01..03 | 3 |
 | Contacto (`UC-COM`) | 01..03 | 3 |
 | Autenticacion (`UC-AUTH`) | 07, 08, 10 | 3 |

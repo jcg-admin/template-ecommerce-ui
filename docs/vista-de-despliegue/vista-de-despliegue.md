@@ -9,9 +9,9 @@ Este documento describe **donde corre el sistema en produccion** y
 flowchart LR
     Dev["Estacion de desarrollo<br/>(WSL2 / Linux)<br/>scripts/install.sh"]
     CI["Build host<br/>(npm run build)"]
-    Apache["Apache HTTP Server<br/>(PracticaYoruba-server)"]
+    Apache["Apache HTTP Server<br/>(e-comerce-server)"]
     UI["dist/<br/>(bundle estatico)"]
-    Django["PracticaYoruba API<br/>(Django + gunicorn)"]
+    Django["e-comerce-ui API<br/>(Django + gunicorn)"]
     DB[("MariaDB")]
 
     Dev -->|"genera"| CI
@@ -76,7 +76,7 @@ La configuracion sensible se inyecta en build time via `DefinePlugin`:
 ### Nodo: servidor de produccion
 
 El bundle `dist/` se sirve estatico desde Apache, en un nodo separado
-provisionado por `PracticaYoruba-server` (Ubuntu + Apache + acme.sh +
+provisionado por `e-comerce-server` (Ubuntu + Apache + acme.sh +
 fail2ban). Detalles relevantes para el UI:
 
 | Aspecto | Detalle |

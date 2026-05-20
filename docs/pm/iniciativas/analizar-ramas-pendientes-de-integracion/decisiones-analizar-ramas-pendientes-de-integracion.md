@@ -54,7 +54,7 @@ alternativa descartada. Una entrada por cada decision.
 |-------|-------|
 | Decision | No incluir el cajon arc42 "Vista de tiempo de ejecucion" como documento separado. |
 | Alternativas | (a) Incluirlo con los flujos principales (auth, checkout, returns). (b) Omitirlo. |
-| Razon | Los flujos de runtime estan cubiertos por los casos de uso (UC-*) del repo backend `PracticaYoruba-doc`. Duplicar aqui produce ruido y dos fuentes de verdad. Los pocos flujos que son **exclusivamente del UI** (manejo de 401, mock-first) se documentan en `conceptos-transversales/` con sequenceDiagram. |
+| Razon | Los flujos de runtime estan cubiertos por los casos de uso (UC-*) del repo backend `e-comerce-doc`. Duplicar aqui produce ruido y dos fuentes de verdad. Los pocos flujos que son **exclusivamente del UI** (manejo de 401, mock-first) se documentan en `conceptos-transversales/` con sequenceDiagram. |
 | Trade-off aceptado | Lectores que esperan el cajon completo segun arc42 tienen que ir a otro repo o al documento de conceptos transversales. Documentado en `docs/README.md`. |
 
 ### dec-un-documento-por-rama-en-vez-de-uno-solo

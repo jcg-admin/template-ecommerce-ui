@@ -1,7 +1,7 @@
-# Documentacion de e-comerce-ui (PracticaYoruba)
+# Documentacion de e-comerce-ui (e-comerce-ui)
 
 Este directorio contiene la documentacion de arquitectura y gestion del
-frontend e-commerce **PracticaYoruba UI** (React 19 + Redux Toolkit 2 +
+frontend e-commerce **e-comerce-ui** (React 19 + Redux Toolkit 2 +
 Webpack 5), construida sobre una adaptacion pragmatica de arc42 mas un
 modulo de project management (`pm/`) que sigue el procedimiento interno
 **PROC-GESTION-001** para iniciativas.
@@ -37,7 +37,7 @@ modulo de project management (`pm/`) que sigue el procedimiento interno
 | Cajon descartado | Razon |
 |------------------|-------|
 | Requisitos de calidad (NFRs) | El repo no tiene ANS/SLO declarados ni metricas de calidad medibles que documentar honestamente. Cuando existan se anadira como cajon propio. |
-| Vista de tiempo de ejecucion | Los flujos en tiempo de ejecucion estan cubiertos por los casos de uso (UC-*) del repo backend `PracticaYoruba-doc`. Duplicar aqui produce ruido. Si un flujo del UI no esta cubierto por un UC, se documenta puntual en `conceptos-transversales/`. |
+| Vista de tiempo de ejecucion | Los flujos en tiempo de ejecucion estan cubiertos por los casos de uso (UC-*) del repo backend `e-comerce-doc`. Duplicar aqui produce ruido. Si un flujo del UI no esta cubierto por un UC, se documenta puntual en `conceptos-transversales/`. |
 
 ## Convenciones de esta documentacion
 

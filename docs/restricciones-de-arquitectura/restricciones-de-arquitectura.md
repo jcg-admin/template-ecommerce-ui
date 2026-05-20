@@ -12,7 +12,7 @@ de gestion, o en otros artefactos del repo. No son aspiraciones.
 | Redux Toolkit 2 como unico store global | Decision del proyecto | `src/redux/store.js` configura `configureStore` con 31 slices |
 | React Query 5 para reads remotos | Convencion canonica | Hooks `useAdminProducts`, `useReturns`, etc. usan `useQuery` |
 | React Router 6 con `BrowserRouter` | `src/router/AppRouter.jsx` | Lazy import por ruta con `React.lazy` |
-| SCSS Modules + sistema de tokens Yoruba | Pipeline SCSS | `src/styles/abstracts/` + 125 `.module.scss` |
+| SCSS Modules + sistema de design tokens | Pipeline SCSS | `src/styles/abstracts/` + 125 `.module.scss` |
 | Webpack 5 como bundler unico | `webpack.config.js` | Code splitting por ruta, contenthash, tree shaking |
 | Jest 29 + React Testing Library 16 | `jest.config.cjs` | 123 archivos `*.test.*` |
 | Node.js >= 20 y npm >= 10 para construir | `package.json#engines` (declarado en la rama pendiente) | `scripts/install.sh` instala Node 22 LTS |
@@ -49,7 +49,7 @@ de gestion, o en otros artefactos del repo. No son aspiraciones.
 
 | Restriccion | Detalle |
 |-------------|---------|
-| Bundle servido estatico, sin Node en runtime | `dist/` se sirve via Apache desde `PracticaYoruba-server` |
+| Bundle servido estatico, sin Node en runtime | `dist/` se sirve via Apache desde `e-comerce-server` |
 | `API_URL` fija en el bundle | No es runtime-configurable; cambiarla requiere rebuild |
 | Cookies SameSite=Strict, Secure, HttpOnly | `src/config/security.js` declara la politica esperada |
 | CSP estricto (default-src 'self') | `src/config/security.js` define el header esperado del servidor |

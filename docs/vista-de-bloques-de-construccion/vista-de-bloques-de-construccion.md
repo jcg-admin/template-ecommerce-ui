@@ -9,7 +9,7 @@ acotada.
 ```mermaid
 flowchart TB
     subgraph nivel_uno [Nivel uno: la SPA completa]
-        SPA["PracticaYoruba UI<br/>SPA React 19"]
+        SPA["e-comerce-ui<br/>SPA React 19"]
     end
 
     subgraph nivel_dos [Nivel dos: capas funcionales]
@@ -133,7 +133,7 @@ Sistema de estilos en cinco capas:
 
 | Capa | Carpeta | Que contiene |
 |------|---------|--------------|
-| Tokens | `styles/abstracts/` | `_variables.scss`, `_mixins.scss`, paleta Yoruba |
+| Tokens | `styles/abstracts/` | `_variables.scss`, `_mixins.scss`, paleta del template |
 | Reset y tipografia | `styles/base/` | `_reset.scss`, `_typography.scss` |
 | Componentes globales | `styles/components/` | `_buttons.scss`, `_cards.scss`, `_forms.scss` |
 | Layouts | `styles/layouts/` | `_header.scss`, `_sidebar.scss` |

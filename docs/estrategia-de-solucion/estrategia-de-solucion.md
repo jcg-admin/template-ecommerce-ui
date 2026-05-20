@@ -124,7 +124,7 @@ flowchart TB
     RTK -->|"thunks"| APIS
     RQ -->|"queryFn"| APIS
     APIS -->|"si *_SOURCE=mock"| MOCK
-    APIS -->|"si *_SOURCE=real"| Backend["PracticaYoruba API<br/>(Django + DRF)"]
+    APIS -->|"si *_SOURCE=real"| Backend["e-comerce-ui API<br/>(Django + DRF)"]
 
     Backend -->|"Set-Cookie: httpOnly"| UI
     Backend -.->|"401"| Listener["UnauthorizedListener"]

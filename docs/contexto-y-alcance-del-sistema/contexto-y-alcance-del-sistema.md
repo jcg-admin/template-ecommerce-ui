@@ -1,13 +1,13 @@
 # Contexto y alcance del sistema
 
 Este documento delimita **que entra y que sale** del sistema. El UI no
-existe solo: es una pieza dentro de un sistema mayor (`PracticaYoruba`)
+existe solo: es una pieza dentro de un sistema mayor (`e-comerce-ui`)
 que incluye backend, base de datos, servidor web y proveedores externos
 de pagos.
 
 ## Contexto de negocio
 
-El UI es la **cara visible** del e-commerce de productos Yoruba.
+El UI es la **cara visible** del e-commerce de productos del catálogo.
 Su responsabilidad de negocio es:
 
 - Ofrecer al comprador una experiencia de busqueda, compra y postventa.
@@ -20,8 +20,8 @@ Su responsabilidad de negocio es:
 flowchart LR
     Comprador["Comprador<br/>(navegador)"]
     Admin["Administrador<br/>(navegador)"]
-    UI["PracticaYoruba UI<br/>React 19 SPA<br/>(este proyecto)"]
-    API["PracticaYoruba API<br/>Django 5 + DRF"]
+    UI["e-comerce-ui<br/>React 19 SPA<br/>(este proyecto)"]
+    API["e-comerce-ui API<br/>Django 5 + DRF"]
     DB[("MariaDB")]
     MP["MercadoPago<br/>(gateway de pago)"]
     PP["PayPal<br/>(gateway de pago)"]
@@ -75,8 +75,8 @@ flowchart LR
 
 | Dentro del repo | Fuera del repo |
 |-----------------|----------------|
-| Codigo fuente React/Redux/SCSS | Codigo backend (`PracticaYoruba-api`) |
-| Configuracion Webpack/Babel/Jest | Configuracion Apache, fail2ban, acme.sh (`PracticaYoruba-server`) |
+| Codigo fuente React/Redux/SCSS | Codigo backend (`e-comerce-api`) |
+| Configuracion Webpack/Babel/Jest | Configuracion Apache, fail2ban, acme.sh (`e-comerce-server`) |
 | Hooks de cliente (husky) | Esquemas de BD MariaDB |
 | Mocks locales para desarrollo | Cuentas reales en MercadoPago/PayPal |
 | Provisioner de Node para el host de build (`scripts/install.sh`) | Aprovisionamiento del servidor de produccion |

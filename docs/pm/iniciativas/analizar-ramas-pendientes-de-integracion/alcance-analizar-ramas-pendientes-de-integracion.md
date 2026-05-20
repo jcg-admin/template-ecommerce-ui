@@ -89,7 +89,7 @@ afirmaciones son verdaderas. Cada una es comprobable mecanicamente.
 | Integrar la rama pendiente | La iniciativa **analiza**; la integracion la decide el equipo con el material producido aqui. |
 | Promover `develop` a `main` | Misma razon: el analisis es insumo, la decision es politica de release. |
 | Borrar ramas integradas del remoto | Decision operativa que requiere acuerdo del equipo, no de un analisis. |
-| Documentar el backend (`PracticaYoruba-api`), la base (`PracticaYoruba-db`) ni el servidor (`PracticaYoruba-server`) | Cada uno tiene su propio repositorio y su propio modulo de gestion. |
+| Documentar el backend (`e-comerce-api`), la base (`e-comerce-db`) ni el servidor (`e-comerce-server`) | Cada uno tiene su propio repositorio y su propio modulo de gestion. |
 | Implementar CI/CD automatico | Listado como riesgo en `docs/riesgos-y-deuda-tecnica/`; requiere su propia iniciativa. |
 | Migrar `src/` a TypeScript | Listado como deuda en `docs/riesgos-y-deuda-tecnica/`. |
 

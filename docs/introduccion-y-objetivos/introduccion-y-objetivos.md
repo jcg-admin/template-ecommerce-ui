@@ -1,10 +1,10 @@
 # Introduccion y objetivos
 
-## Que es PracticaYoruba UI
+## Que es e-comerce-ui
 
-PracticaYoruba UI es el **frontend del e-commerce de productos Yoruba**.
+e-comerce-ui es el **frontend del e-commerce de productos del catálogo**.
 Es una SPA construida con React 19 que consume la API REST de Django
-(`PracticaYoruba-api`). El proyecto vive en este repositorio como
+(`e-comerce-api`). El proyecto vive en este repositorio como
 codigo independiente y se compone con su backend a nivel de despliegue.
 
 ## Vista de stakeholders
@@ -14,7 +14,7 @@ codigo independiente y se compone con su backend a nivel de despliegue.
 | Comprador (autenticado y guest) | Navegar catalogo, gestionar carrito, hacer checkout, ver ordenes, devoluciones y tickets de soporte. |
 | Administrador (rol admin) | Gestionar usuarios, catalogo, ordenes, devoluciones, vouchers, configuracion, auditoria y backups desde `/admin/*`. |
 | Equipo de desarrollo | Construir, testear y desplegar el bundle de forma reproducible; agregar UCs sin romper el sistema. |
-| Backend (`PracticaYoruba-api`) | Recibir peticiones bien tipadas, con cookies httpOnly de auth, y errores manejados por el UI sin reintentos abusivos. |
+| Backend (`e-comerce-api`) | Recibir peticiones bien tipadas, con cookies httpOnly de auth, y errores manejados por el UI sin reintentos abusivos. |
 
 ## Objetivos esenciales
 
@@ -31,7 +31,7 @@ codigo independiente y se compone con su backend a nivel de despliegue.
    esperar al backend.
 4. **Construir reproducible.** El build de produccion se hace con
    `npm run build` y produce un `dist/` servido estaticamente por
-   Apache desde `PracticaYoruba-server`.
+   Apache desde `e-comerce-server`.
 5. **No romper silenciosamente.** Husky pre-commit ejecuta
    `check-scss.mjs` y `check-no-lazy-imports.mjs` para bloquear dos
    clases de fallo conocidas antes de que entren al repo.

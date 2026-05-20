@@ -7,8 +7,8 @@ esta documentacion y en el codigo. En orden alfabetico.
 
 **Caso de uso (UC).** Unidad de funcionalidad identificada por
 `UC-<dominio>-<numero>` (por ejemplo `UC-AUTH-16`). Los IDs se
-comparten entre este repo, el backend (`PracticaYoruba-api`) y la
-documentacion central (`PracticaYoruba-doc`). Cada UC aparece en
+comparten entre este repo, el backend (`e-comerce-api`) y la
+documentacion central (`e-comerce-doc`). Cada UC aparece en
 mensajes de commit y en comentarios JSDoc al inicio de paginas.
 
 **Comprador.** Usuario final del e-commerce, autenticado o invitado
@@ -18,11 +18,6 @@ y rutas protegidas bajo `/account/*`.
 **Administrador (admin).** Usuario con rol `admin` que accede al panel
 `/admin/*`. Operaciones tipicas: gestionar productos, ordenes,
 devoluciones, vouchers, configuracion, auditoria y backups.
-
-**Yoruba.** Identificador comercial del proyecto y de la paleta de
-colores. Aparece como prefijo en flags (`*_SOURCE`), nombres de
-modulos (`productVariantsSlice`), tokens de diseno y nombre del
-producto (PracticaYoruba).
 
 **Dar de baja (deactivate).** Operacion de baja logica de la cuenta
 del comprador (UC-AUTH-16). El comprador puede solicitarla desde
@@ -72,7 +67,7 @@ exclusivamente en cookies httpOnly; el UI nunca lo lee.
 
 **`app:unauthorized`.** Nombre del `CustomEvent` global que `apiService`
 dispara cuando una respuesta HTTP es 401. `UnauthorizedListener` lo
-escucha y redirige al login. El prefijo `py:` (PracticaYoruba) evita
+escucha y redirige al login. El prefijo `app:` (e-comerce-ui) evita
 colisiones con eventos de terceros.
 
 **Iniciativa.** Unidad de trabajo bajo `pm/iniciativas/` segun el
@@ -114,8 +109,8 @@ completo + check-scss).
 
 | Termino | Tipo | Donde se documenta |
 |---------|------|--------------------|
-| PracticaYoruba-api | Repo separado | Backend Django 5 + DRF |
-| PracticaYoruba-server | Repo separado | Provisioner del servidor Ubuntu + Apache |
-| PracticaYoruba-doc | Repo separado | Catalogo central de UCs y modelos |
+| e-comerce-api | Repo separado | Backend Django 5 + DRF |
+| e-comerce-server | Repo separado | Provisioner del servidor Ubuntu + Apache |
+| e-comerce-doc | Repo separado | Catalogo central de UCs y modelos |
 | PROC-GESTION-001 | Procedimiento normativo | Como crear y gestionar iniciativas en `pm/` |
 | arc42 | Plantilla | Estructura general de la documentacion de arquitectura |

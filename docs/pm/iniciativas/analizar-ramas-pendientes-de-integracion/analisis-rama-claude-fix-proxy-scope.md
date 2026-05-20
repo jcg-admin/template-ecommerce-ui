@@ -40,7 +40,7 @@ Conteo por scope del mensaje de commit (`feat(<scope>): ...`):
 | `support` | 5 | Tickets de soporte (UC-SUPP-01..05). |
 | `inventory` | 5 | Inventario admin. |
 | `dashboard` | 5 | Dashboards admin. |
-| `yoruba` | 4 | Variantes Yoruba. |
+| `variants` | 4 | Variantes de producto. |
 | `reports` | 4 | Reportes admin. |
 | `questions` | 4 | Preguntas de producto. |
 | `newsletter` | 4 | Suscripcion. |
@@ -57,7 +57,7 @@ Conteo por scope del mensaje de commit (`feat(<scope>): ...`):
 | `account` | 1 | Sidebar completo. |
 | `mocks` | 1 | Cobertura de returns + inventory. |
 
-Mas refactors (`refactor(yoruba)`, `refactor(pages)`, `refactor(router)`,
+Mas refactors (`refactor(variants)`, `refactor(pages)`, `refactor(router)`,
 `refactor(returns)`, `refactor(support)`, `refactor(inventory)`,
 `refactor(vouchers)`) y tests aislados (`test(product)`, `test(inventory)`).
 

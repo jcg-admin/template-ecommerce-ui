@@ -122,7 +122,7 @@ Cada `lazy(() => import('@pages/...'))` produce un chunk webpack
 independiente con `contenthash`, permitiendo cache aggressive (un
 deploy nuevo solo invalida los chunks que cambiaron).
 
-## Sistema de tokens Yoruba
+## Sistema de design tokens
 
 Paleta y reglas de espaciado centralizadas en
 `src/styles/abstracts/_variables.scss`. Los principales:

@@ -15,14 +15,14 @@ verbo en infinitivo mas objeto de trabajo.
 
 Algunos commits del repo hacen referencia a iniciativas que **no
 viven en este repo de UI** porque son del monorepo conceptual
-`e-comerce` que tiene su gestion en otro repositorio (`PracticaYoruba-doc`
+`e-comerce` que tiene su gestion en otro repositorio (`e-comerce-doc`
 con Sphinx). Se listan aqui para trazabilidad:
 
 | Iniciativa referenciada | Donde vive | Por que se referencia desde commits del UI |
 |-------------------------|------------|--------------------------------------------|
-| `eliminar-lazy-imports-ui` | `PracticaYoruba-doc/source/gestion/pm/ui/iniciativas/` | Origina los commits `46acc7d`, `09fa1bd` de la rama pendiente. |
-| `provisionar-nodejs-ui-develop` | `PracticaYoruba-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `04e526b` (provisioner). |
-| `corregir-carga-env-webpack-config` | `PracticaYoruba-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `c9c3465` (fix del callback de webpack). |
+| `eliminar-lazy-imports-ui` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina los commits `46acc7d`, `09fa1bd` de la rama pendiente. |
+| `provisionar-nodejs-ui-develop` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `04e526b` (provisioner). |
+| `corregir-carga-env-webpack-config` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `c9c3465` (fix del callback de webpack). |
 
 La razon por la que estas iniciativas no se replican aqui:
 
