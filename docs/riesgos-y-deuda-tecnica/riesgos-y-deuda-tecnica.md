@@ -10,11 +10,14 @@ demostrar, no se lista.
 
 | Campo | Valor |
 |-------|-------|
+| Estado | **Delegado a iniciativa propia** `validar-contrato-de-mocks-vs-backend-real` (proxima iniciativa tras `resolver-hallazgos-de-deuda-del-template`). |
+| Fecha de delegacion | 2026-05-20 |
+| Razon | Alcance excede una iniciativa de limpieza unitaria: las opciones reales (schema por endpoint con ajv/zod, generador desde OpenAPI compartido, smoke tests contra staging) requieren cada una su propio diseno y, en algunos casos, coordinacion con el repositorio del backend. |
 | Impacto | Alto |
 | Probabilidad | Alta |
 | Descripcion | Los mocks de `src/mocks/` pueden divergir del contrato real del backend sin que ningun test lo detecte. Un cambio en la API de Django (anadir campo, cambiar tipo de un enum, renombrar) deja el UI roto en `real` pero verde en `mock`. |
 | Mitigacion actual | Ninguna automatica. Solo revisiones manuales. |
-| Mitigacion propuesta | Contrato OpenAPI compartido + generador de mocks desde el spec. Posible iniciativa futura. |
+| Mitigacion propuesta | Definida en la iniciativa delegada. |
 | Evidencia | Estructura de mocks en `src/mocks/`, ausencia de tests de contrato en `tests/`. |
 
 ### riesgo-bundle-construido-con-API-URL-equivocada
@@ -55,6 +58,15 @@ incompleta a TypeScript, o es algo intencionalmente unico. No hay
 documentacion que lo explique.
 
 ### deuda-de-allowlist-color-no-hex
+
+**Estado: delegado a iniciativa propia** `monitorear-y-reducir-allowlist-hex`
+(segunda iniciativa tras `resolver-hallazgos-de-deuda-del-template`).
+Fecha de delegacion: 2026-05-20.
+
+Razon de la delegacion: la combinacion de un bloqueador mecanico en
+pre-push con un ritual trimestral documentado constituye una unidad
+de trabajo cohesiva propia que merece su propia iniciativa con
+alcance, analisis, tareas, progreso y decisiones de cierre.
 
 PR #4 redujo los `#hex` literales de 525 a 17, todos en allowlist.
 Cada entrada de allowlist tiene justificacion. Tarea continua:

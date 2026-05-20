@@ -26,6 +26,8 @@
 | 2026-05-20T21:42:00 | Replan | T-001, T-002 | Ajustadas las descripciones de T-001 y T-002 en `plan-*.md` y `tareas-*.md` para reflejar la distribucion por archivo. T-001 pasa de 9 hallazgos a 5; T-002 pasa de 4 a 8. Costo agregado de Fase 0 sube de 40 min a 50 min (T-002 sube de 10 a 20 min). Costo total de la iniciativa pasa de ~535 min a ~545 min. |
 | 2026-05-20T21:50:00 | Cierre de tarea | T-001 | Eliminadas las 5 secciones (`riesgo-ausencia-de-ci-cd-automatizado`, `riesgo-rama-pendiente-no-integrada`, `riesgo-release-candidate-acumulado-en-develop`, `riesgo-sin-cobertura-de-tests-medida`, `deuda-de-tareas-sprint-4-sin-trazar`) de `docs/riesgos-y-deuda-tecnica/riesgos-y-deuda-tecnica.md`. Cubre H-06, H-09, H-10, H-11, H-12. |
 | 2026-05-20T21:55:00 | Cierre de tarea | T-002 | Eliminadas las 8 subsecciones de "Seccion 2 — Hallazgos durante la ejecucion" de `docs/pm/iniciativas/analizar-ramas-pendientes-de-integracion/decisiones-analizar-ramas-pendientes-de-integracion.md`, sustituidas por una unica subseccion `Hallazgos historicos retirados del log` con tabla resumen y referencia cruzada a esta iniciativa. Contenido detallado preservado en historia git. Cubre H-13, H-14, H-15, H-16, H-17, H-18, H-19, H-20. |
+| 2026-05-20T22:00:00 | Cierre de tarea | T-003 | Marcadas las secciones de `riesgo-divergencia-mocks-vs-contrato-real` y `deuda-de-allowlist-color-no-hex` en `docs/riesgos-y-deuda-tecnica/riesgos-y-deuda-tecnica.md` con estado **Delegado a iniciativa propia**, fecha de delegacion (2026-05-20), slug de la iniciativa destino y razon. Cubre H-05 y H-07. |
+| 2026-05-20T22:00:00 | Fase cerrada | Fase 0 | Las tres tareas de la fase 0 (T-001, T-002, T-003) cerradas. Inventario heredado limpio: 5 entradas retiradas del inventario de riesgos y deuda, 8 entradas del log de la iniciativa previa retiradas o consolidadas (4 historicas + 4 duplicados), 2 entradas (H-05, H-07) marcadas como delegadas. Las 5 entradas vivas restantes (H-01, H-02, H-03, H-04, H-08) se resuelven en las fases 1 a 6. |
 
 ## Eventos por tipo
 
@@ -39,7 +41,8 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 1 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 2 |
+| Cierre de tarea | 3 |
+| Fase cerrada | 1 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
@@ -60,6 +63,8 @@
 - `Cierre de tarea`: la tarea T-NNN pasa de `en curso` a `hecha`. La
   columna **Detalle** lleva el hash corto del commit Tim Pope que la
   cerro.
+- `Fase cerrada`: todas las tareas de una fase pasan a `hecha`. Punto
+  natural de revision antes de comenzar la siguiente fase.
 - `Bloqueo`: la tarea T-NNN pasa a `bloqueada`. **Detalle** lleva la
   razon.
 - `Desbloqueo`: la tarea T-NNN sale de `bloqueada` a `pendiente` o `en
