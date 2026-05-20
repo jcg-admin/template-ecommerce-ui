@@ -58,6 +58,7 @@
 | 2026-05-21T01:05:00 | Fase cerrada | Fase 5 | T-015 es la unica tarea de la fase tras el replan. Cerrada. **H-02 (`deuda-tipos-en-src-types`) resuelto parcialmente con delegacion** en el inventario: tipos canonicos vivos para lo que el template ya implementa; extension (Address como entidad, ProductVariant, Review, User extendido) delegada a la iniciativa registrada en backlog `completar-dominio-de-ecommerce`. Continua fase 6 (endurecer build vs API_URL). |
 | 2026-05-21T01:35:00 | Cierre de tarea | T-020 | Creado `scripts/verify-build.mjs`, script Node ESM siguiendo el patron de `scripts/check-scss.mjs`. Inspecciona `dist/main.*.js`, extrae URLs http(s), filtra ruido conocido (react.dev, github, w3, cdns), y aplica tres reglas: (1) falla si ninguna URL significativa esta presente, (2) falla si encuentra localhost o 127.0.0.1 (a menos que se pase `--allow-localhost`), (3) si recibe `--expected=<url>` exige que esa URL aparezca al menos una vez. Tambien acepta `--dist=<path>` para flexibilidad. Validacion con `npm run build` real: caso feliz exit 0, caso URL ausente exit 1, caso localhost detectado exit 1, caso `--allow-localhost` exit 0. Cubre H-08 (primera mitad). T-021 anadira el `npm script` que invoca este archivo. |
 | 2026-05-21T01:40:00 | Cierre de tarea | T-021 | Anadido `"verify-build": "node scripts/verify-build.mjs"` en `scripts` de `package.json`, justo despues de los scripts de `build` para mantener la agrupacion semantica (build, build:analyze, build:watch, verify-build). Probado: `npm run build && npm run verify-build` cierra en verde con exit 0. `npm run verify-build -- --expected=https://api.example.com` tambien pasa cuando la URL esta presente. Cubre H-08 (script disponible como invocacion canonica). |
+| 2026-05-21T01:55:00 | Cierre de tarea | T-022 | (a) En `webpack.config.js` se anadio `'process.env.BUILT_AT': JSON.stringify(new Date().toISOString())` al DefinePlugin, con comentario explicando el proposito. (b) En `src/index.jsx`, antes del render de React, se asigna `window.__APP_CONFIG__ = Object.freeze({ apiUrl, version, builtAt })` cuando `window` existe (el guard previene errores en SSR hipotetico). Los tres campos quedan literales tras el build: `apiUrl: "https://api.example.com"`, `version: "1.0.0"`, `builtAt: "2026-05-20T23:39:46.493Z"`. Validado con `grep` directo sobre `dist/main.*.js`. `tsc --noEmit` exit 0, 22 suites jest 130 tests siguen verdes. Cubre H-08 (override runtime diagnosticable). |
 
 ## Eventos por tipo
 
@@ -71,7 +72,7 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 10 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 17 |
+| Cierre de tarea | 18 |
 | Fase cerrada | 6 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

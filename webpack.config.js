@@ -53,6 +53,10 @@ const buildDefinedEnv = (mode) => {
       process.env.API_URL || resolvedEnv.API_URL || 'http://localhost:8000'
     ),
     'process.env.APP_VERSION': JSON.stringify(require('./package.json').version),
+    // Timestamp ISO 8601 del momento en que webpack evaluo este config.
+    // Usado por `window.__APP_CONFIG__` en runtime para que el operador
+    // pueda confirmar qué build esta sirviendo el servidor.
+    'process.env.BUILT_AT':    JSON.stringify(new Date().toISOString()),
   };
 };
 
