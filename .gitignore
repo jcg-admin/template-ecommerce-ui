@@ -1,17 +1,33 @@
-# Editores
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+build/
+
+# Webpack cache
+.webpack_cache/
+
+# Environment
+.env
+.env.local
+.env.development
+.env.production
+.env.test
+
+# Coverage
+coverage/
+
+# Editor
 .vscode/
 .idea/
 *.swp
-*~
+*.swo
 .DS_Store
 
-# Sistema operativo
-Thumbs.db
-Desktop.ini
-
-# Logs locales
+# Logs
 *.log
+npm-debug.log*
 
-# Archivos temporales
-*.tmp
-*.bak
+# Misc
+.eslintcache
