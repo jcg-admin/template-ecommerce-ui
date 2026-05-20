@@ -30,6 +30,7 @@
 | 2026-05-20T22:00:00 | Fase cerrada | Fase 0 | Las tres tareas de la fase 0 (T-001, T-002, T-003) cerradas. Inventario heredado limpio: 5 entradas retiradas del inventario de riesgos y deuda, 8 entradas del log de la iniciativa previa retiradas o consolidadas (4 historicas + 4 duplicados), 2 entradas (H-05, H-07) marcadas como delegadas. Las 5 entradas vivas restantes (H-01, H-02, H-03, H-04, H-08) se resuelven en las fases 1 a 6. |
 | 2026-05-20T22:15:00 | Cierre de tarea | T-004 | Reemplazada la seccion "Documentacion" del `README.md` raiz. La seccion ahora se estructura en cuatro bloques: punto de entrada para adoptantes (`docs/como-adaptar-este-template.md`), arquitectura (`docs/README.md` con el indice arc42, decisiones, riesgos), project management (`docs/pm/`), pipeline de estilos (docs `scss-*`). `grep -cE 'como-adaptar\|docs/README\|pm/' README.md` retorna 5, criterio del plan satisfecho. La entrada `deuda-readme-sin-actualizar-tras-cambios` en `riesgos-y-deuda-tecnica.md` se marca como **resuelta** con referencia a esta tarea. Cubre H-04. |
 | 2026-05-20T22:15:00 | Fase cerrada | Fase 1 | T-004 es la unica tarea de la fase 1. Cerrada. Continua fase 2 (preparar TypeScript progresivo). |
+| 2026-05-20T22:25:00 | Cierre de tarea | T-005 | Creado `tsconfig.json` con `compilerOptions` que cumple el criterio del plan: `allowJs: true, checkJs: false, strict: true, jsx: "preserve", target: "ES2022", module: "ESNext", moduleResolution: "bundler", esModuleInterop: true, skipLibCheck: true, noEmit: true`. Los `paths` replican los 21 alias declarados en `jsconfig.json` (y a su vez en `jest.config.cjs` y `webpack.config.js`). `include` cubre `.ts`, `.tsx`, `.js`, `.jsx` bajo `src/`. JSON valido confirmado. Cubre H-03 (preparacion). |
 
 ## Eventos por tipo
 
@@ -43,7 +44,7 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 1 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 4 |
+| Cierre de tarea | 5 |
 | Fase cerrada | 2 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
