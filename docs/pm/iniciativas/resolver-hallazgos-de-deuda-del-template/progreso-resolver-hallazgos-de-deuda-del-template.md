@@ -59,6 +59,8 @@
 | 2026-05-21T01:35:00 | Cierre de tarea | T-020 | Creado `scripts/verify-build.mjs`, script Node ESM siguiendo el patron de `scripts/check-scss.mjs`. Inspecciona `dist/main.*.js`, extrae URLs http(s), filtra ruido conocido (react.dev, github, w3, cdns), y aplica tres reglas: (1) falla si ninguna URL significativa esta presente, (2) falla si encuentra localhost o 127.0.0.1 (a menos que se pase `--allow-localhost`), (3) si recibe `--expected=<url>` exige que esa URL aparezca al menos una vez. Tambien acepta `--dist=<path>` para flexibilidad. Validacion con `npm run build` real: caso feliz exit 0, caso URL ausente exit 1, caso localhost detectado exit 1, caso `--allow-localhost` exit 0. Cubre H-08 (primera mitad). T-021 anadira el `npm script` que invoca este archivo. |
 | 2026-05-21T01:40:00 | Cierre de tarea | T-021 | Anadido `"verify-build": "node scripts/verify-build.mjs"` en `scripts` de `package.json`, justo despues de los scripts de `build` para mantener la agrupacion semantica (build, build:analyze, build:watch, verify-build). Probado: `npm run build && npm run verify-build` cierra en verde con exit 0. `npm run verify-build -- --expected=https://api.example.com` tambien pasa cuando la URL esta presente. Cubre H-08 (script disponible como invocacion canonica). |
 | 2026-05-21T01:55:00 | Cierre de tarea | T-022 | (a) En `webpack.config.js` se anadio `'process.env.BUILT_AT': JSON.stringify(new Date().toISOString())` al DefinePlugin, con comentario explicando el proposito. (b) En `src/index.jsx`, antes del render de React, se asigna `window.__APP_CONFIG__ = Object.freeze({ apiUrl, version, builtAt })` cuando `window` existe (el guard previene errores en SSR hipotetico). Los tres campos quedan literales tras el build: `apiUrl: "https://api.example.com"`, `version: "1.0.0"`, `builtAt: "2026-05-20T23:39:46.493Z"`. Validado con `grep` directo sobre `dist/main.*.js`. `tsc --noEmit` exit 0, 22 suites jest 130 tests siguen verdes. Cubre H-08 (override runtime diagnosticable). |
+| 2026-05-21T02:15:00 | Cierre de tarea | T-023 | En `docs/vista-de-despliegue/vista-de-despliegue.md` anadida seccion `## Verificacion antes del deploy` con dos pasos: paso 1 (inspeccionar bundle con `verify-build` antes de subir, forma estricta con `--expected=$API_URL`) y paso 2 (confirmar runtime con `window.__APP_CONFIG__` tras desplegar). Incluye tabla "Cuando algo no coincide" mapeando 3 sintomas tipicos a su hipotesis e investigacion. En `docs/como-adaptar-este-template.md` se ampliaron las filas de la tabla "Verificacion: tu adopcion esta completa cuando" con dos nuevas: una para `npm run verify-build -- --expected=$API_URL` y otra para `window.__APP_CONFIG__` post-deploy. Cubre H-08 (procedimiento documentado). |
+| 2026-05-21T02:15:00 | Fase cerrada | Fase 6 | Las cuatro tareas (T-020 a T-023) cerradas. **H-08 (`riesgo-bundle-construido-con-API-URL-equivocada`) resuelto en el inventario**: el operador tiene tres herramientas mecanicas para reducir la probabilidad de servir un bundle con URL incorrecta, todas sin necesidad de CI/CD (que esta declarada fuera de scope). Continua fase 7 (cierre de la iniciativa: producir `decisiones-*.md` y cerrar). |
 
 ## Eventos por tipo
 
@@ -72,8 +74,8 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 10 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 18 |
-| Fase cerrada | 6 |
+| Cierre de tarea | 19 |
+| Fase cerrada | 7 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 1 |

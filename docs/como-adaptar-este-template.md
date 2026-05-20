@@ -124,6 +124,8 @@ verde tienes una adopcion sana.
 | `.env.production` apunta a tu backend | `cat .env.production` (no committeado) debe tener `API_URL` con tu dominio real. |
 | Las pruebas siguen pasando tras el rebranding | `npm test` cierra en verde. |
 | El build de produccion funciona | `npm run build` cierra en verde y `dist/` contiene los hashes esperados. |
+| El bundle servira la URL correcta | `npm run verify-build -- --expected=$API_URL` cierra en verde tras un build de produccion. Ver `docs/vista-de-despliegue/` seccion "Verificacion antes del deploy". |
+| El bundle desplegado coincide con lo construido | Tras desplegar, abrir el sitio y en la consola del navegador `window.__APP_CONFIG__` devuelve un objeto con `apiUrl`, `version` y `builtAt` esperados. |
 | Los hooks pre-push estan instalados | `bash scripts/install-hooks.sh` ejecutado al menos una vez (si tu adopcion incluye este script). |
 | El README raiz describe tu producto | `head -5 README.md` debe mencionar tu marca, no decir "Plantilla de frontend e-commerce". |
 | La documentacion arc42 esta alineada con tu adopcion | Como minimo `docs/introduccion-y-objetivos/`, `docs/contexto-y-alcance-del-sistema/` y `docs/glosario/` deben reflejar tu producto, no el template. |

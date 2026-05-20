@@ -22,14 +22,29 @@ demostrar, no se lista.
 
 ### riesgo-bundle-construido-con-API-URL-equivocada
 
+**Estado: resuelto** en la fase 6 de la iniciativa
+`resolver-hallazgos-de-deuda-del-template` (T-020 a T-023, cerrada el
+2026-05-21). Mitigaciones aplicadas:
+
+- `scripts/verify-build.mjs` mas el script npm `verify-build` permiten
+  inspeccionar el bundle antes del deploy. La forma estricta es
+  `npm run verify-build -- --expected=$API_URL`; falla con exit 1 si
+  la URL esperada no aparece, si el bundle no contiene ninguna URL
+  significativa o si encuentra `localhost` en un build de produccion.
+- `window.__APP_CONFIG__` expone `{ apiUrl, version, builtAt }` en el
+  bundle servido, lo que permite confirmar en runtime que el servidor
+  esta sirviendo el build correcto.
+- Procedimiento documentado en `docs/vista-de-despliegue/` seccion
+  "Verificacion antes del deploy" y referenciado desde
+  `docs/como-adaptar-este-template.md` en la checklist de adopcion.
+
 | Campo | Valor |
 |-------|-------|
 | Impacto | Alto (sitio caido visible al usuario) |
 | Probabilidad | Media |
 | Descripcion | Como `API_URL` se inyecta en build time, construir con un `.env.production` mal configurado produce un bundle que apunta a un backend incorrecto o inexistente. El error solo aparece al desplegar. |
-| Mitigacion actual | El commit `c9c3465` (rama pendiente) corrigio un bug de resolucion silenciosa. No hay validacion adicional. |
-| Mitigacion propuesta | Smoke test post-build que verifique que el bundle contiene la `API_URL` esperada. |
-| Evidencia | `webpack.config.js`, ver `decisiones-de-arquitectura/` entrada `dec-api-url-resuelta-en-build-time`. |
+| Mitigacion actual | `verify-build` antes del deploy + `window.__APP_CONFIG__` despues. Documentadas en vista de despliegue y checklist de adopcion. |
+| Evidencia | `scripts/verify-build.mjs`, `src/index.jsx`, `webpack.config.js#BUILT_AT`. |
 
 ## Deuda tecnica conocida
 

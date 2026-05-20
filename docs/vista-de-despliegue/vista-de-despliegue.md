@@ -137,3 +137,65 @@ sequenceDiagram
 
 Este pipeline es **manual**. No hay CI/CD configurado en el repo. Esto
 esta listado en `riesgos-y-deuda-tecnica/`.
+
+## Verificacion antes del deploy
+
+El template ofrece dos mecanismos complementarios para reducir la
+probabilidad de subir un bundle con `API_URL` incorrecta. El operador
+ejecuta el primero antes de copiar `dist/` al servidor; usa el
+segundo para confirmar despues que el servidor sirve lo esperado.
+
+### Paso 1 — Inspeccionar el bundle con `verify-build`
+
+```
+npm run build
+npm run verify-build
+```
+
+Sin argumentos, el script lista todas las URLs http(s) inyectadas en
+`dist/main.*.js` y aplica dos guard rails:
+
+- Falla con exit 1 si **ninguna** URL significativa aparece en el
+  bundle (sintoma de `process.env.API_URL` vacio en build time).
+- Falla con exit 1 si encuentra `localhost` o `127.0.0.1` en el
+  bundle. Para builds de desarrollo intencionales se pasa
+  `--allow-localhost`.
+
+Para el deploy a produccion el operador conoce la URL esperada y la
+exige explicitamente:
+
+```
+npm run build
+npm run verify-build -- --expected=https://api.prod.example.com
+```
+
+Si el bundle no contiene esa URL, el script falla; el operador
+revisa `.env.production`, vuelve a construir y repite.
+
+### Paso 2 — Confirmar runtime con `window.__APP_CONFIG__`
+
+Tras desplegar y abrir el sitio en el navegador, en la consola de
+DevTools:
+
+```
+window.__APP_CONFIG__
+```
+
+Devuelve un objeto inmutable con tres campos:
+
+| Campo | Significado |
+|-------|-------------|
+| `apiUrl` | El `API_URL` que el bundle servido hara consumir al cliente. Debe coincidir con la URL inyectada en build time y validada por `verify-build`. |
+| `version` | La `version` de `package.json` en el commit del que salio el build. |
+| `builtAt` | Timestamp ISO 8601 del momento en que se ejecuto `npm run build`. Permite detectar despliegues que sirven un bundle obsoleto cuando un balanceador o cache CDN no se invalido. |
+
+El objeto esta congelado con `Object.freeze` para evitar mutaciones
+accidentales desde la consola.
+
+### Cuando algo no coincide
+
+| Sintoma | Hipotesis primera | Verificacion |
+|---------|-------------------|--------------|
+| `apiUrl` apunta a localhost en produccion | `.env.production` no se cargo; build se hizo sin `API_URL` definida | Repetir build con `API_URL=...` en el entorno del build host |
+| `apiUrl` apunta a un host antiguo tras un deploy | Apache sirve el bundle anterior porque `dist/` no se reemplazo completo | `builtAt` lo confirma; rsync con `--delete` o invalidar cache del proxy |
+| `window.__APP_CONFIG__` es `undefined` | El servidor sirve un build muy antiguo previo a esta convencion | Forzar `npm run build` desde un commit posterior a T-022 de la iniciativa `resolver-hallazgos-de-deuda-del-template` |
