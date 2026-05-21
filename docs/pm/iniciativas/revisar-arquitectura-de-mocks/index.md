@@ -3,10 +3,11 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `revisar-arquitectura-de-mocks` |
-| Estado | En analisis |
-| Orden de backlog | (vacio: ya no esta en backlog) |
+| Estado | En ejecucion |
+| Orden de backlog | (vacio: no esta en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
+| Fecha de paso a ejecucion | 2026-05-21 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -37,30 +38,26 @@ con el backend real cuando llegue.
 
 ## Estado actual
 
-Iniciativa **abierta**. Estado: `En analisis`. Producidos los
-documentos de analisis tras tres iteraciones:
+Iniciativa en **ejecucion**. Estado: `En ejecucion`. Plan producido
+con 24 tareas atomicas T-NNN distribuidas en 8 fases (0 a 7), costo
+agregado estimado ~645 min (~10.75 horas efectivas).
 
-1. `alcance-revisar-arquitectura-de-mocks.md` definio los criterios
-   y las 9 alternativas a evaluar.
-2. `analisis-revisar-arquitectura-de-mocks.md` comparo las 9
-   alternativas contra 7 criterios y produjo una primera
-   recomendacion (MSW + Faker).
-3. `analisis-trade-off-service-worker.md` profundizo en el trade-off
-   especifico del Service Worker en `public/`.
-4. `reconsideracion-bajo-rup-adaptado.md` reconsidero la decision
-   incorporando la disciplina RUP del proyecto. Detecto la ADR
-   previa `dec-mock-first-via-feature-flags-por-dominio` que el
-   analisis general no habia inspeccionado.
+La Fase 0 (T-001 supersede ADR + T-002 enmienda procedimiento) se
+ejecuta **antes** de cualquier tarea de implementacion. Bajo RUP
+adaptado, la decision arquitectonica formal precede al codigo.
 
-**Decision final aprobada**: Camino B. Superseder la ADR previa y
-migrar a MSW + Faker. La premisa tecnica de la ADR vigente
-(*"MSW agrega un service worker que complica el setup de Jest"*) es
-incorrecta en 2026 y se corrige formalmente como parte de esta
-iniciativa.
+Las fases siguen el DAG declarado en `plan-*.md`:
 
-Siguiente paso del procedimiento: producir `plan-*.md` con las
-tareas atomicas T-NNN del Camino B, seguido del commit que
-supersede la ADR previa, y luego ejecutar las tareas.
+```
+Fase 0  ADR y procedimiento
+  Fase 1  Setup MSW base
+    Fase 2  Handlers tipados por dominio
+      Fase 3  Activacion conditional via *_SOURCE
+      Fase 4  Faker + factories
+        Fase 5  Eliminar interceptor y limpieza
+          Fase 6  Documentacion arc42
+            Fase 7  Cierre
+```
 
 ## Indice de documentos
 
@@ -68,9 +65,9 @@ supersede la ADR previa, y luego ejecutar las tareas.
 |-----------|-----------|
 | [alcance-revisar-arquitectura-de-mocks.md](alcance-revisar-arquitectura-de-mocks.md) | Que cubre la iniciativa, criterio de completitud, fuera de alcance, listado de alternativas a evaluar. |
 | [analisis-revisar-arquitectura-de-mocks.md](analisis-revisar-arquitectura-de-mocks.md) | Comparativo de las 9 alternativas contra los 7 criterios del template. Primera recomendacion: MSW + Faker. |
-| [analisis-trade-off-service-worker.md](analisis-trade-off-service-worker.md) | Profundizacion del trade-off del Service Worker en `public/`. Conclusion: trade-off menor, gestionable con documentacion + guards. |
-| [reconsideracion-bajo-rup-adaptado.md](reconsideracion-bajo-rup-adaptado.md) | Reconsideracion final bajo disciplina RUP del proyecto. Tres caminos posibles (A/B/C). Camino B aprobado. |
-| plan-revisar-arquitectura-de-mocks.md | Pendiente. Producido tras aprobacion del Camino B. |
-| tareas-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
-| progreso-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
+| [analisis-trade-off-service-worker.md](analisis-trade-off-service-worker.md) | Profundizacion del trade-off del Service Worker en `public/`. Conclusion: trade-off menor, gestionable. |
+| [reconsideracion-bajo-rup-adaptado.md](reconsideracion-bajo-rup-adaptado.md) | Reconsideracion bajo disciplina RUP. Tres caminos posibles (A/B/C). Camino B aprobado. |
+| [plan-revisar-arquitectura-de-mocks.md](plan-revisar-arquitectura-de-mocks.md) | Plan de ejecucion en 8 fases con 24 tareas atomicas T-NNN, DAG mermaid y trazabilidad. |
+| [tareas-revisar-arquitectura-de-mocks.md](tareas-revisar-arquitectura-de-mocks.md) | Lista plana de las 24 tareas con su estado actual (pendiente, en curso, hecha). |
+| [progreso-revisar-arquitectura-de-mocks.md](progreso-revisar-arquitectura-de-mocks.md) | Log temporal del avance, con una entrada por evento relevante. |
 | decisiones-revisar-arquitectura-de-mocks.md | Pendiente. Producido al cierre, obligatorio por PROC-GESTION-001. |
