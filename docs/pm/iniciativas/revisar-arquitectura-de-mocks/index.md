@@ -70,4 +70,4 @@ Fase 0  ADR y procedimiento
 | [plan-revisar-arquitectura-de-mocks.md](plan-revisar-arquitectura-de-mocks.md) | Plan de ejecucion en 8 fases con 24 tareas atomicas T-NNN, DAG mermaid y trazabilidad. |
 | [tareas-revisar-arquitectura-de-mocks.md](tareas-revisar-arquitectura-de-mocks.md) | Lista plana de las 24 tareas con su estado actual (pendiente, en curso, hecha). |
 | [progreso-revisar-arquitectura-de-mocks.md](progreso-revisar-arquitectura-de-mocks.md) | Log temporal del avance, con una entrada por evento relevante. |
-| decisiones-revisar-arquitectura-de-mocks.md | Pendiente. Producido al cierre, obligatorio por PROC-GESTION-001. |
+| [decisiones-revisar-arquitectura-de-mocks.md](decisiones-revisar-arquitectura-de-mocks.md) | Decisiones de diseno tomadas, hallazgos durante la ejecucion, verificacion post-ejecucion y que entrega la iniciativa. Obligatorio por PROC-GESTION-001. |

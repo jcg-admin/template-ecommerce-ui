@@ -39,16 +39,16 @@
 | T-020 | Actualizar vista-de-bloques-de-construccion | 6 | hecha | (siguiente commit) |
 | T-021 | Documentar arranque conditional via *_SOURCE en como-adaptar | 6 | hecha | (siguiente commit) |
 | T-022 | Actualizar README de la raiz si menciona el interceptor | 6 | hecha | (siguiente commit) |
-| T-023 | Producir decisiones-revisar-arquitectura-de-mocks.md | 7 | pendiente | |
+| T-023 | Producir decisiones-revisar-arquitectura-de-mocks.md | 7 | hecha | (siguiente commit) |
 | T-024 | Cerrar iniciativa formalmente | 7 | pendiente | |
 
 ## Resumen de estado
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 2 |
+| pendiente | 1 |
 | en curso | 0 |
-| hecha | 22 |
+| hecha | 23 |
 
 ## Notas operativas
 
