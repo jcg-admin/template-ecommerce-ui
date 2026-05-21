@@ -27,7 +27,7 @@ src/
 ├── hooks/            Hooks de dominio (useAuth, useCart)
 ├── layouts/          StorefrontLayout, AccountLayout, AdminLayout
 ├── lib/              queryClient (React Query)
-├── mocks/            Datos mock para desarrollo
+├── mocks/            Handlers MSW + factories Faker (ver "Feature flags")
 ├── pages/            Páginas por ruta (lazy-loaded)
 ├── redux/
 │   ├── slices/       auth, ui, catalog, cart, checkout, orders, wishlist
@@ -67,12 +67,21 @@ npm run build:analyze   # con reporte de bundle
 
 ## Feature flags
 
-En `.env.local`, cada dominio puede usar `mock` o `real`:
+Cada dominio del backend puede consumirse en modo `mock` (handlers
+[MSW](https://mswjs.io/) interceptan a nivel de red, no requiere
+backend) o `real` (la request sale al backend definido por `API_URL`).
+Edita `.env.local`:
 
 ```
-AUTH_SOURCE=mock      # usa datos locales
-CATALOG_SOURCE=real   # llama al backend
+CATALOG_SOURCE=mock
+AUTH_SOURCE=mock
+CART_SOURCE=mock
+PAYMENTS_SOURCE=mock
+PROFILE_SOURCE=mock
 ```
+
+Default: todo en `mock`. Detalles del flujo de adopcion en
+`docs/como-adaptar-este-template.md`.
 
 ## Paleta de colores del template
 
