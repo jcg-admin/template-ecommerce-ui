@@ -61,6 +61,7 @@
 | 2026-05-21T01:55:00 | Cierre de tarea | T-022 | (a) En `webpack.config.js` se anadio `'process.env.BUILT_AT': JSON.stringify(new Date().toISOString())` al DefinePlugin, con comentario explicando el proposito. (b) En `src/index.jsx`, antes del render de React, se asigna `window.__APP_CONFIG__ = Object.freeze({ apiUrl, version, builtAt })` cuando `window` existe (el guard previene errores en SSR hipotetico). Los tres campos quedan literales tras el build: `apiUrl: "https://api.example.com"`, `version: "1.0.0"`, `builtAt: "2026-05-20T23:39:46.493Z"`. Validado con `grep` directo sobre `dist/main.*.js`. `tsc --noEmit` exit 0, 22 suites jest 130 tests siguen verdes. Cubre H-08 (override runtime diagnosticable). |
 | 2026-05-21T02:15:00 | Cierre de tarea | T-023 | En `docs/vista-de-despliegue/vista-de-despliegue.md` anadida seccion `## Verificacion antes del deploy` con dos pasos: paso 1 (inspeccionar bundle con `verify-build` antes de subir, forma estricta con `--expected=$API_URL`) y paso 2 (confirmar runtime con `window.__APP_CONFIG__` tras desplegar). Incluye tabla "Cuando algo no coincide" mapeando 3 sintomas tipicos a su hipotesis e investigacion. En `docs/como-adaptar-este-template.md` se ampliaron las filas de la tabla "Verificacion: tu adopcion esta completa cuando" con dos nuevas: una para `npm run verify-build -- --expected=$API_URL` y otra para `window.__APP_CONFIG__` post-deploy. Cubre H-08 (procedimiento documentado). |
 | 2026-05-21T02:15:00 | Fase cerrada | Fase 6 | Las cuatro tareas (T-020 a T-023) cerradas. **H-08 (`riesgo-bundle-construido-con-API-URL-equivocada`) resuelto en el inventario**: el operador tiene tres herramientas mecanicas para reducir la probabilidad de servir un bundle con URL incorrecta, todas sin necesidad de CI/CD (que esta declarada fuera de scope). Continua fase 7 (cierre de la iniciativa: producir `decisiones-*.md` y cerrar). |
+| 2026-05-21T02:30:00 | Cierre de tarea | T-024 | Anadida seccion `## Resumen rapido` al inicio de `docs/riesgos-y-deuda-tecnica/riesgos-y-deuda-tecnica.md`, con tabla de todas las entradas vivas y su estado final (resuelto, resuelto parcial, delegado), cada una con anchor a la seccion detallada. Las entradas individuales ya estaban actualizadas durante la ejecucion (T-001, T-003, T-009, T-014, T-015, T-023); esta tarea solo provee el indice navegable encima. Nota explicativa sobre la regla "lo que no se puede demostrar, no se lista" preservando las entradas resueltas como contexto historico. Cubre cierre del trabajo sobre el inventario para los 7 hallazgos vivos al inicio. |
 
 ## Eventos por tipo
 
@@ -74,7 +75,7 @@
 | Cambio de estado | 1 |
 | Hallazgo durante la ejecucion | 10 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 19 |
+| Cierre de tarea | 20 |
 | Fase cerrada | 7 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

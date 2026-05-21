@@ -4,6 +4,25 @@ Inventario de riesgos vivos y deuda conocida. Cada entrada es
 observable o trazable a una iniciativa de gestion. Lo que no se puede
 demostrar, no se lista.
 
+## Resumen rapido
+
+| Entrada | Estado |
+|---------|--------|
+| [riesgo-divergencia-mocks-vs-contrato-real](#riesgo-divergencia-mocks-vs-contrato-real) | Delegado a `validar-contrato-de-mocks-vs-backend-real` |
+| [riesgo-bundle-construido-con-API-URL-equivocada](#riesgo-bundle-construido-con-api-url-equivocada) | Resuelto en `resolver-hallazgos-de-deuda-del-template` (Fase 6) |
+| [deuda-sin-typescript-en-src](#deuda-sin-typescript-en-src) | Resuelto en `resolver-hallazgos-de-deuda-del-template` (Fase 3) |
+| [deuda-decorators-experimental](#deuda-decorators-experimental) | Resuelto en `resolver-hallazgos-de-deuda-del-template` (Fase 4) |
+| [deuda-tipos-en-src-types](#deuda-tipos-en-src-types) | Resuelto parcialmente con delegacion a `completar-dominio-de-ecommerce` |
+| [deuda-de-allowlist-color-no-hex](#deuda-de-allowlist-color-no-hex) | Delegado a `monitorear-y-reducir-allowlist-hex` |
+| [deuda-readme-sin-actualizar-tras-cambios](#deuda-readme-sin-actualizar-tras-cambios) | Resuelto en T-004 de `resolver-hallazgos-de-deuda-del-template` |
+
+Las entradas con estado "resuelto" se conservan en este documento
+para que el lector que llega buscando el hallazgo encuentre tanto la
+descripcion historica como la mitigacion aplicada. La regla "lo que
+no se puede demostrar, no se lista" sigue valiendo: entradas sin
+mitigacion verificable se retiran (caso de los 13 historicos del repo
+fuente, retirados en T-001 y T-002).
+
 ## Riesgos abiertos
 
 ### riesgo-divergencia-mocks-vs-contrato-real

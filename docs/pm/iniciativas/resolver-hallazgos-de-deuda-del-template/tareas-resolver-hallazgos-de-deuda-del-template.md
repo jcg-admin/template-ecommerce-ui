@@ -39,16 +39,16 @@
 | T-021 | Anadir npm script verify-build | H-08 | 6 | hecha | (siguiente commit) |
 | T-022 | Exponer window.__APP_CONFIG__ via webpack DefinePlugin | H-08 | 6 | hecha | (siguiente commit) |
 | T-023 | Documentar el procedimiento de verificacion del build | H-08 | 6 | hecha | (siguiente commit) |
-| T-024 | Actualizar riesgos-y-deuda-tecnica.md con estado final | H-01, H-02, H-03, H-04, H-05, H-07, H-08 | 7 | pendiente | |
+| T-024 | Actualizar riesgos-y-deuda-tecnica.md con estado final | H-01, H-02, H-03, H-04, H-05, H-07, H-08 | 7 | hecha | (siguiente commit) |
 | T-025 | Crear decisiones-resolver-hallazgos-de-deuda-del-template.md y cerrar iniciativa | (cierre) | 7 | pendiente | |
 
 ## Vista por estado
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 2 |
+| pendiente | 1 |
 | en curso | 0 |
-| hecha | 19 |
+| hecha | 20 |
 
 ## Valores validos del campo Estado
 
