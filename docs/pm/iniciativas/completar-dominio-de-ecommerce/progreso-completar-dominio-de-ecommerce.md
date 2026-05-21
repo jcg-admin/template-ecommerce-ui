@@ -10,12 +10,13 @@ final; los contadores al pie se actualizan en cada commit.
 |---------------|-------|--------|---------|
 | 2026-05-21T05:00:00 | Apertura iniciativa | completar-dominio-de-ecommerce | Apertura formal: estado en indice-de-iniciativas.md cambia de `Backlog` a `En analisis`. Iniciativa antes #2 en backlog. Apertura motivada por (a) iniciativa orden 1 (`validar-contrato-de-mocks-vs-backend-real`) bloqueada por falta de backend Django en el entorno actual; (b) deuda concreta registrada por la iniciativa recien cerrada `revisar-arquitectura-de-mocks` (path families duales, fetch directo vs apiService, divergencia Product type vs runtime). Index.md de la iniciativa actualizado: cabecera con `Estado: En analisis`, `Fecha de apertura formal: 2026-05-21`, nueva fila "Iniciativa que aporto deuda registrada". Seccion "Estado actual" reescrita; seccion "Como se abre" eliminada (ya abierta); seccion nueva "Documentos esperados" con tabla de los 6 documentos canonicos pendientes. Verificacion previa (paso 2 del procedimiento extendido en T-002 de la iniciativa anterior): grep en `docs/decisiones-de-arquitectura/decisiones-de-arquitectura.md` de "User", "Address", "ProductVariant", "Review", "dominio" no muestra ADR previa que contradiga abrir esta iniciativa. Las 11 ADRs activas son sobre auth (JWT cookies), mocks (MSW), estado (Redux + RQ), build (API_URL build-time, no SSR, lazy loading), pipeline SCSS, color hex, y rename rutas; ninguna toca modelado de entidades del dominio. Paso 2 limpio. |
 
+| 2026-05-21T05:05:05 | Analisis | alcance | Producido alcance-completar-dominio-de-ecommerce.md (7 secciones, ~140 lineas): 7 items dentro del alcance (4 gaps de modelado declarados en el JSDoc de domain.ts + 3 deudas heredadas de la iniciativa anterior), 6 criterios de evaluacion del template, 8 criterios verificables de completitud, lista de fuera de alcance, decisiones de proceso (una entidad = una fase, tipo primero runtime despues, backend out-of-scope, sin cambio de scope sin replan formal). index.md actualizado: fila del alcance pasa de Pendiente a link al documento. |
 ## Contadores
 
 | Clase | Conteo |
 |-------|--------|
 | Apertura iniciativa | 1 |
-| Analisis | 0 |
+| Analisis | 1 |
 | Hallazgo durante el analisis | 0 |
 | Reconsideracion | 0 |
 | Decisiones aprobadas | 0 |

@@ -67,7 +67,7 @@ Segun PROC-GESTION-001, una iniciativa en analisis produce:
 
 | Documento | Estado |
 |-----------|--------|
-| `alcance-completar-dominio-de-ecommerce.md` | Pendiente. Siguiente paso de la apertura. |
+| [alcance-completar-dominio-de-ecommerce.md](alcance-completar-dominio-de-ecommerce.md) | Producido. Define los 7 items del alcance (4 gaps de modelado + 3 deudas heredadas), criterios de evaluacion, criterio de completitud y decisiones de proceso. |
 | `analisis-completar-dominio-de-ecommerce.md` | Pendiente. |
 | `plan-completar-dominio-de-ecommerce.md` | Pendiente. Producido cuando paso a `En ejecucion`. |
 | `tareas-completar-dominio-de-ecommerce.md` | Pendiente. |
