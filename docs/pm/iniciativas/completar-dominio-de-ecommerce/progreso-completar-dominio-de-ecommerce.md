@@ -15,6 +15,7 @@ final; los contadores al pie se actualizan en cada commit.
 | 2026-05-21T05:07:49 | Analisis | analisis | Producido analisis-completar-dominio-de-ecommerce.md (~280 lineas). Metodologia: por cada uno de los 7 items, recoge estado real con evidencia citada, estado en domain.ts, gap, y decision de modelado propuesta. Items con esfuerzo: 1 User (20min, 3 campos), 2 Address (20min, 12 campos), 3 ProductVariant (40min, 5 campos + factory), 4 Review (60min, incluye inspeccion del slice antes), 5 aliases auth legacy (25min, eliminar 4 handlers), 6 fetch directo (60min, 2 thunks + refactor), 7 Product divergence (50min, anadir 3 campos + ProductImage tipo + limpiar `as unknown as`). Esfuerzo total ~4.5h. index.md actualizado: fila analisis pasa de Pendiente a link al documento. |
 | 2026-05-21T05:09:49 | Plan | plan + tareas | Producido plan-completar-dominio-de-ecommerce.md y tareas-completar-dominio-de-ecommerce.md. **18 tareas atomicas T-001 a T-018** en **8 fases** siguiendo el DAG declarado. Coste agregado estimado ~360 min (~6h). Disciplina: una entidad por fase, tipo primero runtime despues. Trazabilidad tabla item-alcance -> fase -> tareas declarada al final del plan. Fase 0 (ADRs) marcada como ejecutada en la apertura (verificacion del paso 2 del procedimiento ya hecha; ninguna ADR previa contradice). |
 | 2026-05-21T05:09:49 | Cambio de estado | completar-dominio-de-ecommerce | En analisis -> En ejecucion. Plan y tareas producidos; estado movido a En ejecucion en indice global e index.md de la iniciativa. Working tree limpio. Lista para iniciar T-001. |
+| 2026-05-21T05:14:27 | Bloqueo | T-001 (y siguientes) | **Pausada por solicitud del usuario** antes de iniciar T-001. Motivo: el usuario quiere agregar UCs nuevos inspirados en cómo la API de MercadoPago expone sus endpoints. Esto **excede el alcance** declarado en alcance-*.md ('Que NO esta dentro del alcance: Implementacion de UCs nuevos del comprador o admin'). Bajo PROC-GESTION-001, expandir scope requiere Replan formal o iniciativa nueva. Decision diferida hasta haber estudiado los ejemplos del usuario. Mientras tanto, esta iniciativa queda en estado En ejecucion pero **bloqueada** (no se inicia T-001). Se reanudara cuando se cierre la conversacion sobre el nuevo scope (sea como iniciativa propia, replan, o decision de no actuar). |
 ## Contadores
 
 | Clase | Conteo |
@@ -31,7 +32,7 @@ final; los contadores al pie se actualizan en cada commit.
 | Inicio de tarea | 0 |
 | Cierre de tarea | 0 |
 | Fase cerrada | 0 |
-| Bloqueo | 0 |
+| Bloqueo | 1 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
 | Cierre de iniciativa | 0 |
