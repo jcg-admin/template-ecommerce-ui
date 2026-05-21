@@ -1,13 +1,30 @@
 /**
  * Handlers MSW del dominio auth.
  *
- * Login y register: deterministicos. Los pares de credenciales
- * (comprador@test.mx/Test1234!, admin@e-comerce.example.com/Admin1234!)
- * son contrato de tests; cambiar a Faker romperia suites enteras.
+ * El slice `authSlice.js` usa los endpoints con prefijo `/api/v1/auth/`:
+ *   POST /api/v1/auth/login/
+ *   POST /api/v1/auth/logout/
+ *   POST /api/v1/auth/register/
+ *   GET  /api/v1/auth/profile/
+ *   PATCH /api/v1/auth/profile/
+ *   POST /api/v1/auth/change-password/
+ *   POST /api/v1/auth/verify-email/
  *
- * `/api/auth/me/`: usa la factory `createUser` con overrides fijos
- * para preservar identidad del usuario actual pero rellenar campos
- * variables (avatar, telefono, completeness) con datos realistas.
+ * El interceptor heredado mockeaba ademas los aliases sin version
+ * `/api/token/`, `/api/auth/me/`, `/api/auth/logout/`,
+ * `/api/auth/register/`. Los conservamos por si codigo antiguo aun
+ * los invoca y para que el template documente ambas familias durante
+ * la transicion. La iniciativa de backlog
+ * `completar-dominio-de-ecommerce` debe consolidar a una sola familia.
+ *
+ * Credenciales validas (preservadas del interceptor heredado, son
+ * contrato de tests):
+ *   comprador@test.mx / Test1234!         -> id 1, is_staff false
+ *   admin@e-comerce.example.com / Admin1234! -> id 2, is_staff true
+ *
+ * `/api/auth/me/` y `/api/v1/auth/profile/` usan `createUser` con
+ * seed fijo para preservar identidad pero rellenar campos variables
+ * realistas.
  */
 
 import { http, HttpResponse } from 'msw';
@@ -25,67 +42,71 @@ function mockUser(id: number, isStaff: boolean, email = 'comprador@test.mx'): Us
   } as User;
 }
 
+async function readLogin(request: Request) {
+  const body = (await request.json().catch(() => null)) as
+    | { username?: string; password?: string }
+    | null;
+
+  if (!body?.username || !body?.password) {
+    return HttpResponse.json(
+      { detail: 'Credenciales requeridas.' },
+      { status: 400 }
+    );
+  }
+  if (body.username === 'comprador@test.mx' && body.password === 'Test1234!') {
+    return HttpResponse.json({ user: mockUser(1, false) });
+  }
+  if (
+    body.username === 'admin@e-comerce.example.com' &&
+    body.password === 'Admin1234!'
+  ) {
+    return HttpResponse.json({ user: mockUser(2, true) });
+  }
+  return HttpResponse.json(
+    { detail: 'Credenciales invalidas.' },
+    { status: 401 }
+  );
+}
+
+async function readRegister(request: Request) {
+  const body = (await request.json().catch(() => null)) as
+    | { email?: string; password?: string }
+    | null;
+  if (!body?.email || !body?.password) {
+    return HttpResponse.json(
+      { detail: 'Email y contrasena requeridos.' },
+      { status: 400 }
+    );
+  }
+  return HttpResponse.json(
+    { user: mockUser(99, false, body.email) },
+    { status: 201 }
+  );
+}
+
+function readMe() {
+  faker.seed(1);
+  const user = createUser({
+    id: 1,
+    email: 'comprador@test.mx',
+    first_name: 'Demo',
+    last_name: 'User',
+    is_staff: false,
+  });
+  faker.seed();
+  return HttpResponse.json(user);
+}
+
 export const authHandlers = [
-  // POST /api/token/  (login deterministico)
-  http.post('/api/token/', async ({ request }) => {
-    const body = (await request.json().catch(() => null)) as
-      | { username?: string; password?: string }
-      | null;
-
-    if (!body?.username || !body?.password) {
-      return HttpResponse.json(
-        { detail: 'Credenciales requeridas.' },
-        { status: 400 }
-      );
-    }
-    if (
-      body.username === 'comprador@test.mx' &&
-      body.password === 'Test1234!'
-    ) {
-      return HttpResponse.json({ user: mockUser(1, false) });
-    }
-    if (
-      body.username === 'admin@e-comerce.example.com' &&
-      body.password === 'Admin1234!'
-    ) {
-      return HttpResponse.json({ user: mockUser(2, true) });
-    }
-    return HttpResponse.json(
-      { detail: 'Credenciales invalidas.' },
-      { status: 401 }
-    );
-  }),
-
-  // POST /api/auth/register/  (deterministico, el email viene del body)
-  http.post('/api/auth/register/', async ({ request }) => {
-    const body = (await request.json().catch(() => null)) as
-      | { email?: string; password?: string }
-      | null;
-    if (!body?.email || !body?.password) {
-      return HttpResponse.json(
-        { detail: 'Email y contrasena requeridos.' },
-        { status: 400 }
-      );
-    }
-    return HttpResponse.json(
-      { user: mockUser(99, false, body.email) },
-      { status: 201 }
-    );
-  }),
-
-  // POST /api/auth/logout/
-  http.post('/api/auth/logout/', () => {
-    return HttpResponse.json({ detail: 'Sesion cerrada.' });
-  }),
-
-  // GET /api/auth/me/  (factory con identidad fija pero rellenos variables)
-  http.get('/api/auth/me/', () => {
-    // Seed estable para que /me/ devuelva el mismo usuario en cada
-    // request dentro de una misma sesion, pero con campos rellenos
-    // realistas (phone, avatar, completeness) que cambian entre seeds
-    // distintos en sesiones distintas.
+  // Familia /api/v1/auth/  (la que usa authSlice.js)
+  http.post('/api/v1/auth/login/',           ({ request }) => readLogin(request)),
+  http.post('/api/v1/auth/logout/',          () => HttpResponse.json({ detail: 'Sesion cerrada.' })),
+  http.post('/api/v1/auth/register/',        ({ request }) => readRegister(request)),
+  http.get('/api/v1/auth/profile/',          () => readMe()),
+  http.patch('/api/v1/auth/profile/',        async ({ request }) => {
+    const patch = (await request.json().catch(() => ({}))) as Partial<User>;
     faker.seed(1);
-    const user = createUser({
+    const base = createUser({
       id: 1,
       email: 'comprador@test.mx',
       first_name: 'Demo',
@@ -93,6 +114,14 @@ export const authHandlers = [
       is_staff: false,
     });
     faker.seed();
-    return HttpResponse.json(user);
+    return HttpResponse.json({ ...base, ...patch });
   }),
+  http.post('/api/v1/auth/change-password/', () => HttpResponse.json({ detail: 'Contrasena actualizada.' })),
+  http.post('/api/v1/auth/verify-email/',    () => HttpResponse.json({ detail: 'Email verificado.' })),
+
+  // Aliases legacy (algunos componentes y tests aun los usan)
+  http.post('/api/token/',          ({ request }) => readLogin(request)),
+  http.post('/api/auth/logout/',    () => HttpResponse.json({ detail: 'Sesion cerrada.' })),
+  http.post('/api/auth/register/',  ({ request }) => readRegister(request)),
+  http.get('/api/auth/me/',         () => readMe()),
 ];

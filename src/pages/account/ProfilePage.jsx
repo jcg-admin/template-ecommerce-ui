@@ -2,19 +2,20 @@
  * ProfilePage — e-comerce-ui
  * Ver y editar el perfil del comprador (UC-AUTH-05 y UC-AUTH-06).
  *
- * Sprint 2:
- *   - Con PROFILE_SOURCE=mock usa datos del MockRegistry.
- *   - Con PROFILE_SOURCE=real usa GET/PATCH /api/v1/auth/profile/.
+ * Tras T-017 de `revisar-arquitectura-de-mocks` el componente despacha
+ * siempre los thunks reales `fetchProfile` y `updateProfile`. Cuando
+ * `PROFILE_SOURCE=mock` (el default) MSW intercepta a nivel de red
+ * via `/api/v1/auth/profile/` (GET/PATCH); cuando es `real`, la
+ * request sale al backend.
  */
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchProfile, updateProfile } from '@redux/slices/authSlice';
 import { selectUser, selectAuthLoading } from '@redux/selectors';
-import { loadMock } from '@mocks/registry';
 import styles from './ProfilePage.module.scss';
 
-const USE_MOCK = process.env.PROFILE_SOURCE === 'mock';
+const IS_MOCK_MODE = process.env.PROFILE_SOURCE === 'mock';
 
 function CompletenessBar({ value }) {
   const color = value === 100 ? '#5a9e5a' : value >= 60 ? '#B8860B' : '#c0392b';
@@ -43,12 +44,7 @@ export default function ProfilePage() {
   });
 
   useEffect(() => {
-    if (USE_MOCK) {
-      const mockProfile = loadMock('profile');
-      dispatch({ type: 'auth/fetchProfile/fulfilled', payload: mockProfile });
-    } else {
-      dispatch(fetchProfile());
-    }
+    dispatch(fetchProfile());
   }, [dispatch]);
 
   useEffect(() => {
@@ -65,13 +61,6 @@ export default function ProfilePage() {
     setFields(prev => ({ ...prev, [e.target.name]: e.target.value }));
 
   const handleSave = async () => {
-    if (USE_MOCK) {
-      dispatch({ type: 'auth/updateProfile/fulfilled', payload: fields });
-      setEditing(false);
-      setSuccess(true);
-      setTimeout(() => setSuccess(false), 3000);
-      return;
-    }
     const result = await dispatch(updateProfile(fields));
     if (updateProfile.fulfilled.match(result)) {
       setEditing(false);
@@ -138,7 +127,7 @@ export default function ProfilePage() {
           </div>
         )}
 
-        {USE_MOCK && (
+        {IS_MOCK_MODE && (
           <p className={styles.mockBadge}>Modo mock activo (PROFILE_SOURCE=mock)</p>
         )}
       </div>

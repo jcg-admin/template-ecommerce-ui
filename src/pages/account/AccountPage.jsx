@@ -3,9 +3,10 @@
  * Hub de la cuenta del comprador. Muestra resumen y navegacion
  * a las secciones de perfil, direcciones y ordenes.
  *
- * Sprint 2:
- *   - Con PROFILE_SOURCE=mock usa datos del MockRegistry.
- *   - Con PROFILE_SOURCE=real usa GET /api/v1/auth/profile/.
+ * Tras T-017 de `revisar-arquitectura-de-mocks` el componente despacha
+ * siempre el thunk real `fetchProfile`. Cuando `PROFILE_SOURCE=mock`
+ * (el default) MSW intercepta via `/api/v1/auth/profile/`; cuando es
+ * `real`, la request sale al backend.
  */
 
 import { useEffect } from 'react';
@@ -13,10 +14,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProfile } from '@redux/slices/authSlice';
 import { selectUser, selectAuthLoading } from '@redux/selectors';
-import { loadMock } from '@mocks/registry';
 import styles from './AccountPage.module.scss';
 
-const USE_MOCK = process.env.PROFILE_SOURCE === 'mock';
+const IS_MOCK_MODE = process.env.PROFILE_SOURCE === 'mock';
 
 const NAV_ITEMS = [
   { to: '/account/profile',   label: 'Mi perfil',          desc: 'Datos personales y avatar' },
@@ -32,12 +32,7 @@ export default function AccountPage() {
   const isLoading = useSelector(selectAuthLoading);
 
   useEffect(() => {
-    if (USE_MOCK) {
-      const mockProfile = loadMock('profile');
-      dispatch({ type: 'auth/fetchProfile/fulfilled', payload: mockProfile });
-    } else {
-      dispatch(fetchProfile());
-    }
+    dispatch(fetchProfile());
   }, [dispatch]);
 
   if (isLoading && !user) {
@@ -69,7 +64,7 @@ export default function AccountPage() {
         ))}
       </nav>
 
-      {USE_MOCK && (
+      {IS_MOCK_MODE && (
         <p className={styles.mockBadge}>Modo mock activo (PROFILE_SOURCE=mock)</p>
       )}
     </div>

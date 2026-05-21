@@ -2,9 +2,15 @@
  * LoginPage — e-comerce-ui
  * Inicio de sesion JWT (UC-AUTH-02).
  *
- * Sprint 1 (completado en Sprint 2):
- *   - Con AUTH_SOURCE=mock usa datos del MockRegistry.
- *   - Con AUTH_SOURCE=real llama a POST /api/v1/auth/login/.
+ * Tras T-017 de `revisar-arquitectura-de-mocks` el componente despacha
+ * siempre el thunk real `loginUser`. Cuando `AUTH_SOURCE=mock` (el
+ * default) los handlers MSW de `/api/v1/auth/login/` interceptan a
+ * nivel de red y devuelven el usuario mock; cuando `AUTH_SOURCE=real`
+ * el handler se desactiva y la request sale al backend.
+ *
+ * El componente NO conoce el modo mock: el bagde "Modo mock activo"
+ * solo lee la flag para mostrar la senal en UI, pero el flujo es
+ * identico en ambos modos.
  */
 
 import { useState } from 'react';
@@ -12,10 +18,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from '@redux/slices/authSlice';
 import { selectAuthLoading, selectAuthError } from '@redux/selectors';
-import { loadMock } from '@mocks/registry';
 import styles from './LoginPage.module.scss';
 
-const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
+const IS_MOCK_MODE = process.env.AUTH_SOURCE === 'mock';
 
 export default function LoginPage() {
   const dispatch   = useDispatch();
@@ -42,13 +47,6 @@ export default function LoginPage() {
     e.preventDefault();
     const validation = validate();
     if (Object.keys(validation).length) { setErrors(validation); return; }
-
-    if (USE_MOCK) {
-      const mockData = loadMock('auth');
-      dispatch({ type: 'auth/login/fulfilled', payload: mockData });
-      navigate('/account');
-      return;
-    }
 
     const result = await dispatch(loginUser(fields));
     if (loginUser.fulfilled.match(result)) navigate('/account');
@@ -87,7 +85,7 @@ export default function LoginPage() {
             {errors.password && <span className={styles.error}>{errors.password}</span>}
           </div>
 
-          {authError && !USE_MOCK && (
+          {authError && (
             <p className={styles.globalError} role="alert">
               Usuario o contrasena incorrectos.
             </p>
@@ -104,11 +102,11 @@ export default function LoginPage() {
 
         <p className={styles.links}>
           <Link to="/auth/forgot-password">Olvide mi contrasena</Link>
-          {' · '}
+          {' \u00b7 '}
           <Link to="/auth/register">Crear cuenta</Link>
         </p>
 
-        {USE_MOCK && (
+        {IS_MOCK_MODE && (
           <p className={styles.mockBadge}>
             Modo mock activo (AUTH_SOURCE=mock)
           </p>
