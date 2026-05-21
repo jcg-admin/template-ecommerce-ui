@@ -28,6 +28,8 @@
 | 2026-05-21T05:30:00 | Cierre de tarea | T-002 | Anadido el paso 2 al bloque "Como abrir una iniciativa nueva" de `docs/pm/como-gestionar-iniciativas.md`: exige inspeccionar `docs/decisiones-de-arquitectura/` antes de proponer cambios arquitectonicos, leer ADRs existentes y planificar superseder formalmente si la nueva decision contradice una previa. Pasos 3-10 renumerados. Bloque cita final documenta **por que** se anadio el paso (fallo de proceso de esta misma iniciativa). El paso se ubica como segundo del flujo (no enterrado) para garantizar visibilidad. |
 | 2026-05-21T05:30:00 | Fase cerrada | Fase 0 | T-001 y T-002 cerradas. La decision arquitectonica esta registrada formalmente como ADR (con la previa superseded en el mismo registro) y el procedimiento esta enmendado para evitar la repeticion del fallo. Comienza Fase 1: Setup MSW base. |
 | 2026-05-21T05:45:00 | Cierre de tarea | T-003 | (a) `npm install --save-dev msw` instalado msw v2.14.6 (34 paquetes anadidos). (b) `npx msw init public/ --save` creo `public/mockServiceWorker.js` (9120 bytes) y anadio `"msw": { "workerDirectory": ["public"] }` a `package.json` para regeneracion automatica. (c) Smoke test: webpack dev server arranca limpio y sirve el archivo desde `public/`. (d) Tests: 27 suites, 184 tests verdes (sin handlers aun, MSW deja pasar todo y el interceptor actual sigue funcionando). |
+| 2026-05-21T06:00:00 | Hallazgo durante la ejecucion | T-004 | (a) Mapa de endpoints reales: el interceptor maneja **dos prefijos distintos** que conviven: sin version (`/api/auth/*`, `/api/cart/*`, `/api/products/*`, `/api/categories/*`, `/api/orders/*`, `/api/payments/*`, `/api/token/*`, `/api/wishlist/*`) y con version (`/api/v1/admin/inventory/*`, `/api/v1/admin/returns/*`, `/api/v1/returns/*`, `/api/v1/orders/*`). Los handlers MSW se escriben contra los paths reales, no contra los que el plan asumia (`/api/v1/catalog/...`). Inconsistencia heredada del template, no introducida por esta iniciativa. Se documentara como deuda menor en el documento de decisiones de cierre. (b) El alias TypeScript `@types/*` configurado en `tsconfig.json` colisiona con la convencion reservada de DefinitelyTyped: `tsc` rechaza importar tipos desde rutas que empiezan con `@types/`. Solucion provisional: los handlers usan import relativo `'../../types/domain'`. Deuda menor: renombrar el alias a `@app-types/*` u otro no reservado en una iniciativa futura. |
+| 2026-05-21T06:05:00 | Cierre de tarea | T-004 | Creados `src/mocks/handlers/index.ts` (array `handlers: HttpHandler[]` vacio inicial, con JSDoc explicando que T-008..T-012 lo poblaran y T-013 cambiara la exportacion a `buildHandlers()`) y `src/mocks/handlers/types.ts` (re-export central de los 12 tipos del dominio usados por handlers desde `../../types/domain`). `tsc --noEmit` exit 0. |
 
 ## Contadores
 
@@ -41,9 +43,9 @@
 | Plan | 1 |
 | Cambio de estado | 1 |
 | Replan | 0 |
-| Hallazgo durante la ejecucion | 0 |
+| Hallazgo durante la ejecucion | 1 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 3 |
+| Cierre de tarea | 4 |
 | Fase cerrada | 1 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

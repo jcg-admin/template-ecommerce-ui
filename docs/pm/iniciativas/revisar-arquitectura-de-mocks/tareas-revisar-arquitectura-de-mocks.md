@@ -20,7 +20,7 @@
 | T-001 | Superseder ADR previa con dec-mocks-via-msw-service-worker | 0 | hecha | (siguiente commit) |
 | T-002 | Anadir verificacion de ADRs al procedimiento | 0 | hecha | (siguiente commit) |
 | T-003 | Instalar msw y configurar workerDirectory | 1 | hecha | (siguiente commit) |
-| T-004 | Crear src/mocks/handlers/index.ts vacio y types base | 1 | pendiente | |
+| T-004 | Crear src/mocks/handlers/index.ts vacio y types base | 1 | hecha | (siguiente commit) |
 | T-005 | Crear src/mocks/browser.ts y src/mocks/node.ts | 1 | pendiente | |
 | T-006 | Integrar worker en src/index.jsx con guard NODE_ENV | 1 | pendiente | |
 | T-007 | Integrar server MSW en setup de Jest | 1 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 21 |
+| pendiente | 20 |
 | en curso | 0 |
-| hecha | 3 |
+| hecha | 4 |
 
 ## Notas operativas
 
