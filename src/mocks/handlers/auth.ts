@@ -1,18 +1,19 @@
 /**
  * Handlers MSW del dominio auth.
  *
- * Endpoints cubiertos (matching del `mockInterceptor` heredado):
- *   POST /api/token/         login con username + password (DRF token)
- *   POST /api/auth/register/ alta de cuenta
- *   POST /api/auth/logout/   cierre de sesion
- *   GET  /api/auth/me/       perfil del usuario autenticado
+ * Login y register: deterministicos. Los pares de credenciales
+ * (comprador@test.mx/Test1234!, admin@e-comerce.example.com/Admin1234!)
+ * son contrato de tests; cambiar a Faker romperia suites enteras.
  *
- * Datos hardcoded por ahora; T-015 anadira variabilidad Faker
- * preservando los pares username/password de los tests.
+ * `/api/auth/me/`: usa la factory `createUser` con overrides fijos
+ * para preservar identidad del usuario actual pero rellenar campos
+ * variables (avatar, telefono, completeness) con datos realistas.
  */
 
 import { http, HttpResponse } from 'msw';
+import { faker } from '@faker-js/faker';
 import type { User } from './types';
+import { createUser } from '../factories';
 
 function mockUser(id: number, isStaff: boolean, email = 'comprador@test.mx'): User {
   return {
@@ -25,7 +26,7 @@ function mockUser(id: number, isStaff: boolean, email = 'comprador@test.mx'): Us
 }
 
 export const authHandlers = [
-  // POST /api/token/  (login)
+  // POST /api/token/  (login deterministico)
   http.post('/api/token/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
       | { username?: string; password?: string }
@@ -55,7 +56,7 @@ export const authHandlers = [
     );
   }),
 
-  // POST /api/auth/register/
+  // POST /api/auth/register/  (deterministico, el email viene del body)
   http.post('/api/auth/register/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
       | { email?: string; password?: string }
@@ -77,8 +78,21 @@ export const authHandlers = [
     return HttpResponse.json({ detail: 'Sesion cerrada.' });
   }),
 
-  // GET /api/auth/me/
+  // GET /api/auth/me/  (factory con identidad fija pero rellenos variables)
   http.get('/api/auth/me/', () => {
-    return HttpResponse.json(mockUser(1, false));
+    // Seed estable para que /me/ devuelva el mismo usuario en cada
+    // request dentro de una misma sesion, pero con campos rellenos
+    // realistas (phone, avatar, completeness) que cambian entre seeds
+    // distintos en sesiones distintas.
+    faker.seed(1);
+    const user = createUser({
+      id: 1,
+      email: 'comprador@test.mx',
+      first_name: 'Demo',
+      last_name: 'User',
+      is_staff: false,
+    });
+    faker.seed();
+    return HttpResponse.json(user);
   }),
 ];

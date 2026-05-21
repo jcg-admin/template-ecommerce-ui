@@ -26,7 +26,7 @@ module.exports = {
   // los necesita transformados; el patron por defecto de Jest ignora
   // todo node_modules, asi que los exceptuamos explicitamente.
   transformIgnorePatterns: [
-    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|@open-draft|outvariant|strict-event-emitter|until-async|headers-polyfill|rettime))',
+    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|@open-draft|outvariant|strict-event-emitter|until-async|headers-polyfill|rettime|@faker-js))',
   ],
 
   moduleNameMapper: {

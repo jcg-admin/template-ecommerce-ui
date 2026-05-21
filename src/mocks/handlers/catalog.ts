@@ -1,18 +1,22 @@
 /**
  * Handlers MSW del dominio catalog.
  *
- * Cubre los endpoints que el `mockInterceptor` heredado servia bajo
- * la regla "url.includes('/api/products/...')". Las formas de los
- * datos replican lo que `_productList`, `_productDetail`,
- * `_searchProducts` y `_categories` devolvian.
+ * Listados (`/api/products/`, `/api/products/search/`): usan factory
+ * `createProductList` con datos variables Faker para que cada request
+ * devuelva un catalogo distinto, mas realista para desarrollo.
  *
- * Datos hardcoded por ahora. T-014 y T-015 sustituiran los listados
- * por factories Faker tipadas. Los slugs siguen siendo deterministicos
- * para que los tests funcionen sin cambios.
+ * Detalle (`/api/products/:slug/`): deterministico por slug, igual que
+ * el interceptor heredado. Esto permite que tests existentes que
+ * verifican shapes especificas no rompan: el slug es el seed de la
+ * generacion.
+ *
+ * Categorias (`/api/categories/`): fijas. Cinco categorias estables.
  */
 
 import { http, HttpResponse } from 'msw';
+import { faker } from '@faker-js/faker';
 import type { Category, Product, PaginatedResponse } from './types';
+import { createProduct, createProductList } from '../factories';
 
 const CATEGORIES: Category[] = [
   { id: 1, name: 'Collares',     slug: 'collares',     product_count: 48 },
@@ -22,39 +26,6 @@ const CATEGORIES: Category[] = [
   { id: 5, name: 'Herramientas', slug: 'herramientas', product_count: 15 },
 ];
 
-const PRODUCT_NAMES = [
-  'Collar Oshun', 'Pulsera Elegua', 'Collar Yemaya',
-  'Elekes Shango', 'Ofrenda Obatala',
-];
-
-const PRICES = [350, 480, 1250, 890, 650, 920, 340, 1100, 560, 780];
-
-function makeProduct(slug: string, idx: number): Product {
-  const i = idx % PRICES.length;
-  return {
-    id: i + 1,
-    slug,
-    name: PRODUCT_NAMES[i % PRODUCT_NAMES.length],
-    category: { id: (i % 5) + 1, name: 'Collares', slug: 'collares' },
-    description: 'Producto de ejemplo del catalogo.',
-    price: PRICES[i],
-    original_price: i % 3 === 0 ? PRICES[i] * 1.3 : null,
-    stock: i % 4 === 0 ? 0 : (i % 20) + 1,
-    images: [{ id: 1, url: '/mock-images/product.jpg', is_main: true }],
-    variants: [
-      { id: 1, name: 'Talla unica', sku: `SKU-${i}-01`, stock: 5, price: PRICES[i] },
-    ],
-    rating_avg: 4.5,
-    review_count: (i * 3) % 30,
-  } as unknown as Product;
-}
-
-function makeProducts(count: number, prefix = ''): Product[] {
-  return Array.from({ length: count }, (_, i) =>
-    makeProduct(`producto-${prefix}-${i + 1}`, i + 1)
-  );
-}
-
 export const catalogHandlers = [
   // GET /api/products/search/?q=...
   http.get('/api/products/search/', ({ request }) => {
@@ -62,26 +33,33 @@ export const catalogHandlers = [
     const q = url.searchParams.get('q') ?? '';
     const body: PaginatedResponse<Product> = {
       count: 4,
-      results: makeProducts(4, q),
+      results: createProductList(4, q ? { name: `${q}` } : {}),
       next: null,
       previous: null,
     };
     return HttpResponse.json(body);
   }),
 
-  // GET /api/products/:slug/  (detalle)
+  // GET /api/products/:slug/  (detalle deterministico)
   http.get('/api/products/:slug/', ({ params }) => {
     const slug = String(params.slug);
-    return HttpResponse.json(makeProduct(slug, 1));
+    // Seed faker para que el mismo slug devuelva siempre el mismo producto.
+    // Hash trivial del slug a numero.
+    const seed = Array.from(slug).reduce((a, c) => a + c.charCodeAt(0), 0);
+    faker.seed(seed);
+    const product = createProduct({ slug, id: (seed % 9999) + 1 });
+    // Reset para no contaminar siguientes handlers.
+    faker.seed();
+    return HttpResponse.json(product);
   }),
 
-  // GET /api/products/  (listado)
+  // GET /api/products/  (listado paginado, variable)
   http.get('/api/products/', ({ request }) => {
     const url = new URL(request.url);
     const page = parseInt(url.searchParams.get('page') ?? '1', 10);
     const body: PaginatedResponse<Product> = {
       count: 143,
-      results: makeProducts(20),
+      results: createProductList(20),
       next: page < 7 ? `?page=${page + 1}` : null,
       previous: page > 1 ? `?page=${page - 1}` : null,
     };

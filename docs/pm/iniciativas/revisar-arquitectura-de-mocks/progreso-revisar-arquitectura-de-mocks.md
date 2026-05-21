@@ -45,7 +45,10 @@
 | 2026-05-21T04:11:49 | Cierre de tarea | T-013 | `src/mocks/handlers/index.ts` reescrito: el array plano de handlers se sustituye por la funcion `buildHandlers(): HttpHandler[]` que lee `process.env.CATALOG_SOURCE`, `AUTH_SOURCE`, `CART_SOURCE`, `PAYMENTS_SOURCE` (defaults a 'mock'). Si el valor es 'mock' los handlers del dominio se anaden al array; cualquier otro valor (por convencion 'real') los omite, dejando que la request salga al backend real. Inventory y returns se anaden siempre (no tienen flag propia: son flujos administrativos). La exportacion `handlers` se preserva (llamada a buildHandlers en carga del modulo) para compatibilidad con `browser.ts` y `node.ts` sin tocarlos. Decision 3a-ii materializada. Validacion: tsc exit 0 (tras anadir @types/node y "types": ["node"] al tsconfig), 27 suites y 184 tests verdes con defaults. |
 
 | 2026-05-21T04:11:58 | Fase cerrada | Fase 3 | T-013 cerrada. Activacion conditional por dominio implementada: el worker (dev) y el server (Jest) componen el array de handlers leyendo CATALOG_SOURCE/AUTH_SOURCE/CART_SOURCE/PAYMENTS_SOURCE. Adoptantes pueden poner una flag en 'real' para consumir el backend correspondiente cuando exista. Comienza Fase 4: Faker. || 2026-05-21T04:14:06 | Cierre de tarea | T-014 | Instalado `@faker-js/faker@^10.4.0` como devDependency (1 paquete, no deps transitivas pesadas). Creados cinco factories en `src/mocks/factories/`: `product.ts` (createProduct + createProductList con id/slug/name/base_price/price_with_tax/category/stock/rating tipados contra `Product`, mas campos legacy `price`/`original_price`/`images`/`variants` para compatibilidad con consumers), `user.ts` (createUser tipado contra `User`), `cart.ts` (createCartItem + createCartItemList tipados contra `CartItem`), `order.ts` (createOrder + createOrderList tipados contra `Order` con OrderStatus deterministico desde el enum), `voucher.ts` (createVoucher tipado contra `Voucher` con type PERCENT/FIXED). Cada factory acepta `overrides: Partial<X>` para deterministicismo. `factories/index.ts` reexporta todo. JSDoc del index documenta el patron `createX/createXList` y el uso de `faker.seed(N)` en `beforeEach` para tests deterministicos. T-015 conectara estos factories a los handlers de catalog y auth para anadir variabilidad en listados. Validacion: tsc exit 0, 184 tests verdes. |
+| 2026-05-21T04:16:24 | Hallazgo durante la ejecucion | T-015 | Al activar factories Faker, los 184 tests fallaron en bloque con `SyntaxError: Cannot use import statement outside a module` al importar `@faker-js/faker`. **Causa**: Faker v10 publica ESM puro y babel-jest no lo transpila por defecto. **Decision tomada sin pausar**: anadir `@faker-js` al `transformIgnorePatterns` de jest.config.cjs (mismo patron que ya esta para los paquetes de MSW). Misma estrategia, mismo resultado, cero ambiguedad. |
+| 2026-05-21T04:16:24 | Cierre de tarea | T-015 | Conectados los factories Faker a dos handlers: (a) `/api/products/` y `/api/products/search/` ahora usan `createProductList(N)` para que cada listado devuelva productos variables (mas realista para desarrollo); (b) `/api/products/:slug/` mantiene determinismo via seed del slug (hash trivial de char codes), asi que tests que piden el mismo slug obtienen el mismo producto; (c) `/api/auth/me/` usa `createUser` con `faker.seed(1)` para devolver siempre el mismo usuario con campos rellenos (phone/avatar/completeness) realistas. Decisiones de diseno: login/register se mantienen deterministicos (los pares username/password son contrato de tests); categorias se mantienen fijas (5 categorias estables); cart/payments/inventory/returns no se tocan en esta tarea (cubierto por sus tipos ya estables, sin necesidad de variabilidad listing-style). `faker.seed()` se llama tras cada uso para no contaminar handlers siguientes. |
 
+| 2026-05-21T04:16:33 | Fase cerrada | Fase 4 | T-014 y T-015 cerradas. Faker + factories tipados disponibles y conectados a los listados de catalog y al /api/auth/me/. Detalles y credenciales preservan determinismo. Comienza Fase 5: eliminar interceptor heredado. |
 ## Contadores
 
 | Evento | Conteo |
@@ -58,10 +61,10 @@
 | Plan | 1 |
 | Cambio de estado | 1 |
 | Replan | 0 |
-| Hallazgo durante la ejecucion | 3 |
+| Hallazgo durante la ejecucion | 4 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 14 |
-| Fase cerrada | 4 |
+| Cierre de tarea | 15 |
+| Fase cerrada | 5 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
