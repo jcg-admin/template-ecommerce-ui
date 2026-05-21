@@ -91,6 +91,7 @@ todos los UCs propuestos esten estudiados.
 | Documento | Estado |
 |-----------|--------|
 | [crear-orden.md](crear-orden.md) | Producido. UC del ecommerce con contrato detallado del endpoint `POST /api/v1/orders/`: header, body completo, enums, response, 24 errores catalogados, 8 reglas de validacion, 5 ejemplos (credito, debito, OXXO, SPEI, pago partido), 15 patrones evaluados. 985 lineas. |
+| [capturar-orden.md](capturar-orden.md) | Producido. UC del ecommerce para capturar una autorizacion previa. Endpoint `POST /api/v1/orders/{order_number}/capture/`. 12 errores catalogados, 5 reglas de validacion, 4 ejemplos (sincrona, asincrona, no-capturable, inexistente), 3 patrones nuevos (body vacio, validacion de estado, response minimo). Dependencia critica: `capture_mode=manual` en `crear-orden`. 553 lineas. |
 | `<otro-uc>.md` | Pendientes. Uno por UC que el usuario quiera incorporar. |
 | `analisis-cruce-vs-template.md` | Pendiente. Cruce final contra inventario; identifica que UCs son nuevos, cuales endurecen los existentes, que patrones se adoptan. Producido cuando se hayan estudiado todos los UCs propuestos. |
 | `alcance-ampliar-ucs-de-ecommerce.md` | Pendiente. UCs concretos a incorporar con criterios verificables. Producido tras el cruce. |
