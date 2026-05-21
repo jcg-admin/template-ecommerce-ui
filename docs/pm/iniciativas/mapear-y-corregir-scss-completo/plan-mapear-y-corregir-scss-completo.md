@@ -284,7 +284,15 @@ Vigente en cada commit de cada fase:
    y los referencia inmediatamente seria un single commit, pero
    se separa en T-008 anade tokens + T-009..T-013 los aplica
    uno por uno por color).
-2. `npm test` verde antes y despues.
+2. **Tests con delta cero respecto al baseline**. Ajuste
+   registrado el 2026-05-21 tras detectar al iniciar T-001 que el
+   repo tenia 2 tests fallando heredados de la iniciativa
+   cerrada `revisar-arquitectura-de-mocks` (`CatalogPage.test.jsx`
+   bloque 'ProductCard - badge Destacado'). Baseline:
+   `Tests: 2 failed, 792 passed, 794 total`. Cualquier commit
+   debe respetar este baseline: si reduce passing o incrementa
+   failing, es regresion y se revierte. La iniciativa no asume
+   responsabilidad de arreglar los 2 fallos heredados.
 3. `npm run verify-build` verde antes y despues.
 4. Validacion visual: aplica para T-009..T-013, T-015 solo si la
    correccion no es 1:1 (todas son 1:1 por construccion).
