@@ -6,12 +6,30 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// Feature flags e-comerce-ui — controlan si el backend es real o mock
+// Feature flags e-comerce-ui — controlan si el dominio se sirve via
+// mock o se delega al backend real.
+//
+// Semantica (tras T-019 de `revisar-arquitectura-de-mocks`):
+//   'mock' (default) -> los handlers MSW del dominio se registran y
+//                       el worker (dev) o el server (Jest) interceptan
+//                       las requests a nivel de red.
+//   'real'           -> los handlers del dominio NO se registran;
+//                       la request sale al backend definido por
+//                       API_URL en el host correspondiente.
+//
+// El switch vive en `src/mocks/handlers/index.ts#buildHandlers()`.
+// El codigo de produccion (paginas, slices, apiService) NO conoce el
+// modo: el bagde "Modo mock activo" que algunas paginas muestran solo
+// lee la flag para senalizar al usuario; el flujo es identico en
+// ambos modos.
+//
+// ADR: `dec-mocks-via-msw-service-worker`.
 const defaultFlags = {
-  CATALOG_SOURCE: 'mock',
-  AUTH_SOURCE: 'mock',
-  CART_SOURCE: 'mock',
+  CATALOG_SOURCE:  'mock',
+  AUTH_SOURCE:     'mock',
+  CART_SOURCE:     'mock',
   PAYMENTS_SOURCE: 'mock',
+  PROFILE_SOURCE:  'mock',
 };
 
 // Lee .env.{NODE_ENV} y .env en ese orden

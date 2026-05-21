@@ -118,6 +118,16 @@ export const authHandlers = [
   }),
   http.post('/api/v1/auth/change-password/', () => HttpResponse.json({ detail: 'Contrasena actualizada.' })),
   http.post('/api/v1/auth/verify-email/',    () => HttpResponse.json({ detail: 'Email verificado.' })),
+  http.post('/api/v1/auth/password-reset/',  () => HttpResponse.json({ detail: 'Si el email existe, se enviara un enlace.' })),
+  http.post('/api/v1/auth/password-reset/confirm/', async ({ request }) => {
+    const body = (await request.json().catch(() => null)) as
+      | { token?: string; new_password?: string }
+      | null;
+    if (!body?.token || !body?.new_password) {
+      return HttpResponse.json({ detail: 'token y new_password requeridos.' }, { status: 400 });
+    }
+    return HttpResponse.json({ detail: 'Contrasena restablecida.' });
+  }),
 
   // Aliases legacy (algunos componentes y tests aun los usan)
   http.post('/api/token/',          ({ request }) => readLogin(request)),

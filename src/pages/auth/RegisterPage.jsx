@@ -2,9 +2,10 @@
  * RegisterPage — e-comerce-ui
  * Registro de comprador (UC-AUTH-01).
  *
- * Sprint 1 (completado en Sprint 2):
- *   - Con AUTH_SOURCE=mock simula el registro y muestra confirmacion.
- *   - Con AUTH_SOURCE=real llama a POST /api/v1/auth/register/.
+ * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina despacha
+ * siempre el thunk real `registerUser`. MSW intercepta
+ * `POST /api/v1/auth/register/` cuando `AUTH_SOURCE=mock` (default);
+ * cuando es `real`, la request sale al backend.
  */
 
 import { useState } from 'react';
@@ -14,7 +15,7 @@ import { registerUser } from '@redux/slices/authSlice';
 import { selectAuthLoading, selectAuthError } from '@redux/selectors';
 import styles from './RegisterPage.module.scss';
 
-const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
+const IS_MOCK_MODE = process.env.AUTH_SOURCE === 'mock';
 
 export default function RegisterPage() {
   const dispatch  = useDispatch();
@@ -49,11 +50,6 @@ export default function RegisterPage() {
     e.preventDefault();
     const validation = validate();
     if (Object.keys(validation).length) { setErrors(validation); return; }
-
-    if (USE_MOCK) {
-      setSubmitted(true);
-      return;
-    }
 
     const result = await dispatch(registerUser(fields));
     if (registerUser.fulfilled.match(result)) setSubmitted(true);
@@ -131,7 +127,7 @@ export default function RegisterPage() {
             )}
           </div>
 
-          {authError && !USE_MOCK && (
+          {authError && (
             <p className={styles.globalError} role="alert">{authError}</p>
           )}
 
@@ -144,7 +140,7 @@ export default function RegisterPage() {
           <Link to="/auth/login">Ya tengo cuenta</Link>
         </p>
 
-        {USE_MOCK && (
+        {IS_MOCK_MODE && (
           <p className={styles.mockBadge}>Modo mock activo</p>
         )}
       </div>

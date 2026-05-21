@@ -1,6 +1,12 @@
 /**
  * ForgotPasswordPage — e-comerce-ui
  * Solicitar recuperacion de contrasena (UC-AUTH-09 Fase 1).
+ *
+ * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina hace fetch
+ * siempre. MSW intercepta `/api/v1/auth/password-reset/` en modo dev
+ * (handler en `src/mocks/handlers/auth.ts`); en `AUTH_SOURCE=real` la
+ * request sale al backend. El badge "Modo mock activo" se mantiene
+ * solo como indicador visual.
  */
 
 import { useState } from 'react';
@@ -8,7 +14,7 @@ import { Link } from 'react-router-dom';
 import styles from './ForgotPasswordPage.module.scss';
 
 const API_URL = '/api/v1/auth/password-reset/';
-const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
+const IS_MOCK_MODE = process.env.AUTH_SOURCE === 'mock';
 
 export default function ForgotPasswordPage() {
   const [email, setEmail]         = useState('');
@@ -21,13 +27,6 @@ export default function ForgotPasswordPage() {
     if (!email.includes('@')) { setError('Ingresa un email valido.'); return; }
     setIsLoading(true);
     setError('');
-
-    if (USE_MOCK) {
-      await new Promise(r => setTimeout(r, 600));
-      setSubmitted(true);
-      setIsLoading(false);
-      return;
-    }
 
     try {
       await fetch(API_URL, {

@@ -1,6 +1,10 @@
 /**
  * ResetPasswordPage — e-comerce-ui
  * Restablecer contrasena con token del email (UC-AUTH-09 Fase 2).
+ *
+ * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina hace fetch
+ * siempre. MSW intercepta `/api/v1/auth/password-reset/confirm/` en
+ * modo dev; en `AUTH_SOURCE=real` la request sale al backend.
  */
 
 import { useState } from 'react';
@@ -8,7 +12,6 @@ import { useSearchParams, useNavigate, Link } from 'react-router-dom';
 import styles from './ResetPasswordPage.module.scss';
 
 const API_URL = '/api/v1/auth/password-reset/confirm/';
-const USE_MOCK = process.env.AUTH_SOURCE === 'mock';
 
 export default function ResetPasswordPage() {
   const [searchParams]            = useSearchParams();
@@ -39,12 +42,6 @@ export default function ResetPasswordPage() {
     if (!token) { setGlobal('El enlace es invalido o ha expirado.'); return; }
     setIsLoading(true);
     setGlobal('');
-
-    if (USE_MOCK) {
-      await new Promise(r => setTimeout(r, 600));
-      navigate('/auth/login', { state: { message: 'Contrasena restablecida. Inicia sesion.' } });
-      return;
-    }
 
     try {
       const res = await fetch(API_URL, {
