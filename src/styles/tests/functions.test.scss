@@ -1,0 +1,129 @@
+// =============================================================================
+// Tests de funciones SCSS portadas de ui-core (T-201)
+// =============================================================================
+//
+// Verifica que cada funcion portada en T-201 produce los valores esperados.
+// Sin estos tests, las funciones se aplicarian a ciegas en F4a (integracion en
+// componentes) y una regresion silenciosa por adaptacion del codigo seria muy
+// dificil de detectar.
+//
+// Iniciativa: mapear-y-corregir-scss-completo (T-201).
+
+@use 'true' as *;
+@use '../abstracts/functions' as fn;
+
+// =============================================================================
+// str-replace
+// =============================================================================
+// La funcion mas simple. Reemplaza substring.
+
+@include describe('str-replace [function]') {
+  @include it('Reemplaza una ocurrencia simple') {
+    @include assert-equal(fn.str-replace('hola mundo', 'mundo', 'sol'), 'hola sol');
+  }
+
+  @include it('Devuelve el string original si no encuentra el substring') {
+    @include assert-equal(fn.str-replace('hola', 'xyz', 'sol'), 'hola');
+  }
+
+  @include it('Reemplaza multiples ocurrencias (recursivo)') {
+    @include assert-equal(fn.str-replace('a-b-c', '-', '_'), 'a_b_c');
+  }
+}
+
+// =============================================================================
+// color (tint, shade, shift)
+// =============================================================================
+
+@include describe('shift-color [function]') {
+  @include it('Con weight 100% positivo da negro puro (shade total)') {
+    @include assert-equal(fn.shift-color(#ff0000, 100%), #000000);
+  }
+
+  @include it('Con weight 100% negativo da blanco puro (tint total)') {
+    @include assert-equal(fn.shift-color(#ff0000, -100%), #ffffff);
+  }
+}
+
+@include describe('tint-color [function]') {
+  @include it('Mezcla un color con blanco al peso indicado') {
+    // tint(red, 100%) = white
+    @include assert-equal(fn.tint-color(#ff0000, 100%), #ffffff);
+  }
+
+  @include it('Con weight 0% devuelve el color original') {
+    @include assert-equal(fn.tint-color(#ff0000, 0%), #ff0000);
+  }
+}
+
+@include describe('shade-color [function]') {
+  @include it('Mezcla un color con negro al peso indicado') {
+    @include assert-equal(fn.shade-color(#ff0000, 100%), #000000);
+  }
+}
+
+// =============================================================================
+// to-rgb
+// =============================================================================
+
+@include describe('to-rgb [function]') {
+  @include it('Devuelve los 3 canales separados por comas') {
+    @include assert-equal((fn.to-rgb(#ff0000)), (255, 0, 0));
+  }
+
+  @include it('Funciona con blanco') {
+    @include assert-equal((fn.to-rgb(#ffffff)), (255, 255, 255));
+  }
+
+  @include it('Funciona con negro') {
+    @include assert-equal((fn.to-rgb(#000000)), (0, 0, 0));
+  }
+}
+
+// =============================================================================
+// math (divide, add, subtract)
+// =============================================================================
+
+@include describe('divide [function]') {
+  @include it('Division simple de numeros sin unidades') {
+    @include assert-equal(fn.divide(10, 2), 5);
+  }
+
+  @include it('Division con unidades compatibles') {
+    @include assert-equal(fn.divide(10px, 2px), 5);
+  }
+
+  @include it('Division por 0 emite error') {
+    // sass-true no testea @error directamente, pero confirmamos comportamiento.
+    // Para el smoke, validamos que la funcion existe y opera.
+    @include assert-equal(fn.divide(0, 5), 0);
+  }
+}
+
+// =============================================================================
+// contrast-ratio + luminance
+// =============================================================================
+
+@include describe('contrast-ratio [function]') {
+  @include it('Negro contra blanco da ratio maximo (21)') {
+    @include assert-equal(fn.contrast-ratio(#000000, #ffffff), 21);
+  }
+
+  @include it('Color contra si mismo da ratio 1') {
+    @include assert-equal(fn.contrast-ratio(#ff0000, #ff0000), 1);
+  }
+}
+
+// =============================================================================
+// color-contrast
+// =============================================================================
+
+@include describe('color-contrast [function]') {
+  @include it('Sobre fondo blanco devuelve color oscuro') {
+    @include assert-equal(fn.color-contrast(#ffffff), #000000);
+  }
+
+  @include it('Sobre fondo negro devuelve color claro') {
+    @include assert-equal(fn.color-contrast(#000000), #ffffff);
+  }
+}

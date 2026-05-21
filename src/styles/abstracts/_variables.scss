@@ -368,3 +368,38 @@ $radius-lg:      $border-radius-lg;
 
 // Tipografía display
 $font-size-display: $font-size-4xl;
+
+
+// =============================================================================
+// VARIABLES MINIMAS PARA SISTEMA DE FUNCIONES PORTADAS (T-201)
+// =============================================================================
+//
+// Anticipacion minima de T-202 (integracion completa de variables de
+// ui-core). Estas 5 variables son las que las funciones portadas en T-201
+// necesitan para compilar. Cuando T-202 integre el _variables.scss completo
+// de ui-core, estos valores quedaran absorbidos en su seccion logica.
+//
+// Origen: ui-core-5.25.0/scss/_variables.scss
+// Variables canonicas con !default para permitir override del adoptante.
+
+// Para color-contrast() (sistema WCAG):
+$white:                  #fff !default;
+$black:                  #000 !default;
+$min-contrast-ratio:     4.5 !default;
+$color-contrast-dark:    $black !default;
+$color-contrast-light:   $white !default;
+
+// Para escape-svg() (codificacion de caracteres en data URIs):
+// scss-docs-start escaped-characters
+$escaped-characters: (
+  ("<", "%3c"),
+  (">", "%3e"),
+  ("#", "%23"),
+  ("(", "%28"),
+  (")", "%29"),
+) !default;
+// scss-docs-end escaped-characters
+
+// Prefijo del template para CSS custom properties (decision D-PREFIJO).
+// Usado por rgba-css-var() y _root.scss (T-208).
+$prefix: "ec-" !default;

@@ -36,8 +36,14 @@ function walk(dir, out = []) {
   for (const entry of readdirSync(dir)) {
     const full = join(dir, entry);
     const s = statSync(full);
-    if (s.isDirectory()) walk(full, out);
-    else if (/\.scss$/.test(entry) && !entry.startsWith('_')) out.push(full);
+    if (s.isDirectory()) {
+      // Skip src/styles/tests/ -- those are sass-true tests compiled
+      // via Jest shim (src/styles/tests/scss.test.js), not via webpack.
+      // Their @use 'true' import is provided by sass-true at runtime and
+      // is not resolvable by this static compiler check.
+      if (full.endsWith(join('styles', 'tests'))) continue;
+      walk(full, out);
+    } else if (/\.scss$/.test(entry) && !entry.startsWith('_')) out.push(full);
   }
   return out;
 }

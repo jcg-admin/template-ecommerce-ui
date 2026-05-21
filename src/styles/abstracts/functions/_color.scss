@@ -1,0 +1,30 @@
+// =============================================================================
+// Portado de ui-core-5.25.0 (CoreUI Pro) — MIT
+// Atribucion: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Adaptado a CSS Modules de e-comerce-ui
+// Origen: scss/functions/_color.scss
+// Iniciativa: mapear-y-corregir-scss-completo (T-201)
+// =============================================================================
+
+@use "sass:color";
+
+// scss-docs-start color-functions
+// Tint a color: mix a color with white
+@function tint-color($color, $weight) {
+  @return color.mix(white, $color, $weight);
+}
+
+// Shade a color: mix a color with black
+@function shade-color($color, $weight) {
+  @return color.mix(black, $color, $weight);
+}
+
+// Shade the color if the weight is positive, else tint it
+@function shift-color($color, $weight) {
+  @if $weight > 0 {
+    @return shade-color($color, $weight);
+  } @else {
+    @return tint-color($color, -$weight);
+  }
+}
+// scss-docs-end color-functions

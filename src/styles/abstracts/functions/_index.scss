@@ -1,0 +1,32 @@
+// =============================================================================
+// FUNCIONES SCSS — `e-comerce-ui`
+// =============================================================================
+//
+// Barrel que reexporta las 13 funciones portadas de ui-core-5.25.0 en T-201.
+// Uso desde otro partial:
+//
+//   @use 'abstracts/functions' as fn;
+//   .foo { background: fn.color-translucent($bg, .2); }
+//
+// O selectivamente:
+//
+//   @use 'abstracts/functions/color' as *;
+//   .foo { background: shift-color($primary, 10%); }
+//
+// Atribucion completa: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-201)
+// =============================================================================
+
+@forward "assert-ascending";
+@forward "assert-starts-at-zero";
+@forward "color";
+@forward "color-contrast";
+@forward "color-contrast-variables";
+@forward "color-translucent";
+@forward "contrast-ratio";
+@forward "escape-svg";
+@forward "maps";
+@forward "math";
+@forward "rgba-css-var";
+@forward "str-replace";
+@forward "to-rgb";

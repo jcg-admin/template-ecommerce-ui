@@ -1,0 +1,13 @@
+// =============================================================================
+// Portado de ui-core-5.25.0 (CoreUI Pro) — MIT
+// Atribucion: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Adaptado a CSS Modules de e-comerce-ui
+// Origen: scss/functions/_to-rgb.scss
+// Iniciativa: mapear-y-corregir-scss-completo (T-201)
+// =============================================================================
+
+@use "sass:color";
+
+@function to-rgb($value) {
+  @return color.channel($value, "red", $space: rgb), color.channel($value, "green", $space: rgb), color.channel($value, "blue", $space: rgb);
+}
