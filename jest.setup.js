@@ -5,6 +5,71 @@
 
 require('@testing-library/jest-dom');
 
+// Polyfills para MSW v2 en jsdom: jsdom no expone `Request`,
+// `Response`, `Headers` ni `fetch` globalmente y `msw/node` los
+// necesita en el scope del test. Node 22 los provee como globals
+// nativos; aqui los re-asignamos al `global` que ve jest tras la
+// inicializacion de jsdom. Hay que cargar `TextEncoder`/`TextDecoder`
+// primero porque `undici` los usa antes de exponer el resto.
+if (typeof globalThis.TextEncoder === 'undefined') {
+  /* eslint-disable no-undef */
+  const { TextEncoder, TextDecoder } = require('node:util');
+  globalThis.TextEncoder = TextEncoder;
+  globalThis.TextDecoder = TextDecoder;
+  /* eslint-enable no-undef */
+}
+if (typeof globalThis.ReadableStream === 'undefined') {
+  /* eslint-disable no-undef */
+  const { ReadableStream, WritableStream, TransformStream } =
+    require('node:stream/web');
+  globalThis.ReadableStream = ReadableStream;
+  globalThis.WritableStream = WritableStream;
+  globalThis.TransformStream = TransformStream;
+  /* eslint-enable no-undef */
+}
+if (typeof globalThis.MessagePort === 'undefined') {
+  /* eslint-disable no-undef */
+  const { MessageChannel, MessagePort } = require('node:worker_threads');
+  globalThis.MessageChannel = MessageChannel;
+  globalThis.MessagePort = MessagePort;
+  /* eslint-enable no-undef */
+}
+if (typeof globalThis.Request === 'undefined') {
+  /* eslint-disable no-undef */
+  const { Request, Response, Headers, fetch, FormData } = require('undici');
+  globalThis.Request = Request;
+  globalThis.Response = Response;
+  globalThis.Headers = Headers;
+  globalThis.fetch = fetch;
+  globalThis.FormData = FormData;
+  /* eslint-enable no-undef */
+}
+if (typeof globalThis.BroadcastChannel === 'undefined') {
+  /* eslint-disable no-undef */
+  globalThis.BroadcastChannel = require('node:worker_threads').BroadcastChannel;
+  /* eslint-enable no-undef */
+}
+
+// MSW: server para Jest (intercepta el modulo `http` de Node).
+// Arranca antes de todos los tests, resetea handlers entre tests y
+// cierra al final. Con `onUnhandledRequest: 'bypass'` los tests cuyos
+// endpoints aun no tienen handler MSW (Phase 2 esta poblando) siguen
+// pasando por el `mockInterceptor` heredado en `apiService` hasta que
+// Phase 5 lo elimine.
+const { server } = require('@mocks/node');
+
+beforeAll(() => {
+  server.listen({ onUnhandledRequest: 'bypass' });
+});
+
+afterEach(() => {
+  server.resetHandlers();
+});
+
+afterAll(() => {
+  server.close();
+});
+
 // Mock window.matchMedia
 Object.defineProperty(window, 'matchMedia', {
   writable: true,
@@ -32,7 +97,7 @@ global.localStorage = _localStorageMock;
 // Mock window.scrollTo
 window.scrollTo = jest.fn();
 
-// Mock IntersectionObserver (usado en lazy loading e imágenes)
+// Mock IntersectionObserver (usado en lazy loading e imagenes)
 global.IntersectionObserver = class IntersectionObserver {
   constructor() {}
   observe() { return null; }

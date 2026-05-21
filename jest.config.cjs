@@ -1,12 +1,33 @@
 module.exports = {
   testEnvironment: 'jsdom',
+  // MSW v2: jsdom por defecto resuelve la condicion `browser` en `exports`
+  // de package.json, lo que rompe las dependencias internas de MSW
+  // (`@mswjs/interceptors`) que esperan condiciones de Node. Forzar
+  // `['node', 'node-addons']` hace que jsdom resuelva paquetes como Node
+  // tipico, manteniendo a `msw/node` funcional para los tests.
+  testEnvironmentOptions: {
+    customExportConditions: ['node', 'node-addons'],
+  },
   setupFilesAfterEnv: ['<rootDir>/jest.setup.js'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'json'],
   verbose: true,
+  // MSW server intercepta el modulo http de Node y registra
+  // listeners que jest no detecta como "open handles" pero
+  // mantienen el proceso vivo. `forceExit` cierra el proceso
+  // limpiamente tras ejecutar todos los tests. Se anadio al
+  // integrar MSW (T-007 de revisar-arquitectura-de-mocks).
+  forceExit: true,
 
   transform: {
-    '^.+\\.(js|jsx|ts|tsx)$': 'babel-jest',
+    '^.+\\.(js|jsx|mjs|ts|tsx)$': 'babel-jest',
   },
+
+  // MSW v2 y `@mswjs/interceptors` se publican como ESM puro. Babel-jest
+  // los necesita transformados; el patron por defecto de Jest ignora
+  // todo node_modules, asi que los exceptuamos explicitamente.
+  transformIgnorePatterns: [
+    'node_modules/(?!(msw|@mswjs|@bundled-es-modules|@open-draft|outvariant|strict-event-emitter|until-async|headers-polyfill|rettime))',
+  ],
 
   moduleNameMapper: {
     '\\.(css|scss|less|sass)$': '<rootDir>/__mocks__/styleMock.js',

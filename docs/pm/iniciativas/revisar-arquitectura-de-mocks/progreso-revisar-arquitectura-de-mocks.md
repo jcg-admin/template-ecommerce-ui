@@ -32,6 +32,9 @@
 | 2026-05-21T06:05:00 | Cierre de tarea | T-004 | Creados `src/mocks/handlers/index.ts` (array `handlers: HttpHandler[]` vacio inicial, con JSDoc explicando que T-008..T-012 lo poblaran y T-013 cambiara la exportacion a `buildHandlers()`) y `src/mocks/handlers/types.ts` (re-export central de los 12 tipos del dominio usados por handlers desde `../../types/domain`). `tsc --noEmit` exit 0. |
 | 2026-05-21T06:15:00 | Cierre de tarea | T-005 | Creados `src/mocks/browser.ts` (importa `setupWorker` de `msw/browser` y exporta `worker = setupWorker(...handlers)`) y `src/mocks/node.ts` (importa `setupServer` de `msw/node` y exporta `server = setupServer(...handlers)`). Ambos consumen el array `handlers` desde `./handlers`. JSDoc explicando cuando se importan: el worker desde `src/index.jsx` con guard `NODE_ENV=development` (T-006), el server desde `tests/setup-msw.ts` (T-007). `tsc --noEmit` exit 0. |
 | 2026-05-21T06:30:00 | Cierre de tarea | T-006 | `src/index.jsx` refactorizado: el render de React ahora vive dentro de `async function startApp()` que arranca el worker MSW antes con `await worker.start({ onUnhandledRequest: 'bypass' })` solo si `process.env.NODE_ENV !== 'production'`. Import dinamico `await import('./mocks/browser')` para que webpack lo elimine por tree shaking en build de produccion. **Validacion crucial**: tras `npm run build`, `grep -lE "msw\|mockServiceWorker\|setupWorker" dist/main.*.js` retorna cero matches. `npm run verify-build` cierra en verde. `npx jest` pasa 184 tests (con handlers vacios y `onUnhandledRequest: bypass`, MSW no interfiere con los tests existentes). |
+| 2026-05-21T06:55:00 | Hallazgo durante la ejecucion | T-007 | Integrar MSW v2 en Jest expuso **cuatro requisitos de entorno** que no estaban en el plan: (a) `testEnvironmentOptions.customExportConditions: ['node', 'node-addons']` en `jest.config.cjs` porque jsdom resuelve la condicion `browser` de `exports` por defecto y eso rompe la cadena de `@mswjs/interceptors`. (b) Polyfills de `Request`/`Response`/`Headers`/`fetch`/`FormData` desde `undici` (instalado como devDependency), mas `TextEncoder`/`TextDecoder`/`ReadableStream`/`MessagePort`/`BroadcastChannel` desde modulos `node:*` ya disponibles en Node 22. jsdom no expone ninguno de estos globals. (c) `transformIgnorePatterns` ampliado para que babel-jest transforme `msw`, `@mswjs`, `@bundled-es-modules`, `@open-draft`, `outvariant`, `strict-event-emitter`, `until-async`, `headers-polyfill`, `rettime` (MSW v2 publica ESM puro). (d) `transform` extendido para incluir `.mjs` (rettime y otros usan extension .mjs). Tambien: MSW server mantiene el proceso vivo tras la suite por sus listeners; mitigado con `forceExit: true`. Causa raiz: la ADR previa (`dec-mock-first-via-feature-flags-por-dominio`) acerto en parte: MSW si tiene mas friccion de setup que un interceptor in-process, **pero** esa friccion es de configuracion una sola vez (todo en `jest.config.cjs` + `jest.setup.js`), no recurrente. La premisa "complica el setup de Jest" era exagerada; la realidad es que requiere ~30 lineas de configuracion bien documentada. |
+| 2026-05-21T07:05:00 | Cierre de tarea | T-007 | `jest.setup.js` extendido con (a) polyfills de Web API globals desde `undici` y modulos `node:*`, (b) carga del `server` de `@mocks/node`, (c) lifecycle hooks: `beforeAll(server.listen)`, `afterEach(server.resetHandlers)`, `afterAll(server.close)`. `jest.config.cjs` actualizado con `testEnvironmentOptions.customExportConditions`, ampliacion de `transformIgnorePatterns` (8 paquetes MSW) y inclusion de `.mjs` en el patron de `transform`. `forceExit: true` para evitar que listeners de MSW dejen el proceso vivo. `undici` anadido a devDependencies. Validacion: 27 suites, **184 tests verdes** con MSW activo (con `onUnhandledRequest: 'bypass'` los handlers vacios dejan pasar todo y los tests siguen funcionando via `mockInterceptor` heredado). Build de produccion sigue limpio (cero referencias a MSW/undici en `dist/`). |
+| 2026-05-21T07:05:00 | Fase cerrada | Fase 1 | T-003 a T-007 cerradas. MSW v2 instalado, `mockServiceWorker.js` en `public/`, modulos `browser.ts` y `node.ts` creados, integracion con dev (NODE_ENV guard) y Jest (lifecycle + polyfills) funcionando. Handlers todavia vacios — Fase 2 los pobla por dominio. |
 
 ## Contadores
 
@@ -45,10 +48,10 @@
 | Plan | 1 |
 | Cambio de estado | 1 |
 | Replan | 0 |
-| Hallazgo durante la ejecucion | 1 |
+| Hallazgo durante la ejecucion | 2 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 6 |
-| Fase cerrada | 1 |
+| Cierre de tarea | 7 |
+| Fase cerrada | 2 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
