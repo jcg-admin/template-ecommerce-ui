@@ -79,27 +79,35 @@ UC-PAY-01, 02, 05, 06, 08, 09, 11. **Huecos**: 03, 04, 07, 10.
 
 ## Documentos esperados
 
+Estructura: una **inspiracion** por documento, numerada secuencialmente
+en orden de llegada. El cruce contra el inventario del template se
+hace al final, cuando todas las inspiraciones esten estudiadas.
+
 | Documento | Estado |
 |-----------|--------|
-| `alcance-ampliar-ucs-de-ecommerce.md` | Pendiente. Producido cuando se hayan recibido los ejemplos del usuario y se hayan estudiado. |
-| `analisis-ejemplos-mercadopago.md` | Pendiente. Estudio de los ejemplos del usuario y extraccion de patrones. |
-| `analisis-cruce-mercadopago-vs-template.md` | Pendiente. Cruce contra el inventario actual; identifica UCs nuevos, UCs a endurecer, patrones a adoptar. |
+| [inspiracion-01-crear-orden-tipo-mercadopago.md](inspiracion-01-crear-orden-tipo-mercadopago.md) | Producido. Estudio del endpoint `POST /v1/orders` de MercadoPago. 15 patrones identificados, 5 candidatos fuertes preliminares (idempotency-key, external_reference, status+status_detail, payment_method estructurado, errores con codigo). |
+| `inspiracion-NN-...` | Pendientes. Una por inspiracion que el usuario pase. |
+| `analisis-cruce-inspiraciones-vs-template.md` | Pendiente. Cruce final contra inventario; identifica UCs nuevos, UCs a endurecer, patrones a adoptar. Producido cuando se hayan estudiado todas las inspiraciones. |
+| `alcance-ampliar-ucs-de-ecommerce.md` | Pendiente. UCs concretos a incorporar. Producido tras el cruce. |
 | `plan-ampliar-ucs-de-ecommerce.md` | Pendiente. Producido cuando paso a `En ejecucion`. |
 | `tareas-ampliar-ucs-de-ecommerce.md` | Pendiente. |
-| `progreso-ampliar-ucs-de-ecommerce.md` | En uso. |
+| [progreso-ampliar-ucs-de-ecommerce.md](progreso-ampliar-ucs-de-ecommerce.md) | En uso. |
 | `decisiones-ampliar-ucs-de-ecommerce.md` | Pendiente. Obligatorio al cierre. |
 
 ## Flujo previsto
 
-1. Usuario pasa los ejemplos de MercadoPago.
-2. Estudio los ejemplos (`analisis-ejemplos-mercadopago.md`).
-3. Los cruzo contra el inventario del template
-   (`analisis-cruce-mercadopago-vs-template.md`).
-4. Produzco `alcance-*.md` con UCs concretos a incorporar.
-5. Pausa para tu confirmacion del alcance antes de planificar.
-6. Produzco plan + tareas, paso a `En ejecucion`.
-7. Ejecuto.
-8. Cierro segun PROC-GESTION-001.
+1. Usuario pasa una inspiracion (ejemplo de API externa, idea, patron).
+2. Produzco `inspiracion-NN-<nombre-descriptivo-del-patron>.md`
+   estudiandola sin tomar decisiones de scope.
+3. Repetir 1-2 hasta que el usuario indique que no hay mas
+   inspiraciones que pasar.
+4. Produzco `analisis-cruce-inspiraciones-vs-template.md` cruzando
+   los patrones contra el inventario del template.
+5. Produzco `alcance-ampliar-ucs-de-ecommerce.md` con UCs concretos.
+6. **Pausa para tu confirmacion del alcance antes de planificar.**
+7. Produzco plan + tareas, paso a `En ejecucion`.
+8. Ejecuto.
+9. Cierro segun PROC-GESTION-001.
 
 ## Relacion con otras iniciativas
 
