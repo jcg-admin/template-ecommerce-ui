@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `mapear-y-corregir-scss-completo` |
-| Estado | En analisis |
+| Estado | En ejecucion |
 | Orden de backlog | (no aplica: abierta directamente sin pasar por backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
 | Fecha de redefinicion de scope | 2026-05-21 (ampliado de auditoria a mapeo + correccion) |
+| Fecha de paso a En ejecucion | 2026-05-21 |
 | Iniciativa origen | Solicitud del usuario el 2026-05-21 como ampliacion de scope de la iniciativa cancelada `monitorear-y-reducir-allowlist-hex`. |
 | Iniciativa que esta subsume | [`monitorear-y-reducir-allowlist-hex`](../monitorear-y-reducir-allowlist-hex/) (cancelada 2026-05-21). |
 | Iniciativa que aporto deuda registrada | `resolver-hallazgos-de-deuda-del-template` (H-05 originalmente delegado a `monitorear-y-reducir-allowlist-hex`, ahora heredado por esta). |
@@ -198,8 +199,8 @@ arreglado).
 |-----------|--------|
 | [alcance-mapear-y-corregir-scss-completo.md](alcance-mapear-y-corregir-scss-completo.md) | Producido. Contrato verificable: criterios de mapeo + correccion por dimension, lo que NO esta en scope, disciplina operativa, orden de ejecucion propuesto, 4 decisiones de proceso pendientes de confirmacion. **Marca el punto de pausa obligatoria**: sin confirmacion del usuario no se avanza al plan. |
 | [analisis-mapear-y-corregir-scss-completo.md](analisis-mapear-y-corregir-scss-completo.md) | Producido. Mapeo formal de las 9 dimensiones con evidencia citada (archivo:linea, conteos, ejemplos). Tres hallazgos transversales (H-A, H-B, H-C) sobre la "allowlist" actual. Estimacion preliminar de esfuerzo correctivo ~10.5 h. |
-| `plan-mapear-y-corregir-scss-completo.md` | Pendiente. Producido cuando paso a `En ejecucion`. Estructura por dimension: tareas de mapeo + tareas de correccion. |
-| `tareas-mapear-y-corregir-scss-completo.md` | Pendiente. |
+| [plan-mapear-y-corregir-scss-completo.md](plan-mapear-y-corregir-scss-completo.md) | Producido. 5 fases secuenciales, 24 tareas, ~8.75 h esfuerzo estimado. Cada fase con criterio de cierre verificable. DAG de dependencias declarado. |
+| [tareas-mapear-y-corregir-scss-completo.md](tareas-mapear-y-corregir-scss-completo.md) | Producido. T-001..T-024 con archivos, accion, criterio binario, dependencias, esfuerzo. Verificacion global al cierre con comandos ejecutables. |
 | [progreso-mapear-y-corregir-scss-completo.md](progreso-mapear-y-corregir-scss-completo.md) | En uso. |
 | `decisiones-mapear-y-corregir-scss-completo.md` | Pendiente. Obligatorio al cierre. Probablemente incluye ADRs nuevas o ampliaciones de las existentes. |
 
