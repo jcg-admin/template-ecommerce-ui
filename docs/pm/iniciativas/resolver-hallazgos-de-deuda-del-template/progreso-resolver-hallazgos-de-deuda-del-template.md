@@ -62,6 +62,10 @@
 | 2026-05-21T02:15:00 | Cierre de tarea | T-023 | En `docs/vista-de-despliegue/vista-de-despliegue.md` anadida seccion `## Verificacion antes del deploy` con dos pasos: paso 1 (inspeccionar bundle con `verify-build` antes de subir, forma estricta con `--expected=$API_URL`) y paso 2 (confirmar runtime con `window.__APP_CONFIG__` tras desplegar). Incluye tabla "Cuando algo no coincide" mapeando 3 sintomas tipicos a su hipotesis e investigacion. En `docs/como-adaptar-este-template.md` se ampliaron las filas de la tabla "Verificacion: tu adopcion esta completa cuando" con dos nuevas: una para `npm run verify-build -- --expected=$API_URL` y otra para `window.__APP_CONFIG__` post-deploy. Cubre H-08 (procedimiento documentado). |
 | 2026-05-21T02:15:00 | Fase cerrada | Fase 6 | Las cuatro tareas (T-020 a T-023) cerradas. **H-08 (`riesgo-bundle-construido-con-API-URL-equivocada`) resuelto en el inventario**: el operador tiene tres herramientas mecanicas para reducir la probabilidad de servir un bundle con URL incorrecta, todas sin necesidad de CI/CD (que esta declarada fuera de scope). Continua fase 7 (cierre de la iniciativa: producir `decisiones-*.md` y cerrar). |
 | 2026-05-21T02:30:00 | Cierre de tarea | T-024 | Anadida seccion `## Resumen rapido` al inicio de `docs/riesgos-y-deuda-tecnica/riesgos-y-deuda-tecnica.md`, con tabla de todas las entradas vivas y su estado final (resuelto, resuelto parcial, delegado), cada una con anchor a la seccion detallada. Las entradas individuales ya estaban actualizadas durante la ejecucion (T-001, T-003, T-009, T-014, T-015, T-023); esta tarea solo provee el indice navegable encima. Nota explicativa sobre la regla "lo que no se puede demostrar, no se lista" preservando las entradas resueltas como contexto historico. Cubre cierre del trabajo sobre el inventario para los 7 hallazgos vivos al inicio. |
+| 2026-05-21T03:00:00 | Cierre de tarea | T-025 | Producido `decisiones-resolver-hallazgos-de-deuda-del-template.md` con cuatro secciones: 7 decisiones de diseno con alternativa-razon-tradeoff (tetradica de hallazgos, TypeScript progresivo, tipos canonicos en lugar de prop-types, decoradores selectivos, validacion build sin CI/CD, cambio de alcance Fase 5, procedimiento de backlog), 10 hallazgos durante la ejecucion con su aprendizaje, verificacion post-ejecucion (estado del inventario, tests, build, plan vs ejecucion, backlog poblado, procedimiento mejorado), y resumen de aportes de la iniciativa categorizado en codigo, infraestructura, tests, documentacion y procedimiento. `index.md` de la iniciativa actualizado: estado de "En ejecucion" a "Cerrada", version 0.1.0 -> 1.0.0, anadida fecha de cierre 2026-05-21, "Que produce esta iniciativa" actualizado para reflejar resultados, "Indice de documentos" con enlace al documento de decisiones, seccion "Estado vs PROC-GESTION-001" reescrita para reflejar cierre. `indice-de-iniciativas.md` actualizado: fila de `resolver-hallazgos-de-deuda-del-template` cambia estado de "En ejecucion" a "Cerrada". |
+| 2026-05-21T03:00:00 | Fase cerrada | Fase 7 | T-024 y T-025 cerradas. Documento de decisiones obligatorio producido. Inventario de riesgos y deuda completo con tabla resumen. Iniciativa lista para cierre formal. |
+| 2026-05-21T03:00:00 | Cambio de estado | (iniciativa) | Iniciativa transiciona de "En ejecucion" a "Cerrada". 21 tareas atomicas ejecutadas, 7 fases cerradas (0 a 6 productivas mas 7 cierre), 5 hallazgos resueltos (H-01, H-02 parcial, H-03, H-04, H-08), 2 delegados a iniciativas con directorio en backlog (H-05, H-07), 13 retirados (historicos del repo fuente). |
+| 2026-05-21T03:00:00 | Cierre de iniciativa | (iniciativa) | Iniciativa `resolver-hallazgos-de-deuda-del-template` cerrada formalmente. Proxima en orden de backlog: `validar-contrato-de-mocks-vs-backend-real`. |
 
 ## Eventos por tipo
 
@@ -72,15 +76,15 @@
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
 | Replan | 3 |
-| Cambio de estado | 1 |
+| Cambio de estado | 2 |
 | Hallazgo durante la ejecucion | 10 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 20 |
-| Fase cerrada | 7 |
+| Cierre de tarea | 21 |
+| Fase cerrada | 8 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 1 |
-| Cierre de iniciativa | 0 |
+| Cierre de iniciativa | 1 |
 
 ## Tipos de evento validos
 
