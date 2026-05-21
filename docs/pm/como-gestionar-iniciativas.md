@@ -73,16 +73,36 @@ trazabilidad.
 ## Como abrir una iniciativa nueva
 
 1. Leer el estado real del repo y del backend antes de decidir nada.
-2. Decidir si la iniciativa cabe en `ui` (este repo) o en otro
+2. **Antes de proponer cualquier cambio arquitectonico, inspeccionar
+   `docs/decisiones-de-arquitectura/` por ADRs existentes que
+   afecten al tema.** Si existe ADR previa, leer su contexto y
+   razon, y planificar superseder formalmente (cambiar `Estado` a
+   `Superseded por <slug-nuevo>`, anadir nota explicando que
+   informacion cambia respecto a la ADR previa) si la nueva
+   decision la contradice. Cambiar una decision arquitectonica
+   registrada sin pasar por la ADR previa es ruptura de la
+   disciplina del proyecto.
+3. Decidir si la iniciativa cabe en `ui` (este repo) o en otro
    submodulo. Si el trabajo es 100% sobre codigo React/Webpack/SCSS,
    es `ui`. Si es sobre la propia documentacion, es `docs` (otro repo).
-3. Elegir un slug en verbo + objeto.
-4. Crear el directorio `pm/iniciativas/<slug>/`.
-5. Crear los cinco archivos minimos.
-6. Definir un criterio de completitud verificable en el alcance.
-7. Definir tareas T-NNN atomicas y su DAG.
-8. Ejecutar. Actualizar progreso despues de cada tarea.
-9. Cerrar con el documento de decisiones obligatorio.
+4. Elegir un slug en verbo + objeto.
+5. Crear el directorio `pm/iniciativas/<slug>/`.
+6. Crear los cinco archivos minimos.
+7. Definir un criterio de completitud verificable en el alcance.
+8. Definir tareas T-NNN atomicas y su DAG.
+9. Ejecutar. Actualizar progreso despues de cada tarea.
+10. Cerrar con el documento de decisiones obligatorio.
+
+> **Por que existe el paso 2.** Esta regla se anadio el 2026-05-21
+> tras el fallo de proceso documentado en la iniciativa
+> `revisar-arquitectura-de-mocks`: el analisis inicial de
+> alternativas de mocks no inspecciono
+> `docs/decisiones-de-arquitectura/` y recomendo cambiar una
+> decision que ya estaba registrada como ADR. La reconsideracion
+> bajo RUP del proyecto exigio descubrir, leer y superseder
+> formalmente la ADR previa antes de aprobar el cambio. Para que
+> el mismo fallo no se repita, el paso 2 es ahora explicito y
+> ocupa el segundo lugar del flujo, no esta enterrado.
 
 ## Catalogo de iniciativas
 
