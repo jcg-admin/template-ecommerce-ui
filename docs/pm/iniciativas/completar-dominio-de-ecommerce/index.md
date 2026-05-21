@@ -4,7 +4,7 @@
 |-------|-------|
 | Slug | `completar-dominio-de-ecommerce` |
 | Estado | Backlog |
-| Orden de backlog | 3 |
+| Orden de backlog | 2 |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (replan de Fase 5, relacionada con H-02) |
 

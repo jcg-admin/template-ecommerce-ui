@@ -3,9 +3,10 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `revisar-arquitectura-de-mocks` |
-| Estado | Backlog |
-| Orden de backlog | 1 |
+| Estado | En analisis |
+| Orden de backlog | (vacio: ya no esta en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
+| Fecha de apertura formal | 2026-05-21 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -36,22 +37,24 @@ con el backend real cuando llegue.
 
 ## Estado actual
 
-Iniciativa registrada en backlog. **No abierta todavia**. No tiene
-documentos canonicos (alcance, analisis, plan, tareas, progreso,
-decisiones) porque esos se producen cuando la iniciativa transiciona
-de `Backlog` a `En analisis`.
+Iniciativa **abierta**. Estado: `En analisis`. Producido el
+[alcance-revisar-arquitectura-de-mocks.md](alcance-revisar-arquitectura-de-mocks.md)
+con el criterio de completitud verificable, las alternativas a
+evaluar y el "fuera de alcance".
 
-## Como se abre
+Siguiente paso del procedimiento: producir
+`analisis-revisar-arquitectura-de-mocks.md` con una entrada por
+cada alternativa listada en el alcance, comparada contra los
+criterios del template, y una recomendacion final que el usuario
+aprueba antes de pasar a `plan-*.md`.
 
-1. Cambiar el estado en
-   [indice-de-iniciativas.md](../indice-de-iniciativas.md) de
-   `Backlog` a `En analisis`.
-2. Producir `alcance-revisar-arquitectura-de-mocks.md` con el
-   criterio de completitud verificable y el listado explicito de
-   opciones a evaluar.
-3. Seguir el procedimiento en
-   [como-gestionar-iniciativas.md](../../como-gestionar-iniciativas.md).
-4. El analisis debe ser comparativo: una entrada por alternativa,
-   con sus trade-offs frente a los criterios del template, y
-   recomendacion final. Decision aprobada por el usuario antes de
-   pasar a plan.
+## Indice de documentos
+
+| Documento | Proposito |
+|-----------|-----------|
+| [alcance-revisar-arquitectura-de-mocks.md](alcance-revisar-arquitectura-de-mocks.md) | Que cubre la iniciativa, criterio de completitud, fuera de alcance, listado de alternativas a evaluar. |
+| analisis-revisar-arquitectura-de-mocks.md | Pendiente. Comparativo de las alternativas contra los criterios del template, con recomendacion final. |
+| plan-revisar-arquitectura-de-mocks.md | Pendiente. Producido cuando se apruebe el analisis. |
+| tareas-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
+| progreso-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
+| decisiones-revisar-arquitectura-de-mocks.md | Pendiente. Producido al cierre, obligatorio por PROC-GESTION-001. |
