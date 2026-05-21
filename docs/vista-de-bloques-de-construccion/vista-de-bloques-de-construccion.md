@@ -19,7 +19,7 @@ flowchart TB
         Components["components/<br/>UI reutilizable"]
         State["redux/ + hooks/domain/<br/>+ lib/queryClient"]
         Services["services/<br/>apiService + secureStorage"]
-        Mocks["mocks/<br/>interceptor + datos"]
+        Mocks["mocks/<br/>handlers MSW + factories"]
         Styles["styles/<br/>abstracts + base + components"]
         Utils["utils/, constants/, config/"]
     end
@@ -30,10 +30,18 @@ flowchart TB
     Pages --> Components
     Pages --> State
     State --> Services
-    Services --> Mocks
+    Services -. fetch HTTP .-> Mocks
     Components --> Styles
     Pages --> Styles
 ```
+
+La flecha `Services -. fetch HTTP .-> Mocks` se dibuja punteada
+porque NO es una llamada directa de codigo a codigo. `apiService`
+hace `fetch` standard; en desarrollo el Service Worker registrado
+por `mocks/browser.ts` intercepta esa request HTTP y la responde
+con un handler. En produccion el worker no se registra (guard
+`NODE_ENV !== 'production'` mas tree shaking), y la flecha se
+extingue.
 
 ## Catalogo de bloques
 
@@ -113,19 +121,39 @@ exponer una API estable a las paginas. Ejemplos: `useAuth`, `useCart`,
 
 | Archivo | Responsabilidad |
 |---------|-----------------|
-| `apiService.js` | Cliente HTTP unico. Timeout (30s), retry (3 intentos con backoff), interceptores request/response/error, mock-first via `mockInterceptor`. Dispara evento global `app:unauthorized` en 401. |
+| `apiService.js` | Cliente HTTP unico. Timeout (30s), retry (3 intentos con backoff), interceptores request/response/error. Dispara evento global `app:unauthorized` en 401. **Agnostico del modo mock**: los mocks se inyectan a nivel de red via MSW (ver bloque `mocks/`), no en este archivo. |
 | `createResilientService.js` | Factoria para servicios con politicas adicionales (circuit breaker). |
 | `secureStorage.js` | Wrapper sobre storage del navegador para datos no sensibles. |
 | `utils/apiErrors.js` | Tipos de error tipados (`TimeoutError`, `NetworkError`, `createErrorFromResponse`). |
 
 ### Bloque `mocks/`
 
-Datos locales y un interceptor que sustituye llamadas REST por
-respuestas mock cuando el flag de dominio esta en `mock`. Estructura:
+Mocks REST implementados con [Mock Service Worker (MSW)](https://mswjs.io/).
+Los handlers interceptan a nivel de red: en navegador via un Service
+Worker registrado por `browser.ts`, en Jest via el modulo `http` de
+Node interceptado por `node.ts`. El codigo de produccion
+(`apiService.js`, slices, paginas) **no sabe** que existe la capa
+mock; la conmutacion mock-vs-real ocurre fuera del bundle de
+produccion via los flags `*_SOURCE` que componen el array de
+handlers en `buildHandlers()`.
 
-- `mocks/mockInterceptor.js`: punto de entrada llamado por `apiService`.
-- `mocks/interceptors/`: handlers por endpoint.
-- `mocks/data/` (implicito): datos de ejemplo.
+Estructura:
+
+| Archivo | Responsabilidad |
+|---------|-----------------|
+| `mocks/handlers/index.ts` | `buildHandlers()` lee `CATALOG_SOURCE`, `AUTH_SOURCE`, `CART_SOURCE`, `PAYMENTS_SOURCE`, `PROFILE_SOURCE` y compone el array final. Default: todo en `mock`. |
+| `mocks/handlers/catalog.ts`, `auth.ts`, `cart.ts`, `payments.ts`, `inventory.ts`, `returns.ts` | Un archivo por dominio. Cada uno exporta su array de `http.get/post/...` con shapes tipados contra `src/types/domain.ts`. |
+| `mocks/handlers/types.ts` | Re-export central de los 12 tipos del dominio. |
+| `mocks/factories/index.ts` | `createProduct`, `createUser`, `createCartItem`, `createOrder`, `createVoucher` con @faker-js/faker. Listados usan factories para variabilidad; detalles preservan determinismo via seed estable. |
+| `mocks/browser.ts` | `setupWorker(...buildHandlers())` para uso en dev. Importado dinamicamente desde `src/index.jsx` con guard `NODE_ENV !== 'production'` para tree shaking. |
+| `mocks/node.ts` | `setupServer(...buildHandlers())` para Jest. Importado desde `jest.setup.js` con lifecycle `listen` / `resetHandlers` / `close`. |
+| `public/mockServiceWorker.js` | Generado por `npx msw init`, commiteado. Regeneracion automatica via `msw.workerDirectory` en `package.json` durante `npm install`. NO se copia a `dist/` (el template no usa `copy-webpack-plugin`). |
+
+Decision arquitectonica registrada como
+`dec-mocks-via-msw-service-worker` (supersede de
+`dec-mock-first-via-feature-flags-por-dominio`). Ver tambien
+`pm/iniciativas/revisar-arquitectura-de-mocks/` para el analisis
+completo y los trade-offs evaluados.
 
 ### Bloque `styles/`
 
@@ -203,7 +231,7 @@ flowchart LR
     hooks --> lib
     hooks --> services
     redux --> services
-    services --> mocks
+    services -. fetch HTTP .-> mocks
     components --> styles
     pages --> styles
 ```
@@ -222,8 +250,9 @@ por configuracion del bundler y por scripts en `scripts/`:
 4. `redux/slices/` puede importar de `services/`, `utils/`. **No**
    importa de `pages/`, `components/`, ni otros slices directamente
    (composicion via selectores).
-5. `services/` solo conoce `utils/`, `mocks/`, `config/`.
-6. `mocks/` no importa de produccion mas alla de `utils/`.
+5. `services/` solo conoce `utils/`, `config/`. **NO** importa de
+   `mocks/` (la intercepcion mock ocurre a nivel de red, no de codigo).
+6. `mocks/` no importa de produccion mas alla de `utils/` y `types/`.
 7. **Lazy loading solo via `React.lazy`.** Cualquier otro `import()`
    dinamico o `require()` dentro de funcion esta prohibido por
    `scripts/check-no-lazy-imports.mjs` (introducido en la rama
