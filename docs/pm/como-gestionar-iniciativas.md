@@ -110,3 +110,13 @@ El listado vivo de iniciativas (en backlog, en analisis, en ejecucion
 y cerradas) vive en su propio documento para evitar duplicacion:
 
 [indice-de-iniciativas.md](iniciativas/indice-de-iniciativas.md)
+
+## Procedimientos derivados
+
+Procedimientos operativos especificos para casos recurrentes que
+complementan este documento general:
+
+- [como-estudiar-ucs-inspirados-en-apis.md](como-estudiar-ucs-inspirados-en-apis.md)
+  Para iniciativas que estudian UCs del ecommerce inspirandose en
+  APIs externas (MercadoPago, Stripe, PayPal, Conekta, etc).
+  Originado por la iniciativa `ampliar-ucs-de-ecommerce`.
