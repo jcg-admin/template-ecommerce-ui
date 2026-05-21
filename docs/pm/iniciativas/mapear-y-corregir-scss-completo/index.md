@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `mapear-y-corregir-scss-completo` |
-| Estado | En ejecucion |
+| Estado | Pausada (2026-05-21, paralela a la iniciativa de creacion de `template-e-comerce-ui-server`) |
 | Orden de backlog | (no aplica: abierta directamente sin pasar por backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
