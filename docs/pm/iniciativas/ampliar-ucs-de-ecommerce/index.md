@@ -79,16 +79,21 @@ UC-PAY-01, 02, 05, 06, 08, 09, 11. **Huecos**: 03, 04, 07, 10.
 
 ## Documentos esperados
 
-Estructura: una **inspiracion** por documento, numerada secuencialmente
-en orden de llegada. El cruce contra el inventario del template se
-hace al final, cuando todas las inspiraciones esten estudiadas.
+Estructura: **un UC por documento**, nombrado con el slug del UC sin
+prefijos numericos ni referencias al integrador del que se inspira.
+La razon: los UCs son del ecommerce, no del integrador; mezclar el
+nombre del integrador en el archivo confunde la propiedad. Las
+fuentes de inspiracion se citan dentro de cada documento.
+
+El cruce contra el inventario del template se hace al final, cuando
+todos los UCs propuestos esten estudiados.
 
 | Documento | Estado |
 |-----------|--------|
-| [inspiracion-01-crear-orden-tipo-mercadopago.md](inspiracion-01-crear-orden-tipo-mercadopago.md) | Producido. Estudio del endpoint `POST /v1/orders` de MercadoPago. 15 patrones identificados, 5 candidatos fuertes preliminares (idempotency-key, external_reference, status+status_detail, payment_method estructurado, errores con codigo). |
-| `inspiracion-NN-...` | Pendientes. Una por inspiracion que el usuario pase. |
-| `analisis-cruce-inspiraciones-vs-template.md` | Pendiente. Cruce final contra inventario; identifica UCs nuevos, UCs a endurecer, patrones a adoptar. Producido cuando se hayan estudiado todas las inspiraciones. |
-| `alcance-ampliar-ucs-de-ecommerce.md` | Pendiente. UCs concretos a incorporar. Producido tras el cruce. |
+| [crear-orden.md](crear-orden.md) | Producido. UC del ecommerce para crear una orden. 15 patrones evaluados desde la optica del ecommerce. Candidatos fuertes: idempotency-key, status+status_detail split, payment_method objeto, items[] congelados, errores con codigo. |
+| `<otro-uc>.md` | Pendientes. Uno por UC que el usuario quiera incorporar. |
+| `analisis-cruce-vs-template.md` | Pendiente. Cruce final contra inventario; identifica que UCs son nuevos, cuales endurecen los existentes, que patrones se adoptan. Producido cuando se hayan estudiado todos los UCs propuestos. |
+| `alcance-ampliar-ucs-de-ecommerce.md` | Pendiente. UCs concretos a incorporar con criterios verificables. Producido tras el cruce. |
 | `plan-ampliar-ucs-de-ecommerce.md` | Pendiente. Producido cuando paso a `En ejecucion`. |
 | `tareas-ampliar-ucs-de-ecommerce.md` | Pendiente. |
 | [progreso-ampliar-ucs-de-ecommerce.md](progreso-ampliar-ucs-de-ecommerce.md) | En uso. |
@@ -96,14 +101,15 @@ hace al final, cuando todas las inspiraciones esten estudiadas.
 
 ## Flujo previsto
 
-1. Usuario pasa una inspiracion (ejemplo de API externa, idea, patron).
-2. Produzco `inspiracion-NN-<nombre-descriptivo-del-patron>.md`
-   estudiandola sin tomar decisiones de scope.
-3. Repetir 1-2 hasta que el usuario indique que no hay mas
-   inspiraciones que pasar.
-4. Produzco `analisis-cruce-inspiraciones-vs-template.md` cruzando
-   los patrones contra el inventario del template.
-5. Produzco `alcance-ampliar-ucs-de-ecommerce.md` con UCs concretos.
+1. Usuario propone un UC (con o sin material de referencia externo).
+2. Produzco `<slug-del-uc>.md` caracterizando el UC desde la optica
+   del ecommerce. Si hay material externo (API de un integrador,
+   notas, etc), lo uso como **inspiracion** y lo cito explicitamente,
+   pero el UC se modela como propiedad del ecommerce.
+3. Repetir 1-2 hasta que el usuario indique que no hay mas UCs.
+4. Produzco `analisis-cruce-vs-template.md` cruzando los UCs
+   propuestos contra el inventario del template.
+5. Produzco `alcance-ampliar-ucs-de-ecommerce.md`.
 6. **Pausa para tu confirmacion del alcance antes de planificar.**
 7. Produzco plan + tareas, paso a `En ejecucion`.
 8. Ejecuto.
