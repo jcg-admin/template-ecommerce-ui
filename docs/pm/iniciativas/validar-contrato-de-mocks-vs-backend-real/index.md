@@ -4,7 +4,7 @@
 |-------|-------|
 | Slug | `validar-contrato-de-mocks-vs-backend-real` |
 | Estado | Backlog |
-| Orden de backlog | 1 |
+| Orden de backlog | 2 |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (delegacion del hallazgo H-07) |
 

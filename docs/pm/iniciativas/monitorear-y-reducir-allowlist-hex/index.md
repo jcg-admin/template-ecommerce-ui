@@ -4,7 +4,7 @@
 |-------|-------|
 | Slug | `monitorear-y-reducir-allowlist-hex` |
 | Estado | Backlog |
-| Orden de backlog | 3 |
+| Orden de backlog | 4 |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (delegacion del hallazgo H-05) |
 
