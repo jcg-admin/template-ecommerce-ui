@@ -3,12 +3,14 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `ampliar-ucs-de-ecommerce` |
-| Estado | En analisis |
+| Estado | En analisis (pausada por solicitud usuario el 2026-05-21) |
 | Orden de backlog | (no aplica: abierta directamente sin pasar por backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
+| Fecha de pausa | 2026-05-21 |
 | Iniciativa origen | Solicitud del usuario durante la pausa de `completar-dominio-de-ecommerce`. |
 | Iniciativa que esta bloquea | `completar-dominio-de-ecommerce` (En ejecucion, en estado Bloqueo hasta cierre de esta). |
+| UCs estudiados antes de pausa | 6: crear-orden, capturar-orden, agregar-transaccion, eliminar-transaccion, actualizar-transaccion, procesar-orden |
 
 ## Motivo de existencia
 
