@@ -40,6 +40,9 @@ las clases definidas en PROC-GESTION-001.
 | 2026-05-21T08:57:20 | Inicio de tarea | T-105 | Comienzo T-105 (Fase F0a, D9). Anadir flag `--cache --cache-location .cache/.stylelintcache` a los scripts `lint:style` y `lint:style:fix` siguiendo el patron de ui-core. Anadir `.cache/` a `.gitignore`. Tarea derivada del analisis T-104 con esfuerzo estimado 10 min y prioridad alta. |
 | 2026-05-21T08:57:21 | Hallazgo durante la ejecucion | T-105 | **Stylelint cache adoptado**. Modificaciones: (1) `package.json` scripts.lint:style cambia de `stylelint "src/**/*.scss"` a `stylelint "src/**/*.scss" --cache --cache-location .cache/.stylelintcache`. Mismo cambio en scripts.lint:style:fix anadiendo el flag junto a `--fix`. (2) `.gitignore` gana entrada `.cache/` en la seccion Misc junto a `.eslintcache`. **Validacion empirica**: Run 1 (cache fria, sin .cache/ previo): npm run lint:style tarda 2406 ms y crea `.cache/.stylelintcache` (23.5 KB con el hash de cada archivo lintado). Run 2 (cache caliente, sin cambios entre ejecuciones): npm run lint:style tarda 1127 ms, **53% mas rapido** (ahorro 1.28 segundos). Ahorro se materializa porque stylelint comprueba hashes y solo re-linta los archivos cuyo hash cambio. Verificado que `.cache/` esta correctamente ignorado por git (status no lo lista). |
 | 2026-05-21T08:57:22 | Cierre de tarea | T-105 | Cierre T-105. Stylelint cache operativo, ahorro de 53% en ejecucion repetida verificado. `.gitignore` actualizado para no trackear el directorio. Esto reduce la friccion del pre-push y del flujo de desarrollo local sin cambiar la deteccion de errores. Tests delta cero. Siguiente tarea: T-106 (instalar `npm-run-all` para orquestacion en paralelo). |
+| 2026-05-21T09:00:19 | Inicio de tarea | T-106 | Comienzo T-106 (Fase F0a, D9). Instalar `npm-run-all` como devDependency. Anadir script orquestador `lint:scss-all` con flags `--aggregate-output --continue-on-error --parallel` siguiendo el patron de ui-core. Tarea derivada del analisis T-104 con esfuerzo estimado 15 min. |
+| 2026-05-21T09:00:20 | Hallazgo durante la ejecucion | T-106 | **npm-run-all v4.1.5 instalado**. Modificaciones: (1) `package.json` devDependencies gana `"npm-run-all": "^4.1.5"`. (2) `package.json` scripts gana `"lint:scss-all": "run-p --aggregate-output --continue-on-error lint:style lint:scss-compile lint:scss-vars"`. **Validacion empirica**: `npm run lint:scss-all` ejecuta los 3 linters; `lint:scss-compile` PASA (102 SCSS entries clean); `lint:style` PASA (sin errores en cache caliente); `lint:scss-vars` FALLA con exit 1 (80 variables muertas, esperado y registrado en T-102). Salida agregada al final agrupada por script, sin mezcla. Tiempo paralelo: 4466 ms. Tiempo secuencial estimado (3 scripts uno tras otro): 4213 ms. **Hallazgo contraintuitivo**: el paralelo NO es mas rapido en este caso. Razon: cada script npm tiene overhead de boot (~700 ms para arrancar Node + cargar deps); en paralelo los 3 booteos compiten por CPU/IO simultaneamente, mientras `lint:scss-vars` (~3.5 s) domina el tiempo total. **No es regresion, no invalida la decision**. El valor real de npm-run-all en este contexto es: (a) **salida agregada**: outputs no se mezclan, se imprimen al final agrupados, lectura mas limpia. (b) **--continue-on-error**: si `lint:scss-vars` falla, los otros dos siguen ejecutandose y reportando sus propios fallos. Modo secuencial con `&&` se detiene en el primer fallo, ocultando errores potenciales en linters posteriores. (c) **Composicion declarativa**: el dia que F1a anada mas linters (sass-true, etc), basta con anadirlos a la lista de `run-p`. **Decision**: adoptar npm-run-all confirmado, no por velocidad sino por completitud de reporte y composicion. |
+| 2026-05-21T09:00:21 | Cierre de tarea | T-106 | Cierre T-106. npm-run-all instalado, script `lint:scss-all` operativo, ejecuta los 3 linters SCSS con salida agregada y tolerancia a fallos. Tests delta cero. Tres vulnerabilidades moderate persisten (heredadas de T-102, diferidas a iniciativa de hardening de supply chain). Siguiente tarea: T-107 (anadir 3 reglas selectivas a stylelint: declaration-no-important, function-disallowed-list, property-disallowed-list). |
 ## Contadores
 
 | Clase | Conteo |
@@ -52,9 +55,9 @@ las clases definidas en PROC-GESTION-001.
 | Plan | 1 |
 | Cambio de estado | 1 |
 | Replan | 1 |
-| Hallazgo durante la ejecucion | 6 |
-| Inicio de tarea | 6 |
-| Cierre de tarea | 6 |
+| Hallazgo durante la ejecucion | 7 |
+| Inicio de tarea | 7 |
+| Cierre de tarea | 7 |
 | Fase cerrada | 0 |
 | Bloqueo | 1 |
 | Desbloqueo | 1 |
