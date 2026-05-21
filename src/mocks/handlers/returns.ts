@@ -1,8 +1,8 @@
 /**
  * Handlers MSW del dominio returns.
  *
- * Cubre UC-RET-01..06 portados textualmente del interceptor heredado
- * `src/mocks/interceptors/returns.js`. Endpoints:
+ * Cubre UC-RET-01..06 portados del interceptor heredado eliminado en
+ * T-018 de la iniciativa `revisar-arquitectura-de-mocks`. Endpoints:
  *
  *   GET  /api/v1/returns/                              comprador: listado
  *   GET  /api/v1/returns/:id/                          comprador: detalle

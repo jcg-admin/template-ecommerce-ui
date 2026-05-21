@@ -1,8 +1,8 @@
 /**
  * Handlers MSW del dominio inventory (admin).
  *
- * Cubre UC-INV-01..05 portados textualmente del interceptor heredado
- * `src/mocks/interceptors/inventory.js`. Endpoints:
+ * Cubre UC-INV-01..05 portados del interceptor heredado eliminado en
+ * T-018 de la iniciativa `revisar-arquitectura-de-mocks`. Endpoints:
  *
  *   GET  /api/v1/admin/inventory/                          listado + summary
  *   GET  /api/v1/admin/inventory/variants/:id/movements/   historial
@@ -10,9 +10,9 @@
  *   POST /api/v1/admin/inventory/import/                   import masivo
  *
  * Estado en variables de modulo. Los exportados `__inventoryState` y
- * `__resetInventoryState` se preservan para los tests que dependian del
- * interceptor heredado; cuando T-018 elimine `src/mocks/interceptors/`,
- * cualquier test que aun los importe debera ajustarse o eliminarse.
+ * `__resetInventoryState` se preservan para uso desde tests; el
+ * subarbol `src/mocks/interceptors/` heredado fue eliminado en T-018
+ * de la iniciativa `revisar-arquitectura-de-mocks`.
  */
 
 import { http, HttpResponse } from 'msw';
@@ -159,10 +159,9 @@ export const inventoryHandlers = [
   }),
 ];
 
-// Exportados para tests heredados que importan estado interno.
-// Cuando T-018 elimine src/mocks/interceptors/, los tests embebidos que
-// usaban esta API desaparecen; este export sigue util para tests nuevos
-// que necesiten resetear estado entre casos.
+// Exportados para tests. Permiten resetear estado entre casos.
+// Antes vivian como `__resetInventoryState` del interceptor heredado
+// en `src/mocks/interceptors/inventory.js`, eliminado en T-018.
 export const __inventoryState = state;
 export const __resetInventoryState = () => {
   state.items = initialItems();
