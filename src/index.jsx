@@ -19,8 +19,26 @@ if (typeof window !== 'undefined') {
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-root.render(
-  <StrictMode>
-    <App />
-  </StrictMode>
-);
+// MSW: arranca el Service Worker solo en desarrollo. El bundle de
+// produccion no incluye MSW ni los handlers; webpack ya hace tree
+// shaking de import dinamico bajo bloque `if (NODE_ENV !== 'production')`
+// porque DefinePlugin sustituye `process.env.NODE_ENV` antes de
+// minificar. El archivo `public/mockServiceWorker.js` no se copia a
+// `dist/` (no hay copy-webpack-plugin), asi que aunque alguien
+// solicitara la URL en produccion seria 404 inocuo. Doble guarded.
+async function startApp() {
+  if (process.env.NODE_ENV !== 'production') {
+    const { worker } = await import('./mocks/browser');
+    await worker.start({
+      onUnhandledRequest: 'bypass',
+    });
+  }
+
+  root.render(
+    <StrictMode>
+      <App />
+    </StrictMode>
+  );
+}
+
+startApp();

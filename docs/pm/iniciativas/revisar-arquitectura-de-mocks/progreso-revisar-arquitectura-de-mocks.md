@@ -31,6 +31,7 @@
 | 2026-05-21T06:00:00 | Hallazgo durante la ejecucion | T-004 | (a) Mapa de endpoints reales: el interceptor maneja **dos prefijos distintos** que conviven: sin version (`/api/auth/*`, `/api/cart/*`, `/api/products/*`, `/api/categories/*`, `/api/orders/*`, `/api/payments/*`, `/api/token/*`, `/api/wishlist/*`) y con version (`/api/v1/admin/inventory/*`, `/api/v1/admin/returns/*`, `/api/v1/returns/*`, `/api/v1/orders/*`). Los handlers MSW se escriben contra los paths reales, no contra los que el plan asumia (`/api/v1/catalog/...`). Inconsistencia heredada del template, no introducida por esta iniciativa. Se documentara como deuda menor en el documento de decisiones de cierre. (b) El alias TypeScript `@types/*` configurado en `tsconfig.json` colisiona con la convencion reservada de DefinitelyTyped: `tsc` rechaza importar tipos desde rutas que empiezan con `@types/`. Solucion provisional: los handlers usan import relativo `'../../types/domain'`. Deuda menor: renombrar el alias a `@app-types/*` u otro no reservado en una iniciativa futura. |
 | 2026-05-21T06:05:00 | Cierre de tarea | T-004 | Creados `src/mocks/handlers/index.ts` (array `handlers: HttpHandler[]` vacio inicial, con JSDoc explicando que T-008..T-012 lo poblaran y T-013 cambiara la exportacion a `buildHandlers()`) y `src/mocks/handlers/types.ts` (re-export central de los 12 tipos del dominio usados por handlers desde `../../types/domain`). `tsc --noEmit` exit 0. |
 | 2026-05-21T06:15:00 | Cierre de tarea | T-005 | Creados `src/mocks/browser.ts` (importa `setupWorker` de `msw/browser` y exporta `worker = setupWorker(...handlers)`) y `src/mocks/node.ts` (importa `setupServer` de `msw/node` y exporta `server = setupServer(...handlers)`). Ambos consumen el array `handlers` desde `./handlers`. JSDoc explicando cuando se importan: el worker desde `src/index.jsx` con guard `NODE_ENV=development` (T-006), el server desde `tests/setup-msw.ts` (T-007). `tsc --noEmit` exit 0. |
+| 2026-05-21T06:30:00 | Cierre de tarea | T-006 | `src/index.jsx` refactorizado: el render de React ahora vive dentro de `async function startApp()` que arranca el worker MSW antes con `await worker.start({ onUnhandledRequest: 'bypass' })` solo si `process.env.NODE_ENV !== 'production'`. Import dinamico `await import('./mocks/browser')` para que webpack lo elimine por tree shaking en build de produccion. **Validacion crucial**: tras `npm run build`, `grep -lE "msw\|mockServiceWorker\|setupWorker" dist/main.*.js` retorna cero matches. `npm run verify-build` cierra en verde. `npx jest` pasa 184 tests (con handlers vacios y `onUnhandledRequest: bypass`, MSW no interfiere con los tests existentes). |
 
 ## Contadores
 
@@ -46,7 +47,7 @@
 | Replan | 0 |
 | Hallazgo durante la ejecucion | 1 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 5 |
+| Cierre de tarea | 6 |
 | Fase cerrada | 1 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
