@@ -196,7 +196,7 @@ arreglado).
 
 | Documento | Estado |
 |-----------|--------|
-| `alcance-mapear-y-corregir-scss-completo.md` | Pendiente. Producido tras un mapeo preliminar mas detallado. |
+| [alcance-mapear-y-corregir-scss-completo.md](alcance-mapear-y-corregir-scss-completo.md) | Producido. Contrato verificable: criterios de mapeo + correccion por dimension, lo que NO esta en scope, disciplina operativa, orden de ejecucion propuesto, 4 decisiones de proceso pendientes de confirmacion. **Marca el punto de pausa obligatoria**: sin confirmacion del usuario no se avanza al plan. |
 | [analisis-mapear-y-corregir-scss-completo.md](analisis-mapear-y-corregir-scss-completo.md) | Producido. Mapeo formal de las 9 dimensiones con evidencia citada (archivo:linea, conteos, ejemplos). Tres hallazgos transversales (H-A, H-B, H-C) sobre la "allowlist" actual. Estimacion preliminar de esfuerzo correctivo ~10.5 h. |
 | `plan-mapear-y-corregir-scss-completo.md` | Pendiente. Producido cuando paso a `En ejecucion`. Estructura por dimension: tareas de mapeo + tareas de correccion. |
 | `tareas-mapear-y-corregir-scss-completo.md` | Pendiente. |
