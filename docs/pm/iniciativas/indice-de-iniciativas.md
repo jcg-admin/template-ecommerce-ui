@@ -10,7 +10,18 @@ en [como-gestionar-iniciativas.md](../como-gestionar-iniciativas.md).
 
 ## Tabla
 
-Estados posibles: `Backlog`, `En analisis`, `En ejecucion`, `Cerrada`.
+Estados posibles: `Backlog`, `En analisis`, `En ejecucion`, `Cerrada`,
+`Cancelada`.
+
+Distincion `Cerrada` vs `Cancelada`:
+
+- **Cerrada**: la iniciativa ejecuto su trabajo y produjo resultados.
+  Tiene `decisiones-*.md` con las cuatro secciones canonicas.
+- **Cancelada**: la iniciativa no se ejecuto y su scope fue absorbido
+  por otra, descartado, o reconceptualizado. No requiere
+  `decisiones-*.md` propio; la justificacion vive en el `index.md`
+  de la iniciativa cancelada con apunte a la iniciativa que la
+  subsume (si aplica).
 
 La columna **Orden de backlog** solo lleva valor cuando el estado es
 `Backlog`; indica la prioridad propuesta de apertura. Cuando la
@@ -24,7 +35,8 @@ iniciativa pasa a otro estado, la celda se vacia.
 | [validar-contrato-de-mocks-vs-backend-real](validar-contrato-de-mocks-vs-backend-real/) | Backlog | resolver-hallazgos-de-deuda-del-template (H-07) | Asegurar que los mocks de `src/mocks/` reflejen el contrato real del backend Django+DRF, mediante schema por endpoint o generacion desde OpenAPI. | 1 |
 | [completar-dominio-de-ecommerce](completar-dominio-de-ecommerce/) | En ejecucion | resolver-hallazgos-de-deuda-del-template (Fase 5 replan, H-02) | Completar el modelo de dominio del template a nivel de las entidades comunes a cualquier e-commerce: User extendido, Address como entidad reutilizable, ProductVariant, Review, junto con los UCs que las soporten. **Bloqueada** desde 2026-05-21 por apertura de `ampliar-ucs-de-ecommerce`. | |
 | [ampliar-ucs-de-ecommerce](ampliar-ucs-de-ecommerce/) | En analisis (pausada) | Solicitud usuario (pivot durante completar-dominio) | Estudiar como la API de MercadoPago expone sus endpoints como fuente de inspiracion, cruzarlo contra el inventario actual del template, decidir que UCs nuevos incorporar y ejecutarlos bajo la disciplina del template. **Pausada 2026-05-21** tras 6 UCs estudiados, esperando decision del usuario sobre como continuar. Bloquea a `completar-dominio-de-ecommerce` hasta su cierre. | |
-| [monitorear-y-reducir-allowlist-hex](monitorear-y-reducir-allowlist-hex/) | Backlog | resolver-hallazgos-de-deuda-del-template (H-05) | Mantener la allowlist de colores `#hex` plana o decreciente mediante un bloqueador mecanico en pre-push y un ritual trimestral documentado. | 3 |
+| [monitorear-y-reducir-allowlist-hex](monitorear-y-reducir-allowlist-hex/) | Cancelada | resolver-hallazgos-de-deuda-del-template (H-05) | Mantener la allowlist de colores `#hex` plana o decreciente mediante un bloqueador mecanico en pre-push y un ritual trimestral documentado. **Cancelada 2026-05-21**: subsumida por `auditar-scss-completo` que amplia el scope a auditoria de todo el SCSS, no solo allowlist hex. | |
+| [auditar-scss-completo](auditar-scss-completo/) | En analisis | Solicitud usuario (ampliacion de scope de `monitorear-y-reducir-allowlist-hex` cancelada) | Auditar el SCSS completo del template: organizacion de variables, tokens de diseno, convenciones de nombrado, pipeline `@use`/`@forward`, especificidad, modulos vs globales, variables muertas/duplicadas. Subsume el trabajo planeado para `monitorear-y-reducir-allowlist-hex` (allowlist hex + bloqueador pre-push + ritual trimestral). | |
 
 ## Iniciativas mencionadas en commits pero sin directorio aqui
 
