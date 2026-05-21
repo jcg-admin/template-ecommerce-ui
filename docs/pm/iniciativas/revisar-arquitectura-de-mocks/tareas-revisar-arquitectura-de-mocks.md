@@ -28,7 +28,7 @@
 | T-009 | Handlers de auth (login, register, profile, password) | 2 | hecha | (siguiente commit) |
 | T-010 | Handlers de cart (cart, applyVoucher) | 2 | hecha | (siguiente commit) |
 | T-011 | Handlers de payments (initiate, retry) | 2 | hecha | (siguiente commit) |
-| T-012 | Handlers de inventory y returns | 2 | pendiente | |
+| T-012 | Handlers de inventory y returns | 2 | hecha | (siguiente commit) |
 | T-013 | Implementar conditional handler registration via *_SOURCE | 3 | pendiente | |
 | T-014 | Instalar faker-js y crear factories base | 4 | pendiente | |
 | T-015 | Anadir variabilidad realista a handlers de catalog y auth | 4 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 13 |
+| pendiente | 12 |
 | en curso | 0 |
-| hecha | 11 |
+| hecha | 12 |
 
 ## Notas operativas
 

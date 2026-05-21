@@ -18,10 +18,14 @@ import { catalogHandlers } from './catalog';
 import { authHandlers } from './auth';
 import { cartHandlers } from './cart';
 import { paymentsHandlers } from './payments';
+import { inventoryHandlers } from './inventory';
+import { returnsHandlers } from './returns';
 
 export const handlers: HttpHandler[] = [
   ...catalogHandlers,
   ...authHandlers,
   ...cartHandlers,
   ...paymentsHandlers,
+  ...inventoryHandlers,
+  ...returnsHandlers,
 ];

@@ -39,7 +39,9 @@
 | 2026-05-21T04:00:33 | Cierre de tarea | T-009 | Creado `src/mocks/handlers/auth.ts` con cuatro handlers: `POST /api/token/` (login con username+password de DRF), `POST /api/auth/register/`, `POST /api/auth/logout/`, `GET /api/auth/me/`. Pares de credenciales preservados del interceptor heredado (`comprador@test.mx/Test1234!` y `admin@e-comerce.example.com/Admin1234!`) para que los tests de auth sigan deterministicos. Tipos: `User as User` (el shape del interceptor heredado solo expone los campos parciales declarados en `domain.ts`). Conectado al array global con spread. Validacion: `tsc --noEmit` exit 0; 27 suites y 184 tests verdes. |
 | 2026-05-21T04:01:43 | Cierre de tarea | T-010 | Creado `src/mocks/handlers/cart.ts` con nueve handlers replicando todo el dominio carrito y wishlist del interceptor heredado. Cart: GET/POST/PATCH/DELETE de `/api/cart/` y `/api/cart/items/:id/`; POST/DELETE `/api/cart/voucher/` con vouchers `DEMO10` (10% percent) y `DESCUENTO50` (50 fixed) preservados. Wishlist: GET/POST/DELETE de `/api/wishlist/` y `/api/wishlist/:product_id/`. Estado del carrito y wishlist en variables a nivel de modulo, igual que el interceptor heredado; documentado en JSDoc que `server.resetHandlers()` no resetea ese estado (los tests que lo necesiten deben reasignar manualmente). Tipos: `CartItem` y `Voucher` directamente desde `domain.ts`, sin casting. Validacion: tsc exit 0, 27 suites y 184 tests verdes. |
 | 2026-05-21T04:02:37 | Cierre de tarea | T-011 | Creado `src/mocks/handlers/payments.ts` con dos handlers: `POST /api/payments/mercadopago/create/` (devuelve preference_id + init_point) y `POST /api/payments/paypal/create/` (devuelve order_id + approve_url). URLs de redireccion sandbox.mercadopago.com.mx y sandbox.paypal.com preservadas del interceptor heredado; `scripts/verify-build.mjs` ya las tiene en su allowlist (T-020 de iniciativa anterior). Sin tipos especificos: las shapes son ad-hoc del integrador externo, no entidades del dominio. Validacion: tsc exit 0, 184 tests verdes. |
+| 2026-05-21T04:04:54 | Cierre de tarea | T-012 | Creados `src/mocks/handlers/inventory.ts` (4 handlers: list+summary, movimientos por variante, ajuste manual con validaciones de new_quantity/reason/STOCK_NEGATIVO_NO_PERMITIDO, import masivo con reporte) y `src/mocks/handlers/returns.ts` (10 handlers: cliente listar/detalle/crear y admin bandeja+5 acciones approve/reject/request-info/reception/refund con validaciones de justification/message/product_condition/amount y transicion 409 si refund pre-RECIBIDA). Migracion textual del comportamiento de `src/mocks/interceptors/inventory.js` (167 lineas) y `src/mocks/interceptors/returns.js` (197 lineas). Estado en variables de modulo; exportados `__inventoryState`, `__resetInventoryState`, `__returnsState`, `__resetReturnsState` para uso en tests futuros. Verificacion previa a T-018: los 21 tests embebidos en `src/mocks/interceptors/*.test.js` siguen verdes porque el interceptor heredado aun vive; cuando T-018 lo elimine, esos 21 tests se borraran y T-018 verificara caso por caso que su cobertura quede en tests de slice ejecutados contra MSW. Validacion: tsc exit 0, 27 suites y 184 tests verdes (no incluye los 21 del interceptor). |
 
+| 2026-05-21T04:05:06 | Fase cerrada | Fase 2 | T-008 a T-012 cerradas. Cinco archivos de handlers cubren todo el contrato del interceptor heredado: catalog (4 endpoints), auth (4), cart+wishlist (9), payments (2), inventory (4), returns (10). Total 33 handlers. Validacion continua: 184 tests + 21 tests del interceptor (que viven hasta T-018) verdes. Coexistencia con interceptor: `mockInterceptor.intercept` se ejecuta antes en `apiService._request`; los handlers MSW estan disponibles pero shadowed. T-013 invertira la prioridad introduciendo conditional handler registration via *_SOURCE; T-016 eliminara la rama del interceptor en apiService. |
 ## Contadores
 
 | Evento | Conteo |
@@ -54,8 +56,8 @@
 | Replan | 0 |
 | Hallazgo durante la ejecucion | 2 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 11 |
-| Fase cerrada | 2 |
+| Cierre de tarea | 12 |
+| Fase cerrada | 3 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
