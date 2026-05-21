@@ -30,7 +30,7 @@
 | T-011 | Handlers de payments (initiate, retry) | 2 | hecha | (siguiente commit) |
 | T-012 | Handlers de inventory y returns | 2 | hecha | (siguiente commit) |
 | T-013 | Implementar conditional handler registration via *_SOURCE | 3 | hecha | (siguiente commit) |
-| T-014 | Instalar faker-js y crear factories base | 4 | pendiente | |
+| T-014 | Instalar faker-js y crear factories base | 4 | hecha | (siguiente commit) |
 | T-015 | Anadir variabilidad realista a handlers de catalog y auth | 4 | pendiente | |
 | T-016 | Eliminar mockInterceptor de apiService._request | 5 | pendiente | |
 | T-017 | Eliminar src/mocks/mockInterceptor.js y registry.js | 5 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 11 |
+| pendiente | 10 |
 | en curso | 0 |
-| hecha | 13 |
+| hecha | 14 |
 
 ## Notas operativas
 
