@@ -13,6 +13,30 @@
  * conditional handler registration por dominio.
  */
 
+/**
+ * MSW handlers — registro central con conditional registration.
+ *
+ * El array final de handlers se compone en runtime leyendo cuatro
+ * variables de entorno por dominio:
+ *
+ *   CATALOG_SOURCE   controla los handlers de `./catalog`
+ *   AUTH_SOURCE      controla los handlers de `./auth`
+ *   CART_SOURCE      controla los handlers de `./cart` (incluye wishlist)
+ *   PAYMENTS_SOURCE  controla los handlers de `./payments`
+ *
+ * Valor `mock` registra los handlers (interceptan via MSW); cualquier
+ * otro valor (`real` por convencion) los omite, dejando que la request
+ * salga al backend real. Por defecto todo es `mock`, igual que en
+ * `webpack.config.js#defaultFlags`.
+ *
+ * Inventory y returns NO tienen flag propia: pertenecen a flujos
+ * administrativos que no se separan por dominio del comprador. Se
+ * registran siempre. Si en el futuro se necesita un flag
+ * `ADMIN_SOURCE`, se anade aqui.
+ *
+ * Decision 3a-ii de la iniciativa `revisar-arquitectura-de-mocks`.
+ */
+
 import type { HttpHandler } from 'msw';
 import { catalogHandlers } from './catalog';
 import { authHandlers } from './auth';
@@ -21,11 +45,32 @@ import { paymentsHandlers } from './payments';
 import { inventoryHandlers } from './inventory';
 import { returnsHandlers } from './returns';
 
-export const handlers: HttpHandler[] = [
-  ...catalogHandlers,
-  ...authHandlers,
-  ...cartHandlers,
-  ...paymentsHandlers,
-  ...inventoryHandlers,
-  ...returnsHandlers,
-];
+function isMock(key: string): boolean {
+  const value = (process.env[key] ?? 'mock').toLowerCase();
+  return value === 'mock';
+}
+
+/**
+ * Construye el array de handlers segun los flags actuales.
+ * Se llama en cada arranque de worker/server; no se cachea para que
+ * tests puedan reasignar `process.env.CATALOG_SOURCE` antes de un
+ * `server.use(...buildHandlers())` si lo necesitan.
+ */
+export function buildHandlers(): HttpHandler[] {
+  const list: HttpHandler[] = [];
+  if (isMock('CATALOG_SOURCE'))  list.push(...catalogHandlers);
+  if (isMock('AUTH_SOURCE'))     list.push(...authHandlers);
+  if (isMock('CART_SOURCE'))     list.push(...cartHandlers);
+  if (isMock('PAYMENTS_SOURCE')) list.push(...paymentsHandlers);
+  // Admin: siempre activo. Ver JSDoc del modulo.
+  list.push(...inventoryHandlers);
+  list.push(...returnsHandlers);
+  return list;
+}
+
+/**
+ * Array estatico para compatibilidad: lo consumen `browser.ts` y
+ * `node.ts` en su carga inicial. Equivalente a llamar `buildHandlers()`
+ * una vez al cargar el modulo.
+ */
+export const handlers: HttpHandler[] = buildHandlers();
