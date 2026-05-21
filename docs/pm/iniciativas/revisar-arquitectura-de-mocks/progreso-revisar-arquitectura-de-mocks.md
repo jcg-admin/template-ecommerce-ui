@@ -27,6 +27,7 @@
 | 2026-05-21T05:15:00 | Cierre de tarea | T-001 | ADR previa `dec-mock-first-via-feature-flags-por-dominio` marcada como **Superseded** con campo nuevo "Nota del supersede" que documenta explicitamente que la justificacion tecnica original sobre Jest era incorrecta en 2026 y referencia la iniciativa actual. Anadida nueva ADR `dec-mocks-via-msw-service-worker` con los 9 campos del formato canonico: Estado, Supersede, Decision (MSW + Faker + `*_SOURCE` como conditional handler registration), Contexto (que cambio respecto a la ADR previa), Alternativas (9 evaluadas con resumen), Razon, Trade-off del Service Worker (con referencia al analisis especifico), Consecuencias (incluye decision 3b-iii sobre tests embebidos), Evidencia (a llenar conforme avancen las tareas), Origen (esta iniciativa, T-001). El bloque "Como agregar una nueva decision" al final del archivo no se toca; T-002 anadira el paso de verificacion. |
 | 2026-05-21T05:30:00 | Cierre de tarea | T-002 | Anadido el paso 2 al bloque "Como abrir una iniciativa nueva" de `docs/pm/como-gestionar-iniciativas.md`: exige inspeccionar `docs/decisiones-de-arquitectura/` antes de proponer cambios arquitectonicos, leer ADRs existentes y planificar superseder formalmente si la nueva decision contradice una previa. Pasos 3-10 renumerados. Bloque cita final documenta **por que** se anadio el paso (fallo de proceso de esta misma iniciativa). El paso se ubica como segundo del flujo (no enterrado) para garantizar visibilidad. |
 | 2026-05-21T05:30:00 | Fase cerrada | Fase 0 | T-001 y T-002 cerradas. La decision arquitectonica esta registrada formalmente como ADR (con la previa superseded en el mismo registro) y el procedimiento esta enmendado para evitar la repeticion del fallo. Comienza Fase 1: Setup MSW base. |
+| 2026-05-21T05:45:00 | Cierre de tarea | T-003 | (a) `npm install --save-dev msw` instalado msw v2.14.6 (34 paquetes anadidos). (b) `npx msw init public/ --save` creo `public/mockServiceWorker.js` (9120 bytes) y anadio `"msw": { "workerDirectory": ["public"] }` a `package.json` para regeneracion automatica. (c) Smoke test: webpack dev server arranca limpio y sirve el archivo desde `public/`. (d) Tests: 27 suites, 184 tests verdes (sin handlers aun, MSW deja pasar todo y el interceptor actual sigue funcionando). |
 
 ## Contadores
 
@@ -42,7 +43,7 @@
 | Replan | 0 |
 | Hallazgo durante la ejecucion | 0 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 2 |
+| Cierre de tarea | 3 |
 | Fase cerrada | 1 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
