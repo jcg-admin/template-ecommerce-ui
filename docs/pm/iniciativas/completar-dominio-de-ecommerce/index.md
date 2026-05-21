@@ -3,10 +3,11 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `completar-dominio-de-ecommerce` |
-| Estado | En analisis |
+| Estado | En ejecucion |
 | Orden de backlog | (vacio: ya no esta en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
+| Fecha de paso a ejecucion | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (replan de Fase 5, relacionada con H-02) |
 | Iniciativa que aporto deuda registrada | `revisar-arquitectura-de-mocks` (cerrada 2026-05-21) |
 
@@ -32,7 +33,9 @@ posiblemente el repositorio del backend en coordinacion externa.
 
 ## Estado actual
 
-Iniciativa abierta en **analisis** el 2026-05-21. Estado: `En analisis`.
+Iniciativa en **ejecucion** desde el 2026-05-21. Estado:
+`En ejecucion`. Plan producido con 18 tareas atomicas T-NNN
+distribuidas en 8 fases, coste agregado estimado ~360 min (~6h).
 
 Apertura motivada por dos razones documentadas:
 
@@ -69,7 +72,7 @@ Segun PROC-GESTION-001, una iniciativa en analisis produce:
 |-----------|--------|
 | [alcance-completar-dominio-de-ecommerce.md](alcance-completar-dominio-de-ecommerce.md) | Producido. Define los 7 items del alcance (4 gaps de modelado + 3 deudas heredadas), criterios de evaluacion, criterio de completitud y decisiones de proceso. |
 | [analisis-completar-dominio-de-ecommerce.md](analisis-completar-dominio-de-ecommerce.md) | Producido. Mapeo de gap por entidad con evidencia citada. Hallazgo central: el patron real es "tipos faltantes para entidades existentes en runtime", no "entidades nuevas que disenar". Esfuerzo estimado ~4.5h. |
-| `plan-completar-dominio-de-ecommerce.md` | Pendiente. Producido cuando paso a `En ejecucion`. |
-| `tareas-completar-dominio-de-ecommerce.md` | Pendiente. |
-| `progreso-completar-dominio-de-ecommerce.md` | Pendiente. |
+| [plan-completar-dominio-de-ecommerce.md](plan-completar-dominio-de-ecommerce.md) | Producido. 18 tareas atomicas T-NNN distribuidas en 8 fases. DAG declarado. Coste agregado ~360 min (~6h). |
+| [tareas-completar-dominio-de-ecommerce.md](tareas-completar-dominio-de-ecommerce.md) | Producido. Panel plano. 18 pendientes. |
+| [progreso-completar-dominio-de-ecommerce.md](progreso-completar-dominio-de-ecommerce.md) | En uso. Log temporal. |
 | `decisiones-completar-dominio-de-ecommerce.md` | Pendiente. Obligatorio al cierre. |
