@@ -22,8 +22,8 @@ ejemplo** que tu adopcion debe sustituir por los tuyos.
 | `.env.example` | Confirmar que los flags `*_SOURCE` siguen siendo los que necesitas. Si tu backend solo tiene auth, eliminar los que sobran. |
 | `.env.production.example` | Apuntar `API_URL` a tu backend real. |
 | `src/styles/abstracts/_variables.scss` | Sustituir la paleta principal (oros, tierra, coral, crema) por la de tu marca. La estructura por capas se conserva. |
-| `src/mocks/registry.js` y `src/mocks/interceptors/*.js` | Reemplazar los datos de ejemplo (productos, usuarios, vouchers, ordenes) por los de tu catalogo real. Mantener la forma de las respuestas, que es la que el backend tiene que respetar. |
-| `src/mocks/mockInterceptor.js` | Misma operacion para las respuestas inline. |
+| `src/mocks/handlers/*.ts` | Reemplazar los datos de ejemplo de cada dominio (catalog, auth, cart, payments, inventory, returns) por los de tu negocio real. Mantener las **shapes** de las respuestas: son el contrato que tu backend tiene que respetar cuando lo conectes. |
+| `src/mocks/factories/*.ts` | Ajustar los rangos de Faker a tu negocio (e.g., precios, nombres de productos) si las factories no encajan con tu dominio. |
 | `docs/introduccion-y-objetivos/` | Reescribir los stakeholders y los cinco objetivos en lenguaje de tu producto. |
 | `docs/contexto-y-alcance-del-sistema/` | Actualizar el diagrama mermaid de contexto con tus sistemas externos reales (pasarelas de pago, correo, analytics). |
 
@@ -74,7 +74,47 @@ mutuamente excluyentes: un marketplace de suscripciones digitales con
 restriccion 18+ es un caso real que combina cuatro variantes y la
 arquitectura del template las soporta.
 
-## Que dejar como esta
+## Activacion de mocks por dominio (flags `*_SOURCE`)
+
+El template trae cinco flags que controlan **por dominio** si el UI
+consume los mocks o el backend real. Viven en `webpack.config.js` y
+se sobreescriben con tu `.env.local` o `.env.production`.
+
+| Flag | Dominio controlado | Handlers afectados |
+|------|--------------------|--------------------|
+| `CATALOG_SOURCE` | Productos, categorias, busqueda | `src/mocks/handlers/catalog.ts` |
+| `AUTH_SOURCE` | Login, registro, perfil, password reset | `src/mocks/handlers/auth.ts` |
+| `CART_SOURCE` | Carrito, voucher, wishlist | `src/mocks/handlers/cart.ts` |
+| `PAYMENTS_SOURCE` | MercadoPago, PayPal | `src/mocks/handlers/payments.ts` |
+| `PROFILE_SOURCE` | Perfil y completitud | (subconjunto de auth) |
+
+Valores:
+
+- `mock` (default en `defaultFlags`): los handlers del dominio se
+  registran. MSW intercepta las requests a nivel de red. El UI ve
+  respuestas mock realistas.
+- `real`: los handlers del dominio NO se registran. La request HTTP
+  sale al backend definido por `API_URL`. Sin handler MSW que
+  responda, el backend debe estar disponible o la request fallara.
+
+Flujo tipico de adopcion incremental:
+
+1. Empiezas con todos los flags en `mock` (default): el UI funciona
+   sin backend.
+2. Tu equipo de backend completa el dominio `auth`. Pasas
+   `AUTH_SOURCE=real` en `.env.local`, validas que las pantallas de
+   login/registro/perfil siguen funcionando contra el backend real.
+3. Repites por dominio hasta que todo este en `real`. En produccion
+   los flags se ponen a `real` en `.env.production`.
+4. Cuando un dominio esta 100% en backend, puedes borrar el handler
+   correspondiente en `src/mocks/handlers/` para reducir el peso del
+   bundle de desarrollo.
+
+El switch vive en `src/mocks/handlers/index.ts#buildHandlers()`. Los
+handlers se componen al arrancar el worker (dev) o el server (Jest),
+asi que cambiar un flag requiere recargar el dev server.
+
+
 
 Lo que sigue es la espina dorsal del template. Cambiarlo sin razon
 es perder tiempo, y cambiarlo con razon merece un ADR propio antes
@@ -85,6 +125,26 @@ de tocarlo.
 | Separacion **Redux Toolkit para estado, React Query para cache** | Es el patron mas balanceado para un e-commerce B2C en React 19. Cambiarlo a "solo Redux" o "solo React Query" introduce los problemas que la combinacion resuelve (invalidacion, refetch, retries en una direccion; estado complejo de cliente en la otra). |
 | Patron **hook de dominio** en `src/hooks/domain/` | Mantiene a las paginas ignorantes de la capa de servicios y de la cache. Sustituirlo por imports directos de React Query desde paginas convierte cada cambio de endpoint en un grep masivo. |
 | **Mock-first** via flags `*_SOURCE=mock|real` | Desbloquea desarrollo paralelo entre frontend y backend, y permite hacer demos sin backend disponible. Eliminarlo solo se justifica si el backend siempre esta disponible y tu equipo nunca trabaja offline. |
+| **JWT en cookies httpOnly** | Elimina la clase entera de bug XSS-roba-token. Moverlo a localStorage suele venir disfrazado de "es mas conveniente para refresh"; no es una buena razon. |
+| **Build-time injection de `API_URL`** | Hace cada bundle un artefacto inmutable por entorno. Pasar a runtime config (`window.__ENV__`, `/config.json`) mueve la fuente de verdad del codigo al servidor de despliegue sin beneficio claro. |
+| **Code splitting por ruta con `React.lazy`** | Reduce el bundle inicial al minimo automaticamente. El guard `check-no-lazy-imports.mjs` evita las regresiones que pueden meter `require()` dinamicos sin que nadie se entere. |
+| **Pipeline SCSS endurecido** (stylelint + check-scss + pre-push) | Detecta los SCSS rotos que Jest no compila. Quitar esta proteccion garantiza una regresion de estilos en pocos sprints. |
+| **Layer system de SCSS** (`abstracts`, `base`, `components`, `layouts`, `utils`) | Estructura predecible que escala. Tirarla y reemplazarla por una libreria de CSS-in-JS o por Tailwind es valido, pero es un proyecto completo aparte. |
+| **Convencion de identificadores UC-XXX** | Si tu backend tambien los usa, te da trazabilidad cross-repo. Si no, conservala internamente: numerar UCs en commits y archivos hace que el historial sea navegable. |
+| **arc42 adaptado en `docs/`** | Diez cajones, sin numeracion. La omision deliberada de "requisitos de calidad" y "vista de tiempo de ejecucion" es intencional. Si llegan SLOs reales o flujos del UI que no esten en UCs, anadelos como cajones propios; no obligues a rellenar cajones vacios. |
+| **`pm/` segun PROC-GESTION-001** | Iniciativas con alcance verificable, tareas atomicas, DAG, decisiones obligatorias al cierre. Cambiar de proceso es valido pero pesa: el procedimiento esta documentado tanto en `pm/README.md` como en el ejemplo bajo `pm/iniciativas/`. |
+
+## Que dejar como esta
+
+Lo que sigue es la espina dorsal del template. Cambiarlo sin razon
+es perder tiempo, y cambiarlo con razon merece un ADR propio antes
+de tocarlo.
+
+| Pieza | Por que conservarla |
+|-------|--------------------|
+| Separacion **Redux Toolkit para estado, React Query para cache** | Es el patron mas balanceado para un e-commerce B2C en React 19. Cambiarlo a "solo Redux" o "solo React Query" introduce los problemas que la combinacion resuelve (invalidacion, refetch, retries en una direccion; estado complejo de cliente en la otra). |
+| Patron **hook de dominio** en `src/hooks/domain/` | Mantiene a las paginas ignorantes de la capa de servicios y de la cache. Sustituirlo por imports directos de React Query desde paginas convierte cada cambio de endpoint en un grep masivo. |
+| **Mocks via MSW** (Mock Service Worker) controlados por flags `*_SOURCE` | Desbloquea desarrollo paralelo entre frontend y backend, y permite hacer demos sin backend disponible. La intercepcion a nivel de red mantiene el codigo de produccion agnostico del mock. Eliminarlo solo se justifica si el backend siempre esta disponible y tu equipo nunca trabaja offline. |
 | **JWT en cookies httpOnly** | Elimina la clase entera de bug XSS-roba-token. Moverlo a localStorage suele venir disfrazado de "es mas conveniente para refresh"; no es una buena razon. |
 | **Build-time injection de `API_URL`** | Hace cada bundle un artefacto inmutable por entorno. Pasar a runtime config (`window.__ENV__`, `/config.json`) mueve la fuente de verdad del codigo al servidor de despliegue sin beneficio claro. |
 | **Code splitting por ruta con `React.lazy`** | Reduce el bundle inicial al minimo automaticamente. El guard `check-no-lazy-imports.mjs` evita las regresiones que pueden meter `require()` dinamicos sin que nadie se entere. |

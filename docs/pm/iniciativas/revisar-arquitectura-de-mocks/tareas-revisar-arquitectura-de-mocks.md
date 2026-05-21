@@ -37,7 +37,7 @@
 | T-018 | Eliminar src/mocks/interceptors/ con verificacion de cobertura | 5 | hecha | (siguiente commit) |
 | T-019 | Reevaluar variables *_SOURCE en webpack DefinePlugin | 5 | hecha | (siguiente commit) |
 | T-020 | Actualizar vista-de-bloques-de-construccion | 6 | hecha | (siguiente commit) |
-| T-021 | Documentar arranque conditional via *_SOURCE en como-adaptar | 6 | pendiente | |
+| T-021 | Documentar arranque conditional via *_SOURCE en como-adaptar | 6 | hecha | (siguiente commit) |
 | T-022 | Actualizar README de la raiz si menciona el interceptor | 6 | pendiente | |
 | T-023 | Producir decisiones-revisar-arquitectura-de-mocks.md | 7 | pendiente | |
 | T-024 | Cerrar iniciativa formalmente | 7 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 4 |
+| pendiente | 3 |
 | en curso | 0 |
-| hecha | 20 |
+| hecha | 21 |
 
 ## Notas operativas
 
