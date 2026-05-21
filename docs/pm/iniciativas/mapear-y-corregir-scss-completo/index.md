@@ -197,7 +197,7 @@ arreglado).
 | Documento | Estado |
 |-----------|--------|
 | `alcance-mapear-y-corregir-scss-completo.md` | Pendiente. Producido tras un mapeo preliminar mas detallado. |
-| `analisis-mapear-y-corregir-scss-completo.md` | Pendiente. Mapeo formal de cada dimension con evidencia citada (archivo:linea, conteos, ejemplos). |
+| [analisis-mapear-y-corregir-scss-completo.md](analisis-mapear-y-corregir-scss-completo.md) | Producido. Mapeo formal de las 9 dimensiones con evidencia citada (archivo:linea, conteos, ejemplos). Tres hallazgos transversales (H-A, H-B, H-C) sobre la "allowlist" actual. Estimacion preliminar de esfuerzo correctivo ~10.5 h. |
 | `plan-mapear-y-corregir-scss-completo.md` | Pendiente. Producido cuando paso a `En ejecucion`. Estructura por dimension: tareas de mapeo + tareas de correccion. |
 | `tareas-mapear-y-corregir-scss-completo.md` | Pendiente. |
 | [progreso-mapear-y-corregir-scss-completo.md](progreso-mapear-y-corregir-scss-completo.md) | En uso. |
