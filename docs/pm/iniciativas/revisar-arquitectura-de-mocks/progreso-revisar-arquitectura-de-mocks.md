@@ -48,7 +48,9 @@
 | 2026-05-21T04:16:24 | Hallazgo durante la ejecucion | T-015 | Al activar factories Faker, los 184 tests fallaron en bloque con `SyntaxError: Cannot use import statement outside a module` al importar `@faker-js/faker`. **Causa**: Faker v10 publica ESM puro y babel-jest no lo transpila por defecto. **Decision tomada sin pausar**: anadir `@faker-js` al `transformIgnorePatterns` de jest.config.cjs (mismo patron que ya esta para los paquetes de MSW). Misma estrategia, mismo resultado, cero ambiguedad. |
 | 2026-05-21T04:16:24 | Cierre de tarea | T-015 | Conectados los factories Faker a dos handlers: (a) `/api/products/` y `/api/products/search/` ahora usan `createProductList(N)` para que cada listado devuelva productos variables (mas realista para desarrollo); (b) `/api/products/:slug/` mantiene determinismo via seed del slug (hash trivial de char codes), asi que tests que piden el mismo slug obtienen el mismo producto; (c) `/api/auth/me/` usa `createUser` con `faker.seed(1)` para devolver siempre el mismo usuario con campos rellenos (phone/avatar/completeness) realistas. Decisiones de diseno: login/register se mantienen deterministicos (los pares username/password son contrato de tests); categorias se mantienen fijas (5 categorias estables); cart/payments/inventory/returns no se tocan en esta tarea (cubierto por sus tipos ya estables, sin necesidad de variabilidad listing-style). `faker.seed()` se llama tras cada uso para no contaminar handlers siguientes. |
 
-| 2026-05-21T04:16:33 | Fase cerrada | Fase 4 | T-014 y T-015 cerradas. Faker + factories tipados disponibles y conectados a los listados de catalog y al /api/auth/me/. Detalles y credenciales preservan determinismo. Comienza Fase 5: eliminar interceptor heredado. |
+| 2026-05-21T04:16:33 | Fase cerrada | Fase 4 | T-014 y T-015 cerradas. Faker + factories tipados disponibles y conectados a los listados de catalog y al /api/auth/me/. Detalles y credenciales preservan determinismo. Comienza Fase 5: eliminar interceptor heredado. || 2026-05-21T04:24:17 | Hallazgo durante la ejecucion | T-016 | Al eliminar el bloque del `mockInterceptor` en `apiService._request`, los 4 tests de `tests/unit/services/apiService.test.js` que mockean `@mocks/mockInterceptor` con `jest.mock` se quedan sin efecto: el codigo ya no lo llama. Sintoma: 4 tests fallan con `TypeError: markResourceTiming is not a function` (undici intenta usar Performance API que jsdom no expone; los tests llegan ahi porque la request real sale sin ser interceptada). **Decision tomada sin pausar**: reescribir el test para usar `server.use(http.all('https://api.test/*', () => HttpResponse.json({ ok: true })))` en `beforeEach`. Patron canonico de MSW. Sigue probando withLogging integration (que es lo que el test dice probar) sin acoplar al mecanismo de mock subyacente. Alternativa descartada: conservar `mockInterceptor.js` como modulo no-op para satisfacer el test; eso era basura tecnica solo por el test. |
+| 2026-05-21T04:24:17 | Cierre de tarea | T-016 | Eliminada la rama del `mockInterceptor` en `apiService._request`. Tres cambios atomicos: (1) `src/services/apiService.js`: import `mockInterceptor from '@mocks/mockInterceptor'` removido; bloque `mockInterceptor.intercept(...)` con sus 16 lineas eliminado; JSDoc de cabecera actualizado referenciando ADR `dec-mocks-via-msw-service-worker`. (2) `jest.setup.js`: `onUnhandledRequest` cambiado de `'bypass'` a `'warn'` ahora que MSW es la unica fuente de mock (asi tests con endpoints no cubiertos producen warning visible en vez de fallar silenciosamente). (3) `tests/unit/services/apiService.test.js`: reescrito para usar `server.use(http.all('https://api.test/*', ...))` en `beforeEach` en vez de `jest.mock('@mocks/mockInterceptor')`. El test sigue probando lo mismo (integracion withLogging) pero deja de acoplarse a la mecanica interna del interceptor. Validacion: tsc exit 0, 27 suites y 184 tests verdes, build de produccion exit 0 con cero referencias a msw/mockServiceWorker/setupWorker/mockInterceptor en `dist/main.*.js`. |
+
 ## Contadores
 
 | Evento | Conteo |
@@ -61,9 +63,9 @@
 | Plan | 1 |
 | Cambio de estado | 1 |
 | Replan | 0 |
-| Hallazgo durante la ejecucion | 4 |
+| Hallazgo durante la ejecucion | 5 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 15 |
+| Cierre de tarea | 16 |
 | Fase cerrada | 5 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

@@ -6,8 +6,14 @@
  *   - Retry automatico en errores transitorios
  *   - Timeout con AbortController
  *   - Interceptores de request/response
- *   - Mock-first via mockInterceptor (*_SOURCE=mock)
  *   - httpOnly cookies para JWT (credentials: 'include')
+ *
+ * Los mocks de desarrollo viven en `src/mocks/` como handlers MSW;
+ * `apiService` es agnostico del modo mock. Cuando MSW esta activo
+ * (dev con `NODE_ENV=development` o Jest con `server.listen()`), los
+ * handlers interceptan a nivel de red sin que este archivo lo sepa.
+ * Decision arquitectonica: ver
+ * `docs/decisiones-de-arquitectura/decisiones-de-arquitectura.md#dec-mocks-via-msw-service-worker`.
  */
 
 import {
@@ -17,7 +23,6 @@ import {
   createErrorFromResponse,
 } from '@utils/apiErrors';
 
-import mockInterceptor from '@mocks/mockInterceptor';
 import { withLogging } from '@decorators/withLogging';
 
 const DEFAULT_TIMEOUT        = 30_000;
@@ -72,24 +77,7 @@ class APIService {
       });
     }
 
-    // Intentar mock interceptor primero
-    const mockResult = await mockInterceptor.intercept(url.toString(), {
-      method,
-      body: body ? JSON.stringify(body) : undefined,
-      headers: { ...this.headers, ...headers },
-    });
-
-    if (mockResult !== null) {
-      if (mockResult.status >= 400) {
-        const err = new Error(mockResult.data?.detail || `HTTP ${mockResult.status}`);
-        err.status = mockResult.status;
-        err.body   = mockResult.data;
-        throw err;
-      }
-      return { data: mockResult.data, status: mockResult.status };
-    }
-
-    // Request real al backend
+    // Request real al backend (interceptado por MSW handlers en dev/test).
     let config = { method, url: url.toString(), headers: { ...this.headers, ...headers } };
     for (const fn of this._interceptors.request) {
       config = (await fn(config)) ?? config;

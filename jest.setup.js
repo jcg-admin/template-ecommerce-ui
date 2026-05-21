@@ -52,14 +52,14 @@ if (typeof globalThis.BroadcastChannel === 'undefined') {
 
 // MSW: server para Jest (intercepta el modulo `http` de Node).
 // Arranca antes de todos los tests, resetea handlers entre tests y
-// cierra al final. Con `onUnhandledRequest: 'bypass'` los tests cuyos
-// endpoints aun no tienen handler MSW (Phase 2 esta poblando) siguen
-// pasando por el `mockInterceptor` heredado en `apiService` hasta que
-// Phase 5 lo elimine.
+// cierra al final. Tras la eliminacion del `mockInterceptor` heredado
+// (T-016 de la iniciativa `revisar-arquitectura-de-mocks`), MSW es la
+// unica fuente de mock; `onUnhandledRequest: 'warn'` ayuda a detectar
+// requests que no tienen handler aun (warning, no fallo).
 const { server } = require('@mocks/node');
 
 beforeAll(() => {
-  server.listen({ onUnhandledRequest: 'bypass' });
+  server.listen({ onUnhandledRequest: 'warn' });
 });
 
 afterEach(() => {

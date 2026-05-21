@@ -9,18 +9,14 @@
  *   - Campos sensibles (password, token, apiKey) en el primer
  *     argumento objeto se ocultan en el log.
  *
- * El test mockea mockInterceptor para evitar tocar la red y para
- * que el flujo se complete sin lanzar.
+ * Actualizacion T-016 de revisar-arquitectura-de-mocks: el test ya no
+ * mockea `mockInterceptor` (eliminado del `apiService`). Usa MSW
+ * `server.use()` para responder a cualquier URL que la suite golpee.
  */
 
+import { http, HttpResponse } from 'msw';
+import { server } from '@mocks/node';
 import { APIService } from '@services/apiService';
-
-jest.mock('@mocks/mockInterceptor', () => ({
-  __esModule: true,
-  default: { intercept: jest.fn() },
-}));
-
-import mockInterceptor from '@mocks/mockInterceptor';
 
 describe('apiService — withLogging integration', () => {
   let api;
@@ -29,11 +25,12 @@ describe('apiService — withLogging integration', () => {
   beforeEach(() => {
     api = new APIService('https://api.test');
     logSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
-    // mockInterceptor devuelve respuesta exitosa para que _request termine.
-    mockInterceptor.intercept.mockResolvedValue({
-      status: 200,
-      data: { ok: true },
-    });
+    // MSW responde 200 OK para cualquier URL de este test.
+    server.use(
+      http.all('https://api.test/*', () =>
+        HttpResponse.json({ ok: true })
+      )
+    );
   });
 
   afterEach(() => {
