@@ -1,0 +1,65 @@
+// Tests unitarios de SCSS — `e-comerce-ui`
+//
+// Este archivo contiene tests sobre mixins y funciones SCSS del template
+// usando sass-true. Se ejecuta como parte de `npm test` via el shim
+// `scss.test.js` en este mismo directorio.
+//
+// Documentacion sass-true: https://www.oddbird.net/true/docs/
+//
+// Patron de un test:
+//   @include describe('grupo') {
+//     @include it('caso especifico') {
+//       @include assert {                  // para mixins que producen CSS
+//         @include output(false) { ... };
+//         @include expected(false) { ... };
+//       }
+//       // o assert-equal($a, $b) para funciones que devuelven valores
+//     }
+//   }
+//
+// Iniciativa: mapear-y-corregir-scss-completo (T-108).
+// Cuando F1a porte las funciones de ui-core (T-201), los tests de cada
+// funcion se anaden aqui o en archivos hermanos `functions.test.scss`,
+// `color-functions.test.scss`, etc.
+
+@use 'true' as *;
+@use '../abstracts/mixins' as *;
+
+// =============================================================================
+// Smoke test del pipeline sass-true
+// =============================================================================
+// Este test prueba que la integracion sass-true + jest funciona end-to-end.
+// Cuando F1a anada tests reales para funciones SCSS portadas de ui-core, este
+// test queda como evidencia historica de que el pipeline esta operativo.
+
+@include describe('Pipeline sass-true') {
+  @include it('Compila y ejecuta tests SCSS desde Jest') {
+    @include assert-true(true, 'Deberia ser true');
+  }
+
+  @include it('Calculos basicos de Sass funcionan dentro del runner') {
+    @include assert-equal(2 + 3, 5);
+    @include assert-equal(100% - 25%, 75%);
+  }
+}
+
+// =============================================================================
+// Tests sobre mixins del template
+// =============================================================================
+
+@include describe('flex-center [mixin]') {
+  @include it('Emite display flex con centrado en ambos ejes') {
+    @include assert {
+      @include output {
+        .target { @include flex-center; }
+      }
+      @include expect {
+        .target {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+      }
+    }
+  }
+}
