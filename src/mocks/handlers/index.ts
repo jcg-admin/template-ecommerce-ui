@@ -14,5 +14,8 @@
  */
 
 import type { HttpHandler } from 'msw';
+import { catalogHandlers } from './catalog';
 
-export const handlers: HttpHandler[] = [];
+export const handlers: HttpHandler[] = [
+  ...catalogHandlers,
+];

@@ -24,7 +24,7 @@
 | T-005 | Crear src/mocks/browser.ts y src/mocks/node.ts | 1 | hecha | (siguiente commit) |
 | T-006 | Integrar worker en src/index.jsx con guard NODE_ENV | 1 | hecha | (siguiente commit) |
 | T-007 | Integrar server MSW en setup de Jest | 1 | hecha | (siguiente commit) |
-| T-008 | Handlers de catalog (productos, categorias, busqueda) | 2 | pendiente | |
+| T-008 | Handlers de catalog (productos, categorias, busqueda) | 2 | hecha | (siguiente commit) |
 | T-009 | Handlers de auth (login, register, profile, password) | 2 | pendiente | |
 | T-010 | Handlers de cart (cart, applyVoucher) | 2 | pendiente | |
 | T-011 | Handlers de payments (initiate, retry) | 2 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 17 |
+| pendiente | 16 |
 | en curso | 0 |
-| hecha | 7 |
+| hecha | 8 |
 
 ## Notas operativas
 
