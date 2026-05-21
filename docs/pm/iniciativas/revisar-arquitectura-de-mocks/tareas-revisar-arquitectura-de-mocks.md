@@ -40,15 +40,15 @@
 | T-021 | Documentar arranque conditional via *_SOURCE en como-adaptar | 6 | hecha | (siguiente commit) |
 | T-022 | Actualizar README de la raiz si menciona el interceptor | 6 | hecha | (siguiente commit) |
 | T-023 | Producir decisiones-revisar-arquitectura-de-mocks.md | 7 | hecha | (siguiente commit) |
-| T-024 | Cerrar iniciativa formalmente | 7 | pendiente | |
+| T-024 | Cerrar iniciativa formalmente | 7 | hecha | (siguiente commit) |
 
 ## Resumen de estado
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 1 |
+| pendiente | 0 |
 | en curso | 0 |
-| hecha | 23 |
+| hecha | 24 |
 
 ## Notas operativas
 

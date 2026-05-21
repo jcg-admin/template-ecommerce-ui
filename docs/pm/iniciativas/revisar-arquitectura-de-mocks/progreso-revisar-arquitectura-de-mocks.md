@@ -62,6 +62,10 @@
 
 | 2026-05-21T04:43:56 | Fase cerrada | Fase 6 | T-020, T-021 y T-022 cerradas. Tres documentos sincronizados con la arquitectura MSW: vista-de-bloques (arc42), como-adaptar-este-template (guia de adopcion) y README.md. Documentacion consistente a tres niveles de detalle. Comienza Fase 7: cierre formal de la iniciativa (T-023, T-024). || 2026-05-21T04:46:09 | Cierre de tarea | T-023 | Producido `docs/pm/iniciativas/revisar-arquitectura-de-mocks/decisiones-revisar-arquitectura-de-mocks.md` (321 lineas, dentro del rango de los otros docs de decisiones: 181-290). Cuatro secciones segun PROC-GESTION-001: (1) Seis **decisiones de diseno** formalizadas: dec-mocks-via-msw-service-worker (ADR), dec-camino-b-rup-adaptado, dec-conditional-handler-registration-via-source-flags (3a-ii), dec-tests-embebidos-eliminados-verificando-cobertura (3b-iii), dec-opcion-b-paginas-refactorizadas (precedente fuerte tras correccion del usuario), dec-enmienda-procedimiento-verificar-adrs. (2) Siete **hallazgos durante la ejecucion** con su resolucion sin pausar documentada: dos prefijos coexisten, alias colision, MSW v2 requisitos Jest, types node, faker ESM, markResourceTiming, anti-patron en 6 paginas (no 3). (3) **Verificacion post-ejecucion**: codigo (4 archivos eliminados, 6 paginas refactorizadas, 33 handlers, 5 factories), ADR (supersede ejecutado), tests (203 verdes), build (verify-build limpio, cero matches en dist), plan vs ejecucion (0 cambios formales de alcance), arc42 (3 docs sincronizados), procedimiento (paso 2 nuevo). (4) **Que entrega**: cuatro entregables verificables + dos iniciativas registradas como deuda (`completar-dominio-de-ecommerce`, `validar-contrato-de-mocks-vs-backend-real`). Index.md actualizado: fila "Pendiente" pasa a link al documento. |
 
+| 2026-05-21T04:47:16 | Cierre de tarea | T-024 | Cierre formal de la iniciativa. index.md de En ejecucion -> Cerrada con Fecha de cierre 2026-05-21; indice-de-iniciativas.md mueve la fila a estado Cerrada. Las 24 tareas del plan completadas. |
+| 2026-05-21T04:47:16 | Fase cerrada | Fase 7 | T-023 y T-024 cerradas. Documentacion de decisiones producida (321 lineas) e iniciativa marcada como Cerrada. Las 8 fases del DAG completadas en orden. |
+| 2026-05-21T04:47:16 | Cambio de estado | revisar-arquitectura-de-mocks | En ejecucion -> Cerrada. Fecha 2026-05-21. |
+| 2026-05-21T04:47:16 | Cierre de iniciativa | revisar-arquitectura-de-mocks | 24 de 24 tareas cerradas; 7 hallazgos resueltos sin pausar; 0 cambios de alcance formales; 203 tests verdes (subio desde 184); bundle produccion limpio; ADR superseded y nueva aceptada; documentacion arc42 sincronizada a tres niveles; procedimiento de gestion mejorado. Detalle en decisiones-revisar-arquitectura-de-mocks.md. |
 ## Contadores
 
 | Evento | Conteo |
@@ -72,13 +76,13 @@
 | Reconsideracion | 1 |
 | Decisiones aprobadas | 1 |
 | Plan | 1 |
-| Cambio de estado | 1 |
+| Cambio de estado | 2 |
 | Replan | 0 |
 | Hallazgo durante la ejecucion | 7 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 23 |
-| Fase cerrada | 7 |
+| Cierre de tarea | 24 |
+| Fase cerrada | 8 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
-| Cierre de iniciativa | 0 |
+| Cierre de iniciativa | 1 |

@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `revisar-arquitectura-de-mocks` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: no esta en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de apertura formal | 2026-05-21 |
 | Fecha de paso a ejecucion | 2026-05-21 |
+| Fecha de cierre | 2026-05-21 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -38,15 +39,19 @@ con el backend real cuando llegue.
 
 ## Estado actual
 
-Iniciativa en **ejecucion**. Estado: `En ejecucion`. Plan producido
-con 24 tareas atomicas T-NNN distribuidas en 8 fases (0 a 7), costo
-agregado estimado ~645 min (~10.75 horas efectivas).
+Iniciativa **cerrada** el 2026-05-21. Estado: `Cerrada`. Las 24
+tareas atomicas T-NNN del plan se ejecutaron en secuencia siguiendo
+el DAG de 8 fases declarado en `plan-*.md`. Cierre formal en T-024.
 
-La Fase 0 (T-001 supersede ADR + T-002 enmienda procedimiento) se
-ejecuta **antes** de cualquier tarea de implementacion. Bajo RUP
-adaptado, la decision arquitectonica formal precede al codigo.
+Resumen del cierre: 24 tareas hechas, 7 hallazgos resueltos sin
+pausar, 0 cambios de alcance formales, 203 tests verdes (+19 sobre
+el inicio), bundle de produccion limpio, ADR previa supersedida,
+ADR nueva aceptada, documentacion arc42 sincronizada a tres niveles,
+procedimiento de gestion mejorado con un paso nuevo. Detalle
+completo en
+[decisiones-revisar-arquitectura-de-mocks.md](decisiones-revisar-arquitectura-de-mocks.md).
 
-Las fases siguen el DAG declarado en `plan-*.md`:
+Las fases siguieron el DAG declarado en `plan-*.md`:
 
 ```
 Fase 0  ADR y procedimiento
