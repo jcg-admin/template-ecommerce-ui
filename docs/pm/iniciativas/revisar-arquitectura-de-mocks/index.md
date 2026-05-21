@@ -37,24 +37,40 @@ con el backend real cuando llegue.
 
 ## Estado actual
 
-Iniciativa **abierta**. Estado: `En analisis`. Producido el
-[alcance-revisar-arquitectura-de-mocks.md](alcance-revisar-arquitectura-de-mocks.md)
-con el criterio de completitud verificable, las alternativas a
-evaluar y el "fuera de alcance".
+Iniciativa **abierta**. Estado: `En analisis`. Producidos los
+documentos de analisis tras tres iteraciones:
 
-Siguiente paso del procedimiento: producir
-`analisis-revisar-arquitectura-de-mocks.md` con una entrada por
-cada alternativa listada en el alcance, comparada contra los
-criterios del template, y una recomendacion final que el usuario
-aprueba antes de pasar a `plan-*.md`.
+1. `alcance-revisar-arquitectura-de-mocks.md` definio los criterios
+   y las 9 alternativas a evaluar.
+2. `analisis-revisar-arquitectura-de-mocks.md` comparo las 9
+   alternativas contra 7 criterios y produjo una primera
+   recomendacion (MSW + Faker).
+3. `analisis-trade-off-service-worker.md` profundizo en el trade-off
+   especifico del Service Worker en `public/`.
+4. `reconsideracion-bajo-rup-adaptado.md` reconsidero la decision
+   incorporando la disciplina RUP del proyecto. Detecto la ADR
+   previa `dec-mock-first-via-feature-flags-por-dominio` que el
+   analisis general no habia inspeccionado.
+
+**Decision final aprobada**: Camino B. Superseder la ADR previa y
+migrar a MSW + Faker. La premisa tecnica de la ADR vigente
+(*"MSW agrega un service worker que complica el setup de Jest"*) es
+incorrecta en 2026 y se corrige formalmente como parte de esta
+iniciativa.
+
+Siguiente paso del procedimiento: producir `plan-*.md` con las
+tareas atomicas T-NNN del Camino B, seguido del commit que
+supersede la ADR previa, y luego ejecutar las tareas.
 
 ## Indice de documentos
 
 | Documento | Proposito |
 |-----------|-----------|
 | [alcance-revisar-arquitectura-de-mocks.md](alcance-revisar-arquitectura-de-mocks.md) | Que cubre la iniciativa, criterio de completitud, fuera de alcance, listado de alternativas a evaluar. |
-| analisis-revisar-arquitectura-de-mocks.md | Pendiente. Comparativo de las alternativas contra los criterios del template, con recomendacion final. |
-| plan-revisar-arquitectura-de-mocks.md | Pendiente. Producido cuando se apruebe el analisis. |
+| [analisis-revisar-arquitectura-de-mocks.md](analisis-revisar-arquitectura-de-mocks.md) | Comparativo de las 9 alternativas contra los 7 criterios del template. Primera recomendacion: MSW + Faker. |
+| [analisis-trade-off-service-worker.md](analisis-trade-off-service-worker.md) | Profundizacion del trade-off del Service Worker en `public/`. Conclusion: trade-off menor, gestionable con documentacion + guards. |
+| [reconsideracion-bajo-rup-adaptado.md](reconsideracion-bajo-rup-adaptado.md) | Reconsideracion final bajo disciplina RUP del proyecto. Tres caminos posibles (A/B/C). Camino B aprobado. |
+| plan-revisar-arquitectura-de-mocks.md | Pendiente. Producido tras aprobacion del Camino B. |
 | tareas-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
 | progreso-revisar-arquitectura-de-mocks.md | Pendiente. Producido al pasar a ejecucion. |
 | decisiones-revisar-arquitectura-de-mocks.md | Pendiente. Producido al cierre, obligatorio por PROC-GESTION-001. |
