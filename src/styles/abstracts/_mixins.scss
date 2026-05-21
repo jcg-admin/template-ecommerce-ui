@@ -392,6 +392,10 @@
 // 10. UTILIDADES
 // ─────────────────────────────────────────────────────────────────────
 
+// SR-only WCAG: el mixin debe ganar contra cualquier cascada del consumer
+// para garantizar que el elemento queda visualmente oculto manteniendo la
+// accesibilidad. Patron estandar documentado en MDN y libros de a11y.
+/* stylelint-disable declaration-no-important */
 @mixin visually-hidden {
   position: absolute !important;
   width: 1px !important;
@@ -403,6 +407,7 @@
   white-space: nowrap !important;
   border: 0 !important;
 }
+/* stylelint-enable declaration-no-important */
 
 @mixin no-select {
   user-select: none;

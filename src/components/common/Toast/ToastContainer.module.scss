@@ -37,6 +37,12 @@
   border-radius: $border-radius-full;
   @include flex-center;
   background: currentColor;
+  // DEUDA T-002 cascada mal modelada: el modifier .toast--success .icon
+  // (especificidad 2) gana sobre .icon (especificidad 1). Sin !important
+  // el caracter del badge circular queda invisible. Refactor planeado en
+  // cierre F1: cambiar los 4 modifiers para setear background en lugar
+  // de color; entonces este !important desaparece.
+  // stylelint-disable-next-line declaration-no-important
   color: $bg-surface !important;
   font-size: 11px;
 }

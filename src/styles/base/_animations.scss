@@ -5,7 +5,11 @@
 // WCAG: prefers-reduced-motion respetado
 // ============================================================
 
-// Reducir animaciones para usuarios que lo prefieren (WCAG AAA)
+// Reducir animaciones para usuarios que lo prefieren (WCAG AAA).
+// El media query debe anular cualquier animacion o transicion declarada en
+// componentes; sin !important, reglas mas especificas ganarian y el reset
+// no funcionaria para usuarios con preferencia de movimiento reducido.
+/* stylelint-disable declaration-no-important */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration:        0.01ms !important;
@@ -14,6 +18,7 @@
     scroll-behavior:           auto   !important;
   }
 }
+/* stylelint-enable declaration-no-important */
 
 // Keyframes globales reutilizables
 @keyframes fadeIn {

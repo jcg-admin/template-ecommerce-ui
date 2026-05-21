@@ -11,6 +11,10 @@
       "ignoreAtRules": ["tailwind", "apply", "variants", "responsive", "screen"]
     }],
 
+    "declaration-no-important": true,
+    "function-disallowed-list": ["lighten", "darken", "saturate", "desaturate", "adjust-hue", "fade-in", "fade-out", "opacify", "transparentize"],
+    "property-disallowed-list": [],
+
     "scss/at-use-no-unnamespaced": null,
     "scss/at-extend-no-missing-placeholder": null,
     "scss/load-no-partial-leading-underscore": null,
