@@ -3,10 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `completar-dominio-de-ecommerce` |
-| Estado | Backlog |
-| Orden de backlog | 2 |
+| Estado | En analisis |
+| Orden de backlog | (vacio: ya no esta en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
+| Fecha de apertura formal | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (replan de Fase 5, relacionada con H-02) |
+| Iniciativa que aporto deuda registrada | `revisar-arquitectura-de-mocks` (cerrada 2026-05-21) |
 
 ## Motivo de existencia
 
@@ -30,20 +32,44 @@ posiblemente el repositorio del backend en coordinacion externa.
 
 ## Estado actual
 
-Iniciativa registrada en backlog. **No abierta todavia**. No tiene
-documentos canonicos. El analisis detallado de "que esta completo,
-parcial o ausente" pertenece a esta iniciativa, no a la iniciativa
-origen.
+Iniciativa abierta en **analisis** el 2026-05-21. Estado: `En analisis`.
 
-## Como se abre
+Apertura motivada por dos razones documentadas:
 
-Cuando llegue su turno segun el orden de backlog (ver
-[indice-de-iniciativas.md](../indice-de-iniciativas.md)):
+1. **Sucesora natural del backlog**: era la siguiente iniciativa
+   ejecutable (orden 2). La iniciativa orden 1
+   (`validar-contrato-de-mocks-vs-backend-real`) requiere un backend
+   Django real corriendo para validar contratos, y en este entorno
+   no esta disponible. Lo correcto es desbloquear las iniciativas
+   no-bloqueadas antes que mantener el orden estricto.
 
-1. Cambiar el estado en el indice de `Backlog` a `En analisis`.
-2. Producir `alcance-completar-dominio-de-ecommerce.md`.
-3. Seguir el procedimiento en
-   [como-gestionar-iniciativas.md](../../como-gestionar-iniciativas.md).
-4. El analisis debe empezar por mapeo formal de gap por entidad
-   con evidencia (archivos, endpoints, UCs del backend), antes de
-   proponer cualquier diseno.
+2. **Deuda recien registrada**: la iniciativa `revisar-arquitectura-de-mocks`,
+   cerrada el 2026-05-21, dejo registrada en su documento
+   `decisiones-*.md` deuda concreta que **esta** iniciativa debe
+   resolver, no la siguiente. Hacer la iniciativa con contexto fresco
+   evita re-mapear evidencia. Items registrados a propagar a esta
+   iniciativa:
+   - Consolidacion de dos familias de paths auth (`/api/auth/` legacy
+     vs `/api/v1/auth/` usado por `authSlice`).
+   - Unificacion de `fetch` directo (en `ForgotPasswordPage`,
+     `ResetPasswordPage`) vs uso de `apiService`.
+   - Divergencia tipo `Product` vs shapes runtime que los consumers
+     leen (`price`, `original_price`, `images`, `variants` no estan
+     en `src/types/domain.ts` pero los handlers MSW y las pages los
+     usan).
+
+El analisis detallado de **que esta completo, parcial o ausente** por
+entidad pertenece a esta iniciativa, no a la iniciativa origen.
+
+## Documentos esperados
+
+Segun PROC-GESTION-001, una iniciativa en analisis produce:
+
+| Documento | Estado |
+|-----------|--------|
+| `alcance-completar-dominio-de-ecommerce.md` | Pendiente. Siguiente paso de la apertura. |
+| `analisis-completar-dominio-de-ecommerce.md` | Pendiente. |
+| `plan-completar-dominio-de-ecommerce.md` | Pendiente. Producido cuando paso a `En ejecucion`. |
+| `tareas-completar-dominio-de-ecommerce.md` | Pendiente. |
+| `progreso-completar-dominio-de-ecommerce.md` | Pendiente. |
+| `decisiones-completar-dominio-de-ecommerce.md` | Pendiente. Obligatorio al cierre. |
