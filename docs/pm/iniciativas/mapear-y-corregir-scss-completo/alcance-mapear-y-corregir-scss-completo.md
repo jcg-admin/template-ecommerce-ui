@@ -380,3 +380,126 @@ en `progreso-*.md`.
 
 Pausa para confirmacion del usuario. Sin confirmacion, no se
 avanza al plan.
+
+## Modificaciones al alcance tras `analisis-inspiracion-ui-core-5.25.0.md`
+
+El 2026-05-21, tras producir el `analisis-inspiracion-ui-core-5.25.0.md`
+y recibir las decisiones del usuario, el alcance se modifica.
+**Las decisiones originales (Decision 1 a Decision 4 mas
+arriba) se modifican como sigue, no se eliminan del documento
+para preservar trazabilidad**:
+
+### Decision 1 — REVOCADA, reemplazada por Decision 1'
+
+**Original**: Eliminar todas las 40 variables muertas y 9
+mixins muertos.
+
+**Reemplazo**: **Conservar todas**. Para cada una:
+- Si ui-core tiene un patron equivalente activo: **integrar**
+  via tarea explicita (T-NUEVA-XX correspondiente).
+- Si no tiene equivalente o el patron no aplica a nuestro
+  template: **marcar con `// fusv-disable`** y comentario
+  justificando como API publica reservada.
+- Eliminacion permitida solo cuando hay evidencia explicita de
+  ausencia de caso de uso presente y futuro (caso excepcional,
+  no por defecto).
+
+Razon de la revocacion: la directiva del usuario "no borres
+nada, integra de manera correcta" + evidencia empirica de
+ui-core (8 de los 9 mixins muertos tienen equivalentes en
+ui-core; mayoria de variables muertas corresponden a patrones
+maduros de ui-core).
+
+### Decision 4 — REVOCADA, reemplazada por Decision 4'
+
+**Original**: Producir ADR `dec-tokens-solo-sass-no-css-vars`
+declarando que el template no usa CSS custom properties.
+
+**Reemplazo**: Producir ADR
+`dec-tokens-via-sass-y-cssvars-selectivos` con adopcion parcial
+del patron de ui-core. Exponer como CSS custom properties solo
+los tokens que JS razonablemente podria querer leer:
+- Colores primarios de marca (~5-10 properties).
+- Dimensiones de layout: sidebar width, header height (~5).
+- Tokens semanticos de estado (success, error, warning, info).
+- **Total estimado**: ~30-50 custom properties con prefijo
+  `--ec-`, no las 130+ de ui-core.
+
+Tokens no expuestos (espaciados, tipografia, transitions,
+breakpoints) permanecen solo en SCSS.
+
+Razon de la revocacion: ui-core demuestra que custom properties
+son el patron estandar para sistemas de tokens maduros; cerrar
+prematuramente nos restaria capacidad futura sin justificacion.
+
+### Decisiones nuevas aprobadas tras el analisis-inspiracion
+
+#### D-MODO — Modo de puerto
+
+**Modo B confirmado**: portar el SCSS de ui-core como **mixins**,
+no como clases globales. Preserva la decision arquitectonica
+declarada en `src/styles/main.scss` ("No hay clases globales de
+componentes").
+
+#### D-PREFIJO — Prefijo CSS custom property
+
+**Prefijo `--ec-`** (de `e-comerce`). Brevedad operativa, sin
+colision con prefijos estandar (`--bs-`, `--cui-`, `--tw-`).
+Verificado: el repo tenia 0 declaraciones de custom properties
+antes de esta decision; el prefijo `app:` que existia en el
+proyecto es exclusivamente para JS CustomEvents
+(`app:unauthorized`), no se extiende a CSS por ser demasiado
+generico.
+
+#### D-COREUI-BUNDLES — Bundles `coreui-*.scss` no se portan
+
+Los archivos `coreui.scss`, `coreui-grid.scss`,
+`coreui-reboot.scss`, `coreui-utilities.scss` y sus variantes
+`.rtl.scss` **no se portan** en esta iniciativa. Razon
+documentada por bundle en
+`analisis-inspiracion-ui-core-5.25.0.md`.
+
+#### Decision 5 — Herramientas de disciplina importadas de ui-core
+
+Adoptar:
+
+- **`find-unused-sass-variables` (fusv)** como devDependency.
+  Script `npm run lint:scss-vars`. Patron `// fusv-disable` /
+  `// fusv-enable` para marcar variables/mixins como API
+  publica.
+- **Activar `declaration-no-important: true`** en stylelint.
+  Casos legitimos (`visually-hidden`,
+  `prefers-reduced-motion`) llevan disable explicito.
+- **Patron de marcadores `// scss-docs-start NAME / scss-docs-end NAME`**
+  como disciplina de organizacion para secciones documentables
+  de `_variables.scss`.
+
+#### Decision 6 — Variables con `!default`
+
+Adoptar `!default` en **todas** las variables del template para
+permitir override por el adoptante. Tarea masiva mecanica
+(T-202 dentro de F1a). ~223 variables afectadas.
+
+## Esfuerzo actualizado tras el replan
+
+| Item | Antes | Despues |
+|------|-------|---------|
+| Fases | 5 | 9 |
+| Tareas | 24 | ~52 |
+| Esfuerzo | 8.75 h | ~39 h |
+| Archivos nuevos en repo | 0-1 | ~50 |
+| Custom properties | 0 | ~30-50 con prefijo `--ec-` |
+| Dependencias nuevas | 0 | `find-unused-sass-variables` |
+
+Detalle en `replan-mapear-y-corregir-scss-completo.md`.
+
+## Pre-condicion para reanudar ejecucion (actualizada)
+
+Antes de reanudar la ejecucion (F1 cierre + F0a + F1a..F5a):
+
+1. El usuario confirma este alcance modificado.
+2. `tareas-mapear-y-corregir-scss-completo.md` se actualiza para
+   reflejar las nuevas tareas (post-replan).
+3. T-101 (verificacion de licencia de ui-core) se ejecuta como
+   primera tarea de F0a. Si la licencia no permite la
+   adaptacion, la iniciativa se detiene y se replantea.
