@@ -17,7 +17,7 @@
 
 | ID | Descripcion | Fase | Estado | Commit |
 |----|-------------|------|--------|--------|
-| T-001 | Superseder ADR previa con dec-mocks-via-msw-service-worker | 0 | pendiente | |
+| T-001 | Superseder ADR previa con dec-mocks-via-msw-service-worker | 0 | hecha | (siguiente commit) |
 | T-002 | Anadir verificacion de ADRs al procedimiento | 0 | pendiente | |
 | T-003 | Instalar msw y configurar workerDirectory | 1 | pendiente | |
 | T-004 | Crear src/mocks/handlers/index.ts vacio y types base | 1 | pendiente | |
@@ -46,9 +46,9 @@
 
 | Estado | Conteo |
 |--------|--------|
-| pendiente | 24 |
+| pendiente | 23 |
 | en curso | 0 |
-| hecha | 0 |
+| hecha | 1 |
 
 ## Notas operativas
 

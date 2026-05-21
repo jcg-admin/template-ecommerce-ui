@@ -24,6 +24,7 @@
 | 2026-05-21T04:30:00 | Decisiones aprobadas | (n/a) | Usuario aprobo **Camino B**. Adicionalmente: **3a-ii** (conservar variables `*_SOURCE` como conditional handlers MSW), **3b-iii** (eliminar tests embebidos del interceptor verificando cobertura caso por caso). Se acuerda commitear los tres documentos del analisis juntos como evidencia honesta del proceso. |
 | 2026-05-21T04:45:00 | Plan | (n/a) | Producido `plan-*.md` con 8 fases y 24 tareas atomicas, costo agregado estimado ~645 min (~10.75 horas efectivas). Diagrama mermaid del DAG. Fase 0 contiene 2 tareas (T-001 supersede ADR, T-002 enmienda procedimiento) que **deben ejecutarse antes** que cualquier tarea de implementacion. |
 | 2026-05-21T04:50:00 | Cambio de estado | (n/a) | Iniciativa transiciona de "En analisis" a "En ejecucion". Creados `tareas-*.md` (lista plana de las 24 tareas) y `progreso-*.md` (este documento). |
+| 2026-05-21T05:15:00 | Cierre de tarea | T-001 | ADR previa `dec-mock-first-via-feature-flags-por-dominio` marcada como **Superseded** con campo nuevo "Nota del supersede" que documenta explicitamente que la justificacion tecnica original sobre Jest era incorrecta en 2026 y referencia la iniciativa actual. Anadida nueva ADR `dec-mocks-via-msw-service-worker` con los 9 campos del formato canonico: Estado, Supersede, Decision (MSW + Faker + `*_SOURCE` como conditional handler registration), Contexto (que cambio respecto a la ADR previa), Alternativas (9 evaluadas con resumen), Razon, Trade-off del Service Worker (con referencia al analisis especifico), Consecuencias (incluye decision 3b-iii sobre tests embebidos), Evidencia (a llenar conforme avancen las tareas), Origen (esta iniciativa, T-001). El bloque "Como agregar una nueva decision" al final del archivo no se toca; T-002 anadira el paso de verificacion. |
 
 ## Contadores
 
@@ -39,7 +40,7 @@
 | Replan | 0 |
 | Hallazgo durante la ejecucion | 0 |
 | Inicio de tarea | 0 |
-| Cierre de tarea | 0 |
+| Cierre de tarea | 1 |
 | Fase cerrada | 0 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |

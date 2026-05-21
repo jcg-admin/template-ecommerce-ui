@@ -28,13 +28,31 @@ numeros — el nombre es el indice.
 
 | Campo | Valor |
 |-------|-------|
-| Estado | Aceptada |
+| Estado | Superseded por `dec-mocks-via-msw-service-worker` (2026-05-21, iniciativa `revisar-arquitectura-de-mocks`) |
 | Decision | Cada dominio tiene un flag `PY_<DOMINIO>_SOURCE=mock|real` que enruta a un interceptor local o al backend. |
 | Contexto | El UI necesita desarrollarse en paralelo al backend; algunas tareas son puramente de cliente y no deberian bloquearse esperando endpoints. |
 | Alternativas | (a) MSW (Mock Service Worker). (b) Servidor json-server local. |
 | Razon | El interceptor in-process es trivial de mantener y no requiere proceso adicional. MSW agrega un service worker que complica el setup de Jest. |
 | Consecuencias | Mocks pueden divergir del contrato real sin que ningun test lo detecte. Esta deuda esta declarada en `riesgos-y-deuda-tecnica/`. |
 | Evidencia | `.env.example`, `src/mocks/mockInterceptor.js`, `webpack.config.js` (defaults en `defaultFlags`). |
+| Nota del supersede | La razon registrada en esta ADR sobre Jest **es tecnicamente incorrecta en 2026**. MSW v2 soporta Jest via `msw/node`, que intercepta el modulo `http` de Node sin usar Service Worker en tests; el setup es `setupServer(...handlers)`, trivial. La parte de "trivial de mantener y no requiere proceso adicional" sigue siendo cierta del interceptor, pero el acoplamiento del codigo de produccion con `src/mocks/` (la rama `mockInterceptor.intercept` en `apiService._request`) es un trade-off que la ADR original no enuncio. Ver iniciativa `revisar-arquitectura-de-mocks` y especialmente `reconsideracion-bajo-rup-adaptado.md` para el analisis completo. La conservacion de los flags `*_SOURCE` por dominio se mantiene en la nueva decision como conditional handler registration. |
+
+---
+
+## dec-mocks-via-msw-service-worker
+
+| Campo | Valor |
+|-------|-------|
+| Estado | Aceptada (2026-05-21, iniciativa `revisar-arquitectura-de-mocks`) |
+| Supersede | `dec-mock-first-via-feature-flags-por-dominio` |
+| Decision | Los mocks del UI se implementan con [Mock Service Worker](https://mswjs.io/) (MSW v2). Los handlers viven en `src/mocks/handlers/` tipados contra `src/types/domain.ts`. La activacion por dominio se mantiene via las variables `CATALOG_SOURCE`, `AUTH_SOURCE`, `CART_SOURCE`, `PAYMENTS_SOURCE`, pero ahora actuan como *conditional handler registration*: al arrancar, el worker (en dev) o el server (en Jest) componen el array de handlers seleccionando solo los dominios marcados como `mock`. Los datos se generan con `@faker-js/faker` mediante factories tipadas en `src/mocks/factories/`. |
+| Contexto | El UI sigue necesitando desarrollarse en paralelo al backend; el problema fundamental que la ADR previa atacaba no ha cambiado. Lo que cambio es: (1) la conviccion de que el acoplamiento del codigo de produccion con `src/mocks/` es deuda real, no estetica, identificada al cerrar la iniciativa `resolver-hallazgos-de-deuda-del-template`; (2) la verificacion de que la justificacion tecnica de la ADR previa para descartar MSW (*"complica el setup de Jest"*) es incorrecta en MSW v2 (2026); (3) la disponibilidad de `src/types/domain.ts` (producido en T-015 de la iniciativa anterior) como contrato canonico al que los handlers pueden tipar. |
+| Alternativas | Nueve evaluadas en `pm/iniciativas/revisar-arquitectura-de-mocks/analisis-revisar-arquitectura-de-mocks.md`: (1) mantener interceptor actual, (2) MSW, (3) json-server, (4) Prism desde OpenAPI, (5) MirageJS, (6) Mockoon, (7) WireMock, (8) Hoverfly, (9) Faker + factory sobre interceptor. MSW cumple los 7 criterios del template sin concesiones; ningun competidor lo iguala. Detalle: Prism es inviable hoy porque exige OpenAPI inexistente; MirageJS esta en declive frente a MSW segun npm trends 2026; json-server requiere proceso separado y no funciona en Jest; WireMock requiere JVM; Mockoon es GUI desktop; Hoverfly resuelve otro problema (chaos engineering). |
+| Razon | MSW intercepta a nivel red (Service Worker en navegador, modulo `http` en Node para Jest), no monkey-patchea fetch ni axios. El codigo de produccion (`apiService.js`) queda **agnostico del mock**, eliminando la rama `if (mockInterceptor.intercept...)` actual. Los mismos handlers funcionan en dev y en tests Jest, con cero duplicacion. Tipan directamente contra `src/types/domain.ts`. La premisa tecnicamente incorrecta de la ADR previa queda corregida. La iniciativa siguiente (`validar-contrato-de-mocks-vs-backend-real`) puede construir sobre handlers tipados con menor friccion que sobre el interceptor opaco. |
+| Trade-off del Service Worker | MSW deposita `public/mockServiceWorker.js` (~10KB) que en proyectos tipo Create React App o Vite suele copiarse a `dist/`. **En este template no se copia**: la configuracion actual de Webpack solo procesa `public/index.html` via `HtmlWebpackPlugin`, sin `copy-webpack-plugin`. Mitigaciones aplicadas como parte de la iniciativa: (a) configuracion `msw.workerDirectory` en `package.json` para regeneracion automatica; (b) guard `NODE_ENV === 'development'` antes de `worker.start()` en `src/index.jsx`; (c) comentario explicito en `webpack.config.js` para futuros mantenedores; (d) nota en `docs/vista-de-despliegue/`. Analisis completo del trade-off en `pm/iniciativas/revisar-arquitectura-de-mocks/analisis-trade-off-service-worker.md`. |
+| Consecuencias | (1) El codigo de produccion deja de saber que existe un modo mock. (2) `src/mocks/` se reescribe completo: 1054 lineas (interceptor + registry + sub-interceptores con tests embebidos) pasan a handlers MSW + factories Faker. (3) Los tests embebidos de los sub-interceptores se eliminan verificando caso por caso que su cobertura queda preservada en tests de slice/servicio ejercitados con los nuevos handlers (decision **3b-iii** del plan). (4) `mockServiceWorker.js` queda commiteado en `public/`. (5) Los flags `*_SOURCE` cambian de "switch en `apiService`" a "switch en arranque del worker". (6) Adoptantes del template instalan MSW transparentemente via `npm install`. |
+| Evidencia | (a llenar conforme avancen las tareas) `src/mocks/handlers/`, `src/mocks/factories/`, `src/mocks/browser.ts`, `src/mocks/node.ts`, `public/mockServiceWorker.js`, `webpack.config.js`, `src/index.jsx`, `src/services/apiService.js` (sin la rama del interceptor), `package.json#msw.workerDirectory`. |
+| Origen | Iniciativa `revisar-arquitectura-de-mocks` (Camino B aprobado), tarea T-001 de la Fase 0. |
 
 ---
 
