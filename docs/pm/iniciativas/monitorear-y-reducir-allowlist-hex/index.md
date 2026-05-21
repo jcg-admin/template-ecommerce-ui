@@ -3,12 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `monitorear-y-reducir-allowlist-hex` |
-| Estado | **Cancelada** (subsumida por `auditar-scss-completo`) |
+| Estado | **Cancelada** (subsumida por `mapear-y-corregir-scss-completo`) |
 | Orden de backlog (historico) | 3 (cuando estaba en backlog) |
 | Fecha de creacion (directorio) | 2026-05-21 |
 | Fecha de cancelacion | 2026-05-21 |
 | Iniciativa origen | `resolver-hallazgos-de-deuda-del-template` (delegacion del hallazgo H-05) |
-| Iniciativa que la subsume | [`auditar-scss-completo`](../auditar-scss-completo/) |
+| Iniciativa que la subsume | [`mapear-y-corregir-scss-completo`](../mapear-y-corregir-scss-completo/) |
 
 ## Motivo de existencia (historico)
 
@@ -50,12 +50,12 @@ sub-objetivo dentro de su alcance.
 Tres opciones se evaluaron al recibir la solicitud del usuario:
 
 - **Opcion A**: renombrar `monitorear-y-reducir-allowlist-hex` ->
-  `auditar-scss-completo` in-place. Pro: preserva el orden de
+  `mapear-y-corregir-scss-completo` in-place. Pro: preserva el orden de
   backlog. Contra: el slug historico citado por
   `resolver-hallazgos-de-deuda-del-template` (H-05) se pierde sin
   rastro.
 - **Opcion B (adoptada)**: cancelar esta iniciativa, abrir
-  `auditar-scss-completo` nueva que la subsume. Pro: slug describe
+  `mapear-y-corregir-scss-completo` nueva que la subsume. Pro: slug describe
   trabajo, trazabilidad limpia (esta cancelada apunta a la nueva),
   cualquier referencia historica a H-05 sigue resolvible. Contra:
   una iniciativa cancelada sin ejecutar como ruido de gestion.
@@ -65,7 +65,7 @@ Tres opciones se evaluaron al recibir la solicitud del usuario:
 
 El usuario eligio B explicitamente.
 
-## Trabajo no ejecutado que migra a `auditar-scss-completo`
+## Trabajo no ejecutado que migra a `mapear-y-corregir-scss-completo`
 
 - Bloqueador mecanico en pre-push contra nuevos `#hex` fuera de
   allowlist.
@@ -73,7 +73,7 @@ El usuario eligio B explicitamente.
 - Cualquier decision sobre como retirar entradas cuando su
   justificacion ya no aplica.
 
-Estos tres puntos los hereda `auditar-scss-completo` como parte de
+Estos tres puntos los hereda `mapear-y-corregir-scss-completo` como parte de
 su alcance.
 
 ## Como se cierra
