@@ -16,8 +16,10 @@
 import type { HttpHandler } from 'msw';
 import { catalogHandlers } from './catalog';
 import { authHandlers } from './auth';
+import { cartHandlers } from './cart';
 
 export const handlers: HttpHandler[] = [
   ...catalogHandlers,
   ...authHandlers,
+  ...cartHandlers,
 ];
