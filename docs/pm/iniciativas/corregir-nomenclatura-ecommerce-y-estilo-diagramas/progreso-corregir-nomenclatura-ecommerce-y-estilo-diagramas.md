@@ -57,6 +57,22 @@
 | 2026-05-22T04:05:01 | Hallazgo durante la ejecucion | F3 validacion | **Cero colisiones generadas como `ecommerceommerce`**. Validacion post-sed: ningun archivo del repo contiene tal cadena. Confirmacion de que la prediccion del analisis F0 fue correcta. Los patrones de busqueda (`e-comerce`, una `m`) y target (`ecommerce`, doble `m`) son strings distintos sin solapamiento. |
 | 2026-05-22T04:05:02 | Hallazgo durante la ejecucion | F3 validacion | **Excepciones intactas confirmadas post-F3**: referente externo `jcg-admin/e-comerce-server` con 13 refs preservadas (era 6 antes; aumento porque la palabra completa aparece tambien en historiales de iniciativa SCSS y otras), procedimiento `ecomerce-p001` con 14 refs preservadas. El sed con patron `e-comerce-ui` (con sufijo `-ui`) no toca estas variantes porque tienen otros sufijos (`-server`, `-p001`). |
 | 2026-05-22T04:05:03 | Fase cerrada | F3 | **Cierre de Fase F3 (Refs del UI a si mismo)**. 6 tareas cerradas (T-301..T-306), 1 commit (54cde6f), 252 archivos modificados, 319 insertions / 318 deletions. Validacion: 0 ocurrencias de `e-comerce-ui` y `template-e-comerce-ui` en archivos editables. Excepciones intactas (13 + 14 refs externas). 3 hallazgos atomizados. **Esfuerzo F3: ~10 min reales vs 60 min estimados** (sed batch es muy eficiente; el grueso del esfuerzo estuvo en F0/analisis). Siguiente fase F4 (Refs cross-repo en UI, 30 min): refs a `e-comerce-api`, `-db`, `-doc`, y CASO POR CASO para `e-comerce-server` distinguiendo referente externo vs hermano. |
+| 2026-05-22T04:08:06 | Inicio de fase | F4 | **Inicio de Fase F4 (Refs cross-repo en el UI)**. Esfuerzo estimado 30 min. Tareas: T-401 api, T-402 db, T-403 doc (sed batches), T-404 server CASO POR CASO, T-405 huerfanos e-comerce, T-406 commit. Estado pre-F4: cero variantes ui restantes, pero 10 archivos con `e-comerce-api`, 5 con `-db`, 9 con `-doc`, 12 con `-server` (mezcla referente+hermano), 12 con huerfano. |
+| 2026-05-22T04:08:08 | Inicio de tarea | T-401 | Comienzo T-401. sed e-comerce-api -> ecommerce-api. |
+| 2026-05-22T04:08:09 | Cierre de tarea | T-401 | Cierre T-401. 10 archivos modificados. |
+| 2026-05-22T04:08:10 | Inicio de tarea | T-402 | Comienzo T-402. sed e-comerce-db -> ecommerce-db. |
+| 2026-05-22T04:08:11 | Cierre de tarea | T-402 | Cierre T-402. 5 archivos modificados. |
+| 2026-05-22T04:08:12 | Inicio de tarea | T-403 | Comienzo T-403. sed e-comerce-doc -> ecommerce-doc. |
+| 2026-05-22T04:08:13 | Cierre de tarea | T-403 | Cierre T-403. 9 archivos modificados. |
+| 2026-05-22T04:08:14 | Inicio de tarea | T-404 | Comienzo T-404. CASO POR CASO para e-comerce-server. |
+| 2026-05-22T04:08:15 | Cierre de tarea | T-404 | Cierre T-404. Inspeccion linea por linea de 28 lineas matchando. **Decisiones aplicadas**: (a) 6 archivos con refs al hermano del proyecto (NO al referente): docs/pm/iniciativas/analizar-ramas-pendientes-de-integracion/alcance, docs/introduccion-y-objetivos/, docs/vista-de-despliegue/, docs/contexto-y-alcance-del-sistema/, docs/glosario/. Cambiados a `ecommerce-server`. (b) 1 archivo (docs/desarrollo/analisis-servidor-para-template.md) con 9 ocurrencias de `template-ecomerce-ui-server` (nombre VIEJO del server hermano detectado por F2): cambiadas a `template-ecommerce-server`. (c) **Limpieza adicional**: 4 archivos con variante intermedia `template-ecommerce-ui-server` (resultado de aplicar F3 sobre `template-e-comerce-ui-server`) tambien limpiados. Referente externo (`jcg-admin/e-comerce-server`, `/tmp/references/e-comerce-server/`) preservado: 14 refs intactas. |
+| 2026-05-22T04:08:16 | Inicio de tarea | T-405 | Comienzo T-405. Huerfanos e-comerce -> ecommerce con cirugia. |
+| 2026-05-22T04:08:17 | Cierre de tarea | T-405 | Cierre T-405. Solo 2 archivos modificados quirurgicamente: docs/pm/como-gestionar-iniciativas.md (linea 10) y docs/pm/iniciativas/indice-de-iniciativas.md (linea 45). Ambos hablan del 'monorepo conceptual e-comerce'. Las 10 ocurrencias restantes del huerfano se preservan porque son: (a) refs al string de busqueda en mi propia iniciativa (no son refs conceptuales), (b) explicacion del prefijo CSS `--ec-` en iniciativa SCSS pausada, (c) snapshot del prompt de continuacion. |
+| 2026-05-22T04:08:18 | Inicio de tarea | T-406 | Comienzo T-406. Commit unitario. |
+| 2026-05-22T04:08:19 | Cierre de tarea | T-406 | Cierre T-406. Commit en UI: fceb503 'Rename cross-repo refs (F4)' (subject 27 chars, cumple Tim Pope). 16 archivos modificados, 55 insertions / 55 deletions. |
+| 2026-05-22T04:08:21 | Hallazgo durante la ejecucion | F4 ejecucion (T-404) | **Estado intermedio detectado y limpiado: `template-ecommerce-ui-server` (sin guion, todavia con `-ui-`)**. En F3, el sed `template-e-comerce-ui -> template-ecommerce-ui` transformo `template-e-comerce-ui-server` en `template-ecommerce-ui-server` (variante intermedia con `-ui-` ahora redundante porque F2 lo renombro a `template-ecommerce-server`). 4 archivos quedaron con este estado intermedio: docs/pm/iniciativas/mapear-y-corregir-scss-completo/index.md + 3 archivos de la propia iniciativa actual donde se documenta la variante. Limpieza aplicada en T-404 con sed especifico: `template-ecommerce-ui-server -> template-ecommerce-server`. **Aprendizaje generalizable**: cuando una fase de search/replace se ejecuta sobre patrones solapados, conviene tener una pasada de cleanup despues que detecte estados intermedios. |
+| 2026-05-22T04:08:22 | Hallazgo durante la ejecucion | F4 inspeccion (T-405) | **10 ocurrencias de `e-comerce` huerfano NO se tocan por contexto**. Inspeccion linea por linea: 7 lineas en docs de la iniciativa actual (alcance, plan, tareas, analisis, index) donde el string es OBJETO de analisis (no referencia conceptual al proyecto); cambiarlas corrompe la documentacion del proceso. 2 lineas en iniciativa SCSS pausada (alcance + analisis) sobre el prefijo CSS `--ec-` y la inspiracion ui-core: refs explicativas/historicas. 1 linea en prompt-continuar-mapear-y-corregir-scss.md: snapshot preservado para reanudar la iniciativa SCSS. **Aprendizaje**: no todo string que matchea el patron debe cambiarse; el contexto importa. |
+| 2026-05-22T04:08:23 | Fase cerrada | F4 | **Cierre de Fase F4 (Refs cross-repo en el UI)**. 6 tareas cerradas (T-401..T-406), 1 commit (fceb503), 16 archivos modificados, 55/55 ins/del. Validacion post-F4: cero `e-comerce-api/-db/-doc`, cero variantes server con `-ui-`, las 7 refs restantes a `e-comerce-server` son TODAS al referente externo (verificado linea por linea). Excepciones preservadas: 14 refs jcg-admin + 15 refs ecomerce-p001. 2 hallazgos atomizados. **Esfuerzo F4: ~15 min reales vs 30 min estimados**. Siguiente fase F5 (Mermaid dark canonico, 60 min): 13 flowchart + 6 no-flowchart en 15 archivos del UI. |
 ## Contadores
 
 | Clase de evento | Cantidad |
@@ -64,10 +80,10 @@
 | Apertura | 1 |
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
-| Hallazgo durante la ejecucion | 12 |
-| Inicio de tarea | 15 |
-| Cierre de tarea | 15 |
-| Fase cerrada | 4 |
+| Hallazgo durante la ejecucion | 14 |
+| Inicio de tarea | 21 |
+| Cierre de tarea | 21 |
+| Fase cerrada | 5 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
