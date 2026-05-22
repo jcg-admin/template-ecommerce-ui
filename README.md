@@ -134,3 +134,35 @@ Ver la documentación completa de UCs y endpoints en `e-comerce-doc`.
 
 Los tokens JWT los maneja el backend en **httpOnly cookies** — nunca
 se almacenan en Redux ni en localStorage.
+
+## Servidor de despliegue
+
+El bundle producido por `npm run build` (en `dist/`) se sirve en
+producción mediante el repo hermano
+[`template-ecomerce-ui-server`](https://github.com/jcg-admin/template-ecomerce-ui-server)
+— un servidor Nginx + SSL (Let's Encrypt) + hardening (UFW + fail2ban
++ SSH) aprovisionado con scripts bash idempotentes sobre Ubuntu 24.04.
+
+| Aspecto del UI | Cómo lo consume el server |
+|----------------|----------------------------|
+| `dist/index.html` | Servido como SPA catch-all (`try_files $uri $uri/ /index.html`) |
+| `dist/*.[contenthash].chunk.js` | Cache de larga duración (1 año) gracias al hash en el nombre |
+| `dist/*.[contenthash].css` | Idem |
+| Webpack `publicPath: '/'` | Compatible con Nginx serviendo desde root |
+| Asume backend en `/api/*` | El server lo proxy-pasa a `$API_UPSTREAM` definido en `.env` del server |
+
+Variable clave en el `.env` del server: `UI_DIST` apunta al `dist/`
+producido en este repo. Despliegue habitual:
+
+```bash
+npm install && npm run build
+rsync -avz --delete dist/ deploy@servidor:/srv/repos/ecom/template-e-comerce-ui/dist/
+```
+
+No es necesario reiniciar Nginx — sirve los archivos en tiempo real
+y el cache busting de Webpack (`contenthash`) hace que los navegadores
+descarguen los chunks nuevos automáticamente.
+
+Para detalles operativos completos del servidor (provisionar, mantener,
+recuperar), ver
+[`docs/operaciones.md` del repo server](https://github.com/jcg-admin/template-ecomerce-ui-server/blob/main/docs/operaciones.md).
