@@ -114,14 +114,33 @@ empujar fixes pequenos antes del merge.
 ## Relacion con las demas ramas
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    main["main (Sprint 4)"]
-    fp["claude/fix-proxy-scope-f1blE<br/>112 commits"]
-    develop1["develop tras PR #2<br/>(=8d04a61)"]
+    rama_main_sprint_4["<b>main</b> (Sprint 4)"]
+    rama_claude_fix_proxy_scope["<b>claude/fix-proxy-scope-f1blE</b><br/><i>112 commits</i>"]
+    rama_develop_post_pr2["<b>develop</b> tras PR #2<br/><i>=8d04a61</i>"]
+    rama_pr_siguientes["<b>PR #3, #4, ...</b>"]
 
-    main -.->|"branched from"| fp
-    fp -->|"PR #2 merge"| develop1
-    develop1 -.->|"siguiente: PR #3"| Next["PR #3, #4, ..."]
+    rama_main_sprint_4 -. "branched from" .-> rama_claude_fix_proxy_scope
+    rama_claude_fix_proxy_scope -- "PR #2 merge" --> rama_develop_post_pr2
+    rama_develop_post_pr2 -. "siguiente: PR #3" .-> rama_pr_siguientes
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+
+    class rama_main_sprint_4,rama_develop_post_pr2 primaryNode
+    class rama_claude_fix_proxy_scope secondaryNode
+    class rama_pr_siguientes externalNode
 ```
 
 Esta rama es la **fuente** del enorme delta `develop` vs `main` que el

@@ -6,21 +6,41 @@ Este documento describe **donde corre el sistema en produccion** y
 ## Topologia de despliegue
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    Dev["Estacion de desarrollo<br/>(WSL2 / Linux)<br/>scripts/install.sh"]
-    CI["Build host<br/>(npm run build)"]
-    Apache["Apache HTTP Server<br/>(ecommerce-server)"]
-    UI["dist/<br/>(bundle estatico)"]
-    Django["ecommerce-ui API<br/>(Django + gunicorn)"]
-    DB[("MariaDB")]
+    estacion_desarrollo["<b>Estacion de desarrollo</b><br/><i>WSL2 / Linux</i><br/>scripts/install.sh"]
+    build_host_ci["<b>Build host</b><br/><i>npm run build</i>"]
+    web_server_apache["<b>Apache HTTP Server</b><br/><i>ecommerce-server</i>"]
+    bundle_dist["<b>dist/</b><br/><i>bundle estatico</i>"]
+    backend_django["<b>ecommerce-api</b><br/><i>Django + gunicorn</i>"]
+    base_datos[("<b>MariaDB</b>")]
+    cliente_navegador["<b>Navegador del comprador</b>"]
 
-    Dev -->|"genera"| CI
-    CI -->|"npm run build<br/>dist/"| UI
-    UI -->|"desplegado a"| Apache
-    Apache -->|"sirve"| Cliente["Navegador del comprador"]
-    Cliente -->|"REST + cookies"| Apache
-    Apache -->|"reverse proxy<br/>/api/*"| Django
-    Django --> DB
+    estacion_desarrollo -- "genera" --> build_host_ci
+    build_host_ci -- "npm run build<br/>dist/" --> bundle_dist
+    bundle_dist -- "desplegado a" --> web_server_apache
+    web_server_apache -- "sirve" --> cliente_navegador
+    cliente_navegador -- "REST + cookies" --> web_server_apache
+    web_server_apache -- "reverse proxy<br/>/api/*" --> backend_django
+    backend_django --> base_datos
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+    classDef userNode fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+
+    class estacion_desarrollo,build_host_ci,bundle_dist primaryNode
+    class web_server_apache,backend_django,base_datos secondaryNode
+    class cliente_navegador userNode
 ```
 
 ## Nodos de despliegue
@@ -114,25 +134,36 @@ estaticos para `/` y `/static/*`, y proxy-pasa `/api/*` a Django.
 ## Pipeline de despliegue (estado actual)
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 sequenceDiagram
-    participant Dev as Desarrollador
-    participant Repo as Repositorio Git
-    participant Build as Build host
-    participant Apache as Servidor Apache
-    participant Cliente as Navegador
+    participant desarrollador as Desarrollador
+    participant repositorio_git as Repositorio Git
+    participant build_host as Build host
+    participant servidor_apache as Servidor Apache
+    participant cliente_navegador as Navegador
+    participant backend_django as Django
 
-    Dev->>Repo: git push (rama feature)
-    Dev->>Repo: PR -> develop
-    Note over Repo: husky pre-commit:<br/>check-scss, check-lazy<br/>(local del dev)
-    Repo->>Repo: merge a develop
-    Note over Repo: develop != main:<br/>149 commits pendientes<br/>de promover (release candidate)
-    Repo->>Build: clone develop
-    Build->>Build: npm install
-    Build->>Build: npm run build<br/>(con .env.production)
-    Build->>Apache: scp dist/ al servidor
-    Apache->>Cliente: GET / -> index.html + bundle
-    Cliente->>Apache: GET /api/v1/* (cookies)
-    Apache->>Django: reverse proxy
+    desarrollador->>repositorio_git: git push (rama feature)
+    desarrollador->>repositorio_git: PR -> develop
+    Note over repositorio_git: husky pre-commit:<br/>check-scss, check-lazy<br/>(local del dev)
+    repositorio_git->>repositorio_git: merge a develop
+    Note over repositorio_git: develop != main:<br/>149 commits pendientes<br/>de promover (release candidate)
+    repositorio_git->>build_host: clone develop
+    build_host->>build_host: npm install
+    build_host->>build_host: npm run build<br/>(con .env.production)
+    build_host->>servidor_apache: scp dist/ al servidor
+    servidor_apache->>cliente_navegador: GET / -> index.html + bundle
+    cliente_navegador->>servidor_apache: GET /api/v1/* (cookies)
+    servidor_apache->>backend_django: reverse proxy
 ```
 
 Este pipeline es **manual**. No hay CI/CD configurado en el repo. Esto

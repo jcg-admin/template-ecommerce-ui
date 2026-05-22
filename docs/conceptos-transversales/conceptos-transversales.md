@@ -17,25 +17,35 @@ una sola vez, vive aqui.
 ### Diagrama de secuencia: 401 durante uso
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 sequenceDiagram
-    participant U as Usuario
-    participant P as Pagina
-    participant H as Hook (useQuery)
-    participant S as apiService
-    participant B as Backend
-    participant L as UnauthorizedListener
-    participant R as Router
+    participant usuario as Usuario
+    participant pagina as Pagina
+    participant hook_usequery as Hook (useQuery)
+    participant api_service as apiService
+    participant backend as Backend
+    participant unauthorized_listener as UnauthorizedListener
+    participant router as Router
 
-    U->>P: interactua
-    P->>H: invoca hook
-    H->>S: GET /api/v1/recurso
-    S->>B: fetch con cookie
-    B-->>S: 401 Unauthorized
-    S->>S: dispatchEvent('app:unauthorized')
-    S-->>H: error
-    L->>L: recibe evento
-    L->>R: navigate('/auth/login',<br/>{state:{from: location}})
-    R->>U: muestra LoginPage
+    usuario->>pagina: interactua
+    pagina->>hook_usequery: invoca hook
+    hook_usequery->>api_service: GET /api/v1/recurso
+    api_service->>backend: fetch con cookie
+    backend-->>api_service: 401 Unauthorized
+    api_service->>api_service: dispatchEvent('app:unauthorized')
+    api_service-->>hook_usequery: error
+    unauthorized_listener->>unauthorized_listener: recibe evento
+    unauthorized_listener->>router: navigate('/auth/login',<br/>{state:{from: location}})
+    router->>usuario: muestra LoginPage
 ```
 
 Este listener se introdujo en la rama pendiente

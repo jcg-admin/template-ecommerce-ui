@@ -7,32 +7,50 @@ acotada.
 ## Vision general en niveles
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart TB
-    subgraph nivel_uno [Nivel uno: la SPA completa]
-        SPA["ecommerce-ui<br/>SPA React 19"]
+    subgraph nivel_uno_spa["Nivel uno: la SPA completa"]
+        ecommerce_ui_spa["<b>ecommerce-ui</b><br/>SPA React 19"]
     end
 
-    subgraph nivel_dos [Nivel dos: capas funcionales]
-        Router["router/<br/>AppRouter + lazy"]
-        Layouts["layouts/<br/>Storefront, Account, Admin"]
-        Pages["pages/<br/>82 paginas"]
-        Components["components/<br/>UI reutilizable"]
-        State["redux/ + hooks/domain/<br/>+ lib/queryClient"]
-        Services["services/<br/>apiService + secureStorage"]
-        Mocks["mocks/<br/>handlers MSW + factories"]
-        Styles["styles/<br/>abstracts + base + components"]
-        Utils["utils/, constants/, config/"]
+    subgraph nivel_dos_capas["Nivel dos: capas funcionales"]
+        router_app["<b>router/</b><br/>AppRouter + lazy"]
+        layouts_dir["<b>layouts/</b><br/>Storefront, Account, Admin"]
+        pages_dir["<b>pages/</b><br/>82 paginas"]
+        components_dir["<b>components/</b><br/>UI reutilizable"]
+        state_layer["<b>redux/ + hooks/domain/</b><br/>+ lib/queryClient"]
+        services_dir["<b>services/</b><br/>apiService + secureStorage"]
+        mocks_dir["<b>mocks/</b><br/>handlers MSW + factories"]
+        styles_dir["<b>styles/</b><br/>abstracts + base + components"]
+        utils_constants_config["<b>utils/, constants/, config/</b>"]
     end
 
-    SPA --> Router
-    Router --> Layouts
-    Layouts --> Pages
-    Pages --> Components
-    Pages --> State
-    State --> Services
-    Services -. fetch HTTP .-> Mocks
-    Components --> Styles
-    Pages --> Styles
+    ecommerce_ui_spa --> router_app
+    router_app --> layouts_dir
+    layouts_dir --> pages_dir
+    pages_dir --> components_dir
+    pages_dir --> state_layer
+    state_layer --> services_dir
+    services_dir -. "fetch HTTP" .-> mocks_dir
+    components_dir --> styles_dir
+    pages_dir --> styles_dir
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+
+    class ecommerce_ui_spa,router_app,layouts_dir,pages_dir,components_dir primaryNode
+    class state_layer,services_dir,styles_dir,utils_constants_config secondaryNode
+    class mocks_dir externalNode
 ```
 
 La flecha `Services -. fetch HTTP .-> Mocks` se dibuja punteada
@@ -188,52 +206,73 @@ es quien las aplica; este archivo documenta la expectativa del UI.
 ## Diagrama UML de paquetes del nivel uno
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    subgraph entrada [Capa de entrada]
-        idx["index.jsx"]
-        app["app/"]
-        router["router/"]
+    subgraph capa_entrada["Capa de entrada"]
+        entry_index_jsx["<b>index.jsx</b>"]
+        directorio_app["<b>app/</b>"]
+        directorio_router["<b>router/</b>"]
     end
 
-    subgraph presentacion [Capa de presentacion]
-        layouts["layouts/"]
-        pages["pages/"]
-        components["components/"]
-        styles["styles/"]
+    subgraph capa_presentacion["Capa de presentacion"]
+        directorio_layouts["<b>layouts/</b>"]
+        directorio_pages["<b>pages/</b>"]
+        directorio_components["<b>components/</b>"]
+        directorio_styles["<b>styles/</b>"]
     end
 
-    subgraph estado [Capa de estado]
-        redux["redux/"]
-        hooks["hooks/domain/"]
-        lib["lib/<br/>(queryClient)"]
-        context["context/"]
+    subgraph capa_estado["Capa de estado"]
+        directorio_redux["<b>redux/</b>"]
+        directorio_hooks_domain["<b>hooks/domain/</b>"]
+        directorio_lib_queryclient["<b>lib/</b><br/><i>queryClient</i>"]
+        directorio_context["<b>context/</b>"]
     end
 
-    subgraph integracion [Capa de integracion]
-        services["services/"]
-        mocks["mocks/"]
+    subgraph capa_integracion["Capa de integracion"]
+        directorio_services["<b>services/</b>"]
+        directorio_mocks["<b>mocks/</b>"]
     end
 
-    subgraph soporte [Soporte transversal]
-        config["config/"]
-        constants["constants/"]
-        utils["utils/"]
-        types["types/"]
+    subgraph capa_soporte_transversal["Soporte transversal"]
+        directorio_config["<b>config/</b>"]
+        directorio_constants["<b>constants/</b>"]
+        directorio_utils["<b>utils/</b>"]
+        directorio_types["<b>types/</b>"]
     end
 
-    idx --> app
-    app --> router
-    router --> layouts
-    layouts --> pages
-    pages --> components
-    pages --> hooks
-    pages --> redux
-    hooks --> lib
-    hooks --> services
-    redux --> services
-    services -. fetch HTTP .-> mocks
-    components --> styles
-    pages --> styles
+    entry_index_jsx --> directorio_app
+    directorio_app --> directorio_router
+    directorio_router --> directorio_layouts
+    directorio_layouts --> directorio_pages
+    directorio_pages --> directorio_components
+    directorio_pages --> directorio_hooks_domain
+    directorio_pages --> directorio_redux
+    directorio_hooks_domain --> directorio_lib_queryclient
+    directorio_hooks_domain --> directorio_services
+    directorio_redux --> directorio_services
+    directorio_services -. "fetch HTTP" .-> directorio_mocks
+    directorio_components --> directorio_styles
+    directorio_pages --> directorio_styles
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+
+    class entry_index_jsx,directorio_app,directorio_router primaryNode
+    class directorio_layouts,directorio_pages,directorio_components,directorio_styles primaryNode
+    class directorio_redux,directorio_hooks_domain,directorio_lib_queryclient,directorio_context secondaryNode
+    class directorio_services secondaryNode
+    class directorio_mocks externalNode
+    class directorio_config,directorio_constants,directorio_utils,directorio_types secondaryNode
 ```
 
 ## Reglas de dependencia entre bloques

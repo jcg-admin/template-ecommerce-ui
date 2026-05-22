@@ -38,15 +38,40 @@
 ## DAG de dependencias
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart TD
-    F0[Fase 0: ADR y procedimiento] --> F1[Fase 1: Setup MSW base]
-    F1 --> F2[Fase 2: Handlers tipados por dominio]
-    F2 --> F3[Fase 3: Activacion conditional via *_SOURCE]
-    F2 --> F4[Fase 4: Faker + factories]
-    F3 --> F5[Fase 5: Eliminar interceptor y limpieza]
-    F4 --> F5
-    F5 --> F6[Fase 6: Documentacion arc42]
-    F6 --> F7[Fase 7: Cierre]
+    fase_f0_adr_procedimiento["<b>Fase 0</b><br/>ADR y procedimiento"]
+    fase_f1_setup_msw_base["<b>Fase 1</b><br/>Setup MSW base"]
+    fase_f2_handlers_tipados["<b>Fase 2</b><br/>Handlers tipados por dominio"]
+    fase_f3_activacion_source["<b>Fase 3</b><br/>Activacion conditional<br/>via *_SOURCE"]
+    fase_f4_faker_factories["<b>Fase 4</b><br/>Faker + factories"]
+    fase_f5_eliminar_interceptor["<b>Fase 5</b><br/>Eliminar interceptor<br/>y limpieza"]
+    fase_f6_docs_arc42["<b>Fase 6</b><br/>Documentacion arc42"]
+    fase_f7_cierre["<b>Fase 7</b><br/>Cierre"]
+
+    fase_f0_adr_procedimiento --> fase_f1_setup_msw_base
+    fase_f1_setup_msw_base --> fase_f2_handlers_tipados
+    fase_f2_handlers_tipados --> fase_f3_activacion_source
+    fase_f2_handlers_tipados --> fase_f4_faker_factories
+    fase_f3_activacion_source --> fase_f5_eliminar_interceptor
+    fase_f4_faker_factories --> fase_f5_eliminar_interceptor
+    fase_f5_eliminar_interceptor --> fase_f6_docs_arc42
+    fase_f6_docs_arc42 --> fase_f7_cierre
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef doneNode fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+
+    class fase_f0_adr_procedimiento,fase_f1_setup_msw_base,fase_f2_handlers_tipados,fase_f3_activacion_source,fase_f4_faker_factories,fase_f5_eliminar_interceptor,fase_f6_docs_arc42 primaryNode
+    class fase_f7_cierre doneNode
 ```
 
 Fase 0 produce la decision arquitectonica formal **antes** de tocar

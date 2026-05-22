@@ -39,18 +39,43 @@ Cada T-NNN cumple los siguientes invariantes:
 ## Diagrama del DAG de fases
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart TD
-    F0[Fase 0: Limpieza inventario] --> F1[Fase 1: Documentacion sin codigo]
-    F0 --> F2[Fase 2: Preparar TypeScript progresivo]
-    F2 --> F3[Fase 3: Migrar modulos compartidos a TS]
-    F3 --> F5[Fase 5: Tipos de dominio en TypeScript]
-    F0 --> F4[Fase 4: Integrar decorators]
-    F0 --> F6deploy[Fase 6: Endurecer build vs API_URL]
-    F1 --> F7[Fase 7: Cierre]
-    F3 --> F7
-    F4 --> F7
-    F5 --> F7
-    F6deploy --> F7
+    fase_f0_limpieza_inventario["<b>Fase 0</b><br/>Limpieza inventario"]
+    fase_f1_documentacion_sin_codigo["<b>Fase 1</b><br/>Documentacion sin codigo"]
+    fase_f2_preparar_typescript["<b>Fase 2</b><br/>Preparar TypeScript progresivo"]
+    fase_f3_migrar_modulos_a_ts["<b>Fase 3</b><br/>Migrar modulos compartidos a TS"]
+    fase_f4_integrar_decorators["<b>Fase 4</b><br/>Integrar decorators"]
+    fase_f5_tipos_dominio_typescript["<b>Fase 5</b><br/>Tipos de dominio en TypeScript"]
+    fase_f6_endurecer_build_api_url["<b>Fase 6</b><br/>Endurecer build vs API_URL"]
+    fase_f7_cierre["<b>Fase 7</b><br/>Cierre"]
+
+    fase_f0_limpieza_inventario --> fase_f1_documentacion_sin_codigo
+    fase_f0_limpieza_inventario --> fase_f2_preparar_typescript
+    fase_f2_preparar_typescript --> fase_f3_migrar_modulos_a_ts
+    fase_f3_migrar_modulos_a_ts --> fase_f5_tipos_dominio_typescript
+    fase_f0_limpieza_inventario --> fase_f4_integrar_decorators
+    fase_f0_limpieza_inventario --> fase_f6_endurecer_build_api_url
+    fase_f1_documentacion_sin_codigo --> fase_f7_cierre
+    fase_f3_migrar_modulos_a_ts --> fase_f7_cierre
+    fase_f4_integrar_decorators --> fase_f7_cierre
+    fase_f5_tipos_dominio_typescript --> fase_f7_cierre
+    fase_f6_endurecer_build_api_url --> fase_f7_cierre
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef doneNode fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+
+    class fase_f0_limpieza_inventario,fase_f1_documentacion_sin_codigo,fase_f2_preparar_typescript,fase_f3_migrar_modulos_a_ts,fase_f4_integrar_decorators,fase_f5_tipos_dominio_typescript,fase_f6_endurecer_build_api_url primaryNode
+    class fase_f7_cierre doneNode
 ```
 
 > Nota: las fases 4, 5 y 6 no tienen dependencia entre si, asi que

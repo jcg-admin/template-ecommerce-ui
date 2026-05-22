@@ -104,29 +104,49 @@ Este detalle esta documentado en `decisiones-de-arquitectura/`.
 ## Diagrama de bloques de la estrategia
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart TB
-    subgraph Navegador
-        UI["React 19 SPA"]
-        subgraph Estado
-            RTK["Redux Toolkit<br/>(31 slices)"]
-            RQ["React Query<br/>(cache de reads)"]
+    subgraph navegador_browser["Navegador"]
+        ui_react_spa["<b>React 19 SPA</b>"]
+        subgraph capa_estado["Estado"]
+            redux_toolkit["<b>Redux Toolkit</b><br/><i>31 slices</i>"]
+            react_query["<b>React Query</b><br/><i>cache de reads</i>"]
         end
     end
 
-    UI --> RTK
-    UI --> RQ
+    ui_react_spa --> redux_toolkit
+    ui_react_spa --> react_query
 
-    subgraph Capa de servicios
-        APIS["apiService"]
-        MOCK["mockInterceptor"]
+    subgraph capa_servicios["Capa de servicios"]
+        api_service["<b>apiService</b>"]
+        mock_interceptor["<b>mockInterceptor</b>"]
     end
 
-    RTK -->|"thunks"| APIS
-    RQ -->|"queryFn"| APIS
-    APIS -->|"si *_SOURCE=mock"| MOCK
-    APIS -->|"si *_SOURCE=real"| Backend["ecommerce-ui API<br/>(Django + DRF)"]
+    redux_toolkit -- "thunks" --> api_service
+    react_query -- "queryFn" --> api_service
+    api_service -- "si *_SOURCE=mock" --> mock_interceptor
+    api_service -- "si *_SOURCE=real" --> backend_api["<b>ecommerce-api</b><br/><i>Django + DRF</i>"]
 
-    Backend -->|"Set-Cookie: httpOnly"| UI
-    Backend -.->|"401"| Listener["UnauthorizedListener"]
-    Listener -->|"redirect"| Login["/auth/login"]
+    backend_api -- "Set-Cookie: httpOnly" --> ui_react_spa
+    backend_api -. "401" .-> unauthorized_listener["<b>UnauthorizedListener</b>"]
+    unauthorized_listener -- "redirect" --> auth_login_route["/auth/login"]
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+    classDef warnNode fill:#7c2d12,stroke:#fb923c,stroke-width:2px,color:#fff7ed
+
+    class ui_react_spa,redux_toolkit,react_query primaryNode
+    class api_service,mock_interceptor secondaryNode
+    class backend_api externalNode
+    class unauthorized_listener,auth_login_route warnNode
 ```

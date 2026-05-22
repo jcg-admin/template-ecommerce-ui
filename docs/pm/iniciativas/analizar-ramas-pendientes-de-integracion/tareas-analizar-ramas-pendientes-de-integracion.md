@@ -82,85 +82,106 @@ ejecucion del comando git correspondiente.
 ## DAG de dependencias
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '12px'
+}}}%%
 flowchart TB
-    T001["T-001<br/>Inventariar ramas"]
-    T002["T-002<br/>Contar commits<br/>y numstats"]
-    T003["T-003<br/>Detectar conflictos"]
-    T004["T-004<br/>Inspeccionar archivos<br/>de la rama pendiente"]
-    T005["T-005<br/>Mapear src/"]
+    tarea_t001_inventariar_ramas["T-001<br/>Inventariar ramas"]
+    tarea_t002_contar_commits_numstats["T-002<br/>Contar commits<br/>y numstats"]
+    tarea_t003_detectar_conflictos["T-003<br/>Detectar conflictos"]
+    tarea_t004_inspeccionar_archivos_rama["T-004<br/>Inspeccionar archivos<br/>de la rama pendiente"]
+    tarea_t005_mapear_src["T-005<br/>Mapear src/"]
 
-    T010["T-010<br/>docs/README"]
-    T011["T-011<br/>introduccion"]
-    T012["T-012<br/>restricciones"]
-    T013["T-013<br/>contexto"]
-    T014["T-014<br/>estrategia"]
-    T015["T-015<br/>bloques"]
-    T016["T-016<br/>despliegue"]
-    T017["T-017<br/>transversales"]
-    T018["T-018<br/>decisiones arq"]
-    T019["T-019<br/>riesgos"]
-    T020["T-020<br/>glosario"]
+    tarea_t010_docs_readme["T-010<br/>docs/README"]
+    tarea_t011_introduccion["T-011<br/>introduccion"]
+    tarea_t012_restricciones["T-012<br/>restricciones"]
+    tarea_t013_contexto["T-013<br/>contexto"]
+    tarea_t014_estrategia["T-014<br/>estrategia"]
+    tarea_t015_bloques["T-015<br/>bloques"]
+    tarea_t016_despliegue["T-016<br/>despliegue"]
+    tarea_t017_transversales["T-017<br/>transversales"]
+    tarea_t018_decisiones_arq["T-018<br/>decisiones arq"]
+    tarea_t019_riesgos["T-019<br/>riesgos"]
+    tarea_t020_glosario["T-020<br/>glosario"]
 
-    T030["T-030<br/>pm README"]
-    T031["T-031<br/>iniciativas README"]
-    T032["T-032<br/>index iniciativa"]
-    T033["T-033<br/>alcance"]
+    tarea_t030_pm_readme["T-030<br/>pm README"]
+    tarea_t031_iniciativas_readme["T-031<br/>iniciativas README"]
+    tarea_t032_index_iniciativa["T-032<br/>index iniciativa"]
+    tarea_t033_alcance["T-033<br/>alcance"]
 
-    T040["T-040<br/>resumen ramas"]
-    T041["T-041<br/>rama pendiente"]
-    T042["T-042<br/>rama PR #2"]
-    T043["T-043<br/>rama PR #3"]
-    T044["T-044<br/>rama PR #4"]
-    T045["T-045<br/>delta dev a main"]
+    tarea_t040_resumen_ramas["T-040<br/>resumen ramas"]
+    tarea_t041_rama_pendiente["T-041<br/>rama pendiente"]
+    tarea_t042_rama_pr_dos["T-042<br/>rama PR #2"]
+    tarea_t043_rama_pr_tres["T-043<br/>rama PR #3"]
+    tarea_t044_rama_pr_cuatro["T-044<br/>rama PR #4"]
+    tarea_t045_delta_dev_a_main["T-045<br/>delta dev a main"]
 
-    T050["T-050<br/>tareas (este)"]
-    T051["T-051<br/>progreso"]
-    T052["T-052<br/>decisiones"]
+    tarea_t050_tareas_este["T-050<br/>tareas (este)"]
+    tarea_t051_progreso["T-051<br/>progreso"]
+    tarea_t052_decisiones["T-052<br/>decisiones"]
 
-    T001 --> T002
-    T002 --> T003
-    T002 --> T004
-    T001 --> T005
+    tarea_t001_inventariar_ramas --> tarea_t002_contar_commits_numstats
+    tarea_t002_contar_commits_numstats --> tarea_t003_detectar_conflictos
+    tarea_t002_contar_commits_numstats --> tarea_t004_inspeccionar_archivos_rama
+    tarea_t001_inventariar_ramas --> tarea_t005_mapear_src
 
-    T005 --> T010
-    T005 --> T011
-    T005 --> T012
-    T005 --> T013
-    T005 --> T014
-    T013 --> T014
-    T005 --> T015
-    T014 --> T015
-    T005 --> T016
-    T014 --> T016
-    T015 --> T017
-    T016 --> T017
-    T002 --> T018
-    T017 --> T018
-    T002 --> T019
-    T017 --> T019
-    T017 --> T020
+    tarea_t005_mapear_src --> tarea_t010_docs_readme
+    tarea_t005_mapear_src --> tarea_t011_introduccion
+    tarea_t005_mapear_src --> tarea_t012_restricciones
+    tarea_t005_mapear_src --> tarea_t013_contexto
+    tarea_t005_mapear_src --> tarea_t014_estrategia
+    tarea_t013_contexto --> tarea_t014_estrategia
+    tarea_t005_mapear_src --> tarea_t015_bloques
+    tarea_t014_estrategia --> tarea_t015_bloques
+    tarea_t005_mapear_src --> tarea_t016_despliegue
+    tarea_t014_estrategia --> tarea_t016_despliegue
+    tarea_t015_bloques --> tarea_t017_transversales
+    tarea_t016_despliegue --> tarea_t017_transversales
+    tarea_t002_contar_commits_numstats --> tarea_t018_decisiones_arq
+    tarea_t017_transversales --> tarea_t018_decisiones_arq
+    tarea_t002_contar_commits_numstats --> tarea_t019_riesgos
+    tarea_t017_transversales --> tarea_t019_riesgos
+    tarea_t017_transversales --> tarea_t020_glosario
 
-    T010 --> T030
-    T030 --> T031
-    T031 --> T032
-    T032 --> T033
+    tarea_t010_docs_readme --> tarea_t030_pm_readme
+    tarea_t030_pm_readme --> tarea_t031_iniciativas_readme
+    tarea_t031_iniciativas_readme --> tarea_t032_index_iniciativa
+    tarea_t032_index_iniciativa --> tarea_t033_alcance
 
-    T033 --> T040
-    T003 --> T041
-    T004 --> T041
-    T040 --> T041
-    T040 --> T042
-    T040 --> T043
-    T040 --> T044
-    T040 --> T045
+    tarea_t033_alcance --> tarea_t040_resumen_ramas
+    tarea_t003_detectar_conflictos --> tarea_t041_rama_pendiente
+    tarea_t004_inspeccionar_archivos_rama --> tarea_t041_rama_pendiente
+    tarea_t040_resumen_ramas --> tarea_t041_rama_pendiente
+    tarea_t040_resumen_ramas --> tarea_t042_rama_pr_dos
+    tarea_t040_resumen_ramas --> tarea_t043_rama_pr_tres
+    tarea_t040_resumen_ramas --> tarea_t044_rama_pr_cuatro
+    tarea_t040_resumen_ramas --> tarea_t045_delta_dev_a_main
 
-    T041 --> T050
-    T042 --> T050
-    T043 --> T050
-    T044 --> T050
-    T045 --> T050
-    T050 --> T051
-    T051 --> T052
+    tarea_t041_rama_pendiente --> tarea_t050_tareas_este
+    tarea_t042_rama_pr_dos --> tarea_t050_tareas_este
+    tarea_t043_rama_pr_tres --> tarea_t050_tareas_este
+    tarea_t044_rama_pr_cuatro --> tarea_t050_tareas_este
+    tarea_t045_delta_dev_a_main --> tarea_t050_tareas_este
+    tarea_t050_tareas_este --> tarea_t051_progreso
+    tarea_t051_progreso --> tarea_t052_decisiones
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef doneNode fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+
+    class tarea_t001_inventariar_ramas,tarea_t002_contar_commits_numstats,tarea_t003_detectar_conflictos,tarea_t004_inspeccionar_archivos_rama,tarea_t005_mapear_src primaryNode
+    class tarea_t010_docs_readme,tarea_t011_introduccion,tarea_t012_restricciones,tarea_t013_contexto,tarea_t014_estrategia,tarea_t015_bloques,tarea_t016_despliegue,tarea_t017_transversales,tarea_t018_decisiones_arq,tarea_t019_riesgos,tarea_t020_glosario secondaryNode
+    class tarea_t030_pm_readme,tarea_t031_iniciativas_readme,tarea_t032_index_iniciativa,tarea_t033_alcance secondaryNode
+    class tarea_t040_resumen_ramas,tarea_t041_rama_pendiente,tarea_t042_rama_pr_dos,tarea_t043_rama_pr_tres,tarea_t044_rama_pr_cuatro,tarea_t045_delta_dev_a_main primaryNode
+    class tarea_t050_tareas_este,tarea_t051_progreso doneNode
+    class tarea_t052_decisiones doneNode
 ```
 
 ## Cobertura: criterio del alcance -> tareas que lo cubren

@@ -17,30 +17,42 @@ Su responsabilidad de negocio es:
 ## Diagrama de contexto
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    Comprador["Comprador<br/>(navegador)"]
-    Admin["Administrador<br/>(navegador)"]
-    UI["ecommerce-ui<br/>React 19 SPA<br/>(este proyecto)"]
-    API["ecommerce-ui API<br/>Django 5 + DRF"]
-    DB[("MariaDB")]
-    MP["MercadoPago<br/>(gateway de pago)"]
-    PP["PayPal<br/>(gateway de pago)"]
-    Mail["Correo electronico<br/>(notificaciones)"]
+    actor_comprador["<b>Comprador</b><br/>(navegador)"]
+    actor_administrador["<b>Administrador</b><br/>(navegador)"]
+    sistema_ui_react["<b>ecommerce-ui</b><br/>React 19 SPA<br/><i>(este proyecto)</i>"]
+    sistema_api_django["<b>ecommerce-api</b><br/>Django 5 + DRF"]
+    base_datos_mariadb[("<b>MariaDB</b>")]
+    servicio_mercadopago["<b>MercadoPago</b><br/><i>gateway de pago</i>"]
+    servicio_paypal["<b>PayPal</b><br/><i>gateway de pago</i>"]
+    servicio_correo_smtp["<b>Correo electronico</b><br/><i>notificaciones</i>"]
 
-    Comprador -->|"HTTPS"| UI
-    Admin -->|"HTTPS"| UI
-    UI -->|"REST + cookies httpOnly"| API
-    API --> DB
-    API -.->|"webhook / redirect"| MP
-    API -.->|"webhook / redirect"| PP
-    API -.->|"SMTP"| Mail
+    actor_comprador -- "HTTPS" --> sistema_ui_react
+    actor_administrador -- "HTTPS" --> sistema_ui_react
+    sistema_ui_react -- "REST + cookies httpOnly" --> sistema_api_django
+    sistema_api_django --> base_datos_mariadb
+    sistema_api_django -. "webhook / redirect" .-> servicio_mercadopago
+    sistema_api_django -. "webhook / redirect" .-> servicio_paypal
+    sistema_api_django -. "SMTP" .-> servicio_correo_smtp
 
-    classDef external fill:#eef,stroke:#446,stroke-width:1px;
-    classDef system fill:#efe,stroke:#464,stroke-width:1px;
-    classDef user fill:#fff,stroke:#666,stroke-width:1px;
-    class Comprador,Admin user;
-    class UI,API,DB system;
-    class MP,PP,Mail external;
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+    classDef userNode fill:#1e3a8a,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+
+    class actor_comprador,actor_administrador userNode
+    class sistema_ui_react,sistema_api_django,base_datos_mariadb primaryNode
+    class servicio_mercadopago,servicio_paypal,servicio_correo_smtp externalNode
 ```
 
 ## Interfaces externas del UI

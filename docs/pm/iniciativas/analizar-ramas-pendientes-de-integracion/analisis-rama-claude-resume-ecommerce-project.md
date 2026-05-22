@@ -236,31 +236,41 @@ para regenerar el lock.
 Este es el flujo que la rama habilita y que justifica integrarla.
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 sequenceDiagram
     autonumber
-    participant User as Comprador
-    participant Tab as Pestana abierta
-    participant Hook as useReturns (ejemplo)
-    participant API as apiService
-    participant Backend as Backend Django
-    participant L as UnauthorizedListener
-    participant Router as React Router
+    participant comprador as Comprador
+    participant pestana_abierta as Pestana abierta
+    participant hook_use_returns as useReturns (ejemplo)
+    participant api_service as apiService
+    participant backend_django as Backend Django
+    participant unauthorized_listener as UnauthorizedListener
+    participant react_router as React Router
 
-    Note over User,Tab: Usuario dejo la pestana abierta;<br/>su JWT (cookie) ya expiro
-    User->>Tab: click en "Mis devoluciones"
-    Tab->>Hook: fetchReturns()
-    Hook->>API: GET /api/v1/returns/
-    API->>Backend: fetch + cookie expirada
-    Backend-->>API: 401 Unauthorized
-    API->>API: dispatchEvent(<br/>new CustomEvent('app:unauthorized'))
-    API-->>Hook: throw UnauthorizedError
-    L->>L: window.addEventListener escucha
-    L->>L: dispatch(clearError())
-    L->>L: location actual = '/account/returns'
-    L->>Router: navigate('/auth/login',<br/>{state:{from:'/account/returns'}})
-    Router->>User: muestra LoginPage
-    Note over User: Usuario hace login<br/>(otra pestana o aqui mismo)
-    Router->>User: redirige de vuelta<br/>a '/account/returns'
+    Note over comprador,pestana_abierta: Usuario dejo la pestana abierta;<br/>su JWT (cookie) ya expiro
+    comprador->>pestana_abierta: click en "Mis devoluciones"
+    pestana_abierta->>hook_use_returns: fetchReturns()
+    hook_use_returns->>api_service: GET /api/v1/returns/
+    api_service->>backend_django: fetch + cookie expirada
+    backend_django-->>api_service: 401 Unauthorized
+    api_service->>api_service: dispatchEvent(<br/>new CustomEvent('app:unauthorized'))
+    api_service-->>hook_use_returns: throw UnauthorizedError
+    unauthorized_listener->>unauthorized_listener: window.addEventListener escucha
+    unauthorized_listener->>unauthorized_listener: dispatch(clearError())
+    unauthorized_listener->>unauthorized_listener: location actual = '/account/returns'
+    unauthorized_listener->>react_router: navigate('/auth/login',<br/>{state:{from:'/account/returns'}})
+    react_router->>comprador: muestra LoginPage
+    Note over comprador: Usuario hace login<br/>(otra pestana o aqui mismo)
+    react_router->>comprador: redirige de vuelta<br/>a '/account/returns'
 ```
 
 Antes de esta rama: el paso 8 (`dispatchEvent`) no existia y los

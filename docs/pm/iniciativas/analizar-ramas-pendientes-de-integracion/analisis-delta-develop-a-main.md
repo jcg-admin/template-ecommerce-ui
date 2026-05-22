@@ -91,34 +91,54 @@ Conteo de `<scope>` en `feat(<scope>): ...`:
 ## Estructura interna del delta (cronologia)
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 gantt
     title Cronologia del delta develop -> main
     dateFormat YYYY-MM-DD
     axisFormat %d-%m
 
     section main
-    Sprint 4 (UC-AUTH-12..15)                :milestone, m1, 2026-05-06, 0d
+    Sprint 4 (UC-AUTH-12..15)                :milestone, milestone_sprint_4, 2026-05-06, 0d
 
     section PR #1 (server)
     feat(server) Fase 0 build produccion     :2026-05-14, 1d
-    Merge PR #1                              :milestone, 2026-05-16, 0d
+    Merge PR #1                              :milestone, milestone_merge_pr_uno, 2026-05-16, 0d
 
     section PR #2 (proxy)
     112 commits de UCs y plumbing            :2026-05-19, 1d
-    Merge PR #2                              :milestone, 2026-05-19, 0d
+    Merge PR #2                              :milestone, milestone_merge_pr_dos, 2026-05-19, 0d
 
     section PR #3 (css fix)
     6 commits SCSS pipeline + docs           :2026-05-20, 1d
-    Merge PR #3                              :milestone, 2026-05-20, 0d
+    Merge PR #3                              :milestone, milestone_merge_pr_tres, 2026-05-20, 0d
 
     section PR #4 (css build)
     28 commits TASK-X.Y (Fases 1-6)          :2026-05-20, 1d
-    Merge PR #4                              :milestone, 2026-05-20, 0d
+    Merge PR #4                              :milestone, milestone_merge_pr_cuatro, 2026-05-20, 0d
 ```
 
 ## Distribucion fina dentro de los 149 commits
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 pie title Composicion del delta por categoria
     "feat(admin) y feat(dominio): 97" : 97
     "TASK-X.Y plan SCSS: 23" : 23
@@ -163,22 +183,40 @@ declarado obsoleto.
 ## Diagrama del delta en relacion al estado final
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    m["main<br/>HEAD historica"]
-    pr1["+1 commit:<br/>PR #1 server (Fase 0)"]
-    pr2["+115 commits:<br/>PR #2 proxy<br/>(86 UCs implementados)"]
-    pr3["+8 commits:<br/>PR #3 css fix<br/>(pipeline SCSS)"]
-    pr4["+30 commits:<br/>PR #4 css build<br/>(TASK 1.x a 6.x)"]
-    d["develop<br/>HEAD actual"]
+    rama_main_head_historica["<b>main</b><br/>HEAD historica"]
+    pr_uno_server_fase_cero["<b>+1 commit</b><br/>PR #1 server<br/><i>Fase 0</i>"]
+    pr_dos_proxy_ucs["<b>+115 commits</b><br/>PR #2 proxy<br/><i>86 UCs implementados</i>"]
+    pr_tres_css_fix_pipeline["<b>+8 commits</b><br/>PR #3 css fix<br/><i>pipeline SCSS</i>"]
+    pr_cuatro_css_build_tasks["<b>+30 commits</b><br/>PR #4 css build<br/><i>TASK 1.x a 6.x</i>"]
+    rama_develop_head_actual["<b>develop</b><br/>HEAD actual"]
+    resumen_delta_totales["Total: 149 commits<br/>386 archivos<br/>+37704 / -533 lineas"]
 
-    m --> pr1
-    pr1 --> pr2
-    pr2 --> pr3
-    pr3 --> pr4
-    pr4 --> d
+    rama_main_head_historica --> pr_uno_server_fase_cero
+    pr_uno_server_fase_cero --> pr_dos_proxy_ucs
+    pr_dos_proxy_ucs --> pr_tres_css_fix_pipeline
+    pr_tres_css_fix_pipeline --> pr_cuatro_css_build_tasks
+    pr_cuatro_css_build_tasks --> rama_develop_head_actual
+    rama_develop_head_actual -. "resumen" .-> resumen_delta_totales
 
-    note["Total: 149 commits<br/>386 archivos<br/>+37704 / -533 lineas"]
-    d -.-> note
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+    classDef doneNode fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+    classDef externalNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#cbd5e1,stroke-dasharray: 5 5
+
+    class rama_main_head_historica,rama_develop_head_actual primaryNode
+    class pr_uno_server_fase_cero,pr_dos_proxy_ucs,pr_tres_css_fix_pipeline,pr_cuatro_css_build_tasks secondaryNode
+    class resumen_delta_totales externalNode
 ```
 
 ## Riesgos asociados al delta no promovido

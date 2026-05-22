@@ -81,17 +81,33 @@ Los 14 archivos modificados encajan en tres categorias:
 ## Relacion con PR #2 y PR #4
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart LR
-    pr2["develop tras PR #2<br/>(=8d04a61)"]
-    pr3rama["release/integrate-ui-css-fix-20260519<br/>6 commits"]
-    pr3merge["develop tras PR #3<br/>(=32ce8fa)"]
-    pr4rama["claude/fix-npm-build-css-DBSPS<br/>28 commits"]
-    pr4merge["develop tras PR #4<br/>(=27640b2)"]
+    rama_develop_post_pr2["<b>develop</b> tras PR #2<br/><i>=8d04a61</i>"]
+    rama_release_integrate_ui_css["<b>release/integrate-ui-css-fix-20260519</b><br/><i>6 commits</i>"]
+    rama_develop_post_pr3["<b>develop</b> tras PR #3<br/><i>=32ce8fa</i>"]
+    rama_claude_fix_npm_build_css["<b>claude/fix-npm-build-css-DBSPS</b><br/><i>28 commits</i>"]
+    rama_develop_post_pr4["<b>develop</b> tras PR #4<br/><i>=27640b2</i>"]
 
-    pr2 --> pr3rama
-    pr3rama -->|"PR #3 merge"| pr3merge
-    pr3merge --> pr4rama
-    pr4rama -->|"PR #4 merge"| pr4merge
+    rama_develop_post_pr2 --> rama_release_integrate_ui_css
+    rama_release_integrate_ui_css -- "PR #3 merge" --> rama_develop_post_pr3
+    rama_develop_post_pr3 --> rama_claude_fix_npm_build_css
+    rama_claude_fix_npm_build_css -- "PR #4 merge" --> rama_develop_post_pr4
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+
+    class rama_develop_post_pr2,rama_develop_post_pr3,rama_develop_post_pr4 primaryNode
+    class rama_release_integrate_ui_css,rama_claude_fix_npm_build_css secondaryNode
 ```
 
 PR #3 introduce la **infraestructura** del pipeline. PR #4 la usa

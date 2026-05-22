@@ -38,6 +38,16 @@ momento del corte. De ellas:
 ## Topologia de ramas
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 gitGraph
     commit id: "main: Sprint 4 (UC-AUTH-12/13/14/15)"
     branch develop

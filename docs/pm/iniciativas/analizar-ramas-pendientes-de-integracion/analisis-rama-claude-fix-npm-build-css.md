@@ -157,23 +157,39 @@ formal aqui.
 ## Diagrama del flujo PR #3 -> PR #4
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 flowchart TB
-    pr3doc["PR #3 documenta el plan<br/>(scss-remediation-plan.md)"]
-    pr3code["PR #3 instala pipeline<br/>(stylelint, check-scss, pre-push)"]
-    pr4f1["PR #4 Fase 1<br/>(barrel + mixins media)"]
-    pr4f2["PR #4 Fase 2<br/>(palette + variantes + mixins)"]
-    pr4f3["PR #4 Fase 3<br/>(migrar hex drop-in)"]
-    pr4f4["PR #4 Fase 4<br/>(migrar por familia)"]
-    pr4f5["PR #4 Fase 5<br/>(limpieza estructural)"]
-    pr4f6["PR #4 Fase 6<br/>(activar guardrails)"]
+    pr_tres_documenta_plan["<b>PR #3</b> documenta el plan<br/><i>scss-remediation-plan.md</i>"]
+    pr_tres_instala_pipeline["<b>PR #3</b> instala pipeline<br/><i>stylelint, check-scss, pre-push</i>"]
+    pr_cuatro_fase_uno["<b>PR #4 Fase 1</b><br/><i>barrel + mixins media</i>"]
+    pr_cuatro_fase_dos["<b>PR #4 Fase 2</b><br/><i>palette + variantes + mixins</i>"]
+    pr_cuatro_fase_tres["<b>PR #4 Fase 3</b><br/><i>migrar hex drop-in</i>"]
+    pr_cuatro_fase_cuatro["<b>PR #4 Fase 4</b><br/><i>migrar por familia</i>"]
+    pr_cuatro_fase_cinco["<b>PR #4 Fase 5</b><br/><i>limpieza estructural</i>"]
+    pr_cuatro_fase_seis["<b>PR #4 Fase 6</b><br/><i>activar guardrails</i>"]
 
-    pr3doc --> pr3code
-    pr3code --> pr4f1
-    pr4f1 --> pr4f2
-    pr4f2 --> pr4f3
-    pr4f3 --> pr4f4
-    pr4f4 --> pr4f5
-    pr4f5 --> pr4f6
+    pr_tres_documenta_plan --> pr_tres_instala_pipeline
+    pr_tres_instala_pipeline --> pr_cuatro_fase_uno
+    pr_cuatro_fase_uno --> pr_cuatro_fase_dos
+    pr_cuatro_fase_dos --> pr_cuatro_fase_tres
+    pr_cuatro_fase_tres --> pr_cuatro_fase_cuatro
+    pr_cuatro_fase_cuatro --> pr_cuatro_fase_cinco
+    pr_cuatro_fase_cinco --> pr_cuatro_fase_seis
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef secondaryNode fill:#334155,stroke:#94a3b8,stroke-width:1px,color:#f1f5f9
+
+    class pr_tres_documenta_plan,pr_tres_instala_pipeline primaryNode
+    class pr_cuatro_fase_uno,pr_cuatro_fase_dos,pr_cuatro_fase_tres,pr_cuatro_fase_cuatro,pr_cuatro_fase_cinco,pr_cuatro_fase_seis secondaryNode
 ```
 
 ## Decisiones pendientes asociadas

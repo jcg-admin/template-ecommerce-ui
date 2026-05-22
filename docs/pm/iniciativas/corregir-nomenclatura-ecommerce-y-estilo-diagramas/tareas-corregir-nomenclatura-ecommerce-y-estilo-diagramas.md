@@ -50,9 +50,9 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-501 | Aplicar plantilla completa (init theme + 5 classDef + class + identificadores snake_case) a los 13 flowchart/graph | 35 min | Pendiente | 13 diagramas actualizados |
-| T-502 | Aplicar solo bloque init a 6 no-flowchart (3 sequenceDiagram + 1 gantt + 1 pie + 1 gitGraph). Expandir alias cortos en sequenceDiagram. | 20 min | Pendiente | 6 diagramas actualizados |
-| T-503 | Commit unitario en UI con subject <=50 chars | 5 min | Pendiente | 1 commit |
+| T-501 | (ver progreso) | -- | **Cerrada** | 13 diagramas actualizados |
+| T-502 | (ver progreso) | -- | **Cerrada** | 6 diagramas actualizados |
+| T-503 | (ver progreso) | -- | **Cerrada** | 1 commit |
 
 ## F6 - Verificacion (30 min)
 

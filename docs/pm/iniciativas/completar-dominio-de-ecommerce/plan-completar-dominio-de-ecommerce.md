@@ -20,16 +20,41 @@ Las decisiones de proceso del alcance se aplican aqui:
 ## DAG de fases
 
 ```mermaid
+%%{init: {'theme':'base', 'themeVariables': {
+  'background': '#0f172a',
+  'primaryColor': '#1e293b',
+  'primaryTextColor': '#f1f5f9',
+  'primaryBorderColor': '#94a3b8',
+  'lineColor': '#cbd5e1',
+  'secondaryColor': '#334155',
+  'tertiaryColor': '#1e3a8a',
+  'fontSize': '13px'
+}}}%%
 graph TD
-    F0[Fase 0: ADRs si las hay] --> F1
-    F1[Fase 1: User extendido] --> F2
-    F2[Fase 2: Address tipado] --> F3
-    F3[Fase 3: ProductImage + Product divergence cleanup] --> F4
-    F4[Fase 4: ProductVariant tipado] --> F5
-    F5[Fase 5: Review tipado] --> F6
-    F6[Fase 6: Aliases auth legacy eliminados] --> F7
-    F7[Fase 7: fetch directo unificado a apiService] --> F8
-    F8[Fase 8: Documentacion arc42 + cierre]
+    fase_f0_adrs["<b>Fase 0</b><br/>ADRs si las hay"]
+    fase_f1_user_extendido["<b>Fase 1</b><br/>User extendido"]
+    fase_f2_address_tipado["<b>Fase 2</b><br/>Address tipado"]
+    fase_f3_productimage_cleanup["<b>Fase 3</b><br/>ProductImage + Product<br/>divergence cleanup"]
+    fase_f4_productvariant_tipado["<b>Fase 4</b><br/>ProductVariant tipado"]
+    fase_f5_review_tipado["<b>Fase 5</b><br/>Review tipado"]
+    fase_f6_aliases_auth_eliminados["<b>Fase 6</b><br/>Aliases auth legacy<br/>eliminados"]
+    fase_f7_fetch_unificado["<b>Fase 7</b><br/>fetch directo<br/>unificado a apiService"]
+    fase_f8_docs_arc42_cierre["<b>Fase 8</b><br/>Documentacion arc42<br/>+ cierre"]
+
+    fase_f0_adrs --> fase_f1_user_extendido
+    fase_f1_user_extendido --> fase_f2_address_tipado
+    fase_f2_address_tipado --> fase_f3_productimage_cleanup
+    fase_f3_productimage_cleanup --> fase_f4_productvariant_tipado
+    fase_f4_productvariant_tipado --> fase_f5_review_tipado
+    fase_f5_review_tipado --> fase_f6_aliases_auth_eliminados
+    fase_f6_aliases_auth_eliminados --> fase_f7_fetch_unificado
+    fase_f7_fetch_unificado --> fase_f8_docs_arc42_cierre
+
+    classDef primaryNode fill:#1e293b,stroke:#60a5fa,stroke-width:2px,color:#f1f5f9
+    classDef doneNode fill:#14532d,stroke:#4ade80,stroke-width:2px,color:#f0fdf4
+
+    class fase_f0_adrs,fase_f1_user_extendido,fase_f2_address_tipado,fase_f3_productimage_cleanup,fase_f4_productvariant_tipado,fase_f5_review_tipado,fase_f6_aliases_auth_eliminados,fase_f7_fetch_unificado primaryNode
+    class fase_f8_docs_arc42_cierre doneNode
 ```
 
 Fase 0 es la verificacion del paso 2 del procedimiento (ADRs previas)
