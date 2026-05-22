@@ -5,10 +5,10 @@
 | Artefacto | INI-UI-009 |
 | Tipo | Iniciativa de project management |
 | Submodulo | ui (template) + server (template-ecommerce-server) |
-| Estado | **En ejecucion** |
+| Estado | **Cerrada** |
 | Version | 1.0.0 |
 | Fecha de creacion | 2026-05-22 |
-| Fecha de cierre | (en curso) |
+| Fecha de cierre | 2026-05-22 |
 | Autor | NestorMonroy |
 | Clasificacion | Interno |
 | Procedimiento de gestion | PROC-GESTION-001 v4.0.0 + arc42 |
@@ -43,16 +43,16 @@ identificadores `snake_case` descriptivos (no alias cortos), y
 
 | Entregable | Estado al cierre |
 |-----------|------------------|
-| Inventario de las 12 variantes `comerce` detectadas y su clasificacion | A producir en F0 |
-| Decisiones aprobadas (D-NOMBRE-UI, D-NOMBRE-SERVER, D-NOMBRE-HERMANOS, D-REFERENTE-EXTERNO, D-PROCEDIMIENTO-EXTERNO, D-MERMAID-CONVENCION, D-COMMITS-HISTORIA) | A aprobar en F0 |
-| Plan de ejecucion en 7 fases con tareas atomicas | A producir en F0 |
-| Backup defensivo de ambos repos | A producir en F1 |
-| Repo server renombrado: directorio + remote + contenido interno | A producir en F2 |
-| Repo UI con refs a si mismo corregidas (package.json, README, docs, comentarios) | A producir en F3 |
-| Repo UI con refs cross-repo corregidas (server, api, db, doc) | A producir en F4 |
-| 19 diagramas Mermaid con estilo dark canonico | A producir en F5 |
-| Verificacion: lint, tests, build, tests del server | A producir en F6 |
-| Cierre formal: backup post-cambios + indice de iniciativas actualizado | A producir en F7 |
+| Inventario de las 12 variantes `comerce` detectadas y su clasificacion | Producido en `analisis-*.md` |
+| Decisiones aprobadas | Aprobadas en F0/T-002 (ver index seccion Decisiones). |
+| Plan de ejecucion en 7 fases con tareas atomicas | Producido en `plan-*.md`, 32 tareas. |
+| Backup defensivo de ambos repos | Producido en F1: PRE-NOMENCLATURA-20260522-035912 (UI 57M + server 985K). |
+| Repo server renombrado: directorio + remote + contenido interno | Producido en F2: commit `fd5fda8` (server) + `91f761a` (UI). 28 archivos del server actualizados. |
+| Repo UI con refs a si mismo corregidas | Producido en F3: commits `54cde6f` + `7bfb19c`. 252 archivos modificados. |
+| Repo UI con refs cross-repo corregidas | Producido en F4: commits `fceb503` + `9b42bcb`. 16 archivos modificados. |
+| 19 diagramas Mermaid con estilo dark canonico | Producido en F5: commits `58e2ea1` + `7e14622`. 15 archivos con diagramas actualizados. |
+| Verificacion: lint, tests, build, tests del server | Producido en F6: commit `3277212`. T-601 SKIP (ESLint debt preexistente), T-602/T-603/T-604 PASS. Cero regresiones. |
+| Cierre formal: backup post-cambios + indice de iniciativas actualizado | Producido en F7. Backup POST-NOMENCLATURA-20260522-043123 generado. Indice actualizado. |
 
 ## Indice de documentos
 

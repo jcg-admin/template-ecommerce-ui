@@ -68,9 +68,9 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-701 | Backup post-cambios de UI + server en `/tmp/backups/` con prefijo `POST-NOMENCLATURA-` | 7 min | Pendiente | 2 tarballs + manifests + .md5 |
-| T-702 | Actualizar `docs/pm/iniciativas/indice-de-iniciativas.md` con esta iniciativa marcada como cerrada | 5 min | Pendiente | Indice actualizado |
-| T-703 | Commit final de cierre con subject <=50 chars | 3 min | Pendiente | 1 commit |
+| T-701 | (ver progreso) | -- | **Cerrada** | 2 tarballs + manifests + .md5 |
+| T-702 | (ver progreso) | -- | **Cerrada** | Indice actualizado |
+| T-703 | (ver progreso) | -- | **Cerrada** | 1 commit |
 
 ## Resumen
 
