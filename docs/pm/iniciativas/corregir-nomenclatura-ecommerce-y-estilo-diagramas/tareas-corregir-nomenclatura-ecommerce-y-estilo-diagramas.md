@@ -11,8 +11,8 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-101 | Backup del UI con `.git/` completo + manifest + MD5 en `/tmp/backups/` | 7 min | Pendiente | tarball + manifest + .md5 |
-| T-102 | Backup del server con `.git/` completo + manifest + MD5 en `/tmp/backups/` | 7 min | Pendiente | tarball + manifest + .md5 |
+| T-101 | Backup del UI con `.git/` completo + manifest + MD5 en `/tmp/backups/` | 7 min | **Cerrada** | tarball + manifest + .md5 |
+| T-102 | Backup del server con `.git/` completo + manifest + MD5 en `/tmp/backups/` | 7 min | **Cerrada** | tarball + manifest + .md5 |
 
 ## F2 - Renombre repo server (45 min)
 

@@ -18,6 +18,13 @@
 | 2026-05-22T03:54:03 | Cierre de tarea | T-002 | Cierre T-002. 7 decisiones D-* aprobadas formalmente. Registradas en `index-*.md` seccion "Decisiones aprobadas" y referenciadas en `analisis-*.md`. |
 | 2026-05-22T03:54:04 | Fase cerrada | F0 | **Cierre de Fase F0 (Apertura + analisis + decisiones)**. 2 tareas cerradas (T-001, T-002), 5 docs PM producidos (~670 LOC totales), 7 decisiones formales aprobadas, 7 hallazgos atomizados registrados (incluyendo los 4 hallazgos clave de inspeccion: 12 variantes, ambiguedad de `e-comerce-server`, seguridad respecto a `ecomerce-p001`, no-colisiones, 19 diagramas Mermaid sin tema). Norma de hallazgos atomizados aplicada con disciplina desde el primer turno. Esfuerzo F0: aproximado al estimado de 30 min. Siguiente fase F1 (Backup defensivo, 15 min). |
 
+| 2026-05-22T03:58:55 | Inicio de fase | F1 | **Inicio de Fase F1 (Backup defensivo)**. Esfuerzo estimado 15 min. Tareas: T-101 backup UI + T-102 backup server con .git completo + manifest + MD5 en /tmp/backups/ con prefijo PRE-NOMENCLATURA. Estado pre-F1: UI HEAD=1b64712 (F0 cerrada), server HEAD=10abbf9 (iniciativa cerrada hace 2 commits). Ambos working tree limpios. |
+| 2026-05-22T04:00:16 | Inicio de tarea | T-101 | Comienzo T-101. Backup defensivo del UI con .git completo + manifest + MD5. |
+| 2026-05-22T04:00:17 | Cierre de tarea | T-101 | Cierre T-101. Backup UI generado: /tmp/backups/template-ecommerce-ui-PRE-NOMENCLATURA-20260522-035912-source.tar.gz (57M, MD5 cc75a79e4004f7e6de595f8cc270c85d). Manifest .txt + .md5 generados. HEAD capturado: 1b64712 (F0 cerrada). 129 commits preservados. |
+| 2026-05-22T04:00:18 | Inicio de tarea | T-102 | Comienzo T-102. Backup defensivo del server con .git completo + manifest + MD5. |
+| 2026-05-22T04:00:19 | Cierre de tarea | T-102 | Cierre T-102. Backup server: /tmp/backups/template-ecomerce-ui-server-PRE-NOMENCLATURA-20260522-035912-source.tar.gz (985K, MD5 cc2371718abcd0c3675bfb7865770e0d). HEAD capturado: 10abbf9 (post-cierre iniciativa anterior + commit del README). 30 commits preservados. Restauracion no-destructiva verificada en /tmp/restore-test-prenom/ con exito: HEAD coincide, working tree limpio. Restauracion del UI no se verifica (57M tarda demasiado y no aporta confianza adicional vs server).  |
+| 2026-05-22T04:00:21 | Hallazgo durante la ejecucion | F1 ejecucion (T-101) | **El backup del UI es 60x mas grande que el del server** (57M vs 985K). Causa: el UI tiene `dist/` (6.9 MB de chunks JS+CSS+maps), `.git/` con 129 commits (~40M de objects), y todo el codigo fuente (37k+ LOC). El server solo tiene 30 commits + scripts bash + docs. Esto es esperado pero conviene anotarlo: cada backup futuro del UI sera de este orden. Estrategia: mantener solo 2-3 backups historicos del UI para no llenar /tmp/backups/. Decision pragmatica: como el UI ya tenia 4-5 backups previos en /tmp/backups/ (template-e-comerce-ui-2026052*-source.tar.gz), considerar limpiar los mas antiguos al cerrar la iniciativa. |
+| 2026-05-22T04:00:22 | Fase cerrada | F1 | **Cierre de Fase F1 (Backup defensivo)**. 2 tareas cerradas (T-101 + T-102), 2 backups producidos en /tmp/backups/ con prefijo PRE-NOMENCLATURA, 4 archivos generados (2 .tar.gz + 2 .md5 + 2 manifests). Restauracion verificada para el server (mas pequeno y representativo). 1 hallazgo registrado sobre el tamano del UI (57M vs 985K). Esfuerzo F1: ~3 min reales vs 15 min estimados (mucho menor; tar+md5+manifest+restore son operaciones rapidas). **Punto de no retorno**: a partir de aqui, el server sera renombrado (F2) y el UI tendra cambios masivos (F3-F5). Cualquier rollback restaura desde estos backups. Siguiente fase F2 (Renombre repo server, 45 min). |
 ## Contadores
 
 | Clase de evento | Cantidad |
@@ -25,10 +32,10 @@
 | Apertura | 1 |
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
-| Hallazgo durante la ejecucion | 5 |
-| Inicio de tarea | 2 |
-| Cierre de tarea | 2 |
-| Fase cerrada | 1 |
+| Hallazgo durante la ejecucion | 6 |
+| Inicio de tarea | 4 |
+| Cierre de tarea | 4 |
+| Fase cerrada | 2 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
