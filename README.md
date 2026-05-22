@@ -129,8 +129,8 @@ operativas (pipeline SCSS, adopción).
 
 ## Relación con el backend
 
-Este proyecto consume la API REST de `e-comerce-api` (Django 5 + DRF).
-Ver la documentación completa de UCs y endpoints en `e-comerce-doc`.
+Este proyecto consume la API REST de `ecommerce-api` (Django 5 + DRF).
+Ver la documentación completa de UCs y endpoints en `ecommerce-doc`.
 
 Los tokens JWT los maneja el backend en **httpOnly cookies** — nunca
 se almacenan en Redux ni en localStorage.

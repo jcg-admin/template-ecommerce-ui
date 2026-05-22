@@ -18,11 +18,11 @@ Variantes detectadas (12 en el UI):
 |---------------|----------|---------------|
 | `template-ecommerce-ui` | `template-ecommerce-ui` | refs a si mismo |
 | `ecommerce-ui` | `ecommerce-ui` | paquete npm + comentarios + docs |
-| `e-comerce-api` | `ecommerce-api` | refs hermano backend |
-| `e-comerce-db` | `ecommerce-db` | refs hermano DB |
-| `e-comerce-doc` | `ecommerce-doc` | refs hermano docs |
+| `ecommerce-api` | `ecommerce-api` | refs hermano backend |
+| `ecommerce-db` | `ecommerce-db` | refs hermano DB |
+| `ecommerce-doc` | `ecommerce-doc` | refs hermano docs |
 | `e-comerce-server` (mencion hermano) | `ecommerce-server` | refs hermano server |
-| `template-ecommerce-ui-server` | `template-ecommerce-server` | refs hermano server (variante larga) |
+| `template-ecommerce-server` | `template-ecommerce-server` | refs hermano server (variante larga) |
 | `template-ecomerce-ui-server` (una `m`, nombre actual del directorio server) | `template-ecommerce-server` | refs hermano server |
 | `e-comerce` huerfano | `ecommerce` | docs PM "como gestionar iniciativas" |
 
@@ -70,9 +70,9 @@ La iniciativa se cierra cuando:
 2. **Remote del server** configurado:
    `https://github.com/jcg-admin/template-ecommerce-server.git`.
 3. **Cero apariciones** en ambos repos de los strings:
-   - `ecommerce-ui`, `e-comerce-api`, `e-comerce-db`, `e-comerce-doc`
+   - `ecommerce-ui`, `ecommerce-api`, `ecommerce-db`, `ecommerce-doc`
    - `template-ecommerce-ui`, `template-ecomerce-ui-server`,
-     `template-ecommerce-ui-server`
+     `template-ecommerce-server`
    - `e-comerce` huerfano
 
    **Excluyendo**:

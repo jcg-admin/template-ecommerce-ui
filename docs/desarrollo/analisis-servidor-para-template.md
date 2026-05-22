@@ -17,7 +17,7 @@ funcion: dejar un Ubuntu listo para servir una arquitectura
 **3-tier**: server (Apache) + api (Django) + ui (React).
 
 Nuestro template `ecommerce-ui` es **solo el UI** (parte 3). La
-propuesta es **crear un proyecto hermano** (`template-ecomerce-ui-server`)
+propuesta es **crear un proyecto hermano** (`template-ecommerce-server`)
 inspirado en el referente pero adaptado a:
 
 - **No incluir API en su scope**: el server diseñamos NO asume
@@ -87,7 +87,7 @@ e-comerce-server/                 22 archivos, 572 KB
       |      WSGI daemon       |
       v       v                v
    filesystem  Django App      Django catch-all -> serve_spa -> UI_DIST/index.html
-   directo    (e-comerce-api)
+   directo    (ecommerce-api)
               .venv + wsgi.py
 ```
 
@@ -234,7 +234,7 @@ Razones:
                     |  HTTPS :443 (Let's Encrypt acme.sh)
                     v
             +-------------------+
-            |     Nginx         |  ← template-ecomerce-ui-server
+            |     Nginx         |  ← template-ecommerce-server
             +-------------------+
                     |
             +-------+-------+
@@ -382,7 +382,7 @@ Nginx corre como `www-data` (default Ubuntu), igual lectura
 
 ## Comparación lado a lado: referente vs propuesta
 
-| Aspecto | `e-comerce-server` (referente) | `template-ecomerce-ui-server` (propuesto) |
+| Aspecto | `e-comerce-server` (referente) | `template-ecommerce-server` (propuesto) |
 |---------|--------------------------------|-----------------------------------------|
 | Web server | Apache 2.4 | **Nginx 1.24+** |
 | WSGI propio | mod_wsgi | **N/A** (no servimos backend) |
@@ -400,7 +400,7 @@ Nginx corre como `www-data` (default Ubuntu), igual lectura
 | Total archivos | 22 | ~20 estimados |
 | LOC bash | ~3500 | ~2800 estimados (sin lógica Django) |
 
-## Plan de creación del proyecto `template-ecomerce-ui-server`
+## Plan de creación del proyecto `template-ecommerce-server`
 
 Si decides ejecutar, esta es la propuesta de **iniciativa formal**:
 
@@ -410,7 +410,7 @@ Si decides ejecutar, esta es la propuesta de **iniciativa formal**:
   `crear-template-server` o
   `disenar-infraestructura-template-server`.
 - Como **proyecto hermano**: el repo nuevo sería
-  `template-ecomerce-ui-server`.
+  `template-ecommerce-server`.
 
 ### Estructura por fases (propuesta)
 
@@ -418,7 +418,7 @@ Si decides ejecutar, esta es la propuesta de **iniciativa formal**:
 |------|--------|-------------------|
 | **F0 Apertura** | Abrir iniciativa, alcance, plan, tareas | 60 min |
 | **F0a Análisis adicional** | Verificar referente, decidir Nginx oficialmente | 30 min |
-| **F1 Estructura del repo** | Crear `template-ecomerce-ui-server` con árbol vacío | 30 min |
+| **F1 Estructura del repo** | Crear `template-ecommerce-server` con árbol vacío | 30 min |
 | **F2 Utils + .env** | Portar `utils/core.sh`, `logging.sh`, `network.sh`, `validation.sh` de e-comerce-server. Diseñar `.env.example` propio. | 90 min |
 | **F3 Configuración Nginx** | `config/nginx/template-https.conf`, `template-http.conf` (redirect + ACME), con placeholders `%%VAR%%` | 60 min |
 | **F4 Provisioners Nginx** | `provisioners/nginx/install.sh` (apt nginx), `setup_vhost.sh` (reemplaza placeholders) | 120 min |
@@ -439,7 +439,7 @@ Si decides ejecutar, esta es la propuesta de **iniciativa formal**:
 | Modelo cuentas: 4 o 5 | **4** (sin svc-dbdata) |
 | Clases almacenamiento: 2 o 3 | **2** (sin clase C) |
 | Procedimiento WSL2 simulando prod | **Igual al referente** (reusable) |
-| Dónde vive el repo | Sugerencia: GitHub `jcg-admin/template-ecomerce-ui-server` |
+| Dónde vive el repo | Sugerencia: GitHub `jcg-admin/template-ecommerce-server` |
 | Modo de creación | **Sub-iniciativa con su propio repo y procedimiento PROC-GESTION-001** |
 | Pausa de iniciativa SCSS | **Sí**, registrarla formalmente |
 
@@ -461,7 +461,7 @@ Para que la propuesta sea honesta sobre su alcance:
 - **No verifiqué que `npm run build` del template produce un `dist/` consumible por Nginx tal como propongo**. Hay que validarlo antes de F11.
 - **No diseñé los 10 checks específicos de `verify.sh`** (lista exhaustiva). Eso llegaría en F8.
 - **No diseñé los tests bash adaptados** (5 archivos del referente). Eso llegaría en F9.
-- **No verifiqué disponibilidad del nombre de repo** `template-ecomerce-ui-server` en GitHub.
+- **No verifiqué disponibilidad del nombre de repo** `template-ecommerce-server` en GitHub.
 
 ## Que sigue
 
@@ -474,8 +474,8 @@ Para que la propuesta sea honesta sobre su alcance:
 3. **Abrir iniciativa formal** `disenar-infraestructura-template-server`
    en el template UI (o donde decidas).
 4. **Decidir donde vive el repo del server**:
-   `/tmp/project/template-ecomerce-ui-server/` local + crear repo
-   GitHub `jcg-admin/template-ecomerce-ui-server`.
+   `/tmp/project/template-ecommerce-server/` local + crear repo
+   GitHub `jcg-admin/template-ecommerce-server`.
 5. **Ejecutar F0..F11** según el plan.
 
 **Si solo quieres tenerlo documentado por ahora**:

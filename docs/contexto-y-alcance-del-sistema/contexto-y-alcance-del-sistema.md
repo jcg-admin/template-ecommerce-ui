@@ -75,8 +75,8 @@ flowchart LR
 
 | Dentro del repo | Fuera del repo |
 |-----------------|----------------|
-| Codigo fuente React/Redux/SCSS | Codigo backend (`e-comerce-api`) |
-| Configuracion Webpack/Babel/Jest | Configuracion Apache, fail2ban, acme.sh (`e-comerce-server`) |
+| Codigo fuente React/Redux/SCSS | Codigo backend (`ecommerce-api`) |
+| Configuracion Webpack/Babel/Jest | Configuracion Apache, fail2ban, acme.sh (`ecommerce-server`) |
 | Hooks de cliente (husky) | Esquemas de BD MariaDB |
 | Mocks locales para desarrollo | Cuentas reales en MercadoPago/PayPal |
 | Provisioner de Node para el host de build (`scripts/install.sh`) | Aprovisionamiento del servidor de produccion |

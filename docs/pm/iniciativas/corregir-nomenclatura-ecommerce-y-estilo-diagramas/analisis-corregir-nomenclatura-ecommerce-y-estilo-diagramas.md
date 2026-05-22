@@ -6,13 +6,13 @@
 
 | # | Variante | Archivos | Lineas | Ejemplo de contexto | Accion |
 |---|----------|----------|--------|---------------------|--------|
-| 1 | `template-ecommerce-ui-server` | 3 | 4 | "proyecto hermano `template-ecommerce-ui-server`" | **Cambiar a `template-ecommerce-server`** |
+| 1 | `template-ecommerce-server` | 3 | 4 | "proyecto hermano `template-ecommerce-server`" | **Cambiar a `template-ecommerce-server`** |
 | 2 | `template-ecommerce-ui` | 11 | 25 | URLs GitHub, refs a si mismo | **Cambiar a `template-ecommerce-ui`** |
 | 3 | `ecommerce-ui-server` | 3 | 4 | menciones al server | **Cambiar a `template-ecommerce-server`** (la forma corta es ambigua; expandirla al nombre nuevo) |
 | 4 | `ecommerce-ui` | 249 | 296 | paquete npm, comentarios JSDoc, README, docs | **Cambiar a `ecommerce-ui`** |
-| 5 | `e-comerce-api` | 7 | 10 | refs hermano backend | **Cambiar a `ecommerce-api`** |
-| 6 | `e-comerce-db` | 2 | 3 | refs hermano DB | **Cambiar a `ecommerce-db`** |
-| 7 | `e-comerce-doc` | 6 | 11 | refs hermano docs | **Cambiar a `ecommerce-doc`** |
+| 5 | `ecommerce-api` | 7 | 10 | refs hermano backend | **Cambiar a `ecommerce-api`** |
+| 6 | `ecommerce-db` | 2 | 3 | refs hermano DB | **Cambiar a `ecommerce-db`** |
+| 7 | `ecommerce-doc` | 6 | 11 | refs hermano docs | **Cambiar a `ecommerce-doc`** |
 | 8 | `e-comerce-server` | 10 | 22 | 50% referente externo / 50% hermano | **CASO POR CASO**: referente externo NO se toca; hermano se cambia a `ecommerce-server` |
 
 ### Referencias que NO se tocan
@@ -50,13 +50,13 @@ strings distintos. Verificado: ninguna combinacion produce
 **Patron de busqueda seguro**: usar el patron mas largo primero
 para evitar reemplazos parciales:
 
-1. `template-ecommerce-ui-server` -> `template-ecommerce-server`
+1. `template-ecommerce-server` -> `template-ecommerce-server`
 2. `template-ecommerce-ui` -> `template-ecommerce-ui`
 3. `ecommerce-ui-server` -> `template-ecommerce-server`
 4. `ecommerce-ui` -> `ecommerce-ui`
-5. `e-comerce-api` -> `ecommerce-api`
-6. `e-comerce-db` -> `ecommerce-db`
-7. `e-comerce-doc` -> `ecommerce-doc`
+5. `ecommerce-api` -> `ecommerce-api`
+6. `ecommerce-db` -> `ecommerce-db`
+7. `ecommerce-doc` -> `ecommerce-doc`
 8. `e-comerce-server` -> CASO POR CASO (no automatizable, requiere
    inspeccion linea por linea para distinguir referente externo de
    hermano)

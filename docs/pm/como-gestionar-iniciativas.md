@@ -7,7 +7,7 @@ una Nueva Iniciativa en source/gestion/pm/") adaptado al stack
 markdown local.
 
 > Este repositorio es el submodulo `ui` del monorepo conceptual
-> `e-comerce`. Por convencion del procedimiento, las iniciativas de
+> `ecommerce`. Por convencion del procedimiento, las iniciativas de
 > trabajo sobre el codigo React + Redux + Webpack viven aqui.
 
 ## Estructura

@@ -42,14 +42,14 @@ iniciativa pasa a otro estado, la celda se vacia.
 
 Algunos commits del repo hacen referencia a iniciativas que **no
 viven en este repo de UI** porque son del monorepo conceptual
-`e-comerce` que tiene su gestion en otro repositorio (`e-comerce-doc`
+`ecommerce` que tiene su gestion en otro repositorio (`ecommerce-doc`
 con Sphinx). Se listan para trazabilidad:
 
 | Iniciativa referenciada | Donde vive | Por que se referencia desde commits del UI |
 |-------------------------|------------|--------------------------------------------|
-| `eliminar-lazy-imports-ui` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina los commits `46acc7d`, `09fa1bd` de la rama pendiente. |
-| `provisionar-nodejs-ui-develop` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `04e526b` (provisioner). |
-| `corregir-carga-env-webpack-config` | `e-comerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `c9c3465` (fix del callback de webpack). |
+| `eliminar-lazy-imports-ui` | `ecommerce-doc/source/gestion/pm/ui/iniciativas/` | Origina los commits `46acc7d`, `09fa1bd` de la rama pendiente. |
+| `provisionar-nodejs-ui-develop` | `ecommerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `04e526b` (provisioner). |
+| `corregir-carga-env-webpack-config` | `ecommerce-doc/source/gestion/pm/ui/iniciativas/` | Origina el commit `c9c3465` (fix del callback de webpack). |
 
 La razon por la que estas iniciativas no se replican aqui: el
 procedimiento PROC-GESTION-001 declara cinco submodulos (`api`,

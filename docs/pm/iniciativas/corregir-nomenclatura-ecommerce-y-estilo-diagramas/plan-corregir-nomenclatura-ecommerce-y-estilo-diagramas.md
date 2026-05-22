@@ -78,7 +78,7 @@ al UI nuevo.
 | T-301 | Actualizar `package.json` y `package-lock.json` (`name: ecommerce-ui`, `description`) | 5 min |
 | T-302 | sed batch sobre 249 archivos: `ecommerce-ui` -> `ecommerce-ui`. Excluir: `node_modules/`, `.git/`, `.cache/`, `dist/`, `package-lock.json` (ya hecho en T-301), bitacoras `progreso-*.md` de iniciativas cerradas/pausadas | 20 min |
 | T-303 | sed batch para `template-ecommerce-ui` -> `template-ecommerce-ui` | 10 min |
-| T-304 | Verificar manualmente las 11 lineas de la variante larga `template-ecommerce-ui-server` (puede ser ambigua por la palabra `server`) | 10 min |
+| T-304 | Verificar manualmente las 11 lineas de la variante larga `template-ecommerce-server` (puede ser ambigua por la palabra `server`) | 10 min |
 | T-305 | Verificar que cero `ecommerce-ui` huerfanos quedan en docs editables | 5 min |
 | T-306 | Commit unitario en UI con subject <=50 | 10 min |
 
@@ -89,9 +89,9 @@ limpio.
 
 | Tarea | Descripcion | Esfuerzo |
 |-------|-------------|----------|
-| T-401 | sed batch: `e-comerce-api` -> `ecommerce-api` | 3 min |
-| T-402 | sed batch: `e-comerce-db` -> `ecommerce-db` | 3 min |
-| T-403 | sed batch: `e-comerce-doc` -> `ecommerce-doc` | 3 min |
+| T-401 | sed batch: `ecommerce-api` -> `ecommerce-api` | 3 min |
+| T-402 | sed batch: `ecommerce-db` -> `ecommerce-db` | 3 min |
+| T-403 | sed batch: `ecommerce-doc` -> `ecommerce-doc` | 3 min |
 | T-404 | CASO POR CASO: `e-comerce-server`. Grep linea por linea, distinguir referente externo (`jcg-admin/e-comerce-server`) de hermano (`ecommerce-server`). Aplicar cambio solo en hermano. | 15 min |
 | T-405 | sed para huerfanos `e-comerce` (forma corta sin `-suffix`). Excluir las menciones a referente externo y procedimiento p001. | 3 min |
 | T-406 | Commit unitario en UI con subject <=50 | 3 min |

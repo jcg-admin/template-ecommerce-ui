@@ -7,8 +7,8 @@ esta documentacion y en el codigo. En orden alfabetico.
 
 **Caso de uso (UC).** Unidad de funcionalidad identificada por
 `UC-<dominio>-<numero>` (por ejemplo `UC-AUTH-16`). Los IDs se
-comparten entre este repo, el backend (`e-comerce-api`) y la
-documentacion central (`e-comerce-doc`). Cada UC aparece en
+comparten entre este repo, el backend (`ecommerce-api`) y la
+documentacion central (`ecommerce-doc`). Cada UC aparece en
 mensajes de commit y en comentarios JSDoc al inicio de paginas.
 
 **Comprador.** Usuario final del e-commerce, autenticado o invitado
@@ -109,8 +109,8 @@ completo + check-scss).
 
 | Termino | Tipo | Donde se documenta |
 |---------|------|--------------------|
-| e-comerce-api | Repo separado | Backend Django 5 + DRF |
-| e-comerce-server | Repo separado | Provisioner del servidor Ubuntu + Apache |
-| e-comerce-doc | Repo separado | Catalogo central de UCs y modelos |
+| ecommerce-api | Repo separado | Backend Django 5 + DRF |
+| ecommerce-server | Repo separado | Provisioner del servidor Ubuntu + Apache |
+| ecommerce-doc | Repo separado | Catalogo central de UCs y modelos |
 | PROC-GESTION-001 | Procedimiento normativo | Como crear y gestionar iniciativas en `pm/` |
 | arc42 | Plantilla | Estructura general de la documentacion de arquitectura |

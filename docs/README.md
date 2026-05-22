@@ -43,7 +43,7 @@ modulo de project management (`pm/`) que sigue el procedimiento interno
 | Cajon descartado | Razon |
 |------------------|-------|
 | Requisitos de calidad (NFRs) | El repo no tiene ANS/SLO declarados ni metricas de calidad medibles que documentar honestamente. Cuando existan se anadira como cajon propio. |
-| Vista de tiempo de ejecucion | Los flujos en tiempo de ejecucion estan cubiertos por los casos de uso (UC-*) del repo backend `e-comerce-doc`. Duplicar aqui produce ruido. Si un flujo del UI no esta cubierto por un UC, se documenta puntual en `conceptos-transversales/`. |
+| Vista de tiempo de ejecucion | Los flujos en tiempo de ejecucion estan cubiertos por los casos de uso (UC-*) del repo backend `ecommerce-doc`. Duplicar aqui produce ruido. Si un flujo del UI no esta cubierto por un UC, se documenta puntual en `conceptos-transversales/`. |
 
 ## Convenciones de esta documentacion
 

@@ -39,9 +39,9 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-401 | sed: `e-comerce-api` -> `ecommerce-api` | 3 min | Pendiente | ~7 archivos modificados |
-| T-402 | sed: `e-comerce-db` -> `ecommerce-db` | 3 min | Pendiente | ~2 archivos modificados |
-| T-403 | sed: `e-comerce-doc` -> `ecommerce-doc` | 3 min | Pendiente | ~6 archivos modificados |
+| T-401 | sed: `ecommerce-api` -> `ecommerce-api` | 3 min | Pendiente | ~7 archivos modificados |
+| T-402 | sed: `ecommerce-db` -> `ecommerce-db` | 3 min | Pendiente | ~2 archivos modificados |
+| T-403 | sed: `ecommerce-doc` -> `ecommerce-doc` | 3 min | Pendiente | ~6 archivos modificados |
 | T-404 | CASO POR CASO `e-comerce-server`: distinguir referente externo (NO tocar) vs hermano (cambiar a `ecommerce-server`) | 15 min | Pendiente | Inspeccion linea a linea + cambios selectivos |
 | T-405 | sed: `e-comerce` huerfano -> `ecommerce`, excluyendo referente y procedimiento p001 | 3 min | Pendiente | Pocos archivos modificados |
 | T-406 | Commit unitario en UI con subject <=50 chars | 3 min | Pendiente | 1 commit |

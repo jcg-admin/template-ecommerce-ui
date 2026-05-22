@@ -9,7 +9,7 @@ Este documento describe **donde corre el sistema en produccion** y
 flowchart LR
     Dev["Estacion de desarrollo<br/>(WSL2 / Linux)<br/>scripts/install.sh"]
     CI["Build host<br/>(npm run build)"]
-    Apache["Apache HTTP Server<br/>(e-comerce-server)"]
+    Apache["Apache HTTP Server<br/>(ecommerce-server)"]
     UI["dist/<br/>(bundle estatico)"]
     Django["ecommerce-ui API<br/>(Django + gunicorn)"]
     DB[("MariaDB")]
@@ -76,7 +76,7 @@ La configuracion sensible se inyecta en build time via `DefinePlugin`:
 ### Nodo: servidor de produccion
 
 El bundle `dist/` se sirve estatico desde Apache, en un nodo separado
-provisionado por `e-comerce-server` (Ubuntu + Apache + acme.sh +
+provisionado por `ecommerce-server` (Ubuntu + Apache + acme.sh +
 fail2ban). Detalles relevantes para el UI:
 
 | Aspecto | Detalle |
