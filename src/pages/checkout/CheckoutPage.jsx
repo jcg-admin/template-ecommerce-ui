@@ -1,5 +1,5 @@
 /**
- * CheckoutPage — e-comerce-ui
+ * CheckoutPage — ecommerce-ui
  * UC-ORD-01: Crear orden desde el carrito (checkout).
  *
  * Recoge direccion de envio + opcionalmente shipping_method_id y notas,

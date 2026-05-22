@@ -1,5 +1,5 @@
 /**
- * AccountPage — e-comerce-ui
+ * AccountPage — ecommerce-ui
  * Hub de la cuenta del comprador. Muestra resumen y navegacion
  * a las secciones de perfil, direcciones y ordenes.
  *

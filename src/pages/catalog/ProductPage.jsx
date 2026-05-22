@@ -1,5 +1,5 @@
 /**
- * ProductPage — e-comerce-ui
+ * ProductPage — ecommerce-ui
  * UC-CAT-02: Ficha completa de un producto.
  */
 import { useEffect, useState } from 'react';

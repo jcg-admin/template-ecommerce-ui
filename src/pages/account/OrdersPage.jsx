@@ -1,5 +1,5 @@
 /**
- * OrdersPage — e-comerce-ui
+ * OrdersPage — ecommerce-ui
  * UC-ORD-03: Listado paginado de ordenes del comprador autenticado.
  *
  * Lectura: useCustomerOrders (React Query).

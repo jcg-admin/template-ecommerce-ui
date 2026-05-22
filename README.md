@@ -1,4 +1,4 @@
-# e-comerce-ui UI
+# ecommerce-ui UI
 
 Frontend del e-commerce de productos del e-commerce. Construido con React 19 + Redux Toolkit + Webpack 5.
 
@@ -156,7 +156,7 @@ producido en este repo. Despliegue habitual:
 
 ```bash
 npm install && npm run build
-rsync -avz --delete dist/ deploy@servidor:/srv/repos/ecom/template-e-comerce-ui/dist/
+rsync -avz --delete dist/ deploy@servidor:/srv/repos/ecom/template-ecommerce-ui/dist/
 ```
 
 No es necesario reiniciar Nginx — sirve los archivos en tiempo real

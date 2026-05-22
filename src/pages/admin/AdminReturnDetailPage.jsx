@@ -1,5 +1,5 @@
 /**
- * AdminReturnDetailPage — e-comerce-ui
+ * AdminReturnDetailPage — ecommerce-ui
  * UC-RET-02 + UC-RET-03 + UC-RET-06:
  *   Detalle administrativo de una devolución y panel de acciones según
  *   el estado actual:

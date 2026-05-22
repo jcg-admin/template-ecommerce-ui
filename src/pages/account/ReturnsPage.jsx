@@ -1,5 +1,5 @@
 /**
- * ReturnsPage — e-comerce-ui
+ * ReturnsPage — ecommerce-ui
  * UC-RET-04: Listar devoluciones del comprador autenticado.
  *
  * Lectura via React Query (`useReturns`). Las mutaciones (UC-RET-01)

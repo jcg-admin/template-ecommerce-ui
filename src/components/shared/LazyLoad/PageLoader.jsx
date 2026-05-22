@@ -1,5 +1,5 @@
 /**
- * PageLoader — e-comerce-ui
+ * PageLoader — ecommerce-ui
  * Loader fullscreen para Suspense y rutas protegidas en carga.
  */
 

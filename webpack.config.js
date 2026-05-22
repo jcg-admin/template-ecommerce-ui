@@ -6,7 +6,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
 
-// Feature flags e-comerce-ui — controlan si el dominio se sirve via
+// Feature flags ecommerce-ui — controlan si el dominio se sirve via
 // mock o se delega al backend real.
 //
 // Semantica (tras T-019 de `revisar-arquitectura-de-mocks`):
@@ -103,7 +103,7 @@ module.exports = (env, argv) => {
     resolve: {
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
       alias: {
-        // Aliases e-comerce-ui-UI — sincronizar con jest.config.cjs moduleNameMapper
+        // Aliases ecommerce-ui-UI — sincronizar con jest.config.cjs moduleNameMapper
         '@app':        path.resolve(__dirname, 'src/app'),
         '@modules':    path.resolve(__dirname, 'src/modules'),
         '@components': path.resolve(__dirname, 'src/components'),

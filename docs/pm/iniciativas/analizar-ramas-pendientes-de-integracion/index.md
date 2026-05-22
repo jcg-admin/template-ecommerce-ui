@@ -15,7 +15,7 @@
 ## Que produce esta iniciativa
 
 Documentacion completa del estado de ramas del repositorio
-`jcg-admin/e-comerce-ui`, distinguiendo:
+`jcg-admin/ecommerce-ui`, distinguiendo:
 
 - Ramas **pendientes de integracion** (delta real respecto a `develop`).
 - Ramas **ya integradas** (PRs cerrados, conservadas como referencia).

@@ -1,8 +1,8 @@
 # Introduccion y objetivos
 
-## Que es e-comerce-ui
+## Que es ecommerce-ui
 
-e-comerce-ui es el **frontend del e-commerce de productos del catálogo**.
+ecommerce-ui es el **frontend del e-commerce de productos del catálogo**.
 Es una SPA construida con React 19 que consume la API REST de Django
 (`e-comerce-api`). El proyecto vive en este repositorio como
 codigo independiente y se compone con su backend a nivel de despliegue.

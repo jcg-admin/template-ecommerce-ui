@@ -1,5 +1,5 @@
 /**
- * AdminSupportPage — e-comerce-ui
+ * AdminSupportPage — ecommerce-ui
  * UC-SUPP-05: Bandeja y reporte de tickets para el equipo de soporte.
  */
 import { useMemo, useState } from 'react';

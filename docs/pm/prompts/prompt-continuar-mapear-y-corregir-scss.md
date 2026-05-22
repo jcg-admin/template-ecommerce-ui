@@ -17,7 +17,7 @@ OBLIGATORIAS DE ARRANQUE" sin omitir ninguna**.
 
 ## CONTEXTO DEL PROYECTO
 
-- **Repo**: `/tmp/project/template-e-comerce-ui/`
+- **Repo**: `/tmp/project/template-ecommerce-ui/`
 - **Tipo**: template SCSS de e-commerce con React + CSS Modules
 - **Procedimiento de gestion**: PROC-GESTION-001 v4.0.0 + arc42
 - **Convencion de commits**: Tim Pope (subject <=50 chars, wrap
@@ -60,7 +60,7 @@ parar y reportar al usuario.
 ### V1: HEAD real del repo
 
 ```bash
-cd /tmp/project/template-e-comerce-ui
+cd /tmp/project/template-ecommerce-ui
 git log --oneline -5
 ```
 
@@ -242,7 +242,7 @@ fusion del analisis duplicado.
 ## CONFIGURACION DE REMOTE GIT
 
 ```
-origin  https://github.com/jcg-admin/template-e-comerce-ui.git
+origin  https://github.com/jcg-admin/template-ecommerce-ui.git
 ```
 
 Configurado pero **sin push hasta el momento**. Repo remoto
@@ -257,9 +257,9 @@ git push -u origin main
 En `/tmp/backups/` existen multiples backups del proyecto. El
 mas reciente al producir este prompt:
 
-- `template-e-comerce-ui-20260521-193954-source.tar.gz` (5.5 MB)
-- `template-e-comerce-ui-20260521-193954-source.tar.gz.md5`
-- `template-e-comerce-ui-20260521-193954-manifest.txt`
+- `template-ecommerce-ui-20260521-193954-source.tar.gz` (5.5 MB)
+- `template-ecommerce-ui-20260521-193954-source.tar.gz.md5`
+- `template-ecommerce-ui-20260521-193954-manifest.txt`
 
 Captura HEAD `786b84c`, 127 commits, working tree CLEAN.
 

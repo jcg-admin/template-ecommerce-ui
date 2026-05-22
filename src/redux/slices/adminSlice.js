@@ -1,5 +1,5 @@
 /**
- * Admin Slice — e-comerce-ui
+ * Admin Slice — ecommerce-ui
  * Gestión de usuarios desde el panel admin.
  *
  * Sprint 4:

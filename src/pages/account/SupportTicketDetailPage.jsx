@@ -1,5 +1,5 @@
 /**
- * SupportTicketDetailPage — e-comerce-ui
+ * SupportTicketDetailPage — ecommerce-ui
  * UC-SUPP-02: Detalle del ticket con historial de conversacion.
  */
 import { useEffect } from 'react';

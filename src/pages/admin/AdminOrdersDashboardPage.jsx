@@ -1,5 +1,5 @@
 /**
- * AdminOrdersDashboardPage — e-comerce-ui
+ * AdminOrdersDashboardPage — ecommerce-ui
  * UC-ORD-10: Dashboard transaccional del administrador.
  *
  * Cuatro bloques en una sola respuesta:

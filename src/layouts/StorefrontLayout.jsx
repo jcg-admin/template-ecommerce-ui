@@ -1,5 +1,5 @@
 /**
- * StorefrontLayout — e-comerce-ui
+ * StorefrontLayout — ecommerce-ui
  * Layout público: Header + contenido + Footer.
  * Usado por: HomePage, CatalogPage, ProductPage, CartPage.
  */

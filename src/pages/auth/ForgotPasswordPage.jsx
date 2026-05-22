@@ -1,5 +1,5 @@
 /**
- * ForgotPasswordPage — e-comerce-ui
+ * ForgotPasswordPage — ecommerce-ui
  * Solicitar recuperacion de contrasena (UC-AUTH-09 Fase 1).
  *
  * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina hace fetch

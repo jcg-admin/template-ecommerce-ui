@@ -1,5 +1,5 @@
 /**
- * AdminContactMessageDetailPage — e-comerce-ui
+ * AdminContactMessageDetailPage — ecommerce-ui
  * UC-COM-03: detalle del mensaje + responder al remitente.
  */
 import { useState, useEffect } from 'react';

@@ -1,5 +1,5 @@
 /**
- * ProductDiscountCreateForm — e-comerce-ui
+ * ProductDiscountCreateForm — ecommerce-ui
  * UC-DASH-01: Crear descuento de producto (Admin)
  *
  * Modal con formulario para crear un ProductDiscount sobre un producto

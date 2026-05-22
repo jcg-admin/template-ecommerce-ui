@@ -1,5 +1,5 @@
 /**
- * AdminOrderDetailPage — e-comerce-ui
+ * AdminOrderDetailPage — ecommerce-ui
  * UC-ORD-07: Detalle administrativo + transicion de estado.
  * UC-ORD-08: Cancelacion administrativa con motivo obligatorio.
  *

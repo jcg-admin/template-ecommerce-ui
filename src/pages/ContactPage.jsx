@@ -1,5 +1,5 @@
 /**
- * ContactPage — e-comerce-ui
+ * ContactPage — ecommerce-ui
  * UC-COM-01: formulario publico de contacto.
  */
 import { useState } from 'react';

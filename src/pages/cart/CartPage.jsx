@@ -1,5 +1,5 @@
 /**
- * CartPage — e-comerce-ui
+ * CartPage — ecommerce-ui
  * UC-CART-01..04: visualizacion + edicion del carrito.
  *
  * Componentes internos:

@@ -23,7 +23,7 @@ referencia esta ubicacion:
 ```scss
 // Portado de ui-core-5.25.0 (MIT)
 // Atribucion: docs/licenses/ui-core-5.25.0-LICENSE.md
-// Adaptado a CSS Modules de e-comerce-ui con prefijo --ec-
+// Adaptado a CSS Modules de ecommerce-ui con prefijo --ec-
 ```
 
 ## Observaciones registradas en T-101

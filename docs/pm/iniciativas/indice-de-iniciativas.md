@@ -54,7 +54,7 @@ con Sphinx). Se listan para trazabilidad:
 La razon por la que estas iniciativas no se replican aqui: el
 procedimiento PROC-GESTION-001 declara cinco submodulos (`api`,
 `db`, `docs`, `server`, `ui`) y centraliza la gestion en el repo
-`docs`. Este repo (`e-comerce-ui`) es el submodulo `ui` desde el
+`docs`. Este repo (`ecommerce-ui`) es el submodulo `ui` desde el
 punto de vista del codigo, pero la documentacion de iniciativas
 vive en el repo `docs` segun el procedimiento. Aqui se conservan
 solo iniciativas cuyo objeto de trabajo es la documentacion o el

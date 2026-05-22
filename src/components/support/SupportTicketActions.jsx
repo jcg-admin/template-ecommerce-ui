@@ -1,5 +1,5 @@
 /**
- * SupportTicketActions — e-comerce-ui
+ * SupportTicketActions — ecommerce-ui
  * UC-SUPP-04: Cerrar o reabrir el ticket de soporte.
  *
  * Si el ticket esta OPEN o REPLIED muestra «Cerrar ticket».

@@ -1,5 +1,5 @@
 /**
- * productVariantsSlice — e-comerce-ui
+ * productVariantsSlice — ecommerce-ui
  * Estado de variantes de producto (Orisha/saints/configuraciones rituales):
  *
  *   UC-CHT-01 — Ver variantes disponibles del producto (Visitante)

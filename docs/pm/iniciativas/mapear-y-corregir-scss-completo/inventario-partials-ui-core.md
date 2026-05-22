@@ -7,7 +7,7 @@
 | Documento | Tabla de decision archivo-por-archivo: portar / portar-adaptado / portar-integrado / no-portar-arquitectura / fuera-de-scope |
 | Fecha | 2026-05-21 |
 | Fuente | `/tmp/references/ui-core-5.25.0/scss/` (210 archivos SCSS) |
-| Destino | `/tmp/project/template-e-comerce-ui/src/styles/` |
+| Destino | `/tmp/project/template-ecommerce-ui/src/styles/` |
 | Modo | B (Puerto como mixins, preserva CSS Modules) — aprobado en alcance |
 | Prefijo | `--ec-` — aprobado en alcance |
 | Decisiones marco | D-MODO, D-PREFIJO, D-COREUI-BUNDLES (ver alcance amended) |
@@ -331,7 +331,7 @@ Cada archivo portado lleva el siguiente header:
 // =============================================================================
 // Portado de ui-core-5.25.0 (CoreUI Pro) — MIT
 // Atribucion: docs/licenses/ui-core-5.25.0-LICENSE.md
-// Adaptado a CSS Modules de e-comerce-ui con prefijo --ec-
+// Adaptado a CSS Modules de ecommerce-ui con prefijo --ec-
 // Origen: scss/<ruta-original>.scss
 // Iniciativa: mapear-y-corregir-scss-completo
 // =============================================================================

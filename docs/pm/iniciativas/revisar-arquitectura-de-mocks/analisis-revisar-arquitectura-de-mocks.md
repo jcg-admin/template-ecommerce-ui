@@ -231,7 +231,7 @@ y puede actuar como proxy validador contra un backend real.
 ### Aplicacion al template
 
 **Prerrequisito**: existir una especificacion OpenAPI del backend
-Django. Hoy **no existe** en el repo `e-comerce-ui`. Tres opciones:
+Django. Hoy **no existe** en el repo `ecommerce-ui`. Tres opciones:
 
 (a) Producir una OpenAPI sintetica del template, mantenida en este
 repo. Riesgo: divergira del backend real cuando llegue.

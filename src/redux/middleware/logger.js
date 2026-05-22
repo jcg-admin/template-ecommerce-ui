@@ -1,5 +1,5 @@
 /**
- * Redux Logger Middleware -- e-comerce-ui
+ * Redux Logger Middleware -- ecommerce-ui
  * Solo activo en development.
  */
 

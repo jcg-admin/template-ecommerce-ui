@@ -16,13 +16,13 @@ Variantes detectadas (12 en el UI):
 
 | String actual | Cambia a | Donde aparece |
 |---------------|----------|---------------|
-| `template-e-comerce-ui` | `template-ecommerce-ui` | refs a si mismo |
-| `e-comerce-ui` | `ecommerce-ui` | paquete npm + comentarios + docs |
+| `template-ecommerce-ui` | `template-ecommerce-ui` | refs a si mismo |
+| `ecommerce-ui` | `ecommerce-ui` | paquete npm + comentarios + docs |
 | `e-comerce-api` | `ecommerce-api` | refs hermano backend |
 | `e-comerce-db` | `ecommerce-db` | refs hermano DB |
 | `e-comerce-doc` | `ecommerce-doc` | refs hermano docs |
 | `e-comerce-server` (mencion hermano) | `ecommerce-server` | refs hermano server |
-| `template-e-comerce-ui-server` | `template-ecommerce-server` | refs hermano server (variante larga) |
+| `template-ecommerce-ui-server` | `template-ecommerce-server` | refs hermano server (variante larga) |
 | `template-ecomerce-ui-server` (una `m`, nombre actual del directorio server) | `template-ecommerce-server` | refs hermano server |
 | `e-comerce` huerfano | `ecommerce` | docs PM "como gestionar iniciativas" |
 
@@ -31,8 +31,8 @@ Y en el server (alcance espejo):
 | String actual | Cambia a |
 |---------------|----------|
 | `template-ecomerce-ui-server` (su propio nombre) | `template-ecommerce-server` |
-| `template-e-comerce-ui` (refs al UI) | `template-ecommerce-ui` |
-| `e-comerce-ui` (forma corta) | `ecommerce-ui` |
+| `template-ecommerce-ui` (refs al UI) | `template-ecommerce-ui` |
+| `ecommerce-ui` (forma corta) | `ecommerce-ui` |
 
 ### Categoria 2: estilo de diagramas Mermaid
 
@@ -70,9 +70,9 @@ La iniciativa se cierra cuando:
 2. **Remote del server** configurado:
    `https://github.com/jcg-admin/template-ecommerce-server.git`.
 3. **Cero apariciones** en ambos repos de los strings:
-   - `e-comerce-ui`, `e-comerce-api`, `e-comerce-db`, `e-comerce-doc`
-   - `template-e-comerce-ui`, `template-ecomerce-ui-server`,
-     `template-e-comerce-ui-server`
+   - `ecommerce-ui`, `e-comerce-api`, `e-comerce-db`, `e-comerce-doc`
+   - `template-ecommerce-ui`, `template-ecomerce-ui-server`,
+     `template-ecommerce-ui-server`
    - `e-comerce` huerfano
 
    **Excluyendo**:

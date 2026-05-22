@@ -1,5 +1,5 @@
 /**
- * Auth Slice — e-comerce-ui
+ * Auth Slice — ecommerce-ui
  *
  * SEGURIDAD:
  *   - NO se guardan tokens en Redux ni en localStorage.

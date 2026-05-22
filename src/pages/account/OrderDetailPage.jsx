@@ -1,5 +1,5 @@
 /**
- * OrderDetailPage — e-comerce-ui
+ * OrderDetailPage — ecommerce-ui
  * UC-ORD-02: Detalle de una orden propia.
  *
  * Habilita acciones del comprador:

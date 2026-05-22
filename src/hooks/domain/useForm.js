@@ -1,5 +1,5 @@
 /**
- * useForm -- e-comerce-ui
+ * useForm -- ecommerce-ui
  * Manejo de formularios con validacion.
  * Usado en: LoginPage, RegisterPage, CheckoutPage (address step),
  *           ProfilePage.

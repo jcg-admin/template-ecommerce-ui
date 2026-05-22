@@ -1,5 +1,5 @@
 /**
- * AdminOrdersPage — e-comerce-ui
+ * AdminOrdersPage — ecommerce-ui
  * UC-ORD-09: Listado/filtro de ordenes para administradores.
  *
  * Filtros acumulativos (AND): order_number, status, email, date_from, date_to.

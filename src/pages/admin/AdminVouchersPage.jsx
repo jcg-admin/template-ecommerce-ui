@@ -1,5 +1,5 @@
 /**
- * AdminVouchersPage — e-comerce-ui
+ * AdminVouchersPage — ecommerce-ui
  * UC-PRO-02: Listar / editar vouchers
  * UC-PRO-03: Desactivar voucher
  */

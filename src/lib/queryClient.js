@@ -1,5 +1,5 @@
 /**
- * queryClient — e-comerce-ui
+ * queryClient — ecommerce-ui
  * Configuración de React Query para el e-commerce
  */
 

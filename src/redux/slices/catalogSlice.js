@@ -1,5 +1,5 @@
 /**
- * Catalog Slice — e-comerce-ui
+ * Catalog Slice — ecommerce-ui
  * Gestiona el catálogo de productos: listado, detalle, búsqueda y filtros.
  *
  * Sprint 5: URLs corregidas a /api/v1/catalogue/* (anteriormente /api/products/)

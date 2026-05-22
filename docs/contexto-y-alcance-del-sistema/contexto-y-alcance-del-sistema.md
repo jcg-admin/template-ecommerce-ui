@@ -1,7 +1,7 @@
 # Contexto y alcance del sistema
 
 Este documento delimita **que entra y que sale** del sistema. El UI no
-existe solo: es una pieza dentro de un sistema mayor (`e-comerce-ui`)
+existe solo: es una pieza dentro de un sistema mayor (`ecommerce-ui`)
 que incluye backend, base de datos, servidor web y proveedores externos
 de pagos.
 
@@ -20,8 +20,8 @@ Su responsabilidad de negocio es:
 flowchart LR
     Comprador["Comprador<br/>(navegador)"]
     Admin["Administrador<br/>(navegador)"]
-    UI["e-comerce-ui<br/>React 19 SPA<br/>(este proyecto)"]
-    API["e-comerce-ui API<br/>Django 5 + DRF"]
+    UI["ecommerce-ui<br/>React 19 SPA<br/>(este proyecto)"]
+    API["ecommerce-ui API<br/>Django 5 + DRF"]
     DB[("MariaDB")]
     MP["MercadoPago<br/>(gateway de pago)"]
     PP["PayPal<br/>(gateway de pago)"]

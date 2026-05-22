@@ -67,7 +67,7 @@ exclusivamente en cookies httpOnly; el UI nunca lo lee.
 
 **`app:unauthorized`.** Nombre del `CustomEvent` global que `apiService`
 dispara cuando una respuesta HTTP es 401. `UnauthorizedListener` lo
-escucha y redirige al login. El prefijo `app:` (e-comerce-ui) evita
+escucha y redirige al login. El prefijo `app:` (ecommerce-ui) evita
 colisiones con eventos de terceros.
 
 **Iniciativa.** Unidad de trabajo bajo `pm/iniciativas/` segun el

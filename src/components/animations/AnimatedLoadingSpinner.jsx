@@ -1,5 +1,5 @@
 /**
- * AnimatedLoadingSpinner -- e-comerce-ui
+ * AnimatedLoadingSpinner -- ecommerce-ui
  * Spinner con animacion para estados de carga inline.
  */
 

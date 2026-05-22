@@ -1,5 +1,5 @@
 /**
- * AdminUserDetailPage — e-comerce-ui
+ * AdminUserDetailPage — ecommerce-ui
  * UC-AUTH-12: Ver perfil de usuario (Admin)
  * UC-AUTH-13: Suspender cuenta
  * UC-AUTH-14: Reactivar cuenta

@@ -1,5 +1,5 @@
 /**
- * AdminContactMessagesPage — e-comerce-ui
+ * AdminContactMessagesPage — ecommerce-ui
  * UC-COM-02: bandeja admin de mensajes de contacto recibidos.
  */
 import { useState } from 'react';

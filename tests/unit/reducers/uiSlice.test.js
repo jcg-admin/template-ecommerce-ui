@@ -1,6 +1,6 @@
 /**
  * Tests — uiSlice reducer
- * e-comerce-ui UI
+ * ecommerce-ui UI
  */
 
 import uiReducer, {

@@ -1,5 +1,5 @@
 /**
- * ProductCard — e-comerce-ui
+ * ProductCard — ecommerce-ui
  * Tarjeta de producto para el catálogo y resultados de búsqueda.
  * Muestra base_price + precio con IVA, disponibilidad y categoría.
  */

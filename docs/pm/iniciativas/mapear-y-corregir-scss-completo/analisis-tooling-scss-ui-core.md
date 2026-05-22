@@ -8,7 +8,7 @@
 | Fecha | 2026-05-21 |
 | Origen | Solicitud del usuario tras cerrar T-102 (instalacion de fusv): "antes puedes analizar de nuestra referencia ui-core-5.25.0/package.json existe algo que podemos adoptar que nos ayude con los del scss" |
 | Fuente primaria | `/tmp/references/ui-core-5.25.0/package.json` |
-| Fuente secundaria | `/tmp/project/template-e-comerce-ui/package.json` |
+| Fuente secundaria | `/tmp/project/template-ecommerce-ui/package.json` |
 | Naturaleza | Trabajo analitico puro, no toca codigo. Produce recomendacion priorizada. |
 
 ## Por que este analisis
@@ -82,7 +82,7 @@ pero la justificacion del tooling es independiente).
 
 ## Comparativa: que ya tenemos vs que falta
 
-| Herramienta | ui-core | template-e-comerce-ui | Estado |
+| Herramienta | ui-core | template-ecommerce-ui | Estado |
 |-------------|---------|------------------------|--------|
 | stylelint | `^16.26.1` | `^17.11.1` | Tenemos (mas reciente). Comparten ecosistema. |
 | stylelint-config | `twbs-bootstrap` | `standard-scss` | Tenemos otra. Decision documentada en alcance vigente. |

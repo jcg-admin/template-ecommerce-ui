@@ -1,5 +1,5 @@
 /**
- * AdminPaymentRefundPage — e-comerce-ui
+ * AdminPaymentRefundPage — ecommerce-ui
  * UC-PAY-09: El admin procesa manualmente un reembolso sobre un Payment APPROVED.
  *
  * Lectura del Payment: `useAdminPayment` (React Query).

@@ -1,5 +1,5 @@
 /**
- * Tipos del dominio del e-commerce -- e-comerce-ui
+ * Tipos del dominio del e-commerce -- ecommerce-ui
  *
  * Modulo unico de tipos para las entidades del dominio que el template
  * implementa. Cada tipo lleva una nota indicando si esta **completo**

@@ -1,5 +1,5 @@
 /**
- * ProtectedRoute — e-comerce-ui
+ * ProtectedRoute — ecommerce-ui
  * Requiere autenticación. Si no está autenticado, redirige a /auth/login
  * preservando la ruta original en el state para redirigir al volver.
  */

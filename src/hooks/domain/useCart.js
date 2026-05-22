@@ -1,5 +1,5 @@
 /**
- * useCart — e-comerce-ui
+ * useCart — ecommerce-ui
  * Hook del carrito de compras.
  */
 

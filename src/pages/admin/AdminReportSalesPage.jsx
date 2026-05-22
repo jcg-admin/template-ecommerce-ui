@@ -1,5 +1,5 @@
 /**
- * AdminReportSalesPage — e-comerce-ui
+ * AdminReportSalesPage — ecommerce-ui
  * UC-REP-01: Reporte ejecutivo de ingresos y ventas.
  * UC-REP-05: Exportar el reporte a CSV o PDF (boton de descarga).
  */

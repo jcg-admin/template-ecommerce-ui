@@ -1,5 +1,5 @@
 /**
- * SupportTicketsPage — e-comerce-ui
+ * SupportTicketsPage — ecommerce-ui
  * UC-SUPP-02: Listar tickets de soporte del comprador autenticado.
  */
 import { Link } from 'react-router-dom';

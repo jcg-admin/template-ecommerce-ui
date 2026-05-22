@@ -1,5 +1,5 @@
 /**
- * AdminProductForm — e-comerce-ui
+ * AdminProductForm — ecommerce-ui
  *
  * Formulario compartido entre UC-CAT-09 (Crear) y UC-CAT-10 (Editar)
  * para productos del catalogo. Los nombres pueden contener

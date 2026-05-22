@@ -1,4 +1,4 @@
-# Analisis y propuesta de servidor para `template-e-comerce-ui`
+# Analisis y propuesta de servidor para `template-ecommerce-ui`
 
 | Campo | Valor |
 |-------|-------|
@@ -16,7 +16,7 @@ servidor Linux** (devops/infraestructura), no una aplicacion. Su
 funcion: dejar un Ubuntu listo para servir una arquitectura
 **3-tier**: server (Apache) + api (Django) + ui (React).
 
-Nuestro template `e-comerce-ui` es **solo el UI** (parte 3). La
+Nuestro template `ecommerce-ui` es **solo el UI** (parte 3). La
 propuesta es **crear un proyecto hermano** (`template-ecomerce-ui-server`)
 inspirado en el referente pero adaptado a:
 
@@ -318,8 +318,8 @@ DOMAIN=midominio.com
 
 # ─── UI ─────────────────────────────────────────────────────────────────────
 # Path al build de produccion del UI (output de 'npm run build' en
-# template-e-comerce-ui). Nginx sirve estos archivos directamente.
-UI_DIST=/srv/repos/ecom/template-e-comerce-ui/dist
+# template-ecommerce-ui). Nginx sirve estos archivos directamente.
+UI_DIST=/srv/repos/ecom/template-ecommerce-ui/dist
 
 # ─── API upstream ───────────────────────────────────────────────────────────
 # URL del backend al que Nginx reverse-proxy-eara /api/*.
@@ -370,13 +370,13 @@ Como **no hay backend en scope**, simplificamos:
 | ~~`svc-dbdata`~~ | — | — | **ELIMINADO** (no hay BD en scope) |
 
 Nginx corre como `www-data` (default Ubuntu), igual lectura
-"other" sobre `/srv/repos/ecom/template-e-comerce-ui/dist`.
+"other" sobre `/srv/repos/ecom/template-ecommerce-ui/dist`.
 
 ### Almacenamiento simplificado
 
 | Clase | Path | Cambio vs referente |
 |-------|------|---------------------|
-| A | `/srv/repos/ecom/template-e-comerce-ui` | Igual (el repo del UI) |
+| A | `/srv/repos/ecom/template-ecommerce-ui` | Igual (el repo del UI) |
 | B | `/srv/backups/project` | Igual |
 | ~~C~~ | — | **ELIMINADO** (no hay dumps BD) |
 
@@ -428,7 +428,7 @@ Si decides ejecutar, esta es la propuesta de **iniciativa formal**:
 | **F8 Scripts de operación** | `verify.sh` (~10 checks), `renew_ssl.sh` 1:1 | 90 min |
 | **F9 Tests bash** | Adaptar los 5 tests del referente | 90 min |
 | **F10 Documentación** | `README.md` + `docs/operaciones.md` adaptados | 60 min |
-| **F11 Integración con template-e-comerce-ui** | Documentar en el README del template cómo se relaciona, añadir paso `npm run build` que produce `dist/` esperado por el server | 30 min |
+| **F11 Integración con template-ecommerce-ui** | Documentar en el README del template cómo se relaciona, añadir paso `npm run build` que produce `dist/` esperado por el server | 30 min |
 | **Total** | ~14 horas (1.75 días de trabajo) | |
 
 ### Decisiones que requeriré antes de arrancar

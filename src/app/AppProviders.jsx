@@ -1,5 +1,5 @@
 /**
- * AppProviders — e-comerce-ui
+ * AppProviders — ecommerce-ui
  * Encapsula todos los providers globales en el orden correcto:
  *   1. React Query (fetching / cache)
  *   2. Redux (estado global)

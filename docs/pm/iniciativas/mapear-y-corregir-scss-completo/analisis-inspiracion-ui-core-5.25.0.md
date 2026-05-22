@@ -15,7 +15,7 @@ de Bootstrap 5. Confirmacion en `package.json`: nombre
 `@ui/ui-pro`, version `5.25.0`, descripcion explicita de
 "based on Bootstrap 5", dependencia `stylelint-config-twbs-bootstrap`.
 
-**Es un template SCSS** (igual que nuestro `template-e-comerce-ui`),
+**Es un template SCSS** (igual que nuestro `template-ecommerce-ui`),
 no una "libreria de componentes" en el sentido de runtime. La
 diferencia con nuestro template es la **capa de consumo del
 SCSS**:
@@ -699,7 +699,7 @@ convierten en mixins o se evaluan caso por caso.
   porque se usara en cientos de declaraciones y miles de usos
   `var(--ec-X)`.
 - Inequivoco en el contexto del proyecto: dentro de
-  `e-comerce-ui`, `--ec-primary` solo puede significar
+  `ecommerce-ui`, `--ec-primary` solo puede significar
   "e-comerce primary".
 - Sin colision con prefijos populares: Bootstrap usa `--bs-`,
   CoreUI `--cui-`, Tailwind `--tw-`. `--ec-` queda en territorio
@@ -716,7 +716,7 @@ proyecto si tiene una convencion de namespace `app:` para JS
 CustomEvents (`app:unauthorized`), pero al revisar con el usuario
 se descarto extender `app-` a CSS porque `app` es demasiado
 generico y se prefiere un prefijo que identifique inequivocamente
-al template `e-comerce-ui`.
+al template `ecommerce-ui`.
 
 ### Decision D-COREUI-BUNDLES — Bundles `coreui-*.scss` no se portan
 
@@ -758,7 +758,7 @@ eliminar las referencias si ya no aplican.
 
 ### Hallazgo organico 2 — Grafia del nombre del proyecto
 
-El `package.json` declara `"name": "e-comerce-ui"` con **una sola
+El `package.json` declara `"name": "ecommerce-ui"` con **una sola
 `m`**. La grafia correcta en ingles es **"e-commerce"** (doble
 `m`). El typo esta consolidado a lo largo del repo (~285
 ocurrencias). No es un error reciente; es la grafia oficial del

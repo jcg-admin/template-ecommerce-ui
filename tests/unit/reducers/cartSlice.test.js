@@ -1,6 +1,6 @@
 /**
  * Tests — cartSlice reducer
- * e-comerce-ui UI
+ * ecommerce-ui UI
  */
 
 import cartReducer, {

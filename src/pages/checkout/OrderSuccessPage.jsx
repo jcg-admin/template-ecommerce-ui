@@ -1,5 +1,5 @@
 /**
- * OrderSuccessPage — e-comerce-ui
+ * OrderSuccessPage — ecommerce-ui
  * Confirmación de orden tras pago exitoso
  *
  * STUB: implementar en el sprint correspondiente.

@@ -1,5 +1,5 @@
 /**
- * ErrorBoundary — e-comerce-ui
+ * ErrorBoundary — ecommerce-ui
  * Captura errores de renderizado y muestra un fallback amigable.
  */
 

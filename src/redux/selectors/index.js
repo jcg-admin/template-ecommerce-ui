@@ -1,5 +1,5 @@
 /**
- * Selectors — e-comerce-ui
+ * Selectors — ecommerce-ui
  * Selectores memoizados con reselect para evitar re-renders innecesarios
  */
 

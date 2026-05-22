@@ -1,5 +1,5 @@
 /**
- * supportTicketsSlice — e-comerce-ui
+ * supportTicketsSlice — ecommerce-ui
  * Soporte: gestion de tickets del comprador y bandeja admin.
  *
  *   UC-SUPP-01 — Crear ticket

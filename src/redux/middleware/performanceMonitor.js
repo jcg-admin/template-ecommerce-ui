@@ -1,5 +1,5 @@
 /**
- * Redux Performance Monitor -- e-comerce-ui
+ * Redux Performance Monitor -- ecommerce-ui
  * Alerta en dev cuando un reducer tarda mas de 16ms (un frame).
  */
 

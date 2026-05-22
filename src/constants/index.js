@@ -1,5 +1,5 @@
 /**
- * Constantes globales — e-comerce-ui
+ * Constantes globales — ecommerce-ui
  */
 
 // API endpoints base

@@ -1,5 +1,5 @@
 /**
- * Footer — e-comerce-ui
+ * Footer — ecommerce-ui
  */
 
 import { Link } from 'react-router-dom';
@@ -10,7 +10,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.inner}>
         <div className={styles.brand}>
-          <span className={styles.brandName}>e-comerce-ui</span>
+          <span className={styles.brandName}>ecommerce-ui</span>
           <p className={styles.tagline}>Generic e-commerce frontend</p>
         </div>
         <nav className={styles.nav} aria-label="Footer">
@@ -36,7 +36,7 @@ export default function Footer() {
         </nav>
       </div>
       <div className={styles.bottom}>
-        <p>© {new Date().getFullYear()} e-comerce-ui. Todos los derechos reservados.</p>
+        <p>© {new Date().getFullYear()} ecommerce-ui. Todos los derechos reservados.</p>
       </div>
     </footer>
   );

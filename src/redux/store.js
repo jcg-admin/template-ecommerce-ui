@@ -1,5 +1,5 @@
 /**
- * Redux Store — e-comerce-ui
+ * Redux Store — ecommerce-ui
  * Estado centralizado del e-commerce
  *
  * Slices:

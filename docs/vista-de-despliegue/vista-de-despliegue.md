@@ -11,7 +11,7 @@ flowchart LR
     CI["Build host<br/>(npm run build)"]
     Apache["Apache HTTP Server<br/>(e-comerce-server)"]
     UI["dist/<br/>(bundle estatico)"]
-    Django["e-comerce-ui API<br/>(Django + gunicorn)"]
+    Django["ecommerce-ui API<br/>(Django + gunicorn)"]
     DB[("MariaDB")]
 
     Dev -->|"genera"| CI

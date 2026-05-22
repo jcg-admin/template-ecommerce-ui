@@ -1,5 +1,5 @@
 /**
- * AdminReturnsPage — e-comerce-ui
+ * AdminReturnsPage — ecommerce-ui
  * UC-RET-05: Bandeja de devoluciones pendientes (Admin)
  */
 import { useMemo, useState } from 'react';

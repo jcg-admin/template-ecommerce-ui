@@ -65,7 +65,7 @@ flowchart LR
 | T-201 | `mv` del directorio `template-ecomerce-ui-server` -> `template-ecommerce-server` | 2 min |
 | T-202 | Configurar remote del server: `git remote add origin https://github.com/jcg-admin/template-ecommerce-server.git` | 2 min |
 | T-203 | Actualizar todas las refs internas del server (configs Nginx, scripts, docs vivos, README) que digan `template-ecomerce-ui-server` -> `template-ecommerce-server`. NO tocar bitacora `progreso-*.md` de la iniciativa cerrada. | 25 min |
-| T-204 | Actualizar refs del server al UI: `template-e-comerce-ui` -> `template-ecommerce-ui` | 10 min |
+| T-204 | Actualizar refs del server al UI: `template-ecommerce-ui` -> `template-ecommerce-ui` | 10 min |
 | T-205 | Commit unitario en server con subject <=50 | 5 min |
 
 **Entregables**: server renombrado, working tree limpio, refs cross-repo
@@ -76,10 +76,10 @@ al UI nuevo.
 | Tarea | Descripcion | Esfuerzo |
 |-------|-------------|----------|
 | T-301 | Actualizar `package.json` y `package-lock.json` (`name: ecommerce-ui`, `description`) | 5 min |
-| T-302 | sed batch sobre 249 archivos: `e-comerce-ui` -> `ecommerce-ui`. Excluir: `node_modules/`, `.git/`, `.cache/`, `dist/`, `package-lock.json` (ya hecho en T-301), bitacoras `progreso-*.md` de iniciativas cerradas/pausadas | 20 min |
-| T-303 | sed batch para `template-e-comerce-ui` -> `template-ecommerce-ui` | 10 min |
-| T-304 | Verificar manualmente las 11 lineas de la variante larga `template-e-comerce-ui-server` (puede ser ambigua por la palabra `server`) | 10 min |
-| T-305 | Verificar que cero `e-comerce-ui` huerfanos quedan en docs editables | 5 min |
+| T-302 | sed batch sobre 249 archivos: `ecommerce-ui` -> `ecommerce-ui`. Excluir: `node_modules/`, `.git/`, `.cache/`, `dist/`, `package-lock.json` (ya hecho en T-301), bitacoras `progreso-*.md` de iniciativas cerradas/pausadas | 20 min |
+| T-303 | sed batch para `template-ecommerce-ui` -> `template-ecommerce-ui` | 10 min |
+| T-304 | Verificar manualmente las 11 lineas de la variante larga `template-ecommerce-ui-server` (puede ser ambigua por la palabra `server`) | 10 min |
+| T-305 | Verificar que cero `ecommerce-ui` huerfanos quedan en docs editables | 5 min |
 | T-306 | Commit unitario en UI con subject <=50 | 10 min |
 
 **Entregables**: UI con refs a si mismo corregidas, working tree
@@ -167,7 +167,7 @@ flowchart TB
     tarea_t203_refs_server_propias[T-203<br/>Server refs propias]
     tarea_t204_refs_server_a_ui[T-204<br/>Server refs UI]
     tarea_t301_package_json[T-301<br/>package.json]
-    tarea_t302_sed_e_comerce_ui[T-302<br/>sed e-comerce-ui]
+    tarea_t302_sed_e_comerce_ui[T-302<br/>sed ecommerce-ui]
     tarea_t303_sed_template_e[T-303<br/>sed template-e-]
     tarea_t304_verificar_largas[T-304<br/>Verificar largas]
 

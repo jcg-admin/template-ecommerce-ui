@@ -1,5 +1,5 @@
 /**
- * API Service - e-comerce-ui
+ * API Service - ecommerce-ui
  *
  * Maneja todas las llamadas REST al backend Django con:
  *   - Errores tipados (apiErrors.js)

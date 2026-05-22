@@ -1,5 +1,5 @@
 /**
- * ReturnCreatePage — e-comerce-ui
+ * ReturnCreatePage — ecommerce-ui
  * UC-RET-01: Solicitar devolucion (Comprador)
  */
 import { useState } from 'react';

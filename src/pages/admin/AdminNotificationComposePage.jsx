@@ -1,5 +1,5 @@
 /**
- * AdminNotificationComposePage — e-comerce-ui
+ * AdminNotificationComposePage — ecommerce-ui
  * UC-NOT-07: Enviar notificacion manual a usuario(s) desde el admin.
  *
  * Permite tres tipos de destinatario:

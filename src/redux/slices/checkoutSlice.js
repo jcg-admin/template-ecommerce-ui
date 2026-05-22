@@ -1,5 +1,5 @@
 /**
- * Checkout Slice — e-comerce-ui
+ * Checkout Slice — ecommerce-ui
  * Gestiona el flujo de compra: dirección → envío → pago → confirmación
  */
 

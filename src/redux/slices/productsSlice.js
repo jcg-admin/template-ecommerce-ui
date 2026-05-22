@@ -1,5 +1,5 @@
 /**
- * productsSlice — e-comerce-ui
+ * productsSlice — ecommerce-ui
  *
  * Mutaciones administrativas sobre el catalogo de productos.
  *

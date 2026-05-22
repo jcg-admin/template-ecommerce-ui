@@ -1,5 +1,5 @@
 /**
- * useAuth — e-comerce-ui
+ * useAuth — ecommerce-ui
  * Hook de autenticación. Combina Redux auth + acciones.
  */
 

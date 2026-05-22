@@ -1,5 +1,5 @@
 /**
- * returnStatus — e-comerce-ui
+ * returnStatus — ecommerce-ui
  * Etiquetas y clases compartidas para los estados de ReturnRequest.
  */
 

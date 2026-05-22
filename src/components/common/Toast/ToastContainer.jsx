@@ -1,5 +1,5 @@
 /**
- * ToastContainer — e-comerce-ui
+ * ToastContainer — ecommerce-ui
  * Renderiza las notificaciones toast del store.
  */
 

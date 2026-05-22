@@ -1,5 +1,5 @@
 /**
- * AdminDashboardPage — e-comerce-ui
+ * AdminDashboardPage — ecommerce-ui
  * Landing del panel admin (ruta `/admin`).
  *
  * Centraliza:

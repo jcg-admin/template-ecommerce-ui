@@ -178,7 +178,7 @@ verde tienes una adopcion sana.
 
 | Pregunta | Como verificar |
 |----------|----------------|
-| El template ya no aparece como nombre del producto | `grep -ri 'e-comerce-ui' . --exclude-dir=.git` solo debe devolver matches en archivos donde tu producto explicitamente cite el origen del template (probablemente cero). |
+| El template ya no aparece como nombre del producto | `grep -ri 'ecommerce-ui' . --exclude-dir=.git` solo debe devolver matches en archivos donde tu producto explicitamente cite el origen del template (probablemente cero). |
 | Los datos de ejemplo del mock son tuyos | Abrir `src/mocks/registry.js` y `src/mocks/mockInterceptor.js` y confirmar que cada `id`, `name`, `email` y `description` es de tu dominio, no de la plantilla. |
 | La paleta es la tuya | Abrir cualquier pagina con `npm run dev` y verificar visualmente que los colores no son los del template. |
 | `.env.production` apunta a tu backend | `cat .env.production` (no committeado) debe tener `API_URL` con tu dominio real. |

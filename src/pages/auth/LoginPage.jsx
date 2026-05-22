@@ -1,5 +1,5 @@
 /**
- * LoginPage — e-comerce-ui
+ * LoginPage — ecommerce-ui
  * Inicio de sesion JWT (UC-AUTH-02).
  *
  * Tras T-017 de `revisar-arquitectura-de-mocks` el componente despacha
@@ -57,7 +57,7 @@ export default function LoginPage() {
       <div className={styles.card}>
         <h1 className={styles.title}>Iniciar sesion</h1>
         <p className={styles.subtitle}>
-          Bienvenido a e-comerce-ui
+          Bienvenido a ecommerce-ui
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

@@ -6,10 +6,10 @@
 
 | # | Variante | Archivos | Lineas | Ejemplo de contexto | Accion |
 |---|----------|----------|--------|---------------------|--------|
-| 1 | `template-e-comerce-ui-server` | 3 | 4 | "proyecto hermano `template-e-comerce-ui-server`" | **Cambiar a `template-ecommerce-server`** |
-| 2 | `template-e-comerce-ui` | 11 | 25 | URLs GitHub, refs a si mismo | **Cambiar a `template-ecommerce-ui`** |
-| 3 | `e-comerce-ui-server` | 3 | 4 | menciones al server | **Cambiar a `template-ecommerce-server`** (la forma corta es ambigua; expandirla al nombre nuevo) |
-| 4 | `e-comerce-ui` | 249 | 296 | paquete npm, comentarios JSDoc, README, docs | **Cambiar a `ecommerce-ui`** |
+| 1 | `template-ecommerce-ui-server` | 3 | 4 | "proyecto hermano `template-ecommerce-ui-server`" | **Cambiar a `template-ecommerce-server`** |
+| 2 | `template-ecommerce-ui` | 11 | 25 | URLs GitHub, refs a si mismo | **Cambiar a `template-ecommerce-ui`** |
+| 3 | `ecommerce-ui-server` | 3 | 4 | menciones al server | **Cambiar a `template-ecommerce-server`** (la forma corta es ambigua; expandirla al nombre nuevo) |
+| 4 | `ecommerce-ui` | 249 | 296 | paquete npm, comentarios JSDoc, README, docs | **Cambiar a `ecommerce-ui`** |
 | 5 | `e-comerce-api` | 7 | 10 | refs hermano backend | **Cambiar a `ecommerce-api`** |
 | 6 | `e-comerce-db` | 2 | 3 | refs hermano DB | **Cambiar a `ecommerce-db`** |
 | 7 | `e-comerce-doc` | 6 | 11 | refs hermano docs | **Cambiar a `ecommerce-doc`** |
@@ -29,8 +29,8 @@
 | Variante actual | Cambia a |
 |-----------------|----------|
 | `template-ecomerce-ui-server` (su nombre actual) | `template-ecommerce-server` |
-| `template-e-comerce-ui` (refs al UI viejo) | `template-ecommerce-ui` |
-| `e-comerce-ui` (forma corta) | `ecommerce-ui` |
+| `template-ecommerce-ui` (refs al UI viejo) | `template-ecommerce-ui` |
+| `ecommerce-ui` (forma corta) | `ecommerce-ui` |
 
 ## Validacion de no-colisiones
 
@@ -50,10 +50,10 @@ strings distintos. Verificado: ninguna combinacion produce
 **Patron de busqueda seguro**: usar el patron mas largo primero
 para evitar reemplazos parciales:
 
-1. `template-e-comerce-ui-server` -> `template-ecommerce-server`
-2. `template-e-comerce-ui` -> `template-ecommerce-ui`
-3. `e-comerce-ui-server` -> `template-ecommerce-server`
-4. `e-comerce-ui` -> `ecommerce-ui`
+1. `template-ecommerce-ui-server` -> `template-ecommerce-server`
+2. `template-ecommerce-ui` -> `template-ecommerce-ui`
+3. `ecommerce-ui-server` -> `template-ecommerce-server`
+4. `ecommerce-ui` -> `ecommerce-ui`
 5. `e-comerce-api` -> `ecommerce-api`
 6. `e-comerce-db` -> `ecommerce-db`
 7. `e-comerce-doc` -> `ecommerce-doc`
@@ -147,7 +147,7 @@ Esto cumple "no alias cortos" sin romper la sintaxis del lenguaje.
 |------|------------|
 | F1 backup | `tar czf` ambos repos con `.git/` completo + manifest + MD5. |
 | F2 server | `mv` + `git remote add` + sed batch sobre 58 lineas + 1 commit. |
-| F3 UI a si mismo | sed batch en este orden: variantes largas primero, luego cortas. 1 commit grande con todo el `e-comerce-ui` (249 archivos). |
+| F3 UI a si mismo | sed batch en este orden: variantes largas primero, luego cortas. 1 commit grande con todo el `ecommerce-ui` (249 archivos). |
 | F4 cross-repo en UI | sed batch para `api`, `db`, `doc`. Manual caso por caso para `server`. |
 | F5 Mermaid | Reescribir cada diagrama uno por uno (no automatizable; cada uno tiene estructura propia). |
 | F6 verificacion | `npm run lint`, `npm test`, `npm run build`, `bash tests/run_all.sh` en server. |
@@ -161,7 +161,7 @@ Esto cumple "no alias cortos" sin romper la sintaxis del lenguaje.
 | R-2 | sed accidental sobre `ecomerce-p001` (procedimiento externo) | Patron sed limita a `e-comerce` con guion antes; `ecomerce` (sin guion) NO matchea. |
 | R-3 | `dist/` queda con strings viejos (compilados) | Regenerar en F6 con `npm run build`. |
 | R-4 | Tests Jest rompen tras renombre | El renombre es solo de strings en comentarios + nombre del paquete; no afecta logica. Verificar en F6. |
-| R-5 | Sub-cadenas inesperadas (e.g. `e-comerce-uix`) | Validacion previa: ningun archivo contiene variantes raras (verificado). |
+| R-5 | Sub-cadenas inesperadas (e.g. `ecommerce-uix`) | Validacion previa: ningun archivo contiene variantes raras (verificado). |
 | R-6 | Reescritura masiva genera commit gigante dificil de revisar | Subdividir por fase: F3 (refs a si mismo) y F4 (cross-repo) son commits separados. |
 | R-7 | El server hermano tiene su propia historia cerrada que referencia el nombre viejo | NO se reescriben commits historicos (D-COMMITS-HISTORIA); las refs en archivos vivos del server SI se actualizan en F2. |
 | R-8 | Inconsistencia visual en diagramas Mermaid: 19 tipos distintos, no todos llevan classDef | Documentado en analisis: aplicar plantilla completa solo a flowchart/graph; init theme a otros. |

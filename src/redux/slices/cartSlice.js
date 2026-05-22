@@ -1,5 +1,5 @@
 /**
- * Cart Slice — e-comerce-ui
+ * Cart Slice — ecommerce-ui
  *
  * UC-CART-01: Agregar producto al carrito (anonimo + autenticado).
  *

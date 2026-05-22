@@ -1,5 +1,5 @@
 /**
- * paymentsSlice — e-comerce-ui
+ * paymentsSlice — ecommerce-ui
  *
  * Pagos: thunks para mutaciones del dominio payments.
  *

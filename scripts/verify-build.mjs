@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// verify-build — e-comerce-ui
+// verify-build — ecommerce-ui
 //
 // Inspecciona los chunks JavaScript de `dist/` tras `npm run build`
 // y reporta las URLs HTTP(S) inyectadas por webpack DefinePlugin.

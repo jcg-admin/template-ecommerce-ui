@@ -1,5 +1,5 @@
 /**
- * CatalogPage — e-comerce-ui
+ * CatalogPage — ecommerce-ui
  * UC-CAT-01: listado de productos
  * UC-CAT-03 + UC-SRCH-01: búsqueda FULLTEXT (search redirige a /search)
  * UC-CAT-04: filtrar por categoria via ?category=<slug>

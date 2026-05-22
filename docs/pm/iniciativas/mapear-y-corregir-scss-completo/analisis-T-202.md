@@ -51,7 +51,7 @@ comentario en la nuestra (merge no destructivo).
 ### Regla 2: divergencias por "diseno propio del template" se mantienen
 
 31 de las 63 divergencias son **valores intencionales del template
-e-comerce-ui**. Ejemplos: `$primary: $primary-color`, `$gray-500:
+ecommerce-ui**. Ejemplos: `$primary: $primary-color`, `$gray-500:
 #999999`, `$font-size-base: 15px` (nuestro template usa 15px
 porque es decision de marca; ui-core usa 1rem que es 16px estandar
 Bootstrap). **Se mantiene la nuestra**, se ignora la de ui-core.
@@ -203,7 +203,7 @@ Categorizadas en 5 grupos. Decision aplicada de Reglas 2-5.
 ### Grupo A: diseno propio del template (31 variables)
 
 **Decision: mantener TODAS las nuestras**. Conservar el diseno
-visual del template e-comerce-ui. ui-core es referencia para
+visual del template ecommerce-ui. ui-core es referencia para
 estructura, no para valores de marca.
 
 | Variable | Nuestro valor (conservar) | ui-core (descartar) | Razon |

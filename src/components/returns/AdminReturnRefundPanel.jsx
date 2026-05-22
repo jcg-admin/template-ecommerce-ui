@@ -1,5 +1,5 @@
 /**
- * AdminReturnRefundPanel — e-comerce-ui
+ * AdminReturnRefundPanel — ecommerce-ui
  * UC-RET-06: Procesar el reembolso de una devolución COMPLETADA.
  * Muestra el resumen del pago original, deja ajustar el monto y dispara
  * la llamada al gateway via processReturnRefund.

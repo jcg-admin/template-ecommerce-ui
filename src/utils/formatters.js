@@ -1,5 +1,5 @@
 /**
- * Formatters — e-comerce-ui
+ * Formatters — ecommerce-ui
  * Funciones utilitarias de formateo para el e-commerce
  */
 

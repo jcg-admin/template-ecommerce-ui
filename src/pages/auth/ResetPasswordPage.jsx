@@ -1,5 +1,5 @@
 /**
- * ResetPasswordPage — e-comerce-ui
+ * ResetPasswordPage — ecommerce-ui
  * Restablecer contrasena con token del email (UC-AUTH-09 Fase 2).
  *
  * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina hace fetch

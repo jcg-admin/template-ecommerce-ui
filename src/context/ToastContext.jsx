@@ -1,5 +1,5 @@
 /**
- * ToastContext — e-comerce-ui
+ * ToastContext — ecommerce-ui
  * Notificaciones globales (añadir al carrito, errores, éxito de orden, etc.)
  */
 

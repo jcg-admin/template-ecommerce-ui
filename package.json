@@ -1,7 +1,7 @@
 {
-  "name": "e-comerce-ui",
+  "name": "ecommerce-ui",
   "version": "1.0.0",
-  "description": "e-comerce-ui — Generic e-commerce frontend template. React 19 + Redux Toolkit + Webpack 5.",
+  "description": "ecommerce-ui — Generic e-commerce frontend template. React 19 + Redux Toolkit + Webpack 5.",
   "main": "src/index.jsx",
   "sideEffects": [
     "**/*.css",

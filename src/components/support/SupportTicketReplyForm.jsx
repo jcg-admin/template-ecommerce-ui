@@ -1,5 +1,5 @@
 /**
- * SupportTicketReplyForm — e-comerce-ui
+ * SupportTicketReplyForm — ecommerce-ui
  * UC-SUPP-03: Responder al ticket de soporte.
  *
  * - El comprador añade información a su propio ticket.

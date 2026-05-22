@@ -1,5 +1,5 @@
 /**
- * App — e-comerce-ui UI
+ * App — ecommerce-ui UI
  * Componente raíz. Single Responsibility: renderizar el router con providers.
  */
 

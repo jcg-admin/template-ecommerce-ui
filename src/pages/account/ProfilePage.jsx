@@ -1,5 +1,5 @@
 /**
- * ProfilePage — e-comerce-ui
+ * ProfilePage — ecommerce-ui
  * Ver y editar el perfil del comprador (UC-AUTH-05 y UC-AUTH-06).
  *
  * Tras T-017 de `revisar-arquitectura-de-mocks` el componente despacha

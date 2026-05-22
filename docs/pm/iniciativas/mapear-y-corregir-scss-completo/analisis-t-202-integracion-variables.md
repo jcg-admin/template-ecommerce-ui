@@ -383,7 +383,7 @@ otras (e.g. btn-variables depende de input-btn-variables).
 
 Recomendacion: tomar un backup adicional del estado actual
 (`0d3ac5f`) antes de empezar. Ya hay un backup en
-`/tmp/backups/template-e-comerce-ui-20260521-093916.tar.gz`
+`/tmp/backups/template-ecommerce-ui-20260521-093916.tar.gz`
 del estado pre-T-201 (HEAD `cda3f4f`). Esto da dos restore
 points distintos.
 
@@ -709,7 +709,7 @@ Tres documentos se actualizan tras el commit de T-202:
 1. T-201 cerrada (HEAD `0d3ac5f`).
 2. Working tree limpio antes de empezar.
 3. Tests baseline `2 failed / 813 passed / 815 total`.
-4. Backup `/tmp/backups/template-e-comerce-ui-20260521-093916.tar.gz`
+4. Backup `/tmp/backups/template-ecommerce-ui-20260521-093916.tar.gz`
    accesible (existe).
 5. Este documento commiteado (T-202.5 = "Analisis T-202 producido").
 

@@ -1,5 +1,5 @@
 /**
- * UI Slice — e-comerce-ui
+ * UI Slice — ecommerce-ui
  * Estado de la interfaz: sidebar, modals, toasts, darkMode
  */
 

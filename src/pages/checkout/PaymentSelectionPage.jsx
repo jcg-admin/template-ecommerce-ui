@@ -1,5 +1,5 @@
 /**
- * PaymentSelectionPage — e-comerce-ui
+ * PaymentSelectionPage — ecommerce-ui
  *   UC-PAY-01 — Iniciar pago con Mercado Pago
  *   UC-PAY-02 — Iniciar pago con PayPal
  *   UC-PAY-01-EXT — Pago con cuotas sin intereses (MSI) via Mercado Pago

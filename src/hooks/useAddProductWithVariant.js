@@ -1,5 +1,5 @@
 /**
- * useAddProductWithVariant — e-comerce-ui
+ * useAddProductWithVariant — ecommerce-ui
  * UC-CHT-02: Encapsula la validacion y agregado al carrito para productos
  * con variantes:
  *

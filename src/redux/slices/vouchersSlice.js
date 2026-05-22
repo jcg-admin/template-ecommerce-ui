@@ -1,5 +1,5 @@
 /**
- * vouchersSlice — e-comerce-ui
+ * vouchersSlice — ecommerce-ui
  * Gestión de cupones / vouchers desde el panel admin.
  *
  *   UC-PRO-01 — Crear voucher

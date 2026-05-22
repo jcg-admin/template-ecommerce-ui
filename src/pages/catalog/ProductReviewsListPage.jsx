@@ -1,5 +1,5 @@
 /**
- * ProductReviewsListPage — e-comerce-ui
+ * ProductReviewsListPage — ecommerce-ui
  * UC-REV-02: lista publica de resenas aprobadas de un producto, con
  * calificacion promedio y desglose.
  *

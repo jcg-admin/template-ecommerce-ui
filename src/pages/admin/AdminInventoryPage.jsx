@@ -1,5 +1,5 @@
 /**
- * AdminInventoryPage — e-comerce-ui
+ * AdminInventoryPage — ecommerce-ui
  * UC-INV-01: Ver stock actual de productos
  */
 import { useMemo, useState } from 'react';

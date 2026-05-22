@@ -1,5 +1,5 @@
 /**
- * AdminNewsletterSubscribersPage — e-comerce-ui
+ * AdminNewsletterSubscribersPage — ecommerce-ui
  * UC-NEW-03: el admin lista y desuscribe manualmente suscriptores.
  */
 import { useState } from 'react';

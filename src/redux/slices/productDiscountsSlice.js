@@ -1,5 +1,5 @@
 /**
- * productDiscountsSlice — e-comerce-ui
+ * productDiscountsSlice — ecommerce-ui
  * Gestión de descuentos de producto (ProductDiscount) desde el panel admin.
  *
  *   UC-DASH-01 — Crear descuento de producto

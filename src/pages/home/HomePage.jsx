@@ -1,5 +1,5 @@
 /**
- * HomePage — e-comerce-ui
+ * HomePage — ecommerce-ui
  * Landing publica de la tienda (UC-CAT-01 entrada).
  *
  * Estructura:

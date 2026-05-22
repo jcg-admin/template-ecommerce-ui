@@ -1,5 +1,5 @@
 /**
- * PaymentHistoryPage — e-comerce-ui
+ * PaymentHistoryPage — ecommerce-ui
  * UC-PAY-06: Listado cronologico de intentos de pago de una orden propia,
  * incluyendo fallidos y reembolsos.
  */

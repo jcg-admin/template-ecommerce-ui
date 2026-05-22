@@ -1,5 +1,5 @@
 /**
- * VariantSelector — e-comerce-ui
+ * VariantSelector — ecommerce-ui
  * UC-CHT-01: Selector visual de variantes (Tamano/Presentacion/Material) del
  * producto del catálogo. Muestra nombre, precio y disponibilidad. Marca la variante
  * seleccionada via aria-pressed y deshabilita las que no tienen stock.

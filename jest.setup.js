@@ -1,5 +1,5 @@
 /**
- * Jest Setup — e-comerce-ui UI
+ * Jest Setup — ecommerce-ui UI
  * Configuración global para todos los tests
  */
 

@@ -1,5 +1,5 @@
 /**
- * NotFoundPage — e-comerce-ui
+ * NotFoundPage — ecommerce-ui
  * Página 404 — ruta no encontrada
  *
  * STUB: implementar en el sprint correspondiente.

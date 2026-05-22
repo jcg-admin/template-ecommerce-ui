@@ -1,5 +1,5 @@
 /**
- * ReturnDetailPage — e-comerce-ui
+ * ReturnDetailPage — ecommerce-ui
  * UC-RET-04: Detalle del estado de la devolucion del comprador.
  *
  * Lectura via React Query (`useReturn`). Las mutaciones permanecen

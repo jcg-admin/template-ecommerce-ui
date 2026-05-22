@@ -1,5 +1,5 @@
 /**
- * AdminReturnReceptionPanel — e-comerce-ui
+ * AdminReturnReceptionPanel — ecommerce-ui
  * UC-RET-03: Registrar la recepción física del producto devuelto.
  * Solo visible cuando la solicitud está APROBADA y aún no tiene
  * `received_at` (la recepción no se ha registrado).

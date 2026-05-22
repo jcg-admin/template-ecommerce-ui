@@ -1,5 +1,5 @@
 /**
- * PaymentRetryPage — e-comerce-ui
+ * PaymentRetryPage — ecommerce-ui
  * UC-PAY-08: Reintentar el pago de una orden en PENDIENTE_PAGO,
  * permitiendo cambiar el gateway. Tras crear la nueva preferencia
  * redirige al entorno del gateway.

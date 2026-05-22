@@ -9,7 +9,7 @@ acotada.
 ```mermaid
 flowchart TB
     subgraph nivel_uno [Nivel uno: la SPA completa]
-        SPA["e-comerce-ui<br/>SPA React 19"]
+        SPA["ecommerce-ui<br/>SPA React 19"]
     end
 
     subgraph nivel_dos [Nivel dos: capas funcionales]

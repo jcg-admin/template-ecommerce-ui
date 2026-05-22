@@ -1,5 +1,5 @@
 /**
- * NewsletterUnsubscribePage — e-comerce-ui
+ * NewsletterUnsubscribePage — ecommerce-ui
  * UC-NEW-02: desuscripcion publica del newsletter via token firmado.
  */
 import { useState } from 'react';

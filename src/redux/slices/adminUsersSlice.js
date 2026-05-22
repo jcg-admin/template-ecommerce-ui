@@ -1,5 +1,5 @@
 /**
- * adminUsersSlice — e-comerce-ui
+ * adminUsersSlice — ecommerce-ui
  *
  * Mutaciones admin sobre usuarios. UC-ADM-01.
  *

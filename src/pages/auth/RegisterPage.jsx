@@ -1,5 +1,5 @@
 /**
- * RegisterPage — e-comerce-ui
+ * RegisterPage — ecommerce-ui
  * Registro de comprador (UC-AUTH-01).
  *
  * Tras T-019 de `revisar-arquitectura-de-mocks`, la pagina despacha
@@ -77,7 +77,7 @@ export default function RegisterPage() {
       <div className={styles.card}>
         <h1 className={styles.title}>Crear cuenta</h1>
         <p className={styles.subtitle}>
-          Crea tu cuenta en e-comerce-ui
+          Crea tu cuenta en ecommerce-ui
         </p>
 
         <form onSubmit={handleSubmit} className={styles.form} noValidate>

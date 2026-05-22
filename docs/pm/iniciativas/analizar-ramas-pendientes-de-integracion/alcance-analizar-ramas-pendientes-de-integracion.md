@@ -9,7 +9,7 @@
 
 ## Por que existe esta iniciativa
 
-El repositorio `jcg-admin/e-comerce-ui` tiene seis ramas remotas con
+El repositorio `jcg-admin/ecommerce-ui` tiene seis ramas remotas con
 historiales muy distintos:
 
 - Una rama estable (`main`) que esta 149 commits atras de `develop`.

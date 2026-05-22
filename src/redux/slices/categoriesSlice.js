@@ -1,5 +1,5 @@
 /**
- * categoriesSlice — e-comerce-ui
+ * categoriesSlice — ecommerce-ui
  *
  * Mutaciones administrativas sobre el arbol de categorias (UC-CAT-06).
  *

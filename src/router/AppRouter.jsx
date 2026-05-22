@@ -1,5 +1,5 @@
 /**
- * AppRouter — e-comerce-ui
+ * AppRouter — ecommerce-ui
  * Rutas de la tienda con lazy loading por página
  */
 

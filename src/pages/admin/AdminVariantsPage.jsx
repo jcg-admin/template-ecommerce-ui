@@ -1,5 +1,5 @@
 /**
- * AdminVariantsPage — e-comerce-ui
+ * AdminVariantsPage — ecommerce-ui
  * UC-CHT-03: Gestionar variantes de un producto del catálogo (Admin).
  *
  * - Lista las variantes actuales (tipo, opcion, stock, precio, estado).

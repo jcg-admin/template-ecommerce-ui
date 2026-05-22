@@ -9,7 +9,7 @@
 
 ## Resumen ejecutivo
 
-El repositorio `jcg-admin/e-comerce-ui` tiene **seis ramas remotas** al
+El repositorio `jcg-admin/ecommerce-ui` tiene **seis ramas remotas** al
 momento del corte. De ellas:
 
 - **Una rama** esta verdaderamente pendiente de integrar:

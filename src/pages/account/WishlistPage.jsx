@@ -1,5 +1,5 @@
 /**
- * WishlistPage — e-comerce-ui
+ * WishlistPage — ecommerce-ui
  *
  *   UC-WISH-02 — Ver la lista de deseos del comprador autenticado.
  *   UC-WISH-03 — Mover producto de la lista al carrito.

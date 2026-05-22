@@ -1,5 +1,5 @@
 /**
- * SupportTicketCreatePage — e-comerce-ui
+ * SupportTicketCreatePage — ecommerce-ui
  * UC-SUPP-01: Crear ticket de soporte (Comprador)
  */
 import { useState } from 'react';

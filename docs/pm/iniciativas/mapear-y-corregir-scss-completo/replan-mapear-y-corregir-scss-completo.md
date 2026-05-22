@@ -40,7 +40,7 @@ Cada partial de ui-core que se porta sigue esta disciplina:
 
 1. **Origen**: archivo en `/tmp/references/ui-core-5.25.0/scss/`.
 2. **Destino**: archivo en
-   `/tmp/project/template-e-comerce-ui/src/styles/abstracts/`
+   `/tmp/project/template-ecommerce-ui/src/styles/abstracts/`
    (o subdirectorio apropiado).
 3. **Adaptaciones obligatorias**:
    - Eliminar el namespace `--cui-` de ui-core y reemplazar por
@@ -283,7 +283,7 @@ Aplicando la regla del usuario "tomar siempre la mejor decision":
 - Componentes nuevos (incluyendo Footer). Las variables de
   footer se conservan con `fusv-disable`; no se implementa el
   componente.
-- Renombrar el proyecto (`e-comerce-ui` -> `e-commerce-ui`).
+- Renombrar el proyecto (`ecommerce-ui` -> `e-commerce-ui`).
 - Eliminar referencias al template antecesor `mx-template`.
 
 ## Pre-condicion para reanudar ejecucion
