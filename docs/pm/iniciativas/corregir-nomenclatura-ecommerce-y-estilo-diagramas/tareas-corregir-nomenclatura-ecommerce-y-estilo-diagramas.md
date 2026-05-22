@@ -58,11 +58,11 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-601 | UI: `npm run lint` (espera 0 errores) | 5 min | Pendiente | Salida documentada |
-| T-602 | UI: `npm test` (espera baseline 2 failed / 813 passed) | 10 min | Pendiente | Salida documentada |
-| T-603 | UI: `npm run build` (regenera `dist/`) | 10 min | Pendiente | `dist/` regenerado |
-| T-604 | Server: `bash tests/run_all.sh` (espera 5 suites OK, 72/0/1) | 3 min | Pendiente | Salida documentada |
-| T-605 | Commit del `dist/` regenerado o confirmar `.gitignore` lo excluye | 2 min | Pendiente | 1 commit opcional |
+| T-601 | (ver progreso) | -- | **Cerrada** | Salida documentada |
+| T-602 | (ver progreso) | -- | **Cerrada** | Salida documentada |
+| T-603 | (ver progreso) | -- | **Cerrada** | `dist/` regenerado |
+| T-604 | (ver progreso) | -- | **Cerrada** | Salida documentada |
+| T-605 | (ver progreso) | -- | **Cerrada** | 1 commit opcional |
 
 ## F7 - Cierre (15 min)
 
