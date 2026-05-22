@@ -28,12 +28,12 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-301 | Actualizar `package.json` y `package-lock.json` (`name: ecommerce-ui`, `description`) | 5 min | Pendiente | 2 archivos modificados |
-| T-302 | sed batch: `ecommerce-ui` -> `ecommerce-ui` en 249 archivos. Excluir: `node_modules/`, `.git/`, `.cache/`, `dist/`, `package-lock.json`, bitacoras `progreso-*.md` de iniciativas previas | 20 min | Pendiente | ~249 archivos modificados |
-| T-303 | sed batch: `template-ecommerce-ui` -> `template-ecommerce-ui` | 10 min | Pendiente | ~11 archivos modificados |
-| T-304 | Verificar manualmente 11 lineas de variante larga `template-ecommerce-ui-server` | 10 min | Pendiente | Inspeccion documentada |
-| T-305 | Verificar cero `ecommerce-ui` huerfanos en docs editables | 5 min | Pendiente | Verificacion documentada |
-| T-306 | Commit unitario en UI con subject <=50 chars | 10 min | Pendiente | 1 commit |
+| T-301 | (ver progreso) | -- | **Cerrada** | 2 archivos modificados |
+| T-302 | (ver progreso) | -- | **Cerrada** | ~249 archivos modificados |
+| T-303 | (ver progreso) | -- | **Cerrada** | ~11 archivos modificados |
+| T-304 | (ver progreso) | -- | **Cerrada** | Inspeccion documentada |
+| T-305 | (ver progreso) | -- | **Cerrada** | Verificacion documentada |
+| T-306 | (ver progreso) | -- | **Cerrada** | 1 commit |
 
 ## F4 - Refs cross-repo en el UI (30 min)
 

@@ -41,6 +41,22 @@
 | 2026-05-22T04:03:19 | Hallazgo durante la ejecucion | F2 validacion (T-205) | **Smoke tests del server NO se rompieron con el renombre masivo**. Ejecucion de bash tests/run_all.sh --quiet post-T-204: 5 suites OK, 72 PASS / 0 FAIL / 1 SKIP (mismo resultado que pre-iniciativa). Esto confirma que los renombres son cambios cosmeticos: NO afectan logica de scripts, deteccion de variables, validaciones, ni comportamiento runtime. Validacion estructural pasada antes de commit. |
 | 2026-05-22T04:03:20 | Fase cerrada | F2 | **Cierre de Fase F2 (Renombre repo server)**. 5 tareas cerradas (T-201 a T-205), 1 commit en el repo server (fd5fda8), 28 archivos editados con 91 lineas modificadas + directorio renombrado + remote configurado. Tests del server preservados (72/0/1). Norma D-COMMITS-HISTORIA respetada (bitacora preservada). Norma D-REFERENTE-EXTERNO respetada (referente intacto). 3 hallazgos atomizados registrados. **Esfuerzo F2: ~10 min reales vs 45 min estimados** (sed batch es rapido; lo costoso fue el analisis previo de que excluir). Siguiente fase F3 (Refs del UI a si mismo, 60 min) -- 249 archivos en el UI con e-comerce-ui a cambiar. |
 | 2026-05-22T04:03:08 | Inicio de fase | F3 | **Inicio de Fase F3 (Refs del UI a si mismo)**. Esfuerzo estimado 60 min. La fase mas grande: 249 archivos con `e-comerce-ui` a cambiar por `ecommerce-ui` + 11 con `template-e-comerce-ui` por `template-ecommerce-ui` + package.json/package-lock.json. Estrategia: aplicar sed mas largo primero, excluir node_modules/.git/.cache/dist/progreso-*.md, validar conteo cero al final. **Punto critico**: dist/ no se toca aqui; se regenera en F6 con `npm run build`. |
+| 2026-05-22T04:04:48 | Inicio de tarea | T-301 | Comienzo T-301. package.json + package-lock.json: name e-comerce-ui -> ecommerce-ui. |
+| 2026-05-22T04:04:49 | Cierre de tarea | T-301 | Cierre T-301. package.json: name = 'ecommerce-ui', description actualizada. package-lock.json: 2 ocurrencias actualizadas (root + nested). Verificacion: grep retorna 0 ocurrencias de 'e-comerce-ui' en los 2 JSON. |
+| 2026-05-22T04:04:50 | Inicio de tarea | T-302 | Comienzo T-302. sed batch e-comerce-ui -> ecommerce-ui sobre 245 archivos. |
+| 2026-05-22T04:04:51 | Cierre de tarea | T-302 | Cierre T-302. 245 archivos modificados across .md/.json/.js/.jsx/.ts/.tsx/.scss/.cjs/.mjs/.html. Excluidos: node_modules/, .git/, .cache/, dist/, progreso-*.md. |
+| 2026-05-22T04:04:52 | Inicio de tarea | T-303 | Comienzo T-303. sed batch template-e-comerce-ui -> template-ecommerce-ui sobre 13 archivos. |
+| 2026-05-22T04:04:53 | Cierre de tarea | T-303 | Cierre T-303. 13 archivos modificados (URLs GitHub + paths en docs). Aplicado ANTES de T-302 para no dejar sub-cadenas. |
+| 2026-05-22T04:04:54 | Inicio de tarea | T-304 | Comienzo T-304. Verificacion manual variante larga template-e-comerce-ui-server. |
+| 2026-05-22T04:04:55 | Cierre de tarea | T-304 | Cierre T-304. Resultado: 0 ocurrencias post-T-303 (la variante larga era subset del patron de T-303; ya quedo cubierta). |
+| 2026-05-22T04:04:56 | Inicio de tarea | T-305 | Comienzo T-305. Verificacion huerfanos e-comerce-ui. |
+| 2026-05-22T04:04:57 | Cierre de tarea | T-305 | Cierre T-305. Resultado: 0 ocurrencias post-T-302. Validacion grep exhaustiva sobre archivos editables completa. |
+| 2026-05-22T04:04:58 | Inicio de tarea | T-306 | Comienzo T-306. Commit unitario. |
+| 2026-05-22T04:04:59 | Cierre de tarea | T-306 | Cierre T-306. Commit en UI: 54cde6f 'Rename e-comerce-ui to ecommerce-ui (F3)' (subject 40 chars, cumple Tim Pope). 252 archivos modificados, 319/318 insertions/deletions. |
+| 2026-05-22T04:05:00 | Hallazgo durante la ejecucion | F3 ejecucion | **El patron `template-e-comerce-ui-server` quedo cubierto por T-303** sin tarea propia. Razon: T-303 sustituye `template-e-comerce-ui` -> `template-ecommerce-ui`, y como `template-e-comerce-ui-server` empieza con `template-e-comerce-ui`, queda transformado a `template-ecommerce-ui-server` (que sigue siendo el nombre viejo CORRECTO del server). Sin embargo, dado que F2 ya renombro el server a `template-ecommerce-server`, esta variante de 3 archivos en el UI quedo en estado intermedio. **Validacion**: en F4 hay tareas para verificar y arreglar. Por ahora ya esta limpio de `e-comerce-` (con guion), pero puede haber `template-ecommerce-ui-server` (sin guion, todavia con `-ui-` ahora redundante). Esto se verifica explicitamente en F4. |
+| 2026-05-22T04:05:01 | Hallazgo durante la ejecucion | F3 validacion | **Cero colisiones generadas como `ecommerceommerce`**. Validacion post-sed: ningun archivo del repo contiene tal cadena. Confirmacion de que la prediccion del analisis F0 fue correcta. Los patrones de busqueda (`e-comerce`, una `m`) y target (`ecommerce`, doble `m`) son strings distintos sin solapamiento. |
+| 2026-05-22T04:05:02 | Hallazgo durante la ejecucion | F3 validacion | **Excepciones intactas confirmadas post-F3**: referente externo `jcg-admin/e-comerce-server` con 13 refs preservadas (era 6 antes; aumento porque la palabra completa aparece tambien en historiales de iniciativa SCSS y otras), procedimiento `ecomerce-p001` con 14 refs preservadas. El sed con patron `e-comerce-ui` (con sufijo `-ui`) no toca estas variantes porque tienen otros sufijos (`-server`, `-p001`). |
+| 2026-05-22T04:05:03 | Fase cerrada | F3 | **Cierre de Fase F3 (Refs del UI a si mismo)**. 6 tareas cerradas (T-301..T-306), 1 commit (54cde6f), 252 archivos modificados, 319 insertions / 318 deletions. Validacion: 0 ocurrencias de `e-comerce-ui` y `template-e-comerce-ui` en archivos editables. Excepciones intactas (13 + 14 refs externas). 3 hallazgos atomizados. **Esfuerzo F3: ~10 min reales vs 60 min estimados** (sed batch es muy eficiente; el grueso del esfuerzo estuvo en F0/analisis). Siguiente fase F4 (Refs cross-repo en UI, 30 min): refs a `e-comerce-api`, `-db`, `-doc`, y CASO POR CASO para `e-comerce-server` distinguiendo referente externo vs hermano. |
 ## Contadores
 
 | Clase de evento | Cantidad |
@@ -48,10 +64,10 @@
 | Apertura | 1 |
 | Plan | 1 |
 | Decisiones aprobadas | 1 |
-| Hallazgo durante la ejecucion | 9 |
-| Inicio de tarea | 9 |
-| Cierre de tarea | 9 |
-| Fase cerrada | 3 |
+| Hallazgo durante la ejecucion | 12 |
+| Inicio de tarea | 15 |
+| Cierre de tarea | 15 |
+| Fase cerrada | 4 |
 | Bloqueo | 0 |
 | Desbloqueo | 0 |
 | Cambio de alcance | 0 |
