@@ -1,0 +1,36 @@
+# Progreso: Corregir nomenclatura `ecommerce` y estilo de diagramas
+
+## Eventos atomizados
+
+| Timestamp | Clase | Referencia | Detalle |
+|-----------|-------|------------|---------|
+| 2026-05-22T03:50:00 | Apertura | iniciativa | **Apertura formal de la iniciativa `corregir-nomenclatura-ecommerce-y-estilo-diagramas`**. Objetivo: corregir el typo historico `e-comerce` (una `m`, con guion) -> `ecommerce` (doble `m`, sin guion) en TODOS los strings que apuntan al propio proyecto y sus repos hermanos, EXCEPTO el repo referente externo `jcg-admin/e-comerce-server`, el procedimiento externo `ecomerce-p001` y los mensajes de commit historicos. Adicionalmente: estandarizar el estilo de diagramas Mermaid segun la convencion adoptada en la iniciativa cerrada `crear-template-ecomerce-ui-server` (tema dark, identificadores snake_case descriptivos, classDef para flowchart). Iniciativa coordina trabajo en DOS repos: `template-ecommerce-ui` (UI, mayoria del trabajo) y `template-ecomerce-ui-server` (server, a renombrar a `template-ecommerce-server`). El progreso PM autoritativo vive en este repo (UI). Esfuerzo estimado: 285 min (4h 45min) en 7 fases con 32 tareas atomicas. Procedimiento: PROC-GESTION-001 v4.0.0 + arc42. Norma de hallazgos atomizados aplicada desde el inicio (aprendida en la iniciativa cerrada del server). |
+| 2026-05-22T03:50:01 | Plan | iniciativa | **Plan aprobado en 7 fases**: F0 apertura + 7 decisiones formales D-* (30 min) -> F1 backup defensivo ambos repos (15 min) -> F2 renombre repo server (45 min, paralelizable con F3) -> F3 refs del UI a si mismo (60 min) -> F4 refs cross-repo en UI (30 min, depende de F2 y F3) -> F5 Mermaid tema dark canonico en 19 diagramas (60 min) -> F6 verificacion lint+test+build+tests del server (30 min) -> F7 cierre + backup post (15 min). DAG documentado en `plan-*.md`. 32 tareas atomicas T-NNN distribuidas. |
+| 2026-05-22T03:51:00 | Hallazgo durante la ejecucion | F0 inspeccion | **12 variantes distintas de `comerce` detectadas en el UI**. Inventario via grep: `template-e-comerce-ui-server` (3 archivos), `template-e-comerce-ui` (11), `e-comerce-ui-server` (3), `e-comerce-ui` (249), `e-comerce-api` (7), `e-comerce-db` (2), `e-comerce-doc` (6), `e-comerce-server` (10 -- ambiguo: referente vs hermano), `e-comerce` huerfano (varios), `ecomerce-p001` (6 -- procedimiento externo, NO tocar), `ecommerce-*` (ya existente correctamente en muchos sitios). Total: 256 archivos con el typo, 330 lineas. Documentado exhaustivamente en `analisis-*.md`. |
+| 2026-05-22T03:51:30 | Hallazgo durante la ejecucion | F0 inspeccion | **El string `e-comerce-server` es AMBIGUO**: 50% refs al referente externo `jcg-admin/e-comerce-server` (NO tocar -- repo real en GitHub con ese nombre exacto), 50% refs al repo hermano server. **NO se puede usar sed global**. Decision aprobada: aplicar caso por caso en T-404, con `grep -n` previo para identificar las 10 lineas y aplicar cambio selectivo solo en menciones al hermano. |
+| 2026-05-22T03:52:00 | Hallazgo durante la ejecucion | F0 inspeccion | **`ecomerce-p001` (procedimiento externo) NO matchea con sed para `e-comerce`** porque el patron de busqueda tiene guion antes (`e-comerce`) y el procedimiento no (`ecomerce-p001`). Esto significa que un sed global `s/e-comerce/ecommerce/g` es seguro respecto al procedimiento p001 (no genera falsos positivos). Verificacion adicional necesaria: confirmar antes de cada sed que el patron `e-comerce` (con guion) no aparece en strings que no deberian cambiar. |
+| 2026-05-22T03:52:30 | Hallazgo durante la ejecucion | F0 inspeccion | **NO hay riesgo de colisiones en cadena (`ecommerceommerce`)** al hacer sed `s/e-comerce/ecommerce/g`. Razon: el patron de busqueda `e-comerce` (una `m`) y el target `ecommerce` (doble `m`) son strings distintos sin solapamiento. Validado: ningun archivo del repo contiene combinaciones raras como `e-comerceommerce` o similar. Riesgo R-5 del analisis MITIGADO antes de ejecutar. |
+| 2026-05-22T03:53:00 | Hallazgo durante la ejecucion | F0 inspeccion | **19 diagramas Mermaid en 15 archivos, cero con tema dark canonico**. Distribucion por tipo: 12 flowchart (plantilla completa aplica), 1 graph (alias de flowchart, plantilla completa aplica), 3 sequenceDiagram (solo init theme aplica; no classDef), 1 gantt, 1 pie, 1 gitGraph (solo init theme cada uno). Identificadores actuales mezclan snake_case y alias cortos (e.g. en sequenceDiagram `participant U as Usuario`); plan incluye expansion a `participant usuario as Usuario` para cumplir norma "no alias cortos". |
+| 2026-05-22T03:53:30 | Decisiones aprobadas | iniciativa | **7 decisiones formales D-* aprobadas en F0/T-002** (documentadas en index): (1) D-NOMBRE-UI: `template-ecommerce-ui` + paquete npm `ecommerce-ui`. (2) D-NOMBRE-SERVER: `template-ecommerce-server` (sin `-ui-`, doble `m`). (3) D-NOMBRE-HERMANOS: `ecommerce-api`, `ecommerce-db`, `ecommerce-doc`. (4) D-REFERENTE-EXTERNO: `jcg-admin/e-comerce-server` NO se renombra (repo externo real). (5) D-PROCEDIMIENTO-EXTERNO: `Procedimiento-...-WSL2-ecomerce-p001` NO se toca. (6) D-MERMAID-CONVENCION: tema base dark canonico, classDef para flowchart, init theme solo para no-flowchart, identificadores snake_case descriptivos prohibiendo alias cortos. (7) D-COMMITS-HISTORIA: NO reescribir commits viejos (129+30), bitacoras `progreso-*.md` previas tampoco se editan. |
+| 2026-05-22T03:54:00 | Inicio de tarea | T-001 | Comienzo T-001. Crear directorio iniciativa + 5 docs PM (index, alcance, analisis, plan, tareas, progreso) siguiendo patron de iniciativa cerrada `resolver-hallazgos-de-deuda-del-template`. |
+| 2026-05-22T03:54:01 | Cierre de tarea | T-001 | Cierre T-001. 5 docs PM producidos: index (110 LOC), alcance (110 LOC), analisis (185 LOC), plan (180 LOC con DAG Mermaid), tareas (88 LOC). Scaffold formal completo segun PROC-GESTION-001 v4.0.0. |
+| 2026-05-22T03:54:02 | Inicio de tarea | T-002 | Comienzo T-002. Las 7 decisiones D-* ya estan documentadas en el index; este evento las ratifica formalmente como aprobadas por el usuario para uso en las fases siguientes. |
+| 2026-05-22T03:54:03 | Cierre de tarea | T-002 | Cierre T-002. 7 decisiones D-* aprobadas formalmente. Registradas en `index-*.md` seccion "Decisiones aprobadas" y referenciadas en `analisis-*.md`. |
+| 2026-05-22T03:54:04 | Fase cerrada | F0 | **Cierre de Fase F0 (Apertura + analisis + decisiones)**. 2 tareas cerradas (T-001, T-002), 5 docs PM producidos (~670 LOC totales), 7 decisiones formales aprobadas, 7 hallazgos atomizados registrados (incluyendo los 4 hallazgos clave de inspeccion: 12 variantes, ambiguedad de `e-comerce-server`, seguridad respecto a `ecomerce-p001`, no-colisiones, 19 diagramas Mermaid sin tema). Norma de hallazgos atomizados aplicada con disciplina desde el primer turno. Esfuerzo F0: aproximado al estimado de 30 min. Siguiente fase F1 (Backup defensivo, 15 min). |
+
+## Contadores
+
+| Clase de evento | Cantidad |
+|------|----------|
+| Apertura | 1 |
+| Plan | 1 |
+| Decisiones aprobadas | 1 |
+| Hallazgo durante la ejecucion | 5 |
+| Inicio de tarea | 2 |
+| Cierre de tarea | 2 |
+| Fase cerrada | 1 |
+| Bloqueo | 0 |
+| Desbloqueo | 0 |
+| Cambio de alcance | 0 |
+| Replan | 0 |
+| Cierre de iniciativa | 0 |
