@@ -18,11 +18,11 @@
 
 | ID | Descripcion | Esfuerzo | Estado | Entregable |
 |----|-------------|----------|--------|------------|
-| T-201 | `mv` directorio: `template-ecomerce-ui-server` -> `template-ecommerce-server` | 2 min | Pendiente | Directorio renombrado |
-| T-202 | Configurar remote: `git remote add origin https://github.com/jcg-admin/template-ecommerce-server.git` | 2 min | Pendiente | Remote configurado |
-| T-203 | Actualizar refs internas del server (configs, scripts, docs vivos, README) a su propio nombre nuevo. NO tocar bitacora `progreso-*.md` de la iniciativa cerrada. | 25 min | Pendiente | Refs internas actualizadas |
-| T-204 | Actualizar refs del server al UI: `template-e-comerce-ui` -> `template-ecommerce-ui` | 10 min | Pendiente | Refs cross-repo actualizadas |
-| T-205 | Commit unitario en server con subject <=50 chars | 5 min | Pendiente | 1 commit |
+| T-201 | `mv` directorio: `template-ecomerce-ui-server` -> `template-ecommerce-server` | 2 min | **Cerrada** | Directorio renombrado |
+| T-202 | Configurar remote: `git remote add origin https://github.com/jcg-admin/template-ecommerce-server.git` | 2 min | **Cerrada** | Remote configurado |
+| T-203 | Actualizar refs internas del server | 25 min | **Cerrada** | Refs internas actualizadas |
+| T-204 | Actualizar refs del server al UI | 10 min | **Cerrada** | Refs cross-repo actualizadas |
+| T-205 | Commit unitario en server con subject <=50 chars | 5 min | **Cerrada** | 1 commit |
 
 ## F3 - Refs del UI a si mismo (60 min)
 
