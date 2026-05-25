@@ -138,31 +138,44 @@ se almacenan en Redux ni en localStorage.
 ## Servidor de despliegue
 
 El bundle producido por `npm run build` (en `dist/`) se sirve en
-producción mediante el repo hermano
-[`template-ecomerce-ui-server`](https://github.com/jcg-admin/template-ecomerce-ui-server)
-— un servidor Nginx + SSL (Let's Encrypt) + hardening (UFW + fail2ban
+produccion mediante el repo hermano
+[`template-ecommerce-server`](https://github.com/jcg-admin/template-ecommerce-server)
+-- un servidor Nginx + SSL (Let's Encrypt) + hardening (UFW + fail2ban
 + SSH) aprovisionado con scripts bash idempotentes sobre Ubuntu 24.04.
 
-| Aspecto del UI | Cómo lo consume el server |
-|----------------|----------------------------|
+| Aspecto del UI | Como lo consume el server |
+|----------------|---------------------------|
 | `dist/index.html` | Servido como SPA catch-all (`try_files $uri $uri/ /index.html`) |
-| `dist/*.[contenthash].chunk.js` | Cache de larga duración (1 año) gracias al hash en el nombre |
+| `dist/*.[contenthash].chunk.js` | Cache de larga duracion (1 anio) gracias al hash en el nombre |
 | `dist/*.[contenthash].css` | Idem |
-| Webpack `publicPath: '/'` | Compatible con Nginx serviendo desde root |
+| Webpack `publicPath: '/'` | Compatible con Nginx sirviendo desde root |
 | Asume backend en `/api/*` | El server lo proxy-pasa a `$API_UPSTREAM` definido en `.env` del server |
 
-Variable clave en el `.env` del server: `UI_DIST` apunta al `dist/`
+**Variable clave: `API_URL` al compilar.**
+
+Para que el proxy Nginx funcione, el bundle debe compilarse con
+`API_URL` vacio. Esto hace que `apiService` use URLs relativas
+(`/api/v1/...`) que Nginx intercepta y proxea a `$API_UPSTREAM`:
+
+```bash
+# Compilar para produccion con proxy Nginx activo
+API_URL='' npm run build
+
+# Si el backend esta en un host separado (sin proxy Nginx)
+API_URL=https://api.midominio.com npm run build
+```
+
+Variable `UI_DIST` en el `.env` del server apunta al `dist/`
 producido en este repo. Despliegue habitual:
 
 ```bash
-npm install && npm run build
-rsync -avz --delete dist/ deploy@servidor:/srv/repos/ecom/template-ecommerce-ui/dist/
+API_URL='' npm run build
+rsync -avz --delete dist/ deploy@servidor:/srv/repos/tui/template-ecommerce-ui/dist/
 ```
 
-No es necesario reiniciar Nginx — sirve los archivos en tiempo real
+No es necesario reiniciar Nginx -- sirve los archivos en tiempo real
 y el cache busting de Webpack (`contenthash`) hace que los navegadores
-descarguen los chunks nuevos automáticamente.
+descarguen los chunks nuevos automaticamente.
 
-Para detalles operativos completos del servidor (provisionar, mantener,
-recuperar), ver
-[`docs/operaciones.md` del repo server](https://github.com/jcg-admin/template-ecomerce-ui-server/blob/main/docs/operaciones.md).
+Para detalles operativos completos del servidor, ver
+[`docs/operaciones.md` del repo server](https://github.com/jcg-admin/template-ecommerce-server/blob/main/docs/operaciones.md).
