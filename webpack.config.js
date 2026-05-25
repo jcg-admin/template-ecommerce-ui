@@ -64,11 +64,14 @@ const buildDefinedEnv = (mode) => {
   return {
     ...pyVars,
     'process.env.NODE_ENV':   JSON.stringify(mode || 'production'),
-    // Prioridad: variable de shell > .env.{NODE_ENV} > fallback desarrollo.
-    // Sin este orden, API_URL en .env.production era ignorado porque
-    // process.env.API_URL (vacío en el CI/servidor) caía directo al fallback.
+    // API_URL: URL base del backend. En produccion con Nginx como proxy,
+    // dejar vacio para que apiService use URLs relativas (/api/v1/...)
+    // que Nginx intercepta y proxea a API_UPSTREAM configurado en el server.
+    // Si se configura un valor absoluto, las llamadas van directamente a
+    // ese host sin pasar por Nginx (util para backends en host separado).
+    // Prioridad: variable de shell > .env.{NODE_ENV} > vacio.
     'process.env.API_URL':    JSON.stringify(
-      process.env.API_URL || resolvedEnv.API_URL || 'http://localhost:8000'
+      process.env.API_URL || resolvedEnv.API_URL || ''
     ),
     'process.env.APP_VERSION': JSON.stringify(require('./package.json').version),
     // Timestamp ISO 8601 del momento en que webpack evaluo este config.

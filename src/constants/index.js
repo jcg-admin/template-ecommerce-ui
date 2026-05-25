@@ -3,7 +3,12 @@
  */
 
 // API endpoints base
-export const API_BASE = process.env.API_URL || 'http://localhost:8000';
+// API_BASE: URL base para llamadas al backend.
+// En produccion con Nginx como proxy, dejar vacio para que las llamadas
+// usen URLs relativas (/api/v1/...) que Nginx intercepta y proxea a
+// API_UPSTREAM. Si se configura un valor absoluto (ej: https://api.dominio.com),
+// las llamadas van directamente a ese host sin pasar por Nginx.
+export const API_BASE = process.env.API_URL || '';
 
 // Paginación por defecto
 export const DEFAULT_PAGE_SIZE = 20;

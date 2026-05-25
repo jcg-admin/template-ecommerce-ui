@@ -70,7 +70,19 @@ class APIService {
   async _request(method, path, options = {}, attempt = 1) {
     const { body, params, timeout = this.timeout, headers = {} } = options;
 
-    const url = new URL(path.startsWith('http') ? path : `${this.baseURL}${path}`);
+    // Construir URL absoluta. Si baseURL esta vacio (API_URL no configurado),
+    // las rutas relativas se resuelven contra el origen del servidor actual.
+    // Esto permite que Nginx intercepte /api/* y proxee al backend configurado
+    // via API_UPSTREAM, sin hardcodear http://localhost:8000 en el bundle.
+    const resolvedPath = path.startsWith('http')
+      ? path
+      : `${this.baseURL}${path}`;
+    const base = typeof window !== 'undefined'
+      ? window.location.origin
+      : 'http://localhost';
+    const url = resolvedPath.startsWith('http')
+      ? new URL(resolvedPath)
+      : new URL(resolvedPath, base);
     if (params) {
       Object.entries(params).forEach(([k, v]) => {
         if (v !== null && v !== undefined) url.searchParams.set(k, v);
