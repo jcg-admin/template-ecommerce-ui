@@ -8,9 +8,9 @@
  *   DELETE /api/cart/items/:id/   eliminar item
  *   POST   /api/cart/voucher/     aplicar voucher
  *   DELETE /api/cart/voucher/     quitar voucher
- *   GET    /api/wishlist/         lista de deseos
- *   POST   /api/wishlist/         anadir a wishlist
- *   DELETE /api/wishlist/:product_id/  quitar de wishlist
+ *   GET    /api/v1/wishlist/         lista de deseos
+ *   POST   /api/v1/wishlist/         anadir a wishlist
+ *   DELETE /api/v1/wishlist/:product_id/  quitar de wishlist
  *
  * El estado del carrito y de la wishlist viven en variables a nivel
  * de modulo. MSW v2 reusa el mismo modulo entre requests (igual que
@@ -131,9 +131,9 @@ export const cartHandlers = [
   }),
 
   // Wishlist
-  http.get('/api/wishlist/', () => HttpResponse.json(wishlist)),
+  http.get('/api/v1/wishlist/', () => HttpResponse.json(wishlist)),
 
-  http.post('/api/wishlist/', async ({ request }) => {
+  http.post('/api/v1/wishlist/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
       | { product_id?: number }
       | null;
@@ -147,7 +147,7 @@ export const cartHandlers = [
     return HttpResponse.json(item, { status: 201 });
   }),
 
-  http.delete('/api/wishlist/:product_id/', ({ params }) => {
+  http.delete('/api/v1/wishlist/:product_id/', ({ params }) => {
     const pid = parseInt(String(params.product_id), 10);
     wishlist = wishlist.filter((i) => i.product_id !== pid);
     return new HttpResponse(null, { status: 204 });
