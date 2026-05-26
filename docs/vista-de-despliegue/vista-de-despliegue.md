@@ -118,6 +118,7 @@ estaticos para `/` y `/static/*`, y proxy-pasa `/api/*` a Django.
 |---------|---------|----------------------|
 | Desarrollo local | `npm run dev` (webpack-dev-server, puerto 3001) | `.env.local` (gitignored) + `.env.example` como plantilla. `*_SOURCE=mock` por defecto. |
 | Build de produccion | `npm run build` con `NODE_ENV=production` | `.env.production` (gitignored) + `.env.production.example` como plantilla. `API_URL` apunta al dominio real. |
+| **Build demo** | `npm run build:demo` (`DEMO_MODE=true webpack --mode production`) | Sin `.env.production`. `mockServiceWorker.js` se copia a `dist/`. MSW arranca aunque `NODE_ENV=production`. Util para demostrar el template sin backend real. |
 | Staging | Mismo build que produccion pero con `API_URL` apuntando al backend de staging | Plantilla propia (no en repo). |
 
 ## Artefactos producidos por el build

@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `habilitar-msw-en-modo-demo` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
 | Fecha de creacion (directorio) | 2026-05-26 |
 | Fecha de apertura formal | 2026-05-26 |
 | Fecha de paso a ejecucion | 2026-05-26 |
+| Fecha de cierre | 2026-05-26 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -59,3 +60,4 @@ Iniciativa **en ejecucion** desde 2026-05-26.
 | [plan-habilitar-msw-en-modo-demo.md](plan-habilitar-msw-en-modo-demo.md) | Plan de ejecucion en fases con tareas atomicas T-NNN y DAG. |
 | [tareas-habilitar-msw-en-modo-demo.md](tareas-habilitar-msw-en-modo-demo.md) | Lista plana de las tareas con su estado actual. |
 | [progreso-habilitar-msw-en-modo-demo.md](progreso-habilitar-msw-en-modo-demo.md) | Log temporal del avance, con una entrada por evento relevante. |
+| [decisiones-habilitar-msw-en-modo-demo.md](decisiones-habilitar-msw-en-modo-demo.md) | Decisiones de diseno, hallazgos y verificacion post-ejecucion. Obligatorio por PROC-GESTION-001. |

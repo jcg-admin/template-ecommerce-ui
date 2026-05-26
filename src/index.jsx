@@ -19,15 +19,18 @@ if (typeof window !== 'undefined') {
 const container = document.getElementById('root');
 const root = createRoot(container);
 
-// MSW: arranca el Service Worker solo en desarrollo. El bundle de
-// produccion no incluye MSW ni los handlers; webpack ya hace tree
-// shaking de import dinamico bajo bloque `if (NODE_ENV !== 'production')`
-// porque DefinePlugin sustituye `process.env.NODE_ENV` antes de
-// minificar. El archivo `public/mockServiceWorker.js` no se copia a
-// `dist/` (no hay copy-webpack-plugin), asi que aunque alguien
-// solicitara la URL en produccion seria 404 inocuo. Doble guarded.
+// MSW: arranca el Service Worker en dos casos:
+// 1. Desarrollo: NODE_ENV !== 'production' (comportamiento original).
+// 2. Demo: DEMO_MODE === 'true' en el bundle compilado. Permite
+//    demostrar el template con datos de mock sobre el dist/ servido
+//    por Nginx, sin necesitar un backend real. Activar con:
+//    DEMO_MODE=true npm run build  (o npm run build:demo)
+// El archivo mockServiceWorker.js se copia a dist/ via copy-webpack-plugin
+// solo cuando DEMO_MODE=true (ver webpack.config.js). En produccion real
+// sin DEMO_MODE, este bloque no ejecuta y el service worker no existe en
+// dist/. Doble guardado: guard de codigo + ausencia del archivo.
 async function startApp() {
-  if (process.env.NODE_ENV !== 'production') {
+  if (process.env.NODE_ENV !== 'production' || process.env.DEMO_MODE === 'true') {
     const { worker } = await import('./mocks/browser');
     await worker.start({
       onUnhandledRequest: 'bypass',

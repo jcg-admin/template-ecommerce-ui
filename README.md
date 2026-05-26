@@ -60,12 +60,32 @@ npm run dev
 npm test
 npm run test:coverage
 
-# Build de producción
+# Build de produccion
 npm run build
 npm run build:analyze   # con reporte de bundle
+npm run build:demo      # con MSW activo (modo demo, ver abajo)
 ```
 
-## Feature flags
+## Modo demo (sin backend real)
+
+El `dist/` producido por `npm run build` no muestra datos si no hay
+un backend real configurado en `API_UPSTREAM`. Para demostrar el
+template con datos de mock sobre el bundle compilado:
+
+```bash
+npm run build:demo
+```
+
+Esto equivale a `DEMO_MODE=true npm run build`. El `dist/` resultante
+incluye `mockServiceWorker.js` y MSW arranca aunque `NODE_ENV` sea
+`production`. Todas las llamadas a `/api/v1/...` son interceptadas
+por los handlers de `src/mocks/` y devuelven datos generados con
+Faker.
+
+Un build de produccion real sin `DEMO_MODE` no cambia — MSW no
+arranca y `mockServiceWorker.js` no aparece en `dist/`.
+
+
 
 Cada dominio del backend puede consumirse en modo `mock` (handlers
 [MSW](https://mswjs.io/) interceptan a nivel de red, no requiere

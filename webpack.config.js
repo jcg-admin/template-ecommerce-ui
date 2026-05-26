@@ -5,6 +5,14 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const { BundleAnalyzerPlugin } = require('webpack-bundle-analyzer');
 const TerserPlugin = require('terser-webpack-plugin');
+const CopyPlugin = require('copy-webpack-plugin');
+
+// DEMO_MODE: cuando es 'true', el build de produccion incluye
+// mockServiceWorker.js en dist/ y MSW arranca aunque NODE_ENV sea
+// 'production'. Util para demostrar el template sin backend real.
+// Uso: DEMO_MODE=true npm run build   (o npm run build:demo)
+// Un build de produccion real sin esta variable no cambia en absoluto.
+const isDemoMode = process.env.DEMO_MODE === 'true';
 
 // Feature flags ecommerce-ui — controlan si el dominio se sirve via
 // mock o se delega al backend real.
@@ -78,6 +86,9 @@ const buildDefinedEnv = (mode) => {
     // Usado por `window.__APP_CONFIG__` en runtime para que el operador
     // pueda confirmar qué build esta sirviendo el servidor.
     'process.env.BUILT_AT':    JSON.stringify(new Date().toISOString()),
+    // DEMO_MODE: habilita MSW en el bundle de produccion para demostracion
+    // sin backend real. Solo activo cuando se compila con DEMO_MODE=true.
+    'process.env.DEMO_MODE':   JSON.stringify(process.env.DEMO_MODE || 'false'),
   };
 };
 
@@ -237,6 +248,15 @@ module.exports = (env, argv) => {
       }),
       new webpack.DefinePlugin(buildDefinedEnv(argv.mode)),
       !isDev && new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+      // DEMO_MODE: copiar mockServiceWorker.js a dist/ solo cuando
+      // DEMO_MODE=true. En builds de produccion real este plugin no se activa
+      // y mockServiceWorker.js no aparece en dist/.
+      isDemoMode && new CopyPlugin({
+        patterns: [{
+          from: path.resolve(__dirname, 'public/mockServiceWorker.js'),
+          to:   path.resolve(__dirname, 'dist/mockServiceWorker.js'),
+        }],
+      }),
       analyze && new BundleAnalyzerPlugin({
         analyzerMode: 'static',
         reportFilename: path.resolve(__dirname, 'dist/bundle-report.html'),
