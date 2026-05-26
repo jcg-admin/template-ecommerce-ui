@@ -14,11 +14,14 @@
  * por slug exacto. Retorna 404 si no existe.
  *
  * Listado (`/api/v1/catalogue/`): pagina CATALOG_PRODUCTS con
- * PAGE_SIZE=20. Acepta ?page=N y ?category=<slug>.
+ * PAGE_SIZE=20. Acepta ?page=N y ?category=<slug>. El filtro
+ * usa el campo `all_categories` del producto para cubrir las 14
+ * categorias, incluidas las 6 que no son categoria_principal.
  *
  * Categorias (`/api/v1/categories/`): retorna CATALOG_CATEGORIES.
  *
- * Implementado en F4 de la iniciativa `integrar-catalogo-oja-en-mocks`.
+ * Correccion A-07 de la iniciativa `auditar-integracion-catalogo`:
+ * filtro por `all_categories.includes()` en lugar de `category?.slug ===`.
  */
 
 import { http, HttpResponse } from 'msw';
@@ -43,7 +46,11 @@ export const catalogHandlers = [
       );
     }
     if (catSlug) {
-      results = results.filter(p => p.category?.slug === catSlug);
+      // Filtra por all_categories para cubrir las 6 categorias que no
+      // tienen categoria_principal en el JSON del scraper (A-07).
+      results = results.filter(p =>
+        (p as any).all_categories?.includes(catSlug)
+      );
     }
 
     const body: PaginatedResponse<typeof results[number]> = {
@@ -77,7 +84,9 @@ export const catalogHandlers = [
 
     let all = [...CATALOG_PRODUCTS];
     if (catSlug) {
-      all = all.filter(p => p.category?.slug === catSlug);
+      // Filtra por all_categories para cubrir las 6 categorias que no
+      // tienen categoria_principal en el JSON del scraper (A-07).
+      all = all.filter(p => (p as any).all_categories?.includes(catSlug));
     }
 
     const total  = all.length;
