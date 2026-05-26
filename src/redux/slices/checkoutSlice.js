@@ -1,6 +1,13 @@
 /**
  * Checkout Slice — ecommerce-ui
  * Gestiona el flujo de compra: dirección → envío → pago → confirmación
+ *
+ * @deprecated Usar `paymentsSlice.js` para los thunks de pago.
+ * Este slice usa los paths legacy `/api/payments/*/create/` que ya
+ * no tienen handler MSW. El slice activo es `paymentsSlice.js` que
+ * usa `/api/v1/payments/*/checkout` y es el que importa
+ * `PaymentSelectionPage.jsx`. Ver hallazgo A-03 en la iniciativa
+ * `auditar-integracion-catalogo`.
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';

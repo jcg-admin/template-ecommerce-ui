@@ -17,3 +17,4 @@
 | 2026-05-26T01:33:36 | T-201, T-202 hechas | Handler search: results devuelve todos sin slice. next=null, previous=null. Verificacion: fragmento exacto muestra results sin slice y ambos campos null. F2 cerrada. |
 | 2026-05-26T01:33:42 | F3 iniciada | T-301 (browser.ts), T-302 (checkoutSlice deprecated), T-303 (README script). |
 | 2026-05-26T01:33:59 | T-301 hecha | browser.ts: JSDoc corregido. Ya no dice 'solo en NODE_ENV=development'. Documenta los dos casos: desarrollo (NODE_ENV) y demo (DEMO_MODE). |
+| 2026-05-26T01:34:18 | T-302 hecha | checkoutSlice.js: @deprecated agregado apuntando a paymentsSlice.js con la razon (paths legacy sin handler MSW). |
