@@ -53,10 +53,14 @@ export const catalogHandlers = [
       );
     }
 
+    // La busqueda retorna todos los resultados sin paginar.
+    // Razon: una busqueda tipicamente devuelve pocos resultados y el
+    // frontend muestra todos de una vez. La paginacion artificial
+    // (A-02) generaba un `next` hardcodeado a page=2 que no funcionaba.
     const body: PaginatedResponse<typeof results[number]> = {
       count:    results.length,
-      results:  results.slice(0, PAGE_SIZE),
-      next:     results.length > PAGE_SIZE ? `?q=${q}&page=2` : null,
+      results,
+      next:     null,
       previous: null,
     };
     return HttpResponse.json(body);

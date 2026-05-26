@@ -13,3 +13,5 @@
 | 2026-05-26T01:32:21 | T-103 hecha | catalog.ts handler: filtro de categoria cambiado de category?.slug === catSlug a all_categories?.includes(catSlug) en listado y busqueda. JSDoc actualizado con la correccion A-07. |
 | 2026-05-26T01:33:08 | T-104 hecha | Verificacion: filtro all_categories.includes(catSlug) coincide con product_count en CATALOG_CATEGORIES para las 14 categorias. 14/14 PASAN. Los 'fallos' del test anterior usaban el conteo de _resumen.json (categoria_principal, 8 valores) como referencia incorrecta — la referencia correcta es CATALOG_CATEGORIES.product_count que ya usa categorias[]. Consistencia total. |
 | 2026-05-26T01:33:08 | F1 cerrada | A-07 resuelto. 4 commits: b217683 (script), 783b9cd (datos), 7bfc283 (handler), este (progreso). Siguiente: F2. |
+| 2026-05-26T01:33:19 | F2 iniciada | T-201, T-202. Corregir A-02: handler de busqueda devuelve todos los resultados sin paginacion artificial. next y previous siempre null. |
+| 2026-05-26T01:33:36 | T-201, T-202 hechas | Handler search: results devuelve todos sin slice. next=null, previous=null. Verificacion: fragmento exacto muestra results sin slice y ambos campos null. F2 cerrada. |
