@@ -22,8 +22,10 @@
  *   multiples imagenes se quedan con la imagen principal hasta que se
  *   implemente la galeria.
  *
- *   categoria_principal -> category + category_name. El campo `categorias`
- *   (array con multiples) se ignora para simplificar.
+ *   categoria_principal -> category + category_name (categoria primaria).
+ *   categorias[] -> all_categories (array de slugs de TODAS las categorias
+ *   del producto). Permite filtrar por cualquiera de las 14 categorias,
+ *   no solo por las 8 que tienen categoria_principal.
  *
  *   Campos ignorados: url, breadcrumb, fecha_entrega, url_wishlist,
  *   ahorro, unidades_compradas, scrapeado_en.
@@ -138,6 +140,14 @@ function transformProduct(p, index) {
   const imagenes = p.imagenes ?? [];
   const mainImg  = imagenes[0]?.archivo ?? null;
 
+  // all_categories: slugs de todas las categorias del producto (desde
+  // el array categorias[] del scraper). Incluye la categoria principal
+  // y las secundarias. Permite filtrar por cualquiera de las 14
+  // categorias en el handler, no solo por las 8 con categoria_principal.
+  const allCategorySlugs = (p.categorias ?? [])
+    .map(cat => CATEGORIAS_MAP[cat]?.slug)
+    .filter(Boolean);
+
   return {
     id:             index + 1,
     slug:           p.slug,
@@ -166,6 +176,11 @@ function transformProduct(p, index) {
     variants:       [
       { id: 1, name: 'Unico', sku: slugToSku(p.slug) + '-01', stock: p.stock_disponible ?? 10, price: priceWithTax },
     ],
+    // all_categories: todos los slugs de categoria del producto.
+    // Campo extra fuera del tipo Product de domain.ts. Se usa en el
+    // handler para filtrar por cualquiera de las 14 categorias.
+    // Correccion de A-07 en la iniciativa `auditar-integracion-catalogo`.
+    all_categories: allCategorySlugs,
   };
 }
 
@@ -208,7 +223,8 @@ const header = `/**
  *   base_price     = round(precio_actual / 1.16, 2)
  *   stock          = stock_disponible ?? 10 (todos son null en el catalogo)
  *   images         = solo la primera imagen (MVP; 37 productos tienen multiples)
- *   category       = categoria_principal (se ignora el array categorias)
+ *   category       = categoria_principal (categoria primaria, 8 valores)
+ *   all_categories = slugs de todas las categorias del producto (14 valores)
  */
 `;
 
