@@ -1,74 +1,101 @@
 /**
  * Handlers MSW del dominio catalog.
  *
- * Paths alineados con catalogSlice.js (Sprint 5: /api/v1/catalogue/*):
+ * Paths alineados con catalogSlice.js (Sprint 5: /api/v1/catalogue/*).
+ * Datos reales del catalogo Oja Yoruba via CATALOG_PRODUCTS y
+ * CATALOG_CATEGORIES generados en src/mocks/data/catalog.ts.
+ * Faker ya no se usa en este handler.
  *
- * Listados (`/api/v1/catalogue/`, `/api/v1/catalogue/search/`): usan
- * factory `createProductList` con datos variables Faker para que cada
- * request devuelva un catalogo distinto, mas realista para desarrollo.
+ * Busqueda (`/api/v1/catalogue/search/`): filtra CATALOG_PRODUCTS
+ * por coincidencia de nombre (case-insensitive) y opcionalmente
+ * por slug de categoria.
  *
- * Detalle (`/api/v1/catalogue/:slug/`): deterministico por slug.
- * El slug es el seed de la generacion para que el mismo slug devuelva
- * siempre el mismo producto.
+ * Detalle (`/api/v1/catalogue/:slug/`): busca en CATALOG_PRODUCTS
+ * por slug exacto. Retorna 404 si no existe.
  *
- * Categorias (`/api/v1/categories/`): fijas. Cinco categorias estables.
+ * Listado (`/api/v1/catalogue/`): pagina CATALOG_PRODUCTS con
+ * PAGE_SIZE=20. Acepta ?page=N y ?category=<slug>.
+ *
+ * Categorias (`/api/v1/categories/`): retorna CATALOG_CATEGORIES.
+ *
+ * Implementado en F4 de la iniciativa `integrar-catalogo-oja-en-mocks`.
  */
 
 import { http, HttpResponse } from 'msw';
-import { faker } from '@faker-js/faker';
-import type { Category, Product, PaginatedResponse } from './types';
-import { createProduct, createProductList } from '../factories';
+import type { PaginatedResponse } from './types';
+import { CATALOG_PRODUCTS, CATALOG_CATEGORIES } from '../data/catalog';
 
-const CATEGORIES: Category[] = [
-  { id: 1, name: 'Collares',     slug: 'collares',     product_count: 48 },
-  { id: 2, name: 'Pulseras',     slug: 'pulseras',     product_count: 31 },
-  { id: 3, name: 'Ofrendas',     slug: 'ofrendas',     product_count: 27 },
-  { id: 4, name: 'Elekes',       slug: 'elekes',       product_count: 22 },
-  { id: 5, name: 'Herramientas', slug: 'herramientas', product_count: 15 },
-];
+const PAGE_SIZE = 20;
 
 export const catalogHandlers = [
-  // GET /api/v1/catalogue/search/?q=...
+  // GET /api/v1/catalogue/search/?q=...&category=<slug>
   http.get('/api/v1/catalogue/search/', ({ request }) => {
-    const url = new URL(request.url);
-    const q = url.searchParams.get('q') ?? '';
-    const body: PaginatedResponse<Product> = {
-      count: 4,
-      results: createProductList(4, q ? { name: `${q}` } : {}),
-      next: null,
+    const url      = new URL(request.url);
+    const q        = (url.searchParams.get('q') ?? '').toLowerCase();
+    const catSlug  = url.searchParams.get('category') ?? '';
+
+    let results = [...CATALOG_PRODUCTS];
+
+    if (q) {
+      results = results.filter(p =>
+        p.name.toLowerCase().includes(q) ||
+        (p.description ?? '').toLowerCase().includes(q)
+      );
+    }
+    if (catSlug) {
+      results = results.filter(p => p.category?.slug === catSlug);
+    }
+
+    const body: PaginatedResponse<typeof results[number]> = {
+      count:    results.length,
+      results:  results.slice(0, PAGE_SIZE),
+      next:     results.length > PAGE_SIZE ? `?q=${q}&page=2` : null,
       previous: null,
     };
     return HttpResponse.json(body);
   }),
 
-  // GET /api/v1/catalogue/:slug/  (detalle deterministico)
+  // GET /api/v1/catalogue/:slug/  (detalle por slug exacto)
   http.get('/api/v1/catalogue/:slug/', ({ params }) => {
-    const slug = String(params.slug);
-    // Seed faker para que el mismo slug devuelva siempre el mismo producto.
-    // Hash trivial del slug a numero.
-    const seed = Array.from(slug).reduce((a, c) => a + c.charCodeAt(0), 0);
-    faker.seed(seed);
-    const product = createProduct({ slug, id: (seed % 9999) + 1 });
-    // Reset para no contaminar siguientes handlers.
-    faker.seed();
+    const slug    = String(params.slug);
+    const product = CATALOG_PRODUCTS.find(p => p.slug === slug);
+
+    if (!product) {
+      return HttpResponse.json(
+        { detail: `Producto "${slug}" no encontrado.` },
+        { status: 404 }
+      );
+    }
     return HttpResponse.json(product);
   }),
 
-  // GET /api/v1/catalogue/  (listado paginado, variable)
+  // GET /api/v1/catalogue/?page=N&category=<slug>
   http.get('/api/v1/catalogue/', ({ request }) => {
-    const url = new URL(request.url);
-    const page = parseInt(url.searchParams.get('page') ?? '1', 10);
-    const body: PaginatedResponse<Product> = {
-      count: 143,
-      results: createProductList(20),
-      next: page < 7 ? `?page=${page + 1}` : null,
-      previous: page > 1 ? `?page=${page - 1}` : null,
+    const url     = new URL(request.url);
+    const page    = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10));
+    const catSlug = url.searchParams.get('category') ?? '';
+
+    let all = [...CATALOG_PRODUCTS];
+    if (catSlug) {
+      all = all.filter(p => p.category?.slug === catSlug);
+    }
+
+    const total  = all.length;
+    const pages  = Math.ceil(total / PAGE_SIZE);
+    const start  = (page - 1) * PAGE_SIZE;
+    const end    = start + PAGE_SIZE;
+
+    const body: PaginatedResponse<typeof all[number]> = {
+      count:    total,
+      results:  all.slice(start, end),
+      next:     page < pages ? `?page=${page + 1}` : null,
+      previous: page > 1     ? `?page=${page - 1}` : null,
     };
     return HttpResponse.json(body);
   }),
 
   // GET /api/v1/categories/
   http.get('/api/v1/categories/', () => {
-    return HttpResponse.json(CATEGORIES);
+    return HttpResponse.json(CATALOG_CATEGORIES);
   }),
 ];

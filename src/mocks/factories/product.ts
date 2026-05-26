@@ -25,12 +25,24 @@ interface ProductOverrides extends Partial<Product> {
   variants?: Array<{ id: number; name: string; sku: string; stock: number; price: number }>;
 }
 
+// 14 categorias reales del catalogo Oja Yoruba.
+// Sincronizadas con CATALOG_CATEGORIES en src/mocks/data/catalog.ts
+// y actualizadas en T-501 de la iniciativa `integrar-catalogo-oja-en-mocks`.
 const CATEGORIES = [
-  { id: 1, name: 'Collares',     slug: 'collares' },
-  { id: 2, name: 'Pulseras',     slug: 'pulseras' },
-  { id: 3, name: 'Ofrendas',     slug: 'ofrendas' },
-  { id: 4, name: 'Elekes',       slug: 'elekes' },
-  { id: 5, name: 'Herramientas', slug: 'herramientas' },
+  { id: 1,  name: 'Lo Nuevo',                    slug: 'lo-nuevo' },
+  { id: 2,  name: 'Akoses / Medicinas',           slug: 'akoses-medicinas' },
+  { id: 3,  name: 'Collares y Pulseras',          slug: 'collares-y-pulseras' },
+  { id: 4,  name: 'Isan / Iconos',               slug: 'isan-iconos' },
+  { id: 5,  name: 'Complementos y Herramientas', slug: 'complementos-y-herramientas' },
+  { id: 6,  name: 'Enseres',                     slug: 'enseres' },
+  { id: 7,  name: 'Collares de Orumila',         slug: 'collares-de-orumila' },
+  { id: 8,  name: 'Ikoberes / Amuletos',         slug: 'ikoberes-amuletos' },
+  { id: 9,  name: 'Semillas',                    slug: 'semillas' },
+  { id: 10, name: 'Ropa y Telas',                slug: 'ropa-y-telas' },
+  { id: 11, name: 'Varios',                      slug: 'varios' },
+  { id: 12, name: 'Paquetes',                    slug: 'paquetes' },
+  { id: 13, name: 'Mayoreo',                     slug: 'mayoreo' },
+  { id: 14, name: 'Titulos',                     slug: 'titulos' },
 ];
 
 export function createProduct(overrides: ProductOverrides = {}): Product {

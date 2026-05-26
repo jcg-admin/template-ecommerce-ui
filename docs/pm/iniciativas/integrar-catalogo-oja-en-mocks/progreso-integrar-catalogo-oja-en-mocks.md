@@ -22,3 +22,9 @@
 | 2026-05-26T01:13:14 | T-202 hecha | webpack.config.js: CopyPlugin extendido con segundo pattern catalog/images/. Verificacion: fragmento exacto con los 2 patterns visible. node --check: OK. |
 | 2026-05-26T01:13:14 | T-203 pendiente en distro | webpack-dev-server sirve public/ desde root. Las imagenes estaran en localhost:3001/catalog/images/. No ejecutable en bash_tool. |
 | 2026-05-26T01:13:14 | F2 cerrada | Imagenes en public/, webpack actualizado. Siguiente: F3 (revisar datos) y F4 (handler). |
+| 2026-05-26T01:15:10 | T-401..T-405 hechas | catalog.ts handler reemplazado: sin Faker, usa CATALOG_PRODUCTS y CATALOG_CATEGORIES. 4 handlers con datos reales: listado con paginacion y filtro por categoria, busqueda por nombre/descripcion, detalle por slug (404 si no existe), categorias reales. |
+| 2026-05-26T01:15:10 | T-501 hecha | product.ts factory: CATEGORIES actualizado con las 14 categorias reales de Oja Yoruba. Sincronizado con CATALOG_CATEGORIES. |
+| 2026-05-26T01:15:10 | T-601 hecha | Verificacion de catalog.ts: 256 productos, 14 categorias, 0 con product_count=0, 256 referencias a imagenes. |
+| 2026-05-26T01:15:10 | T-602 hecha | Verificacion webpack.config.js: CopyPlugin condicional con 2 patterns (mockServiceWorker + catalog/images). Build sin DEMO_MODE no toca catalog/images. |
+| 2026-05-26T01:15:10 | T-603 hecha | decisiones-*.md creado (6 decisiones, 3 hallazgos, 13 criterios). index cerrado. tareas 0 pendientes. indice cerrado. |
+| 2026-05-26T01:15:10 | Iniciativa cerrada | integrar-catalogo-oja-en-mocks cerrada. 6 fases, 17 tareas. 5 archivos de codigo + 320 imagenes. 2 verificaciones funcionales pendientes en distro. |

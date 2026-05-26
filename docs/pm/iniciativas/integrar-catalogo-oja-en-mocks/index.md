@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `integrar-catalogo-oja-en-mocks` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
 | Fecha de creacion (directorio) | 2026-05-26 |
 | Fecha de apertura formal | 2026-05-26 |
 | Fecha de paso a ejecucion | 2026-05-26 |
+| Fecha de cierre | 2026-05-26 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -57,3 +58,4 @@ Iniciativa **en ejecucion** desde 2026-05-26.
 | [plan-integrar-catalogo-oja-en-mocks.md](plan-integrar-catalogo-oja-en-mocks.md) | Fases, tareas atomicas T-NNN y DAG. |
 | [tareas-integrar-catalogo-oja-en-mocks.md](tareas-integrar-catalogo-oja-en-mocks.md) | Lista plana de tareas con estado. |
 | [progreso-integrar-catalogo-oja-en-mocks.md](progreso-integrar-catalogo-oja-en-mocks.md) | Log del avance. |
+| [decisiones-integrar-catalogo-oja-en-mocks.md](decisiones-integrar-catalogo-oja-en-mocks.md) | Decisiones de diseno, hallazgos y verificacion. |
