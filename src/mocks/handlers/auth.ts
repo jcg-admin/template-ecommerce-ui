@@ -1,30 +1,26 @@
 /**
  * Handlers MSW del dominio auth.
  *
- * El slice `authSlice.js` usa los endpoints con prefijo `/api/v1/auth/`:
- *   POST /api/v1/auth/login/
- *   POST /api/v1/auth/logout/
- *   POST /api/v1/auth/register/
- *   GET  /api/v1/auth/profile/
+ * Paths alineados con authSlice.js (familia /api/v1/auth/*):
+ *   POST  /api/v1/auth/login/
+ *   POST  /api/v1/auth/logout/
+ *   POST  /api/v1/auth/register/
+ *   GET   /api/v1/auth/profile/
  *   PATCH /api/v1/auth/profile/
- *   POST /api/v1/auth/change-password/
- *   POST /api/v1/auth/verify-email/
+ *   POST  /api/v1/auth/change-password/
+ *   POST  /api/v1/auth/verify-email/
+ *   POST  /api/v1/auth/password-reset/
+ *   POST  /api/v1/auth/password-reset/confirm/
  *
- * El interceptor heredado mockeaba ademas los aliases sin version
- * `/api/token/`, `/api/auth/me/`, `/api/auth/logout/`,
- * `/api/auth/register/`. Los conservamos por si codigo antiguo aun
- * los invoca y para que el template documente ambas familias durante
- * la transicion. La iniciativa de backlog
- * `completar-dominio-de-ecommerce` debe consolidar a una sola familia.
+ * Los handlers legacy `/api/token/`, `/api/auth/me/`, `/api/auth/logout/`
+ * y `/api/auth/register/` fueron eliminados en la iniciativa
+ * `auditar-y-corregir-inconsistencias` (H-02): ningun archivo de src/
+ * fuera de los handlers los invocaba. El comentario anterior que decia
+ * "algunos componentes y tests aun los usan" era incorrecto.
  *
- * Credenciales validas (preservadas del interceptor heredado, son
- * contrato de tests):
- *   comprador@test.mx / Test1234!         -> id 1, is_staff false
+ * Credenciales validas (contrato de tests):
+ *   comprador@test.mx / Test1234!           -> id 1, is_staff false
  *   admin@e-comerce.example.com / Admin1234! -> id 2, is_staff true
- *
- * `/api/auth/me/` y `/api/v1/auth/profile/` usan `createUser` con
- * seed fijo para preservar identidad pero rellenar campos variables
- * realistas.
  */
 
 import { http, HttpResponse } from 'msw';
@@ -128,10 +124,4 @@ export const authHandlers = [
     }
     return HttpResponse.json({ detail: 'Contrasena restablecida.' });
   }),
-
-  // Aliases legacy (algunos componentes y tests aun los usan)
-  http.post('/api/token/',          ({ request }) => readLogin(request)),
-  http.post('/api/auth/logout/',    () => HttpResponse.json({ detail: 'Sesion cerrada.' })),
-  http.post('/api/auth/register/',  ({ request }) => readRegister(request)),
-  http.get('/api/auth/me/',         () => readMe()),
 ];
