@@ -15,3 +15,5 @@
 | 2026-05-26T01:33:08 | F1 cerrada | A-07 resuelto. 4 commits: b217683 (script), 783b9cd (datos), 7bfc283 (handler), este (progreso). Siguiente: F2. |
 | 2026-05-26T01:33:19 | F2 iniciada | T-201, T-202. Corregir A-02: handler de busqueda devuelve todos los resultados sin paginacion artificial. next y previous siempre null. |
 | 2026-05-26T01:33:36 | T-201, T-202 hechas | Handler search: results devuelve todos sin slice. next=null, previous=null. Verificacion: fragmento exacto muestra results sin slice y ambos campos null. F2 cerrada. |
+| 2026-05-26T01:33:42 | F3 iniciada | T-301 (browser.ts), T-302 (checkoutSlice deprecated), T-303 (README script). |
+| 2026-05-26T01:33:59 | T-301 hecha | browser.ts: JSDoc corregido. Ya no dice 'solo en NODE_ENV=development'. Documenta los dos casos: desarrollo (NODE_ENV) y demo (DEMO_MODE). |
