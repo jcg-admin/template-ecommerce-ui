@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Iniciativa | auditar-integracion-catalogo |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T01:21:26 |
 
 ## A-01 — browser.ts: comentario desactualizado
 

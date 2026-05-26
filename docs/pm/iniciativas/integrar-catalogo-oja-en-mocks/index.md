@@ -5,10 +5,10 @@
 | Slug | `integrar-catalogo-oja-en-mocks` |
 | Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
-| Fecha de creacion (directorio) | 2026-05-26 |
-| Fecha de apertura formal | 2026-05-26 |
-| Fecha de paso a ejecucion | 2026-05-26 |
-| Fecha de cierre | 2026-05-26 |
+| Fecha de creacion (directorio) | 2026-05-26T01:05:16 |
+| Fecha de apertura formal | 2026-05-26T01:05:16 |
+| Fecha de paso a ejecucion | 2026-05-26T01:05:16 |
+| Fecha de cierre | 2026-05-26T01:15:18 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia

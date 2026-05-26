@@ -5,7 +5,7 @@
 | Iniciativa | auditar-y-corregir-inconsistencias |
 | Estado | En ejecucion |
 | Version | 1.0.0 |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T00:39:04 |
 | Iniciativa origen | (raiz) |
 
 ## Por que existe esta iniciativa

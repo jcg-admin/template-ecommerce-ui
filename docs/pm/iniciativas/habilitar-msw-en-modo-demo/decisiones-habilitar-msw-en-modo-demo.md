@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Iniciativa | habilitar-msw-en-modo-demo |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T00:25:12 |
 
 ## Seccion 1 — Decisiones de diseno
 

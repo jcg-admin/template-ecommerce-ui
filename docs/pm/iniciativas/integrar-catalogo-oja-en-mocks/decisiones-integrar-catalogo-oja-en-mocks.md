@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Iniciativa | integrar-catalogo-oja-en-mocks |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T01:05:16 |
 
 ## Seccion 1 — Decisiones de diseno
 

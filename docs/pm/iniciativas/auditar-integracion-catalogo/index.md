@@ -5,9 +5,9 @@
 | Slug | `auditar-integracion-catalogo` |
 | Estado | En ejecucion |
 | Orden de backlog | (vacio: abierta directamente) |
-| Fecha de creacion (directorio) | 2026-05-26 |
-| Fecha de apertura formal | 2026-05-26 |
-| Fecha de paso a ejecucion | 2026-05-26 |
+| Fecha de creacion (directorio) | 2026-05-26T01:21:26 |
+| Fecha de apertura formal | 2026-05-26T01:21:26 |
+| Fecha de paso a ejecucion | 2026-05-26T01:21:26 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia

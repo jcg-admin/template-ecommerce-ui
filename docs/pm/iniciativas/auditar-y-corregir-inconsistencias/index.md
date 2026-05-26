@@ -5,10 +5,10 @@
 | Slug | `auditar-y-corregir-inconsistencias` |
 | Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
-| Fecha de creacion (directorio) | 2026-05-26 |
-| Fecha de apertura formal | 2026-05-26 |
-| Fecha de paso a ejecucion | 2026-05-26 |
-| Fecha de cierre | 2026-05-26 |
+| Fecha de creacion (directorio) | 2026-05-26T00:39:04 |
+| Fecha de apertura formal | 2026-05-26T00:39:04 |
+| Fecha de paso a ejecucion | 2026-05-26T00:39:04 |
+| Fecha de cierre | 2026-05-26T00:48:46 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia

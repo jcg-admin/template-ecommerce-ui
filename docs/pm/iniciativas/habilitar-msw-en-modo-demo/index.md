@@ -5,10 +5,10 @@
 | Slug | `habilitar-msw-en-modo-demo` |
 | Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
-| Fecha de creacion (directorio) | 2026-05-26 |
-| Fecha de apertura formal | 2026-05-26 |
-| Fecha de paso a ejecucion | 2026-05-26 |
-| Fecha de cierre | 2026-05-26 |
+| Fecha de creacion (directorio) | 2026-05-26T00:25:12 |
+| Fecha de apertura formal | 2026-05-26T00:25:12 |
+| Fecha de paso a ejecucion | 2026-05-26T00:25:12 |
+| Fecha de cierre | 2026-05-26T00:31:28 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia

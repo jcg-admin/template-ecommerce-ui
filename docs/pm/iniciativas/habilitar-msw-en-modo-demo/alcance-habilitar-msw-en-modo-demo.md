@@ -5,7 +5,7 @@
 | Iniciativa | habilitar-msw-en-modo-demo |
 | Estado | En ejecucion |
 | Version | 1.0.0 |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T00:25:12 |
 | Iniciativa origen | (raiz) |
 
 ## Por que existe esta iniciativa

@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Iniciativa | auditar-y-corregir-inconsistencias |
-| Fecha de creacion | 2026-05-26 |
+| Fecha de creacion | 2026-05-26T00:39:04 |
 
 ## Seccion 1 — Decisiones de diseno
 
