@@ -20,3 +20,6 @@
 | 2026-05-26T01:34:18 | T-302 hecha | checkoutSlice.js: @deprecated agregado apuntando a paymentsSlice.js con la razon (paths legacy sin handler MSW). |
 | 2026-05-26T01:34:47 | T-303 hecha | README.md: seccion 'Modo demo' actualizada (ya no dice Faker sino datos reales Oja Yoruba). Seccion 'Herramientas de desarrollo' agregada con uso de transform-catalog.mjs. |
 | 2026-05-26T01:34:47 | F3 cerrada | A-01, A-03, A-05 resueltos. 3 commits. Siguiente: F4 (A-06 tipos TS). |
+| 2026-05-26T01:34:52 | F4 iniciada | T-401, T-402. Corregir A-06: CATALOG_PRODUCTS as const hace elementos readonly. Cambiar a tipo explicito sin as const. |
+| 2026-05-26T01:35:26 | T-401, T-402 hechas | Script: as const eliminado de categoriesTs y productsTs. Footer actualizado con sintaxis (typeof X)[number]. catalog.ts regenerado: sin as const, 256 productos, all_categories presente. |
+| 2026-05-26T01:35:26 | F4 cerrada | A-06 resuelto. Siguiente: F5 (verificacion y cierre). |

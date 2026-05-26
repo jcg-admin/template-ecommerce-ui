@@ -5,7 +5,7 @@
  * Regenerar con: node scripts/transform-catalog.mjs <ruta-al-json>
  *
  * Fuente: /tmp/oja_data/oja/productos/_catalogo_completo.json
- * Generado: 2026-05-26T01:31:30.790Z
+ * Generado: 2026-05-26T01:35:16.840Z
  * Productos: 256
  * Categorias: 14
  *
@@ -103,7 +103,7 @@ export const CATALOG_CATEGORIES = [
     "name": "Titulos",
     "product_count": 3
   }
-] as const;
+];
 
 export const CATALOG_PRODUCTS = [
   {
@@ -11292,8 +11292,9 @@ export const CATALOG_PRODUCTS = [
       "ropa-y-telas"
     ]
   }
-] as const;
+];
 
 
-export type CatalogCategory = typeof CATALOG_CATEGORIES[number];
-export type CatalogProduct  = typeof CATALOG_PRODUCTS[number];
+// Tipos inferidos de los arrays generados.
+export type CatalogCategory = (typeof CATALOG_CATEGORIES)[number];
+export type CatalogProduct  = (typeof CATALOG_PRODUCTS)[number];

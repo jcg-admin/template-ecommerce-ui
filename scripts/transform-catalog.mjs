@@ -228,15 +228,20 @@ const header = `/**
  */
 `;
 
-const categoriesTs = `export const CATALOG_CATEGORIES = ${JSON.stringify(transformedCategories, null, 2)} as const;
+// Nota sobre tipos: se omite `as const` para que los arrays sean
+// mutables. `as const` hacia los elementos readonly, lo que podia
+// causar conflictos con tipos no-readonly en modo TypeScript strict.
+// El handler usa spread [...CATALOG_PRODUCTS] cuando necesita mutar.
+const categoriesTs = `export const CATALOG_CATEGORIES = ${JSON.stringify(transformedCategories, null, 2)};
 `;
 
-const productsTs = `export const CATALOG_PRODUCTS = ${JSON.stringify(transformedProducts, null, 2)} as const;
+const productsTs = `export const CATALOG_PRODUCTS = ${JSON.stringify(transformedProducts, null, 2)};
 `;
 
 const footer = `
-export type CatalogCategory = typeof CATALOG_CATEGORIES[number];
-export type CatalogProduct  = typeof CATALOG_PRODUCTS[number];
+// Tipos inferidos de los arrays generados.
+export type CatalogCategory = (typeof CATALOG_CATEGORIES)[number];
+export type CatalogProduct  = (typeof CATALOG_PRODUCTS)[number];
 `;
 
 const output = [header, categoriesTs, productsTs, footer].join('\n');
