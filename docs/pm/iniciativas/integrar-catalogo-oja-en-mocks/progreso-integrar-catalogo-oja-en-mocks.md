@@ -18,3 +18,7 @@
 | 2026-05-26T01:12:28 | T-101 hecha | scripts/transform-catalog.mjs creado. Acepta ruta al JSON como argumento. Genera src/mocks/data/catalog.ts con CATALOG_PRODUCTS (256) y CATALOG_CATEGORIES (14). Script corregido durante T-102 para usar categorias[] en product_count. |
 | 2026-05-26T01:12:28 | T-102 hecha | Verificacion: 256 productos, 14 categorias con product_count correcto (82 Lo Nuevo, 74 Akoses/Medicinas, ..., 3 Titulos). Primer producto verificado: base_price=171.55, price_with_tax=199, original_price=250, images[0].url=/catalog/images/abe-esu-cuchilla-de-esu.png. 0 warnings. |
 | 2026-05-26T01:12:28 | F1 cerrada | Script funcional y verificado. src/mocks/data/catalog.ts generado. Siguiente: F2 (imagenes) y F3 (revisar datos) en paralelo. |
+| 2026-05-26T01:13:14 | T-201 hecha | 320 PNGs copiados a public/catalog/images/ (25 MB). Verificacion: primera imagen referenciada en catalog.ts (abe-esu-cuchilla-de-esu.png) existe en public/. |
+| 2026-05-26T01:13:14 | T-202 hecha | webpack.config.js: CopyPlugin extendido con segundo pattern catalog/images/. Verificacion: fragmento exacto con los 2 patterns visible. node --check: OK. |
+| 2026-05-26T01:13:14 | T-203 pendiente en distro | webpack-dev-server sirve public/ desde root. Las imagenes estaran en localhost:3001/catalog/images/. No ejecutable en bash_tool. |
+| 2026-05-26T01:13:14 | F2 cerrada | Imagenes en public/, webpack actualizado. Siguiente: F3 (revisar datos) y F4 (handler). |

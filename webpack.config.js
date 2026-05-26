@@ -248,14 +248,22 @@ module.exports = (env, argv) => {
       }),
       new webpack.DefinePlugin(buildDefinedEnv(argv.mode)),
       !isDev && new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
-      // DEMO_MODE: copiar mockServiceWorker.js a dist/ solo cuando
-      // DEMO_MODE=true. En builds de produccion real este plugin no se activa
-      // y mockServiceWorker.js no aparece en dist/.
+      // DEMO_MODE: copiar mockServiceWorker.js y las imagenes del catalogo
+      // a dist/ solo cuando DEMO_MODE=true. En builds de produccion real
+      // este plugin no se activa y ninguno de estos assets aparece en dist/.
+      // Las imagenes del catalogo son 320 PNGs (~24 MB); solo se incluyen
+      // en el build de demostracion para no engordar el bundle de produccion.
       isDemoMode && new CopyPlugin({
-        patterns: [{
-          from: path.resolve(__dirname, 'public/mockServiceWorker.js'),
-          to:   path.resolve(__dirname, 'dist/mockServiceWorker.js'),
-        }],
+        patterns: [
+          {
+            from: path.resolve(__dirname, 'public/mockServiceWorker.js'),
+            to:   path.resolve(__dirname, 'dist/mockServiceWorker.js'),
+          },
+          {
+            from: path.resolve(__dirname, 'public/catalog/images'),
+            to:   path.resolve(__dirname, 'dist/catalog/images'),
+          },
+        ],
       }),
       analyze && new BundleAnalyzerPlugin({
         analyzerMode: 'static',
