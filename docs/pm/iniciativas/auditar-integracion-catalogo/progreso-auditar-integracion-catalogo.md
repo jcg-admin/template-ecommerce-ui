@@ -18,3 +18,5 @@
 | 2026-05-26T01:33:42 | F3 iniciada | T-301 (browser.ts), T-302 (checkoutSlice deprecated), T-303 (README script). |
 | 2026-05-26T01:33:59 | T-301 hecha | browser.ts: JSDoc corregido. Ya no dice 'solo en NODE_ENV=development'. Documenta los dos casos: desarrollo (NODE_ENV) y demo (DEMO_MODE). |
 | 2026-05-26T01:34:18 | T-302 hecha | checkoutSlice.js: @deprecated agregado apuntando a paymentsSlice.js con la razon (paths legacy sin handler MSW). |
+| 2026-05-26T01:34:47 | T-303 hecha | README.md: seccion 'Modo demo' actualizada (ya no dice Faker sino datos reales Oja Yoruba). Seccion 'Herramientas de desarrollo' agregada con uso de transform-catalog.mjs. |
+| 2026-05-26T01:34:47 | F3 cerrada | A-01, A-03, A-05 resueltos. 3 commits. Siguiente: F4 (A-06 tipos TS). |

@@ -77,13 +77,31 @@ npm run build:demo
 ```
 
 Esto equivale a `DEMO_MODE=true npm run build`. El `dist/` resultante
-incluye `mockServiceWorker.js` y MSW arranca aunque `NODE_ENV` sea
-`production`. Todas las llamadas a `/api/v1/...` son interceptadas
-por los handlers de `src/mocks/` y devuelven datos generados con
-Faker.
+incluye `mockServiceWorker.js` y `dist/catalog/images/` con 320 imagenes
+PNG. MSW arranca aunque `NODE_ENV` sea `production`. Todas las llamadas
+a `/api/v1/...` son interceptadas por los handlers de `src/mocks/` y
+devuelven datos reales del catalogo **Ọja Yoruba** (256 productos, 14
+categorias).
 
 Un build de produccion real sin `DEMO_MODE` no cambia — MSW no
-arranca y `mockServiceWorker.js` no aparece en `dist/`.
+arranca y las imagenes del catalogo no aparecen en `dist/`.
+
+## Herramientas de desarrollo
+
+### Regenerar el catalogo de datos mock
+
+Los datos de mock del catalogo viven en `src/mocks/data/catalog.ts`.
+Son un archivo generado que se versiona. Si el catalogo fuente cambia,
+regenerarlo con:
+
+```bash
+node scripts/transform-catalog.mjs <ruta-al-json-del-catalogo>
+```
+
+El script lee el JSON del scraper (campos en español) y genera el
+archivo TypeScript con campos en inglés, listos para los handlers MSW.
+Ver el JSDoc del script para la descripcion completa del mapeo de
+campos.
 
 
 
