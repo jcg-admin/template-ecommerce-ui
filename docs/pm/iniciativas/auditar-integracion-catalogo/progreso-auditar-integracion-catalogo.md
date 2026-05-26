@@ -23,3 +23,5 @@
 | 2026-05-26T01:34:52 | F4 iniciada | T-401, T-402. Corregir A-06: CATALOG_PRODUCTS as const hace elementos readonly. Cambiar a tipo explicito sin as const. |
 | 2026-05-26T01:35:26 | T-401, T-402 hechas | Script: as const eliminado de categoriesTs y productsTs. Footer actualizado con sintaxis (typeof X)[number]. catalog.ts regenerado: sin as const, 256 productos, all_categories presente. |
 | 2026-05-26T01:35:26 | F4 cerrada | A-06 resuelto. Siguiente: F5 (verificacion y cierre). |
+| 2026-05-26T01:36:26 | T-501 hecha | Verificacion final: 10/10 criterios pasan. A-04 no requeria cambio (confirmado inofensivo). |
+| 2026-05-26T01:36:26 | Iniciativa cerrada | auditar-integracion-catalogo cerrada. 5 fases, 16 tareas. 7 hallazgos: 6 resueltos (A-01..A-03, A-05..A-07), 1 inofensivo sin cambio (A-04). |

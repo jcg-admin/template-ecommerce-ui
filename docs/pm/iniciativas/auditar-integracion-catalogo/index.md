@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `auditar-integracion-catalogo` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
 | Fecha de creacion (directorio) | 2026-05-26T01:21:26 |
 | Fecha de apertura formal | 2026-05-26T01:21:26 |
 | Fecha de paso a ejecucion | 2026-05-26T01:21:26 |
+| Fecha de cierre | 2026-05-26T01:37:00 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -47,3 +48,4 @@ Iniciativa **en ejecucion** desde 2026-05-26.
 | [plan-auditar-integracion-catalogo.md](plan-auditar-integracion-catalogo.md) | Tareas por hallazgo y DAG. |
 | [tareas-auditar-integracion-catalogo.md](tareas-auditar-integracion-catalogo.md) | Lista plana de tareas con estado. |
 | [progreso-auditar-integracion-catalogo.md](progreso-auditar-integracion-catalogo.md) | Log del avance. |
+| [decisiones-auditar-integracion-catalogo.md](decisiones-auditar-integracion-catalogo.md) | Decisiones de diseno, hallazgos y verificacion. |
