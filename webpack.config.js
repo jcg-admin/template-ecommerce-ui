@@ -284,6 +284,12 @@ module.exports = (env, argv) => {
       proxy: [
         {
           context: ['/api'],
+          // El fallback 'http://localhost:8000' es intencional para
+          // desarrollo local: el backend Django corre tipicamente ahi.
+          // En modo dev con MSW activo (NODE_ENV=development), las
+          // requests interceptadas nunca llegan al proxy; solo las de
+          // dominios sin handler (admin, orders, etc.) lo alcanzan.
+          // En produccion este devServer no existe — el proxy es Nginx.
           target: process.env.API_URL || 'http://localhost:8000',
           changeOrigin: true,
           secure: false,
