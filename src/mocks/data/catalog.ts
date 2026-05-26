@@ -5,7 +5,7 @@
  * Regenerar con: node scripts/transform-catalog.mjs <ruta-al-json>
  *
  * Fuente: /tmp/oja_data/oja/productos/_catalogo_completo.json
- * Generado: 2026-05-26T01:12:03.504Z
+ * Generado: 2026-05-26T01:31:30.790Z
  * Productos: 256
  * Categorias: 14
  *
@@ -14,7 +14,8 @@
  *   base_price     = round(precio_actual / 1.16, 2)
  *   stock          = stock_disponible ?? 10 (todos son null en el catalogo)
  *   images         = solo la primera imagen (MVP; 37 productos tienen multiples)
- *   category       = categoria_principal (se ignora el array categorias)
+ *   category       = categoria_principal (categoria primaria, 8 valores)
+ *   all_categories = slugs de todas las categorias del producto (14 valores)
  */
 
 export const CATALOG_CATEGORIES = [
@@ -143,6 +144,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 199
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -183,6 +188,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 199
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -223,6 +231,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1599
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -263,6 +275,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1699
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "lo-nuevo"
     ]
   },
   {
@@ -303,6 +319,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "lo-nuevo"
     ]
   },
   {
@@ -343,6 +363,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -383,6 +406,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -423,6 +449,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -463,6 +492,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -503,6 +535,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -543,6 +578,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -583,6 +621,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -623,6 +664,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2799
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -663,6 +707,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1399
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo"
     ]
   },
   {
@@ -703,6 +751,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 299
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "lo-nuevo"
     ]
   },
   {
@@ -743,6 +795,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1199
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo",
+      "varios"
     ]
   },
   {
@@ -783,6 +840,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -823,6 +883,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -863,6 +926,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 899
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -903,6 +969,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 14999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -943,6 +1012,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 12999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -983,6 +1055,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2949
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -1023,6 +1099,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 10999
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -1063,6 +1143,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 4699
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -1103,6 +1186,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1143,6 +1229,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 250
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -1183,6 +1272,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1223,6 +1315,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1263,6 +1358,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -1303,6 +1402,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1343,6 +1445,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -1383,6 +1489,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1423,6 +1532,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1463,6 +1575,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1503,6 +1618,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1543,6 +1661,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1583,6 +1704,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1623,6 +1747,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1663,6 +1790,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1703,6 +1833,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1743,6 +1876,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1783,6 +1919,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1200
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1823,6 +1962,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1863,6 +2005,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1903,6 +2048,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -1943,6 +2091,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -1983,6 +2135,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2023,6 +2178,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2063,6 +2221,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2103,6 +2264,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2143,6 +2307,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2183,6 +2350,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2223,6 +2394,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2263,6 +2438,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2303,6 +2482,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2343,6 +2526,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2383,6 +2570,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2423,6 +2614,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2463,6 +2658,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2503,6 +2702,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2543,6 +2746,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -2583,6 +2791,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2699
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -2623,6 +2835,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 85
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -2663,6 +2879,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "isan-iconos"
     ]
   },
   {
@@ -2703,6 +2923,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -2743,6 +2967,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -2783,6 +3011,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -2823,6 +3054,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1000
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -2863,6 +3097,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 499
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -2903,6 +3141,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 899
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "complementos-y-herramientas",
+      "lo-nuevo"
     ]
   },
   {
@@ -2943,6 +3186,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -2983,6 +3229,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "varios"
     ]
   },
   {
@@ -3023,6 +3274,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 849
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "varios"
     ]
   },
   {
@@ -3063,6 +3319,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 799
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -3103,6 +3362,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3143,6 +3405,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3183,6 +3448,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3223,6 +3491,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3263,6 +3534,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3303,6 +3577,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3343,6 +3620,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 849
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3383,6 +3663,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 299
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3423,6 +3706,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3463,6 +3749,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1199
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -3503,6 +3793,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3543,6 +3836,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3583,6 +3879,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3623,6 +3922,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3663,6 +3965,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1299
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3703,6 +4008,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1799
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -3743,6 +4052,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3783,6 +4095,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1049
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3823,6 +4138,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3863,6 +4181,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -3903,6 +4224,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 649
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -3943,6 +4269,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -3983,6 +4314,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 549
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4023,6 +4359,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4063,6 +4404,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4103,6 +4449,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4143,6 +4494,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4183,6 +4539,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4223,6 +4584,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4263,6 +4629,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4303,6 +4674,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4343,6 +4719,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4383,6 +4764,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4423,6 +4807,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4463,6 +4850,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4503,6 +4893,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4543,6 +4936,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4583,6 +4979,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4623,6 +5023,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4663,6 +5068,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4703,6 +5111,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4743,6 +5155,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4783,6 +5198,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4823,6 +5242,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 549
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras"
     ]
   },
   {
@@ -4863,6 +5286,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -4903,6 +5330,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -4943,6 +5374,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 25
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -4983,6 +5417,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1399
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -5023,6 +5461,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5063,6 +5504,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -5103,6 +5548,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -5143,6 +5593,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -5183,6 +5636,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 120
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "mayoreo"
     ]
   },
   {
@@ -5223,6 +5680,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 299
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "mayoreo"
     ]
   },
   {
@@ -5263,6 +5724,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 249
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -5303,6 +5768,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 549
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "lo-nuevo"
     ]
   },
   {
@@ -5343,6 +5812,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 325
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -5383,6 +5856,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "varios"
     ]
   },
   {
@@ -5423,6 +5900,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1199
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -5463,6 +5944,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5503,6 +5987,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2599
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5543,6 +6030,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2699
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5583,6 +6073,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2399
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5623,6 +6116,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 6499
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -5663,6 +6160,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 5499
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -5703,6 +6204,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2899
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5743,6 +6247,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 4699
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5783,6 +6290,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3799
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5823,6 +6333,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -5863,6 +6377,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -5903,6 +6420,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "enseres"
     ]
   },
   {
@@ -5943,6 +6464,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "ropa-y-telas"
     ]
   },
   {
@@ -5983,6 +6507,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 749
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -6023,6 +6550,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -6063,6 +6593,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 149
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   },
   {
@@ -6103,6 +6638,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 499
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   },
   {
@@ -6143,6 +6683,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 200
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -6183,6 +6726,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 250
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -6223,6 +6769,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -6263,6 +6812,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "semillas"
     ]
   },
   {
@@ -6303,6 +6856,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 450
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "semillas"
     ]
   },
   {
@@ -6343,6 +6900,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 699
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6383,6 +6945,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6423,6 +6989,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 799
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6463,6 +7033,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6503,6 +7078,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 799
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6543,6 +7122,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3499
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6583,6 +7167,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 699
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6623,6 +7212,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6663,6 +7256,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 699
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6703,6 +7300,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6743,6 +7345,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6783,6 +7390,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6823,6 +7435,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos",
+      "lo-nuevo"
     ]
   },
   {
@@ -6863,6 +7480,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 799
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "ikoberes-amuletos"
     ]
   },
   {
@@ -6903,6 +7524,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 4349
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -6943,6 +7567,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 500
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -6983,6 +7610,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1799
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -7023,6 +7653,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -7063,6 +7696,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1200
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -7103,6 +7739,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1299
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -7143,6 +7783,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1049
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "varios"
     ]
   },
   {
@@ -7183,6 +7828,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -7223,6 +7871,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1199
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -7263,6 +7915,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -7303,6 +7958,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2999
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   },
   {
@@ -7343,6 +8003,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   },
   {
@@ -7383,6 +8048,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 129
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "isan-iconos",
+      "varios"
     ]
   },
   {
@@ -7423,6 +8093,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 250
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -7463,6 +8136,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 699
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "enseres"
     ]
   },
   {
@@ -7503,6 +8180,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "lo-nuevo"
     ]
   },
   {
@@ -7543,6 +8224,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 299
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "enseres"
     ]
   },
   {
@@ -7583,6 +8268,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -7623,6 +8311,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -7663,6 +8354,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 179
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -7703,6 +8397,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "enseres"
     ]
   },
   {
@@ -7743,6 +8441,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo"
     ]
   },
   {
@@ -7783,6 +8485,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 169
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -7823,6 +8529,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 35
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -7863,6 +8572,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 599
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -7903,6 +8616,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 8999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -7943,6 +8659,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 7999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -7983,6 +8702,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 17999
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -8023,6 +8746,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 600
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "mayoreo"
     ]
   },
   {
@@ -8063,6 +8790,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3499
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -8103,6 +8833,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2799
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -8143,6 +8876,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1199
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -8183,6 +8920,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3799
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -8223,6 +8964,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1399
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -8263,6 +9008,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1299
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -8303,6 +9051,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo"
     ]
   },
   {
@@ -8343,6 +9095,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 899
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "semillas"
     ]
   },
   {
@@ -8383,6 +9139,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "lo-nuevo"
     ]
   },
   {
@@ -8423,6 +9183,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -8463,6 +9228,12 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1399
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "complementos-y-herramientas",
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -8503,6 +9274,12 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1499
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "complementos-y-herramientas",
+      "isan-iconos",
+      "varios"
     ]
   },
   {
@@ -8543,6 +9320,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2499
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -8583,6 +9364,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 230
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "enseres"
     ]
   },
   {
@@ -8623,6 +9408,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 4999
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -8663,6 +9452,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 549
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -8703,6 +9496,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 325
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -8743,6 +9539,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 7499
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -8783,6 +9582,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 149
       }
+    ],
+    "all_categories": [
+      "enseres"
     ]
   },
   {
@@ -8823,6 +9625,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3835.15
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "paquetes"
     ]
   },
   {
@@ -8863,6 +9669,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2506.1
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "paquetes"
     ]
   },
   {
@@ -8903,6 +9713,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2078.6
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "paquetes"
     ]
   },
   {
@@ -8943,6 +9757,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 3351.6
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "paquetes"
     ]
   },
   {
@@ -8983,6 +9801,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 833.15
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "paquetes"
     ]
   },
   {
@@ -9023,6 +9845,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 799
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -9063,6 +9889,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 849
       }
+    ],
+    "all_categories": [
+      "isan-iconos",
+      "lo-nuevo"
     ]
   },
   {
@@ -9103,6 +9933,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1701
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -9143,6 +9976,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 85
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -9183,6 +10020,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 55
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -9223,6 +10064,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 140
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -9263,6 +10108,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 140
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas",
+      "complementos-y-herramientas"
     ]
   },
   {
@@ -9303,6 +10152,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 169
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "enseres"
     ]
   },
   {
@@ -9343,6 +10196,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 350
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9383,6 +10239,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -9423,6 +10283,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 449
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -9463,6 +10327,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 350
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9503,6 +10370,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 149
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9543,6 +10413,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 199
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9583,6 +10457,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 199
       }
+    ],
+    "all_categories": [
+      "collares-de-orumila",
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9623,6 +10501,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9663,6 +10544,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -9703,6 +10588,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 850
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9743,6 +10631,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9783,6 +10674,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -9823,6 +10718,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "lo-nuevo"
     ]
   },
   {
@@ -9863,6 +10762,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 350
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9903,6 +10805,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 349
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras"
     ]
   },
   {
@@ -9943,6 +10848,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 2899
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos"
     ]
   },
   {
@@ -9983,6 +10892,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 700
       }
+    ],
+    "all_categories": [
+      "akoses-medicinas"
     ]
   },
   {
@@ -10023,6 +10935,11 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 79
       }
+    ],
+    "all_categories": [
+      "complementos-y-herramientas",
+      "isan-iconos",
+      "semillas"
     ]
   },
   {
@@ -10063,6 +10980,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 49
       }
+    ],
+    "all_categories": [
+      "enseres",
+      "semillas"
     ]
   },
   {
@@ -10103,6 +11024,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 17999
       }
+    ],
+    "all_categories": [
+      "isan-iconos"
     ]
   },
   {
@@ -10143,6 +11067,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1399
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "titulos"
     ]
   },
   {
@@ -10183,6 +11111,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 999
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "titulos"
     ]
   },
   {
@@ -10223,6 +11155,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 949
       }
+    ],
+    "all_categories": [
+      "collares-y-pulseras",
+      "titulos"
     ]
   },
   {
@@ -10263,6 +11199,9 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 4499
       }
+    ],
+    "all_categories": [
+      "ropa-y-telas"
     ]
   },
   {
@@ -10303,6 +11242,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1799
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   },
   {
@@ -10343,6 +11286,10 @@ export const CATALOG_PRODUCTS = [
         "stock": 10,
         "price": 1149
       }
+    ],
+    "all_categories": [
+      "lo-nuevo",
+      "ropa-y-telas"
     ]
   }
 ] as const;

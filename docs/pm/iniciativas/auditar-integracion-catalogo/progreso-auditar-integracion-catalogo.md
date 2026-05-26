@@ -9,3 +9,4 @@
 | 2026-05-26T01:21:12 | F0 cerrada | Siguiente: F1 (A-07, el mas critico). |
 | 2026-05-26T01:30:48 | F1 iniciada | T-101..T-104. Corregir A-07: filtro de categoria retorna 0 para 6 de 14 categorias. Fix: campo all_categories[] en el script y filtro por includes() en el handler. |
 | 2026-05-26T01:31:27 | T-101 hecha | transform-catalog.mjs: campo all_categories[] agregado. Mapea categorias[] del scraper a slugs canonicos via CATEGORIAS_MAP. Filtra nulls (categorias sin mapeo). JSDoc y header del archivo generado actualizados. |
+| 2026-05-26T01:31:51 | T-102 hecha | catalog.ts regenerado. Verificacion: 0 productos sin all_categories. Conteos por categoria secundaria: semillas=10, ikoberes-amuletos=14, varios=7, mayoreo=3, paquetes=5, titulos=3 — todos coinciden con el esperado. Ejemplo: atare tiene category.slug=enseres (principal) y all_categories=['enseres','semillas']. |
