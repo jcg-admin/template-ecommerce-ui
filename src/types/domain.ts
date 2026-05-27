@@ -42,6 +42,9 @@ export interface User {
   phone?: string;
   avatar_url?: string;
   is_staff?: boolean;
+  /** true si el usuario tiene rol de administrador del negocio
+   *  (puede diferir de is_staff, que indica staff tecnico del sistema). */
+  is_admin?: boolean;
   /** Porcentaje 0..100 de completitud del perfil. */
   profile_completeness?: number;
   /** Lista de campos del perfil que faltan por completar. */

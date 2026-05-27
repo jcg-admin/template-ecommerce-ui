@@ -3,10 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `validar-perfiles-de-usuario` |
-| Estado | En analisis |
+| Estado | Cerrada |
 | Orden de backlog | (abierta directamente a analisis) |
 | Fecha de creacion (directorio) | 2026-05-27T21:35:00 |
 | Fecha de apertura formal | 2026-05-27T21:35:00 |
+| Fecha de paso a ejecucion | 2026-05-27T21:40:00 |
+| Fecha de cierre | 2026-05-27T22:00:00 |
 | Iniciativa origen | (raiz — hallazgo post-cierre de corregir-deuda-diseno-yoruba) |
 
 ## Motivo de existencia
@@ -38,12 +40,13 @@ de autenticarse.
 
 ## Estado actual
 
-Iniciativa en analisis desde 2026-05-27T21:35:00.
+Iniciativa cerrada. Ver decisiones-validar-perfiles-de-usuario.md.
 
 ## Indice de documentos
 
 | Documento | Proposito |
 |-----------|-----------|
+| [decisiones-validar-perfiles-de-usuario.md](decisiones-validar-perfiles-de-usuario.md) | Decisiones, 4 bugs corregidos, resultado final. |
 | [alcance-validar-perfiles-de-usuario.md](alcance-validar-perfiles-de-usuario.md) | Que cubre, criterio de completitud, fuera de alcance. |
 | [analisis-validar-perfiles-de-usuario.md](analisis-validar-perfiles-de-usuario.md) | Hallazgos con evidencia de codigo. |
 | [plan-validar-perfiles-de-usuario.md](plan-validar-perfiles-de-usuario.md) | Fases y descripcion de entregables. |

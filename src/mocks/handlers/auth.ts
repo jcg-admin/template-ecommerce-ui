@@ -28,13 +28,24 @@ import { faker } from '@faker-js/faker';
 import type { User } from './types';
 import { createUser } from '../factories';
 
-function mockUser(id: number, isStaff: boolean, email = 'comprador@test.mx'): User {
+// Sesion activa en el handler (MSW es stateless entre requests
+// pero no entre llamadas dentro de la misma carga de pagina).
+// readLogin actualiza _activeSession; readMe lo consulta.
+let _activeSession: ReturnType<typeof mockUser> | null = null;
+
+function mockUser(
+  id: number,
+  isStaff: boolean,
+  email = 'comprador@test.mx',
+  isAdmin = false,
+): User {
   return {
     id,
     email,
     first_name: 'Demo',
     last_name: 'User',
     is_staff: isStaff,
+    is_admin: isAdmin,
   } as User;
 }
 
@@ -50,13 +61,19 @@ async function readLogin(request: Request) {
     );
   }
   if (body.username === 'comprador@test.mx' && body.password === 'Test1234!') {
-    return HttpResponse.json({ user: mockUser(1, false) });
+    _activeSession = mockUser(1, false);
+    return HttpResponse.json({ user: _activeSession });
   }
   if (
     body.username === 'admin@e-comerce.example.com' &&
     body.password === 'Admin1234!'
   ) {
-    return HttpResponse.json({ user: mockUser(2, true) });
+    _activeSession = mockUser(2, true, 'admin@e-comerce.example.com', true);
+    return HttpResponse.json({ user: _activeSession });
+  }
+  if (body.username === 'staff@test.mx' && body.password === 'Staff1234!') {
+    _activeSession = mockUser(3, true, 'staff@test.mx', false);
+    return HttpResponse.json({ user: _activeSession });
   }
   return HttpResponse.json(
     { detail: 'Credenciales invalidas.' },
@@ -81,6 +98,11 @@ async function readRegister(request: Request) {
 }
 
 function readMe() {
+  // Si hay sesion activa (post-login en modo demo), devolver ese perfil.
+  // Fallback al perfil comprador para requests directos sin login previo.
+  if (_activeSession) {
+    return HttpResponse.json(_activeSession);
+  }
   faker.seed(1);
   const user = createUser({
     id: 1,
@@ -96,7 +118,7 @@ function readMe() {
 export const authHandlers = [
   // Familia /api/v1/auth/  (la que usa authSlice.js)
   http.post('/api/v1/auth/login/',           ({ request }) => readLogin(request)),
-  http.post('/api/v1/auth/logout/',          () => HttpResponse.json({ detail: 'Sesion cerrada.' })),
+  http.post('/api/v1/auth/logout/', () => { _activeSession = null; return HttpResponse.json({ detail: 'Sesion cerrada.' }); }),
   http.post('/api/v1/auth/register/',        ({ request }) => readRegister(request)),
   http.get('/api/v1/auth/profile/',          () => readMe()),
   http.patch('/api/v1/auth/profile/',        async ({ request }) => {

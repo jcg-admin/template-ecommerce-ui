@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Iniciativa | validar-perfiles-de-usuario |
-| Estado | En analisis |
+| Estado | En ejecucion |
 | Version | 1.0.0 |
 | Fecha de creacion | 2026-05-27T21:35:00 |
 | Iniciativa origen | raiz |

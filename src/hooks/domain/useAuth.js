@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useCallback } from 'react';
 import {
   selectUser, selectIsAuthenticated, selectIsAdmin,
+  selectIsStaff, selectIsSuperAdmin,
   selectAuthLoading, selectAuthError,
 } from '@redux/selectors';
 import {
@@ -19,6 +20,8 @@ export function useAuth() {
   const user            = useSelector(selectUser);
   const isAuthenticated = useSelector(selectIsAuthenticated);
   const isAdmin         = useSelector(selectIsAdmin);
+  const isStaff         = useSelector(selectIsStaff);
+  const isSuperAdmin    = useSelector(selectIsSuperAdmin);
   const isLoading       = useSelector(selectAuthLoading);
   const error           = useSelector(selectAuthError);
 
@@ -30,7 +33,7 @@ export function useAuth() {
   const update   = useCallback((data)  => dispatch(updateUser(data)),      [dispatch]);
 
   return {
-    user, isAuthenticated, isAdmin, isLoading, error,
+    user, isAuthenticated, isAdmin, isStaff, isSuperAdmin, isLoading, error,
     login, logout, register, refresh, clearError: clear, updateUser: update,
   };
 }

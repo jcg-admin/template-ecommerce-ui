@@ -9,7 +9,15 @@ import { createSelector } from 'reselect';
 const selectAuthState  = (state) => state.auth;
 export const selectUser            = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
-export const selectIsAdmin         = (state) => state.auth.user?.is_staff ?? false;
+// Un usuario tiene acceso admin si es is_staff (staff tecnico del sistema)
+// O si es is_admin (administrador del negocio). Ver decision T-103 de
+// validar-perfiles-de-usuario.
+export const selectIsAdmin = (state) =>
+  !!(state.auth.user?.is_staff || state.auth.user?.is_admin);
+// Selectores granulares de rol (para componentes que necesitan
+// distinguir staff tecnico de admin del negocio).
+export const selectIsStaff  = (state) => !!(state.auth.user?.is_staff);
+export const selectIsSuperAdmin = (state) => !!(state.auth.user?.is_admin);
 export const selectAuthLoading     = (state) => state.auth.isLoading;
 export const selectAuthError       = (state) => state.auth.error;
 

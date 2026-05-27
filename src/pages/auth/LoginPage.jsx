@@ -18,7 +18,7 @@ export default function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const location = useLocation();
-  const redirectTo = location.state?.from?.pathname || '/account';
+  // redirectTo se calcula en handleSubmit segun el perfil del usuario autenticado.
 
   const [creds, setCreds] = useState({ email: '', password: '', remember: true });
   const [error, setError] = useState('');
@@ -29,8 +29,12 @@ export default function LoginPage() {
     setError('');
     setLoading(true);
     try {
-      await dispatch(login(creds)).unwrap();
-      navigate(redirectTo, { replace: true });
+      const result = await dispatch(login(creds)).unwrap();
+      const loggedUser = result?.user ?? result;
+      const isAdminUser = !!(loggedUser?.is_staff || loggedUser?.is_admin);
+      const dest = location.state?.from?.pathname ||
+                   (isAdminUser ? '/admin' : '/account');
+      navigate(dest, { replace: true });
     } catch (err) {
       setError('Correo o contraseña incorrectos.');
     } finally {
