@@ -272,3 +272,9 @@ const cartSlice = createSlice({
 
 export const { clearCart, clearCartActionState } = cartSlice.actions;
 export default cartSlice.reducer;
+
+// addCartItem: alias de addToCart para compatibilidad con el sistema de
+// diseno Yoruba. El paquete importa addCartItem; nuestro slice usa addToCart.
+// Agregado en F4 de adaptar-sistema-diseno-yoruba (H-F4-01).
+export const addCartItem = addToCart;
+export default cartSlice.reducer;
