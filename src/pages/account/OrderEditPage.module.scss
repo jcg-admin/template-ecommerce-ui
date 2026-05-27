@@ -33,7 +33,7 @@
   display: flex;
   gap: $spacing-8;
   border-bottom: 1px solid $border-color;
-  margin-bottom: $spacing-7;
+  margin-bottom: 28px;
 }
 .tab {
   padding: 12px 0;
@@ -91,7 +91,7 @@
 }
 
 .actions {
-  margin-top: $spacing-7;
+  margin-top: 28px;
   display: flex;
   gap: $spacing-3;
   align-items: center;

@@ -9,8 +9,8 @@
 }
 
 .primaryBtn {
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
@@ -21,8 +21,8 @@
 
 .dangerBtn {
   background: transparent;
-  color: $color-danger;
-  border: 1px solid $color-danger;
+  color: $error-color;
+  border: 1px solid $error-color;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;

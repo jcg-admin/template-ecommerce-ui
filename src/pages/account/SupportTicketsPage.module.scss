@@ -18,8 +18,8 @@
 .title { font-size: 1.5rem; margin: 0; }
 
 .primaryBtn {
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.55rem 1.1rem;
   border-radius: 0.25rem;
@@ -38,7 +38,7 @@
 .item {
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.35rem;
-  background: $bg-surface;
+  background: $bg-elevated;
 }
 
 .itemLink {
@@ -70,8 +70,8 @@
 
 .itemDate { color: rgba(0, 0, 0, 0.6); font-size: 0.9rem; }
 
-.badgeOpen    { @include badge-base; background: rgba(244, 162, 0, 0.18);  color: $amber-700; }
-.badgeReplied { @include badge-base; background: rgba(64, 132, 245, 0.18); color: $indigo-600; }
+.badgeOpen    { @include badge-base; background: rgba(244, 162, 0, 0.18);  color: $rust; }
+.badgeReplied { @include badge-base; background: rgba(64, 132, 245, 0.18); color: #1C5BD8; }
 .badgeClosed  { @include badge-base; background: rgba(0, 0, 0, 0.08);     color: rgba(0, 0, 0, 0.55); }
 
 .empty {
@@ -80,4 +80,4 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
-.error { color: $color-danger; }
+.error { color: $error-color; }

@@ -12,7 +12,7 @@
 }
 
 .backLink {
-  color: $success-strong;
+  color: $lime-deep;
   text-decoration: none;
   display: inline-block;
   margin-bottom: 0.5rem;
@@ -71,7 +71,7 @@
 }
 
 .fieldError {
-  color: $danger-strong;
+  color: $vino-deep;
   font-size: 0.85rem;
 }
 
@@ -81,8 +81,8 @@
 }
 
 .primaryBtn {
-  background: $success-strong;
-  color: $bg-surface;
+  background: $lime-deep;
+  color: $bg-elevated;
   border: 0;
   border-radius: 0.4rem;
   padding: 0.65rem 1.3rem;
@@ -90,9 +90,9 @@
 }
 
 .success {
-  color: $success-strong;
+  color: $lime-deep;
 }
 
 .error {
-  color: $danger-strong;
+  color: $vino-deep;
 }

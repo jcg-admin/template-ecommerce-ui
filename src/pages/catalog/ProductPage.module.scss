@@ -19,7 +19,7 @@
   font-size: $font-size-xs;
   color: $text-muted;
   letter-spacing: 0.1em;
-  margin-bottom: $spacing-7;
+  margin-bottom: 28px;
   display: flex;
   gap: $spacing-3;
   flex-wrap: wrap;
@@ -113,7 +113,7 @@
   font-size: $font-size-md;
   color: $text-secondary;
   line-height: $line-height-relaxed;
-  margin-bottom: $spacing-7;
+  margin-bottom: 28px;
 }
 .priceRow {
   display: flex;
@@ -137,7 +137,7 @@
 }
 
 // Variants
-.variants { margin-bottom: $spacing-7; }
+.variants { margin-bottom: 28px; }
 .variantsHeader { display: flex; justify-content: space-between; margin-bottom: $spacing-3; }
 .sizeGuide { font-family: $font-family-mono; font-size: $font-size-xs; color: $coral; letter-spacing: 0.08em; text-decoration: none; }
 .variantGrid {

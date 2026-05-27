@@ -2,7 +2,7 @@
 @use '@styles/abstracts' as *;
 
 .panel {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.4rem;
   padding: 1rem 1.15rem;
@@ -35,9 +35,9 @@
   gap: 0.5rem;
 }
 
-.approve { @include btn-base; @include btn-variant($success-strong); }
-.reject  { @include btn-base; @include btn-variant($danger-strong); }
-.info    { @include btn-base; @include btn-outline($color-primary); }
+.approve { @include btn-base; @include btn-variant($lime-deep); }
+.reject  { @include btn-base; @include btn-variant($vino-deep); }
+.info    { @include btn-base; @include btn-outline($primary-color); }
 
-.error   { color: $color-danger; font-size: 0.9rem; }
-.success { color: $success-strong; font-weight: 600; margin-top: 0.5rem; }
+.error   { color: $error-color; font-size: 0.9rem; }
+.success { color: $lime-deep; font-weight: 600; margin-top: 0.5rem; }

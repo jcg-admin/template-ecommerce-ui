@@ -17,7 +17,7 @@
   padding: 0.85rem 1rem;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.4rem;
-  background: $bg-surface;
+  background: $bg-elevated;
   display: flex;
   flex-direction: column;
 }
@@ -50,7 +50,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: $bg-surface;
+  background: $bg-elevated;
 
   th, td {
     padding: 0.6rem 0.75rem;
@@ -69,7 +69,7 @@
 .customerEmail { font-size: 0.85rem; color: rgba(0, 0, 0, 0.6); }
 
 .detailLink {
-  color: $color-primary;
+  color: $primary-color;
   text-decoration: none;
   font-size: 0.9rem;
 
@@ -77,4 +77,4 @@
 }
 
 .empty   { padding: 2rem; text-align: center; color: rgba(0, 0, 0, 0.6); }
-.error   { color: $color-danger; }
+.error   { color: $error-color; }

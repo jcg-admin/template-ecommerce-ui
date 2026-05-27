@@ -19,7 +19,7 @@
 }
 
 .metric {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.35rem;
   padding: 0.75rem 1rem;
@@ -54,7 +54,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: $bg-surface;
+  background: $bg-elevated;
 
   th, td {
     padding: 0.6rem 0.75rem;
@@ -73,7 +73,7 @@
 .customerEmail { color: rgba(0, 0, 0, 0.55); font-size: 0.85rem; }
 
 .detailLink {
-  color: $color-primary;
+  color: $primary-color;
   text-decoration: none;
   font-weight: 600;
 
@@ -86,4 +86,4 @@
   color: rgba(0, 0, 0, 0.6);
 }
 
-.error { color: $color-danger; }
+.error { color: $error-color; }

@@ -2,8 +2,8 @@
 
 .page { max-width: 1100px; margin: 2rem auto; padding: 1.5rem; }
 .header { margin-bottom: 1.25rem; }
-.title { font-size: 1.75rem; margin: 0 0 .25rem; color: $text-strong; }
-.subtitle { color: $text-soft; margin: 0; }
+.title { font-size: 1.75rem; margin: 0 0 .25rem; color: $text-primary; }
+.subtitle { color: $text-muted; margin: 0; }
 .filters {
   border: 1px solid $border-color;
   border-radius: .5rem;
@@ -35,12 +35,12 @@
   th, td { padding: .55rem .7rem; text-align: left; border-bottom: 1px solid $bg-sunken; font-size: .9rem; }
   th { background: $bg-sunken; }
 }
-.status_APPROVED  { color: $success-strong; font-weight: 600; }
-.status_REJECTED  { color: $danger-deep; font-weight: 600; }
+.status_APPROVED  { color: $lime-deep; font-weight: 600; }
+.status_REJECTED  { color: $vino-deep; font-weight: 600; }
 .status_PENDING   { color: $primary-color; font-weight: 600; }
-.status_REFUNDED  { color: $indigo-500; font-weight: 600; }
-.status_CANCELLED { color: $text-soft; font-weight: 600; }
-.statusDefault    { color: $text-strong; font-weight: 600; }
+.status_REFUNDED  { color: #4A5FC1; font-weight: 600; }
+.status_CANCELLED { color: $text-muted; font-weight: 600; }
+.statusDefault    { color: $text-primary; font-weight: 600; }
 .refundLink { color: $primary-color; text-decoration: underline; font-weight: 600; }
 .error { @include error-banner; }
-.empty { color: $text-soft; }
+.empty { color: $text-muted; }

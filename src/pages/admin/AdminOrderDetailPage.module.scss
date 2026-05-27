@@ -44,7 +44,7 @@
   @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
 }
 .card {
-  border: 1px solid $border-color; background: $bg-surface;
+  border: 1px solid $border-color; background: $bg-elevated;
   margin-bottom: $spacing-5;
 }
 .cardHeader {
@@ -134,8 +134,8 @@
   display: grid; place-items: center; padding: $spacing-4;
 }
 .modal {
-  background: $bg-surface; border: 1px solid $border-medium;
-  max-width: 480px; width: 100%; padding: $spacing-7;
+  background: $bg-elevated; border: 1px solid $border-medium;
+  max-width: 480px; width: 100%; padding: 28px;
 }
 .modalTitle {
   font-family: $font-family-display; font-size: $font-size-xl;

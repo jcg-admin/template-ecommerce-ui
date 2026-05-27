@@ -7,35 +7,35 @@
 }
 .header { margin-bottom: 24px; }
 .title  { font-size: 1.75rem; margin: 0 0 8px; }
-.subtitle { color: $gray-700; margin: 0; }
+.subtitle { color: $text-secondary; margin: 0; }
 .tree   { list-style: none; padding: 0; margin: 0; }
 .node   { margin: 4px 0; }
 .nodeRow {
   display: flex; align-items: center; gap: 8px;
-  padding: 8px 12px; border: 1px solid $gray-200; border-radius: 6px;
-  background: $bg-surface;
+  padding: 8px 12px; border: 1px solid rgba($text-primary, 0.12); border-radius: 6px;
+  background: $bg-elevated;
 }
 .toggle {
   width: 24px; height: 24px;
-  border: 1px solid $gray-400; background: $gray-50;
+  border: 1px solid rgba($text-primary, 0.28); background: rgba($text-primary, 0.04);
   border-radius: 4px; cursor: pointer;
   font-size: 1rem; line-height: 1;
 }
 .toggleSpacer { display: inline-block; width: 24px; }
 .nodeLink {
   flex: 1; display: flex; justify-content: space-between;
-  align-items: center; text-decoration: none; color: $gray-800;
+  align-items: center; text-decoration: none; color: rgba($text-primary, 0.65);
 }
 .nodeName { font-weight: 600; }
-.count    { font-size: 0.875rem; color: $gray-600; }
+.count    { font-size: 0.875rem; color: $text-muted; }
 .children { list-style: none; padding-left: 28px; margin-top: 4px; }
 .loading, .error, .empty {
-  text-align: center; padding: 32px; color: $gray-700;
+  text-align: center; padding: 32px; color: $text-secondary;
 }
 .spinner {
   width: 32px; height: 32px; margin: 0 auto 12px;
-  border: 3px solid $gray-200; border-top-color: $gray-700;
+  border: 3px solid rgba($text-primary, 0.12); border-top-color: $text-secondary;
   border-radius: 50%; animation: spin 0.8s linear infinite;
 }
-.error { color: $danger-strong; background: $danger-bg; border-radius: 6px; }
+.error { color: $vino-deep; background: rgba($vino, 0.12); border-radius: 6px; }
 @keyframes spin { to { transform: rotate(360deg); } }

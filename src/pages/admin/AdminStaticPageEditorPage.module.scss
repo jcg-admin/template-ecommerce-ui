@@ -46,7 +46,7 @@
   &:focus { border-color: $lime; }
 }
 .previewBox {
-  border: 1px solid $border-color; background: $bg-surface;
+  border: 1px solid $border-color; background: $bg-elevated;
   margin-top: $spacing-3;
 }
 .previewLabel {
@@ -65,7 +65,7 @@
   code { background: rgba($lime, 0.1); padding: 1px 6px; border-radius: 2px; color: $lime-soft; }
 }
 
-.sidebar { border: 1px solid $border-color; background: $bg-surface; align-self: start; position: sticky; top: $spacing-5;
+.sidebar { border: 1px solid $border-color; background: $bg-elevated; align-self: start; position: sticky; top: $spacing-5;
   @media (max-width: $bp-lg) { position: static; }
 }
 .sidebarTitle {

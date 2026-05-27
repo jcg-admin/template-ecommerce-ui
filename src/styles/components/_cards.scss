@@ -61,7 +61,7 @@
     top: $spacing-2;
     right: $spacing-2;
     z-index: 1;
-    background: rgba($bg-surface, 0.9);
+    background: rgba($bg-elevated, 0.9);
     border-radius: $border-radius-full;
     padding: $spacing-1;
     color: $text-muted;
@@ -115,7 +115,7 @@
   &__discount {
     font-size: $font-size-xs;
     font-weight: $font-weight-bold;
-    color: $bg-surface;
+    color: $bg-elevated;
     background-color: $accent-color;
     padding: 2px $spacing-2;
     border-radius: $border-radius-sm;
@@ -144,7 +144,7 @@
       content: 'Sin stock';
       @include absolute-fill;
       @include flex-center;
-      background: rgba($bg-surface, 0.85);
+      background: rgba($bg-elevated, 0.85);
       color: $error-color;
       font-weight: $font-weight-semibold;
       font-size: $font-size-sm;

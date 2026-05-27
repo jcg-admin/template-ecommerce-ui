@@ -50,7 +50,7 @@
 }
 
 .error {
-  color: $color-danger;
+  color: $error-color;
   font-size: 0.85rem;
 }
 
@@ -62,8 +62,8 @@
 }
 
 .primaryBtn {
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.55rem 1.1rem;
   border-radius: 0.25rem;
@@ -76,7 +76,7 @@
 
 .secondaryBtn {
   background: transparent;
-  color: $color-text;
+  color: $text-primary;
   border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.55rem 1.1rem;
   border-radius: 0.25rem;

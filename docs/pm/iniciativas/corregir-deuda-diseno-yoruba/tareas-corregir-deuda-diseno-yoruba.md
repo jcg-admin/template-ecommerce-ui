@@ -4,20 +4,20 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-201 | Reemplazar variables legacy en modulos SCSS de components/catalog/ | `src/components/catalog/*.module.scss` (batch) | Pendiente |
-| T-202 | Reemplazar variables legacy en modulos SCSS de components/layout/ | `src/components/layout/**/*.module.scss` (batch) | Pendiente |
-| T-203 | Reemplazar variables legacy en modulos SCSS de components/account/ | `src/components/account/**/*.module.scss` (batch) | Pendiente |
-| T-204 | Reemplazar variables legacy en modulos SCSS de components/admin/ | `src/components/admin/**/*.module.scss` (batch) | Pendiente |
-| T-205 | Reemplazar variables legacy en modulos SCSS de components/common/ | `src/components/common/**/*.module.scss` (batch) | Pendiente |
-| T-206 | Reemplazar variables legacy en modulos SCSS de components/checkout/ y raiz | `src/components/checkout/**/*.module.scss` (batch) | Pendiente |
-| T-207 | Reemplazar variables legacy en modulos SCSS de pages/catalog/ | `src/pages/catalog/*.module.scss` (batch) | Pendiente |
-| T-208 | Reemplazar variables legacy en modulos SCSS de pages/account/ | `src/pages/account/*.module.scss` (batch) | Pendiente |
-| T-209 | Reemplazar variables legacy en modulos SCSS de pages/admin/ | `src/pages/admin/*.module.scss` (batch) | Pendiente |
-| T-210 | Reemplazar variables legacy en modulos SCSS de pages/auth/ y pages/ raiz | `src/pages/auth/*.module.scss`, `src/pages/*.module.scss` (batch) | Pendiente |
-| T-211 | Reemplazar variables legacy en modulos SCSS de pages/cart/, cart/, checkout/ | `src/pages/cart/*.module.scss`, `src/pages/checkout/*.module.scss` (batch) | Pendiente |
-| T-212 | Reemplazar variables legacy en styles/ (non-variables) | `src/styles/**/*.scss` (excluye _variables.scss) | Pendiente |
-| T-213 | Eliminar los 4 bloques de aliases de _variables.scss | `src/styles/abstracts/_variables.scss` | Pendiente |
-| T-214 | Verificar build tras eliminar aliases | (verificacion) | Pendiente |
+| T-201 | Reemplazar variables legacy en modulos SCSS de components/catalog/ | `src/components/catalog/*.module.scss` (batch) | Hecha |
+| T-202 | Reemplazar variables legacy en modulos SCSS de components/layout/ | `src/components/layout/**/*.module.scss` (batch) | Hecha |
+| T-203 | Reemplazar variables legacy en modulos SCSS de components/account/ | `src/components/account/**/*.module.scss` (batch) | Hecha |
+| T-204 | Reemplazar variables legacy en modulos SCSS de components/admin/ | `src/components/admin/**/*.module.scss` (batch) | Hecha |
+| T-205 | Reemplazar variables legacy en modulos SCSS de components/common/ | `src/components/common/**/*.module.scss` (batch) | Hecha |
+| T-206 | Reemplazar variables legacy en modulos SCSS de components/checkout/ y raiz | `src/components/checkout/**/*.module.scss` (batch) | Hecha |
+| T-207 | Reemplazar variables legacy en modulos SCSS de pages/catalog/ | `src/pages/catalog/*.module.scss` (batch) | Hecha |
+| T-208 | Reemplazar variables legacy en modulos SCSS de pages/account/ | `src/pages/account/*.module.scss` (batch) | Hecha |
+| T-209 | Reemplazar variables legacy en modulos SCSS de pages/admin/ | `src/pages/admin/*.module.scss` (batch) | Hecha |
+| T-210 | Reemplazar variables legacy en modulos SCSS de pages/auth/ y pages/ raiz | `src/pages/auth/*.module.scss`, `src/pages/*.module.scss` (batch) | Hecha |
+| T-211 | Reemplazar variables legacy en modulos SCSS de pages/cart/, cart/, checkout/ | `src/pages/cart/*.module.scss`, `src/pages/checkout/*.module.scss` (batch) | Hecha |
+| T-212 | Reemplazar variables legacy en styles/ (non-variables) | `src/styles/**/*.scss` (excluye _variables.scss) | Hecha |
+| T-213 | Eliminar los 4 bloques de aliases de _variables.scss | `src/styles/abstracts/_variables.scss` | Hecha |
+| T-214 | Verificar build tras eliminar aliases | (verificacion) | Hecha |
 
 ## F3 — Adaptar NotFoundPage
 

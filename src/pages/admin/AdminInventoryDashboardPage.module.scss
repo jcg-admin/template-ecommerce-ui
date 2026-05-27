@@ -49,7 +49,7 @@
 .kpiBronze { color: $bronze-soft; }
 .kpiMuted  { color: $text-primary; }
 
-.card { border: 1px solid $border-color; background: $bg-surface; }
+.card { border: 1px solid $border-color; background: $bg-elevated; }
 .cardHeader {
   display: flex; justify-content: space-between; align-items: center;
   padding: 12px $spacing-5; border-bottom: 1px solid $border-color;

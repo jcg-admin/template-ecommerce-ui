@@ -19,20 +19,20 @@
 }
 
 .primaryBtn {
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   cursor: pointer;
 
-  &:hover { background: color.adjust($color-primary, $lightness: -5%); }
+  &:hover { background: color.adjust($primary-color, $lightness: -5%); }
 }
 
 .dangerBtn {
   background: transparent;
-  color: $color-danger;
-  border: 1px solid $color-danger;
+  color: $error-color;
+  border: 1px solid $error-color;
   padding: 0.25rem 0.75rem;
   border-radius: 0.25rem;
   cursor: pointer;
@@ -74,5 +74,5 @@
 }
 
 .error {
-  color: $color-danger;
+  color: $error-color;
 }

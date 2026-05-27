@@ -12,7 +12,7 @@
 }
 
 .modal {
-  background: $bg-surface;
+  background: $bg-elevated;
   border-radius: 0.5rem;
   width: min(480px, 90vw);
   max-height: 90vh;
@@ -64,7 +64,7 @@
 }
 
 .error {
-  color: $color-danger;
+  color: $error-color;
   font-size: 0.8rem;
 }
 
@@ -76,8 +76,8 @@
 }
 
 .primaryBtn {
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
@@ -88,7 +88,7 @@
 
 .secondaryBtn {
   background: transparent;
-  color: $color-text;
+  color: $text-primary;
   border: 1px solid rgba(0, 0, 0, 0.15);
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;

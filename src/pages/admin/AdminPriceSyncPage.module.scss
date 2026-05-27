@@ -1,66 +1,66 @@
 @use '@styles/abstracts' as *;
 
 .page { max-width: 960px; margin: 0 auto; padding: 24px 16px; }
-.backLink { display: inline-block; margin-bottom: 12px; color: $gray-700; }
+.backLink { display: inline-block; margin-bottom: 12px; color: $text-secondary; }
 .title { font-size: 1.5rem; margin: 0 0 8px; }
-.description { color: $gray-700; max-width: 720px; }
+.description { color: $text-secondary; max-width: 720px; }
 
 .tabs { display: flex; gap: 8px; margin: 20px 0 12px; }
 .tab, .tabActive {
   padding: 8px 16px;
-  border: 1px solid $gray-400;
-  background: $gray-50;
+  border: 1px solid rgba($text-primary, 0.28);
+  background: rgba($text-primary, 0.04);
   border-radius: 4px 4px 0 0;
   cursor: pointer;
   font-size: 0.95rem;
 }
 .tabActive {
-  background: $bg-surface;
-  border-bottom: 1px solid $bg-surface;
+  background: $bg-elevated;
+  border-bottom: 1px solid $bg-elevated;
   font-weight: 600;
 }
 
 .form {
-  background: $bg-surface; border: 1px solid $gray-200; padding: 16px;
+  background: $bg-elevated; border: 1px solid rgba($text-primary, 0.12); padding: 16px;
   border-radius: 6px; margin-bottom: 16px;
 }
 .field { margin-bottom: 12px; display: flex; flex-direction: column; gap: 4px; }
 .field input {
-  padding: 6px 8px; border: 1px solid $gray-400; border-radius: 4px;
+  padding: 6px 8px; border: 1px solid rgba($text-primary, 0.28); border-radius: 4px;
   font-size: 0.95rem;
 }
 .formActions { display: flex; gap: 8px; }
 .primaryBtn, .secondaryBtn {
   padding: 8px 16px; border-radius: 4px; cursor: pointer;
-  font-size: 0.95rem; border: 1px solid $indigo-700;
+  font-size: 0.95rem; border: 1px solid #1A4F8B;
 }
-.primaryBtn { background: $indigo-700; color: $bg-surface; }
-.primaryBtn:hover:not([disabled]) { background: $indigo-700; }
+.primaryBtn { background: #1A4F8B; color: $bg-elevated; }
+.primaryBtn:hover:not([disabled]) { background: #1A4F8B; }
 .primaryBtn[disabled] { opacity: 0.5; cursor: not-allowed; }
-.secondaryBtn { background: $bg-surface; color: $indigo-700; }
-.secondaryBtn:hover { background: $gray-50; }
+.secondaryBtn { background: $bg-elevated; color: #1A4F8B; }
+.secondaryBtn:hover { background: rgba($text-primary, 0.04); }
 
 .table {
   width: 100%; border-collapse: collapse;
-  margin: 16px 0; background: $bg-surface;
+  margin: 16px 0; background: $bg-elevated;
 }
 .table th, .table td {
-  padding: 8px 12px; border: 1px solid $gray-200;
+  padding: 8px 12px; border: 1px solid rgba($text-primary, 0.12);
   text-align: left; font-size: 0.92rem;
 }
-.table th { background: $gray-50; }
-.invalidRow { background: $danger-bg; }
-.invalidRow td { color: $danger-strong; }
+.table th { background: rgba($text-primary, 0.04); }
+.invalidRow { background: rgba($vino, 0.12); }
+.invalidRow td { color: $vino-deep; }
 
-.summary { color: $gray-700; margin: 12px 0; }
+.summary { color: $text-secondary; margin: 12px 0; }
 .confirmActions { margin-top: 12px; }
 .error {
-  background: $danger-bg; border: 1px solid $error-border;
-  padding: 10px; border-radius: 4px; color: $danger-strong;
+  background: rgba($vino, 0.12); border: 1px solid $error-border;
+  padding: 10px; border-radius: 4px; color: $vino-deep;
   margin: 12px 0;
 }
 .success {
   background: $success-bg; border: 1px solid $success-bg;
-  padding: 10px; border-radius: 4px; color: $success-strong;
+  padding: 10px; border-radius: 4px; color: $lime-deep;
   margin: 12px 0;
 }

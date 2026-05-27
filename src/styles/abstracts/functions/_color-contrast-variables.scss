@@ -10,8 +10,8 @@
 
 // We use this function only in variables.scss because recursive imports are not allowed in Sass anymore.
 
-@function color-contrast-variables($background, $color-contrast-dark, $color-contrast-light, $white, $black, $min-contrast-ratio) {
-  $foregrounds: $color-contrast-light, $color-contrast-dark, $white, $black;
+@function color-contrast-variables($background, $color-contrast-dark, $color-contrast-light, #F5F7EE, $black, $min-contrast-ratio) {
+  $foregrounds: $color-contrast-light, $color-contrast-dark, #F5F7EE, $black;
   $max-ratio: 0;
   $max-ratio-color: null;
 

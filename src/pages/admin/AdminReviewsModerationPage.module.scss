@@ -26,14 +26,14 @@
 }
 
 .item {
-  background:    $bg-surface;
-  border:        1px solid $gray-200;
+  background:    $bg-elevated;
+  border:        1px solid rgba($text-primary, 0.12);
   border-radius: 8px;
   padding:       1rem 1.25rem;
 }
 
 .meta {
-  color:     $gray-700;
+  color:     $text-secondary;
   font-size: 0.9rem;
   margin:    0 0 0.5rem 0;
 }
@@ -44,7 +44,7 @@
 }
 
 .itemBody {
-  color:    $gray-800;
+  color:    rgba($text-primary, 0.65);
   margin:   0 0 0.75rem;
 }
 
@@ -63,13 +63,13 @@
   select {
     padding:       0.4rem 0.6rem;
     border-radius: 6px;
-    border:        1px solid $gray-400;
+    border:        1px solid rgba($text-primary, 0.28);
   }
 }
 
 .primaryBtn {
-  background:    $success-strong;
-  color:         $bg-surface;
+  background:    $lime-deep;
+  color:         $bg-elevated;
   border:        none;
   padding:       0.5rem 1.1rem;
   border-radius: 6px;
@@ -79,8 +79,8 @@
 }
 
 .dangerBtn {
-  background:    $danger-strong;
-  color:         $bg-surface;
+  background:    $vino-deep;
+  color:         $bg-elevated;
   border:        none;
   padding:       0.5rem 1.1rem;
   border-radius: 6px;
@@ -90,16 +90,16 @@
 }
 
 .empty {
-  color:     $gray-600;
+  color:     $text-muted;
   font-style: italic;
 }
 
 .error {
-  color:        $danger-strong;
+  color:        $vino-deep;
   font-weight:  500;
 }
 
 .success {
-  color:        $success-strong;
+  color:        $lime-deep;
   font-weight:  500;
 }

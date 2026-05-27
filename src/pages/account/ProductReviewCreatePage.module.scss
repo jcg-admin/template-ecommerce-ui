@@ -17,7 +17,7 @@
 }
 
 .description {
-  color:     $gray-700;
+  color:     $text-secondary;
   font-size: 0.95rem;
   margin:    0;
 }
@@ -41,19 +41,19 @@
   select,
   textarea {
     padding:       0.55rem 0.7rem;
-    border:        1px solid $gray-400;
+    border:        1px solid rgba($text-primary, 0.28);
     border-radius: 6px;
     font-size:     0.95rem;
   }
 }
 
 .fieldError {
-  color:     $danger-strong;
+  color:     $vino-deep;
   font-size: 0.85rem;
 }
 
 .error {
-  color:        $danger-strong;
+  color:        $vino-deep;
   font-weight:  500;
   margin:       0.25rem 0 0;
 }
@@ -65,8 +65,8 @@
 }
 
 .primaryBtn {
-  background:    $indigo-600;
-  color:         $bg-surface;
+  background:    #1C5BD8;
+  color:         $bg-elevated;
   border:        none;
   padding:       0.6rem 1.2rem;
   border-radius: 6px;
@@ -79,7 +79,7 @@
 }
 
 .successMessage {
-  color:     $success-strong;
+  color:     $lime-deep;
   font-size: 1rem;
   margin:    1rem 0;
 }

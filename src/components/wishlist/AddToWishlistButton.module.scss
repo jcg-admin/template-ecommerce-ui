@@ -19,7 +19,7 @@
 
   &:hover:not(:disabled) {
     background: $primary-color;
-    color: $bg-surface;
+    color: $bg-elevated;
   }
 
   &:disabled {
@@ -29,7 +29,7 @@
 
   &.added {
     background: $primary-color;
-    color: $bg-surface;
+    color: $bg-elevated;
   }
 }
 
@@ -44,7 +44,7 @@
 
 .warn {
   margin: 6px 0 0;
-  color: $amber-900;
+  color: $bronze-deep;
   font-size: 13px;
 }
 

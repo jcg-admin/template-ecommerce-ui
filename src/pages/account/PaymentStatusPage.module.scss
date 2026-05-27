@@ -2,8 +2,8 @@
 
 .page { max-width: 720px; margin: 2rem auto; padding: 1.5rem; }
 .header { margin-bottom: 1.5rem; }
-.title { font-size: 1.75rem; margin: 0 0 .25rem; color: $text-strong; }
-.subtitle { color: $text-soft; margin: 0; }
+.title { font-size: 1.75rem; margin: 0 0 .25rem; color: $text-primary; }
+.subtitle { color: $text-muted; margin: 0; }
 .card {
   border: 1px solid $border-color;
   border-radius: .5rem;
@@ -15,31 +15,31 @@
   grid-template-columns: 1fr 1fr;
   gap: 1rem;
   margin: 0 0 1rem;
-  dt { font-size: .8rem; color: $text-soft; text-transform: uppercase; margin: 0; }
-  dd { margin: .15rem 0 0; font-size: 1rem; color: $text-strong; }
+  dt { font-size: .8rem; color: $text-muted; text-transform: uppercase; margin: 0; }
+  dd { margin: .15rem 0 0; font-size: 1rem; color: $text-primary; }
 }
-.status_APPROVED  { color: $success-strong; font-weight: 600; }
-.status_REJECTED  { color: $danger-deep; font-weight: 600; }
+.status_APPROVED  { color: $lime-deep; font-weight: 600; }
+.status_REJECTED  { color: $vino-deep; font-weight: 600; }
 .status_PENDING   { color: $primary-color; font-weight: 600; }
-.status_REFUNDED  { color: $indigo-500; font-weight: 600; }
-.status_CANCELLED { color: $text-soft; font-weight: 600; }
-.statusDefault    { color: $text-strong; font-weight: 600; }
-.errorCode { font-family: monospace; color: $danger-deep; }
+.status_REFUNDED  { color: #4A5FC1; font-weight: 600; }
+.status_CANCELLED { color: $text-muted; font-weight: 600; }
+.statusDefault    { color: $text-primary; font-weight: 600; }
+.errorCode { font-family: monospace; color: $vino-deep; }
 .primaryBtn {
   display: inline-block;
   margin-right: 1rem;
   padding: .55rem 1.1rem;
   background: $primary-color;
-  color: $bg-surface;
+  color: $bg-elevated;
   border-radius: .35rem;
   text-decoration: none;
   font-weight: 600;
 }
-.secondaryLink { color: $indigo-500; text-decoration: underline; }
+.secondaryLink { color: #4A5FC1; text-decoration: underline; }
 .error {
-  background: $danger-bg;
-  color: $danger-deep;
+  background: rgba($vino, 0.12);
+  color: $vino-deep;
   padding: .6rem .8rem;
   border-radius: .35rem;
 }
-.empty { color: $text-soft; }
+.empty { color: $text-muted; }

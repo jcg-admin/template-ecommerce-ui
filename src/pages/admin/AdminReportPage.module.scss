@@ -20,14 +20,14 @@
 }
 
 .exportLink {
-  background: $info-strong;
-  color: $bg-surface;
+  background: $bronze;
+  color: $bg-elevated;
   padding: 0.4rem 0.85rem;
   border-radius: 0.3rem;
   text-decoration: none;
   font-size: 0.9rem;
 
-  &:hover { background: $indigo-900; }
+  &:hover { background: #14296B; }
 }
 
 .totals {
@@ -38,7 +38,7 @@
 }
 
 .metric {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.35rem;
   padding: 0.75rem 1rem;
@@ -49,8 +49,8 @@
 .metricLabel { color: rgba(0, 0, 0, 0.6); font-size: 0.85rem; }
 .metricValue { font-size: 1.5rem; font-weight: 700; }
 .metricDelta { font-size: 0.85rem; margin-top: 0.15rem; }
-.metricDeltaUp   { color: $success-strong; }
-.metricDeltaDown { color: $danger-strong; }
+.metricDeltaUp   { color: $lime-deep; }
+.metricDeltaDown { color: $vino-deep; }
 
 .filters {
   display: flex;
@@ -76,7 +76,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: $bg-surface;
+  background: $bg-elevated;
   margin-bottom: 1.25rem;
 
   th, td {
@@ -98,7 +98,7 @@
   margin: 1rem 0 0.5rem;
 }
 
-.error { color: $danger-strong; }
+.error { color: $vino-deep; }
 .empty { padding: 1rem 0; color: rgba(0, 0, 0, 0.6); }
 
 .cardGrid {

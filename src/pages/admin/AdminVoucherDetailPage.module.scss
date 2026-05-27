@@ -49,7 +49,7 @@
 }
 
 .changelog {
-  border: 1px solid $border-color; background: $bg-surface;
+  border: 1px solid $border-color; background: $bg-elevated;
   align-self: start;
   position: sticky; top: $spacing-5;
   @media (max-width: $bp-lg) { position: static; }

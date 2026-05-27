@@ -2,7 +2,7 @@
 @use '@styles/abstracts' as *;
 
 .panel {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.4rem;
   padding: 1rem 1.15rem;
@@ -44,8 +44,8 @@
 
 .primaryBtn {
   align-self: flex-start;
-  background: $color-primary;
-  color: $bg-surface;
+  background: $primary-color;
+  color: $bg-elevated;
   border: 0;
   padding: 0.55rem 1.1rem;
   border-radius: 0.3rem;
@@ -53,5 +53,5 @@
   font-weight: 600;
 }
 
-.error   { color: $color-danger; font-size: 0.9rem; }
-.success { color: $success-strong; font-weight: 600; }
+.error   { color: $error-color; font-size: 0.9rem; }
+.success { color: $lime-deep; font-weight: 600; }

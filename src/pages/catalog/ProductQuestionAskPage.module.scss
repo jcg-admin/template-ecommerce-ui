@@ -23,13 +23,13 @@
   textarea { resize: vertical; }
 }
 
-.fieldError { color: $danger-strong; font-size: 0.85rem; }
+.fieldError { color: $vino-deep; font-size: 0.85rem; }
 
 .actions { display: flex; }
 
 .primaryBtn {
-  background: $success-strong;
-  color: $bg-surface;
+  background: $lime-deep;
+  color: $bg-elevated;
   border: 0;
   border-radius: 0.4rem;
   padding: 0.65rem 1.3rem;
@@ -42,4 +42,4 @@
   border-radius: 0.4rem;
 }
 
-.error { color: $danger-strong; }
+.error { color: $vino-deep; }

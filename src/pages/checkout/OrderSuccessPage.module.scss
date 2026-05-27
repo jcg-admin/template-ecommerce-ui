@@ -59,7 +59,7 @@
   @media (max-width: $bp-md) { grid-template-columns: repeat(2, 1fr); }
 }
 .fact {
-  padding: $spacing-6 $spacing-7;
+  padding: $spacing-6 28px;
   border-left: 1px solid $border-color;
   &:first-child { border-left: 0; }
 }
@@ -97,7 +97,7 @@
 .nextStepD { font-size: $font-size-sm; color: $text-secondary; line-height: $line-height-relaxed; }
 
 .recap {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid $border-medium;
   padding: $spacing-8;
   display: grid;

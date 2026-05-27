@@ -3,14 +3,14 @@
 .page { padding: 1.5rem; }
 .header {
   .title { font-size: 1.5rem; margin: 0; }
-  .subtitle { color: $gray-600; margin: 0.25rem 0 1rem; }
+  .subtitle { color: $text-muted; margin: 0.25rem 0 1rem; }
 }
 .apiError {
-  background: $danger-bg; color: $danger-strong; padding: 0.5rem;
+  background: rgba($vino, 0.12); color: $vino-deep; padding: 0.5rem;
   border-radius: 4px; border: 1px solid $error-border;
 }
 .success {
-  background: $success-bg; color: $success-strong; padding: 0.5rem;
+  background: $success-bg; color: $lime-deep; padding: 0.5rem;
   border-radius: 4px; border: 1px solid $success-color;
 }
 .matrix {
@@ -18,7 +18,7 @@
   border-collapse: collapse;
   th, td {
     padding: 0.5rem;
-    border-bottom: 1px solid $gray-200;
+    border-bottom: 1px solid rgba($text-primary, 0.12);
     text-align: center;
   }
   th:first-child, td:first-child { text-align: left; }

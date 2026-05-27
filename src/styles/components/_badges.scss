@@ -44,6 +44,6 @@
 .discount-badge {
   @include badge-base;
   background-color: $accent-color;
-  color: $bg-surface;
+  color: $bg-elevated;
   font-weight: $font-weight-bold;
 }

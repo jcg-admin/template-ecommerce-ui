@@ -147,7 +147,7 @@
   top: 0;
   z-index: $z-sticky;
   height: $header-height;
-  background: $bg-surface;
+  background: $bg-elevated;
   border-bottom: 1px solid $border-color;
   box-shadow: $shadow-xs;
   @include flex-between;

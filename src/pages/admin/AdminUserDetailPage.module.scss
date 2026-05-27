@@ -18,11 +18,11 @@
 .hero {
   display: grid;
   grid-template-columns: auto 1fr auto;
-  gap: $spacing-7;
+  gap: 28px;
   align-items: center;
-  padding: $spacing-7;
+  padding: 28px;
   border: 1px solid $border-color;
-  background: $bg-surface;
+  background: $bg-elevated;
   margin-bottom: $spacing-6;
   @media (max-width: $bp-md) { grid-template-columns: 1fr; }
 }
@@ -96,7 +96,7 @@
   grid-template-columns: repeat(4, 1fr);
   gap: 0;
   border: 1px solid $border-color;
-  background: $bg-surface;
+  background: $bg-elevated;
   @media (max-width: $bp-md) { grid-template-columns: repeat(2, 1fr); }
 }
 .stat {
@@ -130,7 +130,7 @@
 // Card
 .card {
   border: 1px solid $border-color;
-  background: $bg-surface;
+  background: $bg-elevated;
 }
 .cardHeader {
   display: flex;

@@ -37,8 +37,8 @@
 }
 
 .primaryBtn {
-  background: $success-strong;
-  color: $bg-surface;
+  background: $lime-deep;
+  color: $bg-elevated;
   border: 0;
   border-radius: 0.4rem;
   padding: 0.5rem 1rem;
@@ -46,8 +46,8 @@
 }
 
 .dangerBtn {
-  background: $danger-strong;
-  color: $bg-surface;
+  background: $vino-deep;
+  color: $bg-elevated;
   border: 0;
   border-radius: 0.4rem;
   padding: 0.5rem 1rem;
@@ -55,5 +55,5 @@
 }
 
 .empty { color: rgba(0, 0, 0, 0.6); font-style: italic; }
-.success { color: $success-strong; }
-.error { color: $danger-strong; }
+.success { color: $lime-deep; }
+.error { color: $vino-deep; }

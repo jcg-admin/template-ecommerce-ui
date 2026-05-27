@@ -13,11 +13,11 @@
 .title {
   font-size: 1.75rem;
   margin: 0 0 .25rem;
-  color: $text-strong;
+  color: $text-primary;
 }
 
 .subtitle {
-  color: $text-soft;
+  color: $text-muted;
   margin: 0;
 }
 
@@ -32,7 +32,7 @@
 .gatewayTitle {
   font-size: 1.15rem;
   margin: 0 0 .75rem;
-  color: $text-strong;
+  color: $text-primary;
 }
 
 .installments {
@@ -62,18 +62,18 @@
   &:disabled { opacity: .55; cursor: not-allowed; }
 }
 
-.primaryBtn  { background: $primary-color; color: $bg-surface; }
-.secondaryBtn { background: $indigo-900; color: $bg-surface; }
+.primaryBtn  { background: $primary-color; color: $bg-elevated; }
+.secondaryBtn { background: #14296B; color: $bg-elevated; }
 
 .legal {
   font-size: .85rem;
-  color: $text-soft;
+  color: $text-muted;
   margin-top: 1rem;
 }
 
 .error {
-  background: $danger-bg;
-  color: $danger-deep;
+  background: rgba($vino, 0.12);
+  color: $vino-deep;
   padding: .6rem .8rem;
   border-radius: .35rem;
   margin-bottom: 1rem;

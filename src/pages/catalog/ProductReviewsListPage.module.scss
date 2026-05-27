@@ -17,8 +17,8 @@
 }
 
 .summary {
-  background:    $gray-50;
-  border:        1px solid $gray-200;
+  background:    rgba($text-primary, 0.04);
+  border:        1px solid rgba($text-primary, 0.12);
   border-radius: 8px;
   padding:       1rem 1.25rem;
   margin-bottom: 1rem;
@@ -31,11 +31,11 @@
 .average {
   font-size:   2rem;
   font-weight: 700;
-  color:       $indigo-600;
+  color:       #1C5BD8;
 }
 
 .total {
-  color:     $gray-700;
+  color:     $text-secondary;
   font-size: 0.95rem;
 }
 
@@ -49,14 +49,14 @@
 }
 
 .item {
-  background:    $bg-surface;
-  border:        1px solid $gray-200;
+  background:    $bg-elevated;
+  border:        1px solid rgba($text-primary, 0.12);
   border-radius: 8px;
   padding:       0.85rem 1rem;
 }
 
 .rating {
-  color:       $amber-500;
+  color:       $coral;
   font-weight: 600;
   margin:      0 0 0.25rem;
 }
@@ -67,16 +67,16 @@
 }
 
 .itemBody {
-  color:    $gray-700;
+  color:    $text-secondary;
   margin:   0;
 }
 
 .empty {
-  color:     $gray-600;
+  color:     $text-muted;
   font-style: italic;
 }
 
 .error {
-  color:        $danger-strong;
+  color:        $vino-deep;
   font-weight:  500;
 }

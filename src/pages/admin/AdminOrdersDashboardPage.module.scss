@@ -35,9 +35,9 @@
     flex-direction: column;
     gap: 0.25rem;
     padding: 0.75rem;
-    border: 1px solid $gray-200;
+    border: 1px solid rgba($text-primary, 0.12);
     border-radius: 6px;
-    background: $gray-50;
+    background: rgba($text-primary, 0.04);
 
     strong {
       font-size: 1.5rem;
@@ -55,7 +55,7 @@
     grid-template-columns: auto 1fr auto;
     gap: 1rem;
     padding: 0.5rem 0;
-    border-bottom: 1px solid $gray-200;
+    border-bottom: 1px solid rgba($text-primary, 0.12);
   }
 }
 
@@ -75,14 +75,14 @@
 
   th, td {
     padding: 0.5rem 0.75rem;
-    border-bottom: 1px solid $gray-200;
+    border-bottom: 1px solid rgba($text-primary, 0.12);
     text-align: left;
   }
 }
 
 .error {
-  color: $danger-strong;
-  background: $danger-bg;
+  color: $vino-deep;
+  background: rgba($vino, 0.12);
   padding: 0.75rem;
   border-radius: 4px;
 }

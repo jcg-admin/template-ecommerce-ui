@@ -40,7 +40,7 @@
 }
 
 .fieldError {
-  color: $danger-strong;
+  color: $vino-deep;
   font-size: 0.85rem;
 }
 
@@ -49,8 +49,8 @@
 }
 
 .primaryBtn {
-  background: $success-strong;
-  color: $bg-surface;
+  background: $lime-deep;
+  color: $bg-elevated;
   border: 0;
   border-radius: 0.4rem;
   padding: 0.65rem 1.3rem;
@@ -59,8 +59,8 @@
 
 .secondaryBtn {
   background: transparent;
-  color: $success-strong;
-  border: 1px solid $success-strong;
+  color: $lime-deep;
+  border: 1px solid $lime-deep;
   border-radius: 0.4rem;
   padding: 0.65rem 1.3rem;
   cursor: pointer;
@@ -73,5 +73,5 @@
 }
 
 .error {
-  color: $danger-strong;
+  color: $vino-deep;
 }

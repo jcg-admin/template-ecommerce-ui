@@ -8,7 +8,7 @@
 }
 
 .card {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid $border-color;
   border-radius: 8px;
   padding: $spacing-6;
@@ -28,14 +28,14 @@
 
 .success {
   background: $success-bg;
-  color: $success-strong;
+  color: $lime-deep;
   padding: $spacing-3;
   border-radius: 4px;
   margin: 0 0 $spacing-3;
 }
 
 .error {
-  background: $danger-bg;
+  background: rgba($vino, 0.12);
   color: $accent-dark;
   padding: $spacing-3;
   border-radius: 4px;
@@ -83,7 +83,7 @@
 
 .btnPrimary {
   background: $primary-color;
-  color: $bg-surface;
+  color: $bg-elevated;
   border: none;
   padding: $spacing-2 $spacing-4;
   border-radius: 4px;

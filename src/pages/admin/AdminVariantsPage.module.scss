@@ -27,7 +27,7 @@
   padding: $spacing-12; text-align: center; color: $text-muted;
   border: 1px dashed $border-strong;
 }
-.typeCard { border: 1px solid $border-color; background: $bg-surface; }
+.typeCard { border: 1px solid $border-color; background: $bg-elevated; }
 .typeHeader {
   display: flex; justify-content: space-between; align-items: center;
   padding: $spacing-4 $spacing-5; border-bottom: 1px solid $border-color;
@@ -104,7 +104,7 @@
 .bulkInput { width: 120px; }
 
 .tableWrap {
-  border: 1px solid $border-color; background: $bg-surface;
+  border: 1px solid $border-color; background: $bg-elevated;
   overflow-x: auto;
 }
 .variantsTable {
@@ -144,7 +144,7 @@
   z-index: $z-modal; display: grid; place-items: center; padding: $spacing-4;
 }
 .modal {
-  background: $bg-surface; border: 1px solid $border-medium;
+  background: $bg-elevated; border: 1px solid $border-medium;
   max-width: 480px; width: 100%; padding: $spacing-6;
 }
 .modalTitle {

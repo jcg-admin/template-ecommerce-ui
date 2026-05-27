@@ -17,8 +17,8 @@
   gap: 0.25rem;
   padding: 0.75rem 1rem;
   min-width: 6.5rem;
-  background: $bg-surface;
-  border: 2px solid $gray-400;
+  background: $bg-elevated;
+  border: 2px solid rgba($text-primary, 0.28);
   border-radius: 0.5rem;
   cursor: pointer;
   transition: border-color 0.15s, box-shadow 0.15s;
@@ -46,11 +46,11 @@
 
 .price {
   font-size: 0.85rem;
-  color: $gray-700;
+  color: $text-secondary;
 }
 
 .stockTag {
   font-size: 0.7rem;
-  color: $danger-strong;
+  color: $vino-deep;
   text-transform: uppercase;
 }

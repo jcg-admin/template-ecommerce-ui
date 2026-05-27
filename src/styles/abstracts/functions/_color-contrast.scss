@@ -14,7 +14,7 @@
 
 // scss-docs-start color-contrast-function
 @function color-contrast($background, $color-contrast-dark: $color-contrast-dark, $color-contrast-light: $color-contrast-light, $min-contrast-ratio: $min-contrast-ratio) {
-  $foregrounds: $color-contrast-light, $color-contrast-dark, $white, $black;
+  $foregrounds: $color-contrast-light, $color-contrast-dark, #F5F7EE, $black;
   $max-ratio: 0;
   $max-ratio-color: null;
 

@@ -19,7 +19,7 @@
 }
 
 .input, .select, .textarea {
-  border: 1px solid $gray-400;
+  border: 1px solid rgba($text-primary, 0.28);
   border-radius: 4px;
   padding: 0.5rem;
   font-size: 0.95rem;
@@ -36,14 +36,14 @@
 }
 
 .fieldError {
-  color: $danger-strong;
+  color: $vino-deep;
   font-size: 0.85rem;
   margin: 0;
 }
 
 .apiError {
-  background: $danger-bg;
-  color: $danger-strong;
+  background: rgba($vino, 0.12);
+  color: $vino-deep;
   border: 1px solid $error-border;
   border-radius: 4px;
   padding: 0.5rem;
@@ -55,7 +55,7 @@
 }
 
 .btnPrimary {
-  background: $gray-950;
+  background: $bg-sunken;
   color: white;
   border: 0;
   border-radius: 4px;

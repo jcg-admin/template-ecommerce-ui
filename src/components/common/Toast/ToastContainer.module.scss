@@ -17,7 +17,7 @@
   align-items: flex-start;
   gap: $spacing-3;
   padding: $spacing-3 $spacing-4;
-  background: $bg-surface;
+  background: $bg-elevated;
   border-radius: $border-radius-lg;
   box-shadow: $shadow-lg;
   border-left: 4px solid $border-color;
@@ -43,7 +43,7 @@
   // cierre F1: cambiar los 4 modifiers para setear background en lugar
   // de color; entonces este !important desaparece.
   // stylelint-disable-next-line declaration-no-important
-  color: $bg-surface !important;
+  color: $bg-elevated !important;
   font-size: 11px;
 }
 

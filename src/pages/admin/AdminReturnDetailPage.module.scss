@@ -10,7 +10,7 @@
 .backLink {
   display: inline-block;
   margin-bottom: 1rem;
-  color: $color-primary;
+  color: $primary-color;
   text-decoration: none;
 
   &:hover { text-decoration: underline; }
@@ -24,7 +24,7 @@
 .meta  { color: rgba(0, 0, 0, 0.6); margin: 0.35rem 0 0; }
 
 .block {
-  background: $bg-surface;
+  background: $bg-elevated;
   border: 1px solid rgba(0, 0, 0, 0.08);
   border-radius: 0.4rem;
   padding: 1rem 1.15rem;
@@ -53,12 +53,12 @@
 
 .itemQty { color: rgba(0, 0, 0, 0.6); font-size: 0.9rem; }
 
-.badgePending   { @include badge-base; background: rgba(244, 162, 0, 0.18);   color: $amber-700; }
+.badgePending   { @include badge-base; background: rgba(244, 162, 0, 0.18);   color: $rust; }
 /* stylelint-disable-next-line color-no-hex */
 .badgeInfo      { @include badge-base; background: rgba(125, 90, 240, 0.18);  color: #5a36d0; }
-.badgeApproved  { @include badge-base; background: rgba(64, 132, 245, 0.18);  color: $indigo-600; }
-.badgeRejected  { @include badge-base; background: rgba(220, 53, 69, 0.18);   color: $danger-strong; }
-.badgeCompleted { @include badge-base; background: rgba(40, 167, 69, 0.18);   color: $success-strong; }
+.badgeApproved  { @include badge-base; background: rgba(64, 132, 245, 0.18);  color: #1C5BD8; }
+.badgeRejected  { @include badge-base; background: rgba(220, 53, 69, 0.18);   color: $vino-deep; }
+.badgeCompleted { @include badge-base; background: rgba(40, 167, 69, 0.18);   color: $lime-deep; }
 
 .empty { color: rgba(0, 0, 0, 0.6); margin: 0; }
-.error { color: $color-danger; }
+.error { color: $error-color; }

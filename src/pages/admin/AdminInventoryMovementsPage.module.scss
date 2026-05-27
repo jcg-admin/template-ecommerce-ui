@@ -6,7 +6,7 @@
 .backLink {
   display: inline-block;
   margin-bottom: 1rem;
-  color: $info-strong;
+  color: $bronze;
   text-decoration: none;
   &:hover { text-decoration: underline; }
 }
@@ -33,7 +33,7 @@
 .table {
   width: 100%;
   border-collapse: collapse;
-  background: $bg-surface;
+  background: $bg-elevated;
 
   th, td {
     padding: 0.6rem 0.75rem;
@@ -59,12 +59,12 @@
   font-weight: 600;
 }
 
-.badgeSale   { background: rgba(200, 0, 0, 0.12);    color: $danger-strong; }
-.badgeCancel { background: rgba(0, 128, 0, 0.12);    color: $success-strong; }
-.badgeManual { background: rgba(31, 58, 138, 0.12);  color: $info-strong; }
+.badgeSale   { background: rgba(200, 0, 0, 0.12);    color: $vino-deep; }
+.badgeCancel { background: rgba(0, 128, 0, 0.12);    color: $lime-deep; }
+.badgeManual { background: rgba(31, 58, 138, 0.12);  color: $bronze; }
 
-.positive { color: $success-strong; font-weight: 600; }
-.negative { color: $danger-strong; font-weight: 600; }
+.positive { color: $lime-deep; font-weight: 600; }
+.negative { color: $vino-deep; font-weight: 600; }
 
-.error { color: $danger-strong; }
+.error { color: $vino-deep; }
 .empty { padding: 1rem 0; color: rgba(0, 0, 0, 0.6); }
