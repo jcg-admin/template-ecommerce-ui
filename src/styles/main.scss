@@ -23,6 +23,7 @@
 
 // 1. Reset y base de elementos
 @use 'base/reset';
+@use 'abstracts/typography';   // Fraunces + IBM Plex — estilos globales html/body/h1-h6
 @use 'base/typography';
 @use 'base/animations';
 
