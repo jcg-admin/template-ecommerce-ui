@@ -49,3 +49,4 @@
 | 2026-05-27T17:31:32 | Hallazgo H-F4-03 [PROVEN] | fetchOrderDetail no existe en ordersSlice. El slice tiene checkoutOrder, cancelOrder, etc. pero no un thunk de lectura de detalle de orden. Solucion: agregar fetchOrderDetail en ordersSlice. |
 | 2026-05-27T17:31:32 | Hallazgo H-F4-04 [PROVEN] | fetchAddresses no existe en authSlice. El slice tiene loginUser, fetchProfile, etc. pero no gestion de direcciones. Solucion: agregar fetchAddresses en authSlice. |
 | 2026-05-27T17:31:32 | Hallazgo H-F4-05 [PROVEN] | fetchExpressEligibility y submitExpress no existen en ningun slice. Los usa ExpressCheckoutPage. fetchPaymentHistory tampoco existe. Solucion: agregar los 3 en paymentsSlice. |
+| 2026-05-27T17:33:15 | T-401 T-402 hechas | CatalogPage adaptada. 0 rutas ES, 0 hex hardcodeados. |
