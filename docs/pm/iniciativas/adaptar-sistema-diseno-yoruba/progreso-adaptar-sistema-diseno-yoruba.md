@@ -26,3 +26,4 @@
 | 2026-05-27T16:27:05 | F1 cerrada | T-101..T-107 hechas. 5 builds necesarios. 2 hallazgos criticos resueltos: aliases de compatibilidad y conflicto de @use namespace. Build limpio: EXIT=0, 3 warnings preexistentes. |
 | 2026-05-27T16:48:16 | F2 iniciada | T-201..T-206. Adaptacion del shape de datos: image_url, toggleWishlist, fetchFeaturedProducts, fetchCategories, filtro is_featured. |
 | 2026-05-27T16:48:38 | T-201 hecha | transform-catalog.mjs: campo image_url agregado como alias de images[0].url. Valor: /catalog/images/<archivo> o null si no hay imagen. |
+| 2026-05-27T16:48:50 | T-202 hecha | catalog.ts regenerado. 256 productos. image_url coincide con images[0].url en el primer producto verificado. |

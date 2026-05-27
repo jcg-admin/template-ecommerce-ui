@@ -5,7 +5,7 @@
  * Regenerar con: node scripts/transform-catalog.mjs <ruta-al-json>
  *
  * Fuente: /tmp/oja_data/oja/productos/_catalogo_completo.json
- * Generado: 2026-05-26T01:35:16.840Z
+ * Generado: 2026-05-27T16:48:45.007Z
  * Productos: 256
  * Categorias: 14
  *
@@ -136,6 +136,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/abe-esu-cuchilla-de-esu.png",
     "variants": [
       {
         "id": 1,
@@ -180,6 +181,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aceite-de-palma-epò-pupa.png",
     "variants": [
       {
         "id": 1,
@@ -223,6 +225,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ada-orisa.png",
     "variants": [
       {
         "id": 1,
@@ -267,6 +270,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/adin-aceite-negro-1-litro.png",
     "variants": [
       {
         "id": 1,
@@ -311,6 +315,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/adin-aceite-negro-500-ml.png",
     "variants": [
       {
         "id": 1,
@@ -355,6 +360,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-ibeyis.png",
     "variants": [
       {
         "id": 1,
@@ -398,6 +404,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-obatala.png",
     "variants": [
       {
         "id": 1,
@@ -441,6 +448,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-osun.png",
     "variants": [
       {
         "id": 1,
@@ -484,6 +492,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-oya.png",
     "variants": [
       {
         "id": 1,
@@ -527,6 +536,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-sango.png",
     "variants": [
       {
         "id": 1,
@@ -570,6 +580,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-de-yemoja.png",
     "variants": [
       {
         "id": 1,
@@ -613,6 +624,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-ogun.png",
     "variants": [
       {
         "id": 1,
@@ -656,6 +668,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agboran-osoosi.png",
     "variants": [
       {
         "id": 1,
@@ -699,6 +712,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/agogo-ifa-africana.png",
     "variants": [
       {
         "id": 1,
@@ -743,6 +757,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aidan-vaina.png",
     "variants": [
       {
         "id": 1,
@@ -787,6 +802,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aìpẹ-owọ-abanico-de-mano.png",
     "variants": [
       {
         "id": 1,
@@ -832,6 +848,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aja-ogun-doble-chica.png",
     "variants": [
       {
         "id": 1,
@@ -875,6 +892,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aja-ogun-doble-grande.png",
     "variants": [
       {
         "id": 1,
@@ -918,6 +936,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/aja-ogun-sencillo.png",
     "variants": [
       {
         "id": 1,
@@ -961,6 +980,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajere-alta-mod-01-pieza-unica.png",
     "variants": [
       {
         "id": 1,
@@ -1004,6 +1024,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajere-alta-mod-03-pieza-unica.png",
     "variants": [
       {
         "id": 1,
@@ -1047,6 +1068,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajere-chica-isefa-o-ifa.png",
     "variants": [
       {
         "id": 1,
@@ -1091,6 +1113,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajere-ifa-alto-relieve.png",
     "variants": [
       {
         "id": 1,
@@ -1135,6 +1158,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajere-ifa-mediana.png",
     "variants": [
       {
         "id": 1,
@@ -1178,6 +1202,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ajetumobi-para-generar-riqueza.png",
     "variants": [
       {
         "id": 1,
@@ -1221,6 +1246,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akara-frijol-molido.png",
     "variants": [
       {
         "id": 1,
@@ -1264,6 +1290,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-adani-lare-ejo-ganar-casos-en-la-corte.png",
     "variants": [
       {
         "id": 1,
@@ -1307,6 +1334,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-agadango-abrir-camino-a-los-negocios.png",
     "variants": [
       {
         "id": 1,
@@ -1350,6 +1378,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-agbara-oko-potencia-sexual.png",
     "variants": [
       {
         "id": 1,
@@ -1394,6 +1423,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-aisiki-para-prosperidad.png",
     "variants": [
       {
         "id": 1,
@@ -1437,6 +1467,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-alubarika-regresar-el-daño.png",
     "variants": [
       {
         "id": 1,
@@ -1481,6 +1512,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-arubi-prisíon.png",
     "variants": [
       {
         "id": 1,
@@ -1524,6 +1556,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-arun-buburu-para-el-cancer.png",
     "variants": [
       {
         "id": 1,
@@ -1567,6 +1600,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-aseta-gallo-vencer-enemigos.png",
     "variants": [
       {
         "id": 1,
@@ -1610,6 +1644,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-atherence-liberacion-de-cualquier-esclavitud.png",
     "variants": [
       {
         "id": 1,
@@ -1653,6 +1688,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-atogbe-diabetes.png",
     "variants": [
       {
         "id": 1,
@@ -1696,6 +1732,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-atude-ewon-resolver-problemas-legales.png",
     "variants": [
       {
         "id": 1,
@@ -1739,6 +1776,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-awari-regular-la-menstruacion.png",
     "variants": [
       {
         "id": 1,
@@ -1782,6 +1820,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-awogba-arun-salud-en-general.png",
     "variants": [
       {
         "id": 1,
@@ -1825,6 +1864,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-buburu-ati-osi-evitar-miseria-y-probreza.png",
     "variants": [
       {
         "id": 1,
@@ -1868,6 +1908,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-con-oti-antibrujeria.png",
     "variants": [
       {
         "id": 1,
@@ -1911,6 +1952,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-iferan-atraccion.png",
     "variants": [
       {
         "id": 1,
@@ -1954,6 +1996,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-igbega-lenu-ise-asenso-laboral.png",
     "variants": [
       {
         "id": 1,
@@ -1997,6 +2040,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-iranti-memoria.png",
     "variants": [
       {
         "id": 1,
@@ -2040,6 +2084,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-isora-proteccion-contra-enviaciones-energeticas.png",
     "variants": [
       {
         "id": 1,
@@ -2083,6 +2128,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-iwori-meji-dinero-y-prestigio.png",
     "variants": [
       {
         "id": 1,
@@ -2127,6 +2173,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-mandarikan-antibrujeria.png",
     "variants": [
       {
         "id": 1,
@@ -2170,6 +2217,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-osa-meji-antibrujeria.png",
     "variants": [
       {
         "id": 1,
@@ -2213,6 +2261,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-owo-generar-dinero.png",
     "variants": [
       {
         "id": 1,
@@ -2256,6 +2305,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-owo-moto-proteccion-de-accidentes-automovilisticos.png",
     "variants": [
       {
         "id": 1,
@@ -2299,6 +2349,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-oyun-embarazo.png",
     "variants": [
       {
         "id": 1,
@@ -2342,6 +2393,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-ciatica.png",
     "variants": [
       {
         "id": 1,
@@ -2386,6 +2438,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-circulacion-sanguinea.png",
     "variants": [
       {
         "id": 1,
@@ -2430,6 +2483,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-depurar-la-sangre.png",
     "variants": [
       {
         "id": 1,
@@ -2474,6 +2528,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-osteoporosis.png",
     "variants": [
       {
         "id": 1,
@@ -2518,6 +2573,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-presión-arterial.png",
     "variants": [
       {
         "id": 1,
@@ -2562,6 +2618,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-producir-mas-esperma.png",
     "variants": [
       {
         "id": 1,
@@ -2606,6 +2663,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-riñones.png",
     "variants": [
       {
         "id": 1,
@@ -2650,6 +2708,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-trombosis.png",
     "variants": [
       {
         "id": 1,
@@ -2694,6 +2753,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/akose-para-vitiligo.png",
     "variants": [
       {
         "id": 1,
@@ -2738,6 +2798,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/apiru-ogun-iroke-ogun.png",
     "variants": [
       {
         "id": 1,
@@ -2783,6 +2844,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/àṣà-ṣàngó-2-hachas-de-sango.png",
     "variants": [
       {
         "id": 1,
@@ -2827,6 +2889,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/atare-pimienta-de-guinea.png",
     "variants": [
       {
         "id": 1,
@@ -2871,6 +2934,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/atipa-erufo.png",
     "variants": [
       {
         "id": 1,
@@ -2915,6 +2979,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/awe-olla-con-hoyos.png",
     "variants": [
       {
         "id": 1,
@@ -2959,6 +3024,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/awe-egbe-olla-para-egbe.png",
     "variants": [
       {
         "id": 1,
@@ -3003,6 +3069,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/awe-orisa-olla-para-orisa.png",
     "variants": [
       {
         "id": 1,
@@ -3046,6 +3113,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/awon-alabara-atraer-clientes.png",
     "variants": [
       {
         "id": 1,
@@ -3089,6 +3157,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/brazalete-de-bronce.png",
     "variants": [
       {
         "id": 1,
@@ -3133,6 +3202,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/brazalete-de-bronce-ancho.png",
     "variants": [
       {
         "id": 1,
@@ -3178,6 +3248,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/brazalete-de-plomo.png",
     "variants": [
       {
         "id": 1,
@@ -3221,6 +3292,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/campana-grande.png",
     "variants": [
       {
         "id": 1,
@@ -3266,6 +3338,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/campana-mediana.png",
     "variants": [
       {
         "id": 1,
@@ -3311,6 +3384,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/cauri-1-kilo-caracol-abierto.png",
     "variants": [
       {
         "id": 1,
@@ -3354,6 +3428,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-arenilla-rojo.png",
     "variants": [
       {
         "id": 1,
@@ -3397,6 +3472,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-arenilla-amarillo.png",
     "variants": [
       {
         "id": 1,
@@ -3440,6 +3516,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-arenilla-azul.png",
     "variants": [
       {
         "id": 1,
@@ -3483,6 +3560,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-arenilla-blanco.png",
     "variants": [
       {
         "id": 1,
@@ -3526,6 +3604,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-arenilla-cafe.png",
     "variants": [
       {
         "id": 1,
@@ -3569,6 +3648,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-arenilla-negro-y-blanco.png",
     "variants": [
       {
         "id": 1,
@@ -3612,6 +3692,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-cauris.png",
     "variants": [
       {
         "id": 1,
@@ -3655,6 +3736,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-egbe-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -3698,6 +3780,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-egbe-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -3741,6 +3824,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-egbe-cuenta-jumbo.png",
     "variants": [
       {
         "id": 1,
@@ -3785,6 +3869,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-egungun.png",
     "variants": [
       {
         "id": 1,
@@ -3828,6 +3913,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-iyun-azul.png",
     "variants": [
       {
         "id": 1,
@@ -3871,6 +3957,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-iyun-blanco.png",
     "variants": [
       {
         "id": 1,
@@ -3914,6 +4001,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-iyun-rojo.png",
     "variants": [
       {
         "id": 1,
@@ -3957,6 +4045,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-segi-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -4000,6 +4089,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-segi-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4044,6 +4134,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-de-segi-cuenta-mediana.png",
     "variants": [
       {
         "id": 1,
@@ -4087,6 +4178,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-iyun-con-coral.png",
     "variants": [
       {
         "id": 1,
@@ -4130,6 +4222,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-obatala-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4173,6 +4266,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-ogun-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4216,6 +4310,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-arenilla.png",
     "variants": [
       {
         "id": 1,
@@ -4261,6 +4356,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-con-coral.png",
     "variants": [
       {
         "id": 1,
@@ -4306,6 +4402,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-con-segi.png",
     "variants": [
       {
         "id": 1,
@@ -4351,6 +4448,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-ikin-e-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -4396,6 +4494,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-ikin-y-cauri-cuenta-gde.png",
     "variants": [
       {
         "id": 1,
@@ -4441,6 +4540,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-ikin-y-cauri-cuenta-med.png",
     "variants": [
       {
         "id": 1,
@@ -4486,6 +4586,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-ikin-y-cristal-azul.png",
     "variants": [
       {
         "id": 1,
@@ -4531,6 +4632,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-ikin-cauri-y-cristal-azul.png",
     "variants": [
       {
         "id": 1,
@@ -4576,6 +4678,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-otutu-opon-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -4621,6 +4724,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-otutu-opon-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4666,6 +4770,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-otutu-opon-cuenta-jumbo.png",
     "variants": [
       {
         "id": 1,
@@ -4711,6 +4816,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-orula-otutu-opon-cuenta-mediana.png",
     "variants": [
       {
         "id": 1,
@@ -4756,6 +4862,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-osun-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4799,6 +4906,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-sango-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4842,6 +4950,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/collar-yemoja-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -4885,6 +4994,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-elefante-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -4928,6 +5038,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-esu-alaje-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -4971,6 +5082,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-esu-odara-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5015,6 +5127,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-rostro-alargado-orula-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5060,6 +5173,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-rostro-orula-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5103,6 +5217,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-rostro-orula-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5147,6 +5262,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-sango-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5190,6 +5306,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-tablero-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5234,6 +5351,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-tablero-chico-bronce-con-collar-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -5278,6 +5396,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/dije-tambor-bronce-con-collar.png",
     "variants": [
       {
         "id": 1,
@@ -5322,6 +5441,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/edun-ara-piedra-de-rayo.png",
     "variants": [
       {
         "id": 1,
@@ -5366,6 +5486,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/efun-africano.png",
     "variants": [
       {
         "id": 1,
@@ -5409,6 +5530,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/egbe-eleko.png",
     "variants": [
       {
         "id": 1,
@@ -5453,6 +5575,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/egungun-icono-de-los-ancestros.png",
     "variants": [
       {
         "id": 1,
@@ -5496,6 +5619,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/egungun-inuigo-para-riqueza.png",
     "variants": [
       {
         "id": 1,
@@ -5540,6 +5664,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/egungun-inuigo-prosperidad-y-protección.png",
     "variants": [
       {
         "id": 1,
@@ -5585,6 +5710,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/egungun-inuigo-vencimiento-de-enemigos.png",
     "variants": [
       {
         "id": 1,
@@ -5628,6 +5754,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/eja-aro-pez-africano.png",
     "variants": [
       {
         "id": 1,
@@ -5672,6 +5799,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/eku-ifa-nigeriana.png",
     "variants": [
       {
         "id": 1,
@@ -5716,6 +5844,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/eku-ijebu.png",
     "variants": [
       {
         "id": 1,
@@ -5760,6 +5889,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/emu-vino-de-palma-600-ml.png",
     "variants": [
       {
         "id": 1,
@@ -5804,6 +5934,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/eru-–-1-4-libra.png",
     "variants": [
       {
         "id": 1,
@@ -5848,6 +5979,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/estera-africana.png",
     "variants": [
       {
         "id": 1,
@@ -5892,6 +6024,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-alaje-10-cm.png",
     "variants": [
       {
         "id": 1,
@@ -5936,6 +6069,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-alaje-25-cm.png",
     "variants": [
       {
         "id": 1,
@@ -5979,6 +6113,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-alaje-cabeza-larga.png",
     "variants": [
       {
         "id": 1,
@@ -6022,6 +6157,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-alaje-cauri-en-cabeza.png",
     "variants": [
       {
         "id": 1,
@@ -6065,6 +6201,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-alaje-esu-de-la-riqueza.png",
     "variants": [
       {
         "id": 1,
@@ -6108,6 +6245,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-ase-manifiesta-lo-que-uno-anhela.png",
     "variants": [
       {
         "id": 1,
@@ -6152,6 +6290,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-iseri-gangan-exito-financiero.png",
     "variants": [
       {
         "id": 1,
@@ -6196,6 +6335,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-odara-con-gorro.png",
     "variants": [
       {
         "id": 1,
@@ -6239,6 +6379,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-odara-grande.png",
     "variants": [
       {
         "id": 1,
@@ -6282,6 +6423,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-odara-mediano.png",
     "variants": [
       {
         "id": 1,
@@ -6325,6 +6467,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-odara-sencillo.png",
     "variants": [
       {
         "id": 1,
@@ -6369,6 +6512,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/esu-sigidi.png",
     "variants": [
       {
         "id": 1,
@@ -6412,6 +6556,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ewes-hierbas-africanas.png",
     "variants": [
       {
         "id": 1,
@@ -6456,6 +6601,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/fila-africana.png",
     "variants": [
       {
         "id": 1,
@@ -6499,6 +6645,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/gargantilla-de-iyun-con-coral.png",
     "variants": [
       {
         "id": 1,
@@ -6542,6 +6689,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/gbetu-gbetu-manifestar-lo-que-se-desea.png",
     "variants": [
       {
         "id": 1,
@@ -6585,6 +6733,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/gele-gorro-mujer.png",
     "variants": [
       {
         "id": 1,
@@ -6630,6 +6779,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/gele-premium-gorro-mujer.png",
     "variants": [
       {
         "id": 1,
@@ -6675,6 +6825,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ide-con-coral.png",
     "variants": [
       {
         "id": 1,
@@ -6718,6 +6869,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ide-egbe.png",
     "variants": [
       {
         "id": 1,
@@ -6761,6 +6913,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/igba-orisas.png",
     "variants": [
       {
         "id": 1,
@@ -6804,6 +6957,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikines-de-4-ojos.png",
     "variants": [
       {
         "id": 1,
@@ -6848,6 +7002,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikines-de-5-ojos.png",
     "variants": [
       {
         "id": 1,
@@ -6892,6 +7047,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-aabo-protección-con-iyami-osooronga.png",
     "variants": [
       {
         "id": 1,
@@ -6937,6 +7093,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-awọn-ifun-ti-ẹmi-ataques-espirituales-y-energeticos.png",
     "variants": [
       {
         "id": 1,
@@ -6981,6 +7138,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-blanco-atraer-bendiciones.png",
     "variants": [
       {
         "id": 1,
@@ -7025,6 +7183,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-itanja-protección-y-devolver-daños.png",
     "variants": [
       {
         "id": 1,
@@ -7070,6 +7229,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-negro-dominio-y-control.png",
     "variants": [
       {
         "id": 1,
@@ -7114,6 +7274,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-ohun-ija-antibalas.png",
     "variants": [
       {
         "id": 1,
@@ -7159,6 +7320,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-okiki-fama-y-prestigio.png",
     "variants": [
       {
         "id": 1,
@@ -7204,6 +7366,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-oko-ayokole-protección-al-automóvil.png",
     "variants": [
       {
         "id": 1,
@@ -7248,6 +7411,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-oro-riqueza-y-dinero-abundante.png",
     "variants": [
       {
         "id": 1,
@@ -7292,6 +7456,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-para-atraer-el-amor.png",
     "variants": [
       {
         "id": 1,
@@ -7337,6 +7502,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-para-buena-suerte.png",
     "variants": [
       {
         "id": 1,
@@ -7382,6 +7548,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-para-evitar-accidentes.png",
     "variants": [
       {
         "id": 1,
@@ -7427,6 +7594,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-para-pedir-favores.png",
     "variants": [
       {
         "id": 1,
@@ -7472,6 +7640,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ikobere-rojo-protección.png",
     "variants": [
       {
         "id": 1,
@@ -7516,6 +7685,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ile-ori-con-igbori.png",
     "variants": [
       {
         "id": 1,
@@ -7559,6 +7729,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ipara-iferan-crema-para-atracción.png",
     "variants": [
       {
         "id": 1,
@@ -7602,6 +7773,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ipara-iṣakoso-dominio-y-control.png",
     "variants": [
       {
         "id": 1,
@@ -7645,6 +7817,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ipara-oja-crema-para-ventas.png",
     "variants": [
       {
         "id": 1,
@@ -7688,6 +7861,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ipara-wundia-crema-para-la-virilidad.png",
     "variants": [
       {
         "id": 1,
@@ -7731,6 +7905,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/iroke-africano.png",
     "variants": [
       {
         "id": 1,
@@ -7775,6 +7950,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/iroke-de-cuentas.png",
     "variants": [
       {
         "id": 1,
@@ -7820,6 +7996,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/irukere-africano-cola-de-vaca.png",
     "variants": [
       {
         "id": 1,
@@ -7863,6 +8040,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/irukere-africano-mango-de-cuero.png",
     "variants": [
       {
         "id": 1,
@@ -7907,6 +8085,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/isan-egbe.png",
     "variants": [
       {
         "id": 1,
@@ -7950,6 +8129,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ites-tapete-con-cuentas.png",
     "variants": [
       {
         "id": 1,
@@ -7995,6 +8175,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ites-tapete-y-bolso.png",
     "variants": [
       {
         "id": 1,
@@ -8040,6 +8221,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/iya-aje-caracol-aje.png",
     "variants": [
       {
         "id": 1,
@@ -8085,6 +8267,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/iyan-ñame-molido.png",
     "variants": [
       {
         "id": 1,
@@ -8128,6 +8311,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/iyerosun.png",
     "variants": [
       {
         "id": 1,
@@ -8172,6 +8356,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabon-arobi-riqueza-y-antibrujeria.png",
     "variants": [
       {
         "id": 1,
@@ -8216,6 +8401,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabón-negro-ose-dudu.png",
     "variants": [
       {
         "id": 1,
@@ -8260,6 +8446,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabón-negro-ose-dudu-en-pasta.png",
     "variants": [
       {
         "id": 1,
@@ -8303,6 +8490,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabón-negro-ose-dudu-nigeriano.png",
     "variants": [
       {
         "id": 1,
@@ -8346,6 +8534,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabón-negro-ose-dudu-osun-en-barra-150gr.png",
     "variants": [
       {
         "id": 1,
@@ -8389,6 +8578,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/jabón-negro-con-akose-jabón-con-medicina.png",
     "variants": [
       {
         "id": 1,
@@ -8433,6 +8623,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/juego-de-ibos.png",
     "variants": [
       {
         "id": 1,
@@ -8477,6 +8668,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/koko-ajere-isefa.png",
     "variants": [
       {
         "id": 1,
@@ -8521,6 +8713,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/navaja-para-incisiones-10-pzs-dobles.png",
     "variants": [
       {
         "id": 1,
@@ -8564,6 +8757,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/obi-abata.png",
     "variants": [
       {
         "id": 1,
@@ -8608,6 +8802,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/odo-sango-recipiente-de-sango.png",
     "variants": [
       {
         "id": 1,
@@ -8651,6 +8846,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/odo-sango-completo-recipiente-de-sango.png",
     "variants": [
       {
         "id": 1,
@@ -8694,6 +8890,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ogun-con-aso-ode-pieza-unica.png",
     "variants": [
       {
         "id": 1,
@@ -8738,6 +8935,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/okete-nigeriana.png",
     "variants": [
       {
         "id": 1,
@@ -8782,6 +8980,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ologbohun-potencializa-el-ase.png",
     "variants": [
       {
         "id": 1,
@@ -8825,6 +9024,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opa-egungun.png",
     "variants": [
       {
         "id": 1,
@@ -8868,6 +9068,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opa-ogun.png",
     "variants": [
       {
         "id": 1,
@@ -8912,6 +9113,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opa-osun.png",
     "variants": [
       {
         "id": 1,
@@ -8956,6 +9158,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opa-ozayin.png",
     "variants": [
       {
         "id": 1,
@@ -9000,6 +9203,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opele-de-bronce.png",
     "variants": [
       {
         "id": 1,
@@ -9043,6 +9247,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opele-de-bronce-elefante.png",
     "variants": [
       {
         "id": 1,
@@ -9087,6 +9292,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opele-de-semilla-gbere.png",
     "variants": [
       {
         "id": 1,
@@ -9131,6 +9337,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opele-de-semilla-ope.png",
     "variants": [
       {
         "id": 1,
@@ -9175,6 +9382,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opon-akose-tablero-akose-ovalado.png",
     "variants": [
       {
         "id": 1,
@@ -9220,6 +9428,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opon-akose-tablero-akose-redondo.png",
     "variants": [
       {
         "id": 1,
@@ -9266,6 +9475,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opon-akose-tablero-akose-rostros.png",
     "variants": [
       {
         "id": 1,
@@ -9312,6 +9522,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/opon-ifa-tablero-grande.png",
     "variants": [
       {
         "id": 1,
@@ -9356,6 +9567,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/ori-shea-butter-200-grs.png",
     "variants": [
       {
         "id": 1,
@@ -9400,6 +9612,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/orisa-oro.png",
     "variants": [
       {
         "id": 1,
@@ -9444,6 +9657,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/orogbo.png",
     "variants": [
       {
         "id": 1,
@@ -9488,6 +9702,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/osun-–-camwood-–-1-4-libra.png",
     "variants": [
       {
         "id": 1,
@@ -9531,6 +9746,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/oya-agboran-base-y-plato.png",
     "variants": [
       {
         "id": 1,
@@ -9574,6 +9790,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/oyin-miel-710-gr.png",
     "variants": [
       {
         "id": 1,
@@ -9617,6 +9834,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/paquete-egbe-eleko.png",
     "variants": [
       {
         "id": 1,
@@ -9661,6 +9879,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/paquete-egbe-orun.png",
     "variants": [
       {
         "id": 1,
@@ -9705,6 +9924,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/paquete-egungun-isan.png",
     "variants": [
       {
         "id": 1,
@@ -9749,6 +9969,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/paquete-egungun-opa.png",
     "variants": [
       {
         "id": 1,
@@ -9793,6 +10014,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/paquete-isefa.png",
     "variants": [
       {
         "id": 1,
@@ -9837,6 +10059,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pareja-de-edan.png",
     "variants": [
       {
         "id": 1,
@@ -9881,6 +10104,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/peinetas-de-osun.png",
     "variants": [
       {
         "id": 1,
@@ -9925,6 +10149,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/piedra-yangi.png",
     "variants": [
       {
         "id": 1,
@@ -9968,6 +10193,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/plato-de-barro.png",
     "variants": [
       {
         "id": 1,
@@ -10012,6 +10238,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/plato-de-barro-chico.png",
     "variants": [
       {
         "id": 1,
@@ -10056,6 +10283,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pluma-de-agbe.png",
     "variants": [
       {
         "id": 1,
@@ -10100,6 +10328,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pluma-de-aluko.png",
     "variants": [
       {
         "id": 1,
@@ -10144,6 +10373,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pluma-de-loro-odidere.png",
     "variants": [
       {
         "id": 1,
@@ -10188,6 +10418,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-azul-ide-de-cuenta-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -10231,6 +10462,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-azul-cristal.png",
     "variants": [
       {
         "id": 1,
@@ -10275,6 +10507,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-blanca-ide-de-arcilla.png",
     "variants": [
       {
         "id": 1,
@@ -10319,6 +10552,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-blanca-ide-de-cuenta-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -10362,6 +10596,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-orisas-ide-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -10405,6 +10640,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-orula-ide-cuenta-chica.png",
     "variants": [
       {
         "id": 1,
@@ -10449,6 +10685,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-orula-ide-cuenta-grande.png",
     "variants": [
       {
         "id": 1,
@@ -10493,6 +10730,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-orula-con-segi.png",
     "variants": [
       {
         "id": 1,
@@ -10536,6 +10774,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-orula-cristal.png",
     "variants": [
       {
         "id": 1,
@@ -10580,6 +10819,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-de-segi.png",
     "variants": [
       {
         "id": 1,
@@ -10623,6 +10863,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-esu-de-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -10666,6 +10907,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-oxido-cristal.png",
     "variants": [
       {
         "id": 1,
@@ -10710,6 +10952,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-oxido-cristal-con-tambor.png",
     "variants": [
       {
         "id": 1,
@@ -10754,6 +10997,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-roja-ide-de-cuenta-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -10797,6 +11041,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/pulsera-sango-de-iyun.png",
     "variants": [
       {
         "id": 1,
@@ -10840,6 +11085,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/rostro-de-odudua.png",
     "variants": [
       {
         "id": 1,
@@ -10884,6 +11130,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/sekere-opo-sekere-de-exito-y-abundancia.png",
     "variants": [
       {
         "id": 1,
@@ -10927,6 +11174,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/semilla-de-gbere.png",
     "variants": [
       {
         "id": 1,
@@ -10972,6 +11220,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/semilla-de-ope.png",
     "variants": [
       {
         "id": 1,
@@ -11016,6 +11265,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/tambor-africano.png",
     "variants": [
       {
         "id": 1,
@@ -11059,6 +11309,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/titulo-de-ifa.png",
     "variants": [
       {
         "id": 1,
@@ -11103,6 +11354,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/titulo-de-ogboni.png",
     "variants": [
       {
         "id": 1,
@@ -11147,6 +11399,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/títulos-de-orisa.png",
     "variants": [
       {
         "id": 1,
@@ -11191,6 +11444,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/traje-dashiki-yoruba-“preguntar-por-diseños-disponibles”.png",
     "variants": [
       {
         "id": 1,
@@ -11234,6 +11488,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/traje-yoruba-hombre.png",
     "variants": [
       {
         "id": 1,
@@ -11278,6 +11533,7 @@ export const CATALOG_PRODUCTS = [
         "is_main": true
       }
     ],
+    "image_url": "/catalog/images/traje-yoruba-mujer.png",
     "variants": [
       {
         "id": 1,
