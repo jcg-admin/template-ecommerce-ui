@@ -229,3 +229,84 @@ export const {
 } = adminSlice.actions;
 
 export default adminSlice.reducer;
+
+// ── Thunks para el sistema de diseno Yoruba — panel admin (F6, H-F6-01) ──
+
+export const fetchAdminMetrics = createAsyncThunk(
+  'admin/metrics', async (_a, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/metrics/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchAdminOrders = createAsyncThunk(
+  'admin/orders', async (params = {}, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/orders/', { params })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchAdminProducts = createAsyncThunk(
+  'admin/products', async (params = {}, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/products/', { params })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const deleteProduct = createAsyncThunk(
+  'admin/deleteProduct', async (id, { rejectWithValue }) => {
+    try { await apiService.delete(`/api/v1/admin/products/${id}/`); return id; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const toggleProductFeatured = createAsyncThunk(
+  'admin/toggleFeatured', async ({ id, is_featured }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/products/${id}/`, { is_featured })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const adjustProductStock = createAsyncThunk(
+  'admin/adjustStock', async ({ productId, delta, reason }, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/products/${productId}/adjust-stock/`, { delta, reason })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const adjustVariantStock = createAsyncThunk(
+  'admin/adjustVariantStock', async ({ variantId, delta, reason }, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/variants/${variantId}/adjust-stock/`, { delta, reason })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const adminCreateRefund = createAsyncThunk(
+  'admin/createRefund', async ({ orderNumber, amount, reason }, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/orders/${orderNumber}/refund/`, { amount, reason })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchInventoryDashboard = createAsyncThunk(
+  'admin/inventoryDashboard', async (_a, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/inventory/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchStockAlerts = createAsyncThunk(
+  'admin/stockAlerts', async (_a, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/inventory/alerts/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchSiteSettings = createAsyncThunk(
+  'admin/siteSettings', async (_a, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/settings/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const updateSiteSettings = createAsyncThunk(
+  'admin/updateSettings', async (data, { rejectWithValue }) => {
+    try { return (await apiService.patch('/api/v1/admin/settings/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+export const fetchAdminPages = createAsyncThunk(
+  'admin/pages', async (_a, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/pages/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
