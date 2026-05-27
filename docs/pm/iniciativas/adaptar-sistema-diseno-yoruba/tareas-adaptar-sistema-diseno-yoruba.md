@@ -34,17 +34,17 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-301 | Adaptar `Header/index.jsx` (rutas EN, selectores existentes) | `src/components/layout/Header/index.jsx` | Pendiente |
-| T-302 | Adaptar `Header.module.scss` con paleta Yoruba | `src/components/layout/Header/Header.module.scss` | Pendiente |
-| T-303 | Adoptar `Footer/index.jsx` del paquete | `src/components/layout/Footer/index.jsx` | Pendiente |
-| T-304 | Adoptar `Footer.module.scss` del paquete | `src/components/layout/Footer/Footer.module.scss` | Pendiente |
-| T-305 | Adaptar `ProductCard.jsx` (image_url, sin orisha_name, rutas EN) | `src/components/catalog/ProductCard.jsx` | Pendiente |
-| T-306 | Adoptar `ProductCard.module.scss` del paquete | `src/components/catalog/ProductCard.module.scss` | Pendiente |
-| T-307 | Adoptar `AccountSidebar/index.jsx` | `src/components/account/AccountSidebar/index.jsx` | Pendiente |
-| T-308 | Adoptar `AccountSidebar.module.scss` | `src/components/account/AccountSidebar/AccountSidebar.module.scss` | Pendiente |
-| T-309 | Adoptar `primitives/index.jsx` | `src/components/common/primitives/index.jsx` | Pendiente |
-| T-310 | Adoptar `primitives.module.scss` | `src/components/common/primitives/primitives.module.scss` | Pendiente |
-| T-311 | Verificar ProductCard en dev server | (verificacion) | Pendiente |
+| T-301 | Adaptar `Header/index.jsx` (rutas EN, selectores existentes) | `src/components/layout/Header/index.jsx` | Hecha |
+| T-302 | Adaptar `Header.module.scss` con paleta Yoruba | `src/components/layout/Header/Header.module.scss` | Hecha |
+| T-303 | Adoptar `Footer/index.jsx` del paquete | `src/components/layout/Footer/index.jsx` | Hecha |
+| T-304 | Adoptar `Footer.module.scss` del paquete | `src/components/layout/Footer/Footer.module.scss` | Hecha |
+| T-305 | Adaptar `ProductCard.jsx` (image_url, sin orisha_name, rutas EN) | `src/components/catalog/ProductCard.jsx` | Hecha |
+| T-306 | Adoptar `ProductCard.module.scss` del paquete | `src/components/catalog/ProductCard.module.scss` | Hecha |
+| T-307 | Adoptar `AccountSidebar/index.jsx` | `src/components/account/AccountSidebar/index.jsx` | Hecha |
+| T-308 | Adoptar `AccountSidebar.module.scss` | `src/components/account/AccountSidebar/AccountSidebar.module.scss` | Hecha |
+| T-309 | Adoptar `primitives/index.jsx` | `src/components/common/primitives/index.jsx` | Hecha |
+| T-310 | Adoptar `primitives.module.scss` | `src/components/common/primitives/primitives.module.scss` | Hecha |
+| T-311 | Verificar ProductCard en dev server | (verificacion) | Hecha |
 
 ## F4 - Paginas del storefront
 

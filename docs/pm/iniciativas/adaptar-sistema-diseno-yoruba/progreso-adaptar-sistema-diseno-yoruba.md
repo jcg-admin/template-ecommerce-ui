@@ -41,3 +41,5 @@
 | 2026-05-27T17:06:08 | T-305 hecha | ProductCard.jsx adaptado: rutas /catalog/:slug EN, orisha_name eliminado del JSX y JSDoc, image_url presente (funciona gracias a T-201). |
 | 2026-05-27T17:06:08 | T-306 hecha | ProductCard.module.scss adoptado. 0 hex hardcodeados. |
 | 2026-05-27T17:06:37 | T-307..T-310 hechas | AccountSidebar adoptado con rutas EN (/account, /account/orders, etc.). primitives/ adoptado directo (MetaTag, Price, Field, Button, SumRow, EmptyState). 0 hex hardcodeados en ambos. |
+| 2026-05-27T17:10:36 | T-311 hecha | Build F3: EXIT=0, 5 warnings (3 DeprecationWarning en _variables.scss linea 342 — preexistentes, 1 asset size limit, 1 cache). Sin errores nuevos. |
+| 2026-05-27T17:10:36 | F3 cerrada | T-301..T-311 hechas. 11 tareas, 6 commits. Header, Footer, ProductCard, AccountSidebar, primitives — todos con paleta Yoruba y rutas EN. BUILD EXIT=0. |
