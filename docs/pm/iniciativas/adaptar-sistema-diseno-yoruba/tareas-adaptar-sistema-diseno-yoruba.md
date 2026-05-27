@@ -11,13 +11,13 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-101 | Auditar hex hardcodeados en SCSS — decidir si se reemplazan en F1 o se delegan | (lectura, sin modificacion) | Pendiente |
-| T-102 | Reemplazar `_variables.scss` con paleta del brazalete | `src/styles/abstracts/_variables.scss` | Pendiente |
-| T-103 | Agregar `_typography.scss` (Fraunces + IBM Plex) | `src/styles/abstracts/_typography.scss` | Pendiente |
-| T-104 | Importar `_typography` en `main.scss` | `src/styles/main.scss` | Pendiente |
-| T-105 | Agregar alias `@assets` en webpack | `webpack.config.js` | Pendiente |
-| T-106 | Copiar logo a `src/assets/` | `src/assets/practica-yoruba-logo.png` | Pendiente |
-| T-107 | Verificar build tras cambio de variables | (verificacion) | Pendiente |
+| T-101 | Auditar hex hardcodeados en SCSS — decidir si se reemplazan en F1 o se delegan | (lectura, sin modificacion) | Hecha |
+| T-102 | Reemplazar `_variables.scss` con paleta del brazalete | `src/styles/abstracts/_variables.scss` | Hecha |
+| T-103 | Agregar `_typography.scss` (Fraunces + IBM Plex) | `src/styles/abstracts/_typography.scss` | Hecha |
+| T-104 | Importar `_typography` en `main.scss` | `src/styles/main.scss` | Hecha |
+| T-105 | Agregar alias `@assets` en webpack | `webpack.config.js` | Hecha |
+| T-106 | Copiar logo a `src/assets/` | `src/assets/practica-yoruba-logo.png` | Hecha |
+| T-107 | Verificar build tras cambio de variables | (verificacion) | Hecha |
 
 ## F2 - Adaptacion del shape de datos
 
