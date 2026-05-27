@@ -103,51 +103,51 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-601 | Adoptar `AdminSidebar/index.jsx` (nuevo) | `src/components/admin/AdminSidebar/index.jsx` | Pendiente |
-| T-602 | Adoptar `AdminSidebar.module.scss` (nuevo) | `src/components/admin/AdminSidebar/AdminSidebar.module.scss` | Pendiente |
-| T-603 | Adoptar `AdminLayout/index.jsx` (nuevo) | `src/layouts/AdminLayout/index.jsx` | Pendiente |
-| T-604 | Adoptar `AdminLayout.module.scss` (nuevo) | `src/layouts/AdminLayout/AdminLayout.module.scss` | Pendiente |
-| T-605 | Adoptar `AdminDashboardPage.jsx` | `src/pages/admin/AdminDashboardPage.jsx` | Pendiente |
-| T-606 | Adoptar `AdminDashboardPage.module.scss` | `src/pages/admin/AdminDashboardPage.module.scss` | Pendiente |
-| T-607 | Adoptar `AdminProductsPage.jsx` | `src/pages/admin/AdminProductsPage.jsx` | Pendiente |
-| T-608 | Adoptar `AdminOrdersPage.jsx` | `src/pages/admin/AdminOrdersPage.jsx` | Pendiente |
-| T-609 | Adoptar `AdminUsersPage.jsx` | `src/pages/admin/AdminUsersPage.jsx` | Pendiente |
-| T-610 | Adoptar `AdminUsersPage.module.scss` | `src/pages/admin/AdminUsersPage.module.scss` | Pendiente |
-| T-611 | Adoptar `AdminUserDetailPage.jsx` | `src/pages/admin/AdminUserDetailPage.jsx` | Pendiente |
-| T-612 | Adoptar `AdminUserDetailPage.module.scss` | `src/pages/admin/AdminUserDetailPage.module.scss` | Pendiente |
-| T-613 | Adoptar `AdminTablePage.module.scss` (nuevo) | `src/pages/admin/AdminTablePage.module.scss` | Pendiente |
-| T-614 | Agregar `AdminOrderDetailPage.jsx` (nueva) | `src/pages/admin/AdminOrderDetailPage.jsx` | Pendiente |
-| T-615 | Agregar `AdminOrderDetailPage.module.scss` (nueva) | `src/pages/admin/AdminOrderDetailPage.module.scss` | Pendiente |
-| T-616 | Agregar `AdminProductDetailPage.jsx` (nueva) | `src/pages/admin/AdminProductDetailPage.jsx` | Pendiente |
-| T-617 | Agregar `AdminProductDetailPage.module.scss` (nueva) | `src/pages/admin/AdminProductDetailPage.module.scss` | Pendiente |
-| T-618 | Agregar `AdminCategoriesPage.jsx` (nueva) | `src/pages/admin/AdminCategoriesPage.jsx` | Pendiente |
-| T-619 | Agregar `AdminCategoriesPage.module.scss` (nueva) | `src/pages/admin/AdminCategoriesPage.module.scss` | Pendiente |
-| T-620 | Agregar `AdminInventoryDashboardPage.jsx` (nueva) | `src/pages/admin/AdminInventoryDashboardPage.jsx` | Pendiente |
-| T-621 | Agregar `AdminInventoryDashboardPage.module.scss` (nueva) | `src/pages/admin/AdminInventoryDashboardPage.module.scss` | Pendiente |
-| T-622 | Agregar `AdminStockAlertsPage.jsx` (nueva) | `src/pages/admin/AdminStockAlertsPage.jsx` | Pendiente |
-| T-623 | Agregar `StockAdjustModal/index.jsx` (nuevo) | `src/components/admin/StockAdjustModal/index.jsx` | Pendiente |
-| T-624 | Agregar `StockAdjustModal.module.scss` (nuevo) | `src/components/admin/StockAdjustModal/StockAdjustModal.module.scss` | Pendiente |
-| T-625 | Agregar `AdminVouchersPage.jsx` (nueva) | `src/pages/admin/AdminVouchersPage.jsx` | Pendiente |
-| T-626 | Agregar `AdminVoucherDetailPage.jsx` (nueva) | `src/pages/admin/AdminVoucherDetailPage.jsx` | Pendiente |
-| T-627 | Agregar `AdminVoucherDetailPage.module.scss` (nueva) | `src/pages/admin/AdminVoucherDetailPage.module.scss` | Pendiente |
-| T-628 | Agregar `AdminSiteSettingsPage.jsx` (nueva) | `src/pages/admin/AdminSiteSettingsPage.jsx` | Pendiente |
-| T-629 | Agregar `AdminSiteSettingsPage.module.scss` (nueva) | `src/pages/admin/AdminSiteSettingsPage.module.scss` | Pendiente |
-| T-630 | Agregar `AdminGatewaysPage.jsx` (nueva) | `src/pages/admin/AdminGatewaysPage.jsx` | Pendiente |
-| T-631 | Agregar `AdminGatewaysPage.module.scss` (nueva) | `src/pages/admin/AdminGatewaysPage.module.scss` | Pendiente |
-| T-632 | Agregar `AdminShippingMethodsPage.jsx` (nueva) | `src/pages/admin/AdminShippingMethodsPage.jsx` | Pendiente |
-| T-633 | Agregar `AdminStaticPagesPage.jsx` (nueva) | `src/pages/admin/AdminStaticPagesPage.jsx` | Pendiente |
-| T-634 | Agregar `AdminStaticPageEditorPage.jsx` (nueva) | `src/pages/admin/AdminStaticPageEditorPage.jsx` | Pendiente |
-| T-635 | Agregar `AdminStaticPageEditorPage.module.scss` (nueva) | `src/pages/admin/AdminStaticPageEditorPage.module.scss` | Pendiente |
-| T-636 | Agregar `RefundModal/index.jsx` (nuevo) | `src/components/admin/RefundModal/index.jsx` | Pendiente |
-| T-637 | Agregar `RefundModal.module.scss` (nuevo) | `src/components/admin/RefundModal/RefundModal.module.scss` | Pendiente |
-| T-638 | Agregar `AdminProductImportPage.jsx` (nueva) | `src/pages/admin/AdminProductImportPage.jsx` | Pendiente |
-| T-639 | Agregar `AdminPriceSyncPage.jsx` (nueva) | `src/pages/admin/AdminPriceSyncPage.jsx` | Pendiente |
-| T-640 | Agregar `AdminBulkPage.module.scss` (nuevo) | `src/pages/admin/AdminBulkPage.module.scss` | Pendiente |
-| T-641 | Agregar `AdminVariantTypesPage.jsx` (nueva) | `src/pages/admin/AdminVariantTypesPage.jsx` | Pendiente |
-| T-642 | Agregar `AdminProductVariantsPage.jsx` (nueva) | `src/pages/admin/AdminProductVariantsPage.jsx` | Pendiente |
-| T-643 | Agregar `AdminVariantsPage.module.scss` (nuevo) | `src/pages/admin/AdminVariantsPage.module.scss` | Pendiente |
-| T-644 | Agregar thunks faltantes en `adminSlice` (adjustStock, createRefund, settings, gateways) | `src/redux/slices/adminSlice.js` | Pendiente |
-| T-645 | Merge manual del AppRouter (rutas nuevas con convencion EN) | `src/router/AppRouter.jsx` | Pendiente |
+| T-601 | Adoptar `AdminSidebar/index.jsx` (nuevo) | `src/components/admin/AdminSidebar/index.jsx` | Hecha |
+| T-602 | Adoptar `AdminSidebar.module.scss` (nuevo) | `src/components/admin/AdminSidebar/AdminSidebar.module.scss` | Hecha |
+| T-603 | Adoptar `AdminLayout/index.jsx` (nuevo) | `src/layouts/AdminLayout/index.jsx` | Hecha |
+| T-604 | Adoptar `AdminLayout.module.scss` (nuevo) | `src/layouts/AdminLayout/AdminLayout.module.scss` | Hecha |
+| T-605 | Adoptar `AdminDashboardPage.jsx` | `src/pages/admin/AdminDashboardPage.jsx` | Hecha |
+| T-606 | Adoptar `AdminDashboardPage.module.scss` | `src/pages/admin/AdminDashboardPage.module.scss` | Hecha |
+| T-607 | Adoptar `AdminProductsPage.jsx` | `src/pages/admin/AdminProductsPage.jsx` | Hecha |
+| T-608 | Adoptar `AdminOrdersPage.jsx` | `src/pages/admin/AdminOrdersPage.jsx` | Hecha |
+| T-609 | Adoptar `AdminUsersPage.jsx` | `src/pages/admin/AdminUsersPage.jsx` | Hecha |
+| T-610 | Adoptar `AdminUsersPage.module.scss` | `src/pages/admin/AdminUsersPage.module.scss` | Hecha |
+| T-611 | Adoptar `AdminUserDetailPage.jsx` | `src/pages/admin/AdminUserDetailPage.jsx` | Hecha |
+| T-612 | Adoptar `AdminUserDetailPage.module.scss` | `src/pages/admin/AdminUserDetailPage.module.scss` | Hecha |
+| T-613 | Adoptar `AdminTablePage.module.scss` (nuevo) | `src/pages/admin/AdminTablePage.module.scss` | Hecha |
+| T-614 | Agregar `AdminOrderDetailPage.jsx` (nueva) | `src/pages/admin/AdminOrderDetailPage.jsx` | Hecha |
+| T-615 | Agregar `AdminOrderDetailPage.module.scss` (nueva) | `src/pages/admin/AdminOrderDetailPage.module.scss` | Hecha |
+| T-616 | Agregar `AdminProductDetailPage.jsx` (nueva) | `src/pages/admin/AdminProductDetailPage.jsx` | Hecha |
+| T-617 | Agregar `AdminProductDetailPage.module.scss` (nueva) | `src/pages/admin/AdminProductDetailPage.module.scss` | Hecha |
+| T-618 | Agregar `AdminCategoriesPage.jsx` (nueva) | `src/pages/admin/AdminCategoriesPage.jsx` | Hecha |
+| T-619 | Agregar `AdminCategoriesPage.module.scss` (nueva) | `src/pages/admin/AdminCategoriesPage.module.scss` | Hecha |
+| T-620 | Agregar `AdminInventoryDashboardPage.jsx` (nueva) | `src/pages/admin/AdminInventoryDashboardPage.jsx` | Hecha |
+| T-621 | Agregar `AdminInventoryDashboardPage.module.scss` (nueva) | `src/pages/admin/AdminInventoryDashboardPage.module.scss` | Hecha |
+| T-622 | Agregar `AdminStockAlertsPage.jsx` (nueva) | `src/pages/admin/AdminStockAlertsPage.jsx` | Hecha |
+| T-623 | Agregar `StockAdjustModal/index.jsx` (nuevo) | `src/components/admin/StockAdjustModal/index.jsx` | Hecha |
+| T-624 | Agregar `StockAdjustModal.module.scss` (nuevo) | `src/components/admin/StockAdjustModal/StockAdjustModal.module.scss` | Hecha |
+| T-625 | Agregar `AdminVouchersPage.jsx` (nueva) | `src/pages/admin/AdminVouchersPage.jsx` | Hecha |
+| T-626 | Agregar `AdminVoucherDetailPage.jsx` (nueva) | `src/pages/admin/AdminVoucherDetailPage.jsx` | Hecha |
+| T-627 | Agregar `AdminVoucherDetailPage.module.scss` (nueva) | `src/pages/admin/AdminVoucherDetailPage.module.scss` | Hecha |
+| T-628 | Agregar `AdminSiteSettingsPage.jsx` (nueva) | `src/pages/admin/AdminSiteSettingsPage.jsx` | Hecha |
+| T-629 | Agregar `AdminSiteSettingsPage.module.scss` (nueva) | `src/pages/admin/AdminSiteSettingsPage.module.scss` | Hecha |
+| T-630 | Agregar `AdminGatewaysPage.jsx` (nueva) | `src/pages/admin/AdminGatewaysPage.jsx` | Hecha |
+| T-631 | Agregar `AdminGatewaysPage.module.scss` (nueva) | `src/pages/admin/AdminGatewaysPage.module.scss` | Hecha |
+| T-632 | Agregar `AdminShippingMethodsPage.jsx` (nueva) | `src/pages/admin/AdminShippingMethodsPage.jsx` | Hecha |
+| T-633 | Agregar `AdminStaticPagesPage.jsx` (nueva) | `src/pages/admin/AdminStaticPagesPage.jsx` | Hecha |
+| T-634 | Agregar `AdminStaticPageEditorPage.jsx` (nueva) | `src/pages/admin/AdminStaticPageEditorPage.jsx` | Hecha |
+| T-635 | Agregar `AdminStaticPageEditorPage.module.scss` (nueva) | `src/pages/admin/AdminStaticPageEditorPage.module.scss` | Hecha |
+| T-636 | Agregar `RefundModal/index.jsx` (nuevo) | `src/components/admin/RefundModal/index.jsx` | Hecha |
+| T-637 | Agregar `RefundModal.module.scss` (nuevo) | `src/components/admin/RefundModal/RefundModal.module.scss` | Hecha |
+| T-638 | Agregar `AdminProductImportPage.jsx` (nueva) | `src/pages/admin/AdminProductImportPage.jsx` | Hecha |
+| T-639 | Agregar `AdminPriceSyncPage.jsx` (nueva) | `src/pages/admin/AdminPriceSyncPage.jsx` | Hecha |
+| T-640 | Agregar `AdminBulkPage.module.scss` (nuevo) | `src/pages/admin/AdminBulkPage.module.scss` | Hecha |
+| T-641 | Agregar `AdminVariantTypesPage.jsx` (nueva) | `src/pages/admin/AdminVariantTypesPage.jsx` | Hecha |
+| T-642 | Agregar `AdminProductVariantsPage.jsx` (nueva) | `src/pages/admin/AdminProductVariantsPage.jsx` | Hecha |
+| T-643 | Agregar `AdminVariantsPage.module.scss` (nuevo) | `src/pages/admin/AdminVariantsPage.module.scss` | Hecha |
+| T-644 | Agregar thunks faltantes en `adminSlice` (adjustStock, createRefund, settings, gateways) | `src/redux/slices/adminSlice.js` | Hecha |
+| T-645 | Merge manual del AppRouter (rutas nuevas con convencion EN) | `src/router/AppRouter.jsx` | Hecha |
 
 ## F7 - Verificacion y cierre
 
