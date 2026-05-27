@@ -53,3 +53,5 @@
 | 2026-05-27T17:33:39 | Hallazgo H-F4-06 [PROVEN] | ProductPage ya usa product.images[] (array) — no usa image_url. No requiere adaptacion de imagen. El paquete fue disenado para ambos: image_url para ProductCard (lista), images[] para ProductPage (galeria). |
 | 2026-05-27T17:33:39 | T-403 T-404 hechas | ProductPage adaptada. 0 rutas ES, 0 hex. Usa images[] (galeria multi-imagen). |
 | 2026-05-27T17:34:00 | T-405 T-406 T-407 T-408 hechas | HomePage: usa fetchFeaturedProducts y fetchCategories de F2 — integrado correctamente. CartPage: usa fetchCart, addCartItem (alias F4), updateCartItem, removeCartItem, applyVoucher, removeVoucher. 0 rutas ES en ambas. |
+| 2026-05-27T17:34:32 | Hallazgo H-F4-07 [PROVEN] | ExpressCheckoutPage tenia ruta /mi-cuenta/direcciones hardcodeada en un onChange (no capturada por el mapa de rutas porque usaba comillas simples dentro de template literal). Corregida a /account/addresses. |
+| 2026-05-27T17:34:32 | T-409..T-418 hechas | CheckoutPage, OrderSuccessPage, PaymentReturnPage, PaymentFailedPage, ExpressCheckoutPage adaptadas. 0 rutas ES residuales tras correccion de H-F4-07. 0 hex hardcodeados en los 5 SCSS. |
