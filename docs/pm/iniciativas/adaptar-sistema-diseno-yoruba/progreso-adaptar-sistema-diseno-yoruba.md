@@ -18,3 +18,5 @@
 | 2026-05-27T15:50:51 | Hallazgo durante T-104 | base/_typography.scss es clases de utilidad (.text-xs, .text-sm). abstracts/_typography.scss (nuevo) define estilos globales html/body/h1-h6. No hay conflicto — responsabilidades distintas. Se importa abstracts/typography ANTES de base/typography para que los estilos base de elementos preceden las clases de utilidad. |
 | 2026-05-27T15:50:51 | T-104 hecha | main.scss actualizado: @use 'abstracts/typography' insertado entre base/reset y base/typography. Verificacion: grep muestra el orden correcto. |
 | 2026-05-27T15:51:09 | T-105 hecha | webpack.config.js: alias @assets agregado apuntando a src/assets/. node --check: OK. |
+| 2026-05-27T15:51:22 | Hallazgo durante T-106 | src/assets/ no existia en el repo. Se crea el directorio. El logo practica-yoruba-logo.png pesa 928 KB — es un PNG de alta resolucion. Para produccion seria candidato a optimizacion (webp, compresion) pero eso es fuera del alcance de esta iniciativa. |
+| 2026-05-27T15:51:22 | T-106 hecha | practica-yoruba-logo.png copiado a src/assets/ (928 KB). src/assets/ creado como directorio nuevo. |
