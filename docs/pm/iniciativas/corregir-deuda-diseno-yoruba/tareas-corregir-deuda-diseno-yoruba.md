@@ -23,8 +23,8 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-301 | Adoptar NotFoundPage.jsx del paquete con rutas EN | `src/pages/NotFoundPage.jsx` | Pendiente |
-| T-302 | Adoptar NotFoundPage.module.scss del paquete | `src/pages/NotFoundPage.module.scss` | Pendiente |
+| T-301 | Adoptar NotFoundPage.jsx del paquete con rutas EN | `src/pages/NotFoundPage.jsx` | Hecha |
+| T-302 | Adoptar NotFoundPage.module.scss del paquete | `src/pages/NotFoundPage.module.scss` | Hecha |
 
 ## F1 — Corregir tests de componentes (18 suites)
 

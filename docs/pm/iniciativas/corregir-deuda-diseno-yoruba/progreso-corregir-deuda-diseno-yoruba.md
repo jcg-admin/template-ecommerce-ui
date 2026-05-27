@@ -12,3 +12,5 @@
 | 2026-05-27T19:27:06 | T-213 hecha | _variables.scss: 4 bloques de aliases eliminados (lineas 368-425). Solo se conserva el bloque ALIASES original del tema ($bg-card, $primary-tint, etc.). |
 | 2026-05-27T19:27:06 | T-214 hecha | Build tras eliminar aliases: EXIT=0, 189 warnings (preexistentes Sass). Sin nuevos errores. |
 | 2026-05-27T19:27:06 | F2 cerrada | 14 tareas, BUILD EXIT=0. _variables.scss limpio. 103 archivos SCSS actualizados con variables semanticas. |
+| 2026-05-27T19:27:11 | F3 iniciada | T-301..T-302. NotFoundPage con diseno Yoruba editorial. |
+| 2026-05-27T19:27:32 | T-301 T-302 hechas | NotFoundPage.jsx adoptado del paquete con ruta EN (/catalog?category=akoses-medicinas). NotFoundPage.module.scss adoptado. 0 hex hardcodeados. F3 cerrada. |
