@@ -1,0 +1,59 @@
+@use '@styles/abstracts/variables' as *;
+
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em; margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  display: flex; justify-content: space-between; align-items: end;
+  padding-bottom: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6; gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: stretch; }
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-4xl;
+  font-weight: $font-weight-normal; color: $text-primary; margin-top: $spacing-3;
+}
+.lead { color: $text-secondary; margin-top: $spacing-3; max-width: 640px; line-height: $line-height-relaxed; }
+.headerActions { display: flex; gap: $spacing-3; align-items: center; }
+.toast {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $lime-soft; letter-spacing: 0.08em;
+}
+.tabs {
+  display: flex; gap: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-7;
+}
+.tab {
+  padding: 12px 0; background: none; border: 0;
+  border-bottom: 1px solid transparent; margin-bottom: -1px;
+  color: $text-muted; font-size: $font-size-sm; cursor: pointer;
+}
+.tabActive { color: $text-primary; font-weight: $font-weight-medium; border-bottom-color: $bronze; }
+
+.form { max-width: 760px; }
+.section { display: flex; flex-direction: column; gap: $spacing-4; }
+.sectionTitle {
+  font-family: $font-family-display; font-size: $font-size-lg;
+  color: $text-primary; font-weight: $font-weight-medium;
+  margin-bottom: $spacing-2;
+}
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }
+.row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }
+
+.toggle {
+  display: flex; gap: $spacing-2; align-items: center;
+  color: $text-secondary; font-size: $font-size-sm;
+  cursor: pointer; margin-top: $spacing-3;
+}
+.note {
+  padding: 12px; background: rgba($bronze, 0.06);
+  border: 1px solid $border-color; font-size: $font-size-sm;
+  color: $text-secondary; line-height: $line-height-relaxed;
+  strong { color: $text-primary; }
+  code { background: rgba($lime, 0.1); padding: 1px 6px; border-radius: 2px; color: $lime-soft; font-family: $font-family-mono; }
+}

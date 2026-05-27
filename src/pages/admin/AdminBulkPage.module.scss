@@ -1,0 +1,185 @@
+@use '@styles/abstracts/variables' as *;
+
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em; margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  display: flex; justify-content: space-between; align-items: end;
+  padding-bottom: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6; gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: stretch; }
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-4xl;
+  font-weight: $font-weight-normal; color: $text-primary; margin-top: $spacing-3;
+}
+.lead { color: $text-secondary; margin-top: $spacing-3; max-width: 640px; line-height: $line-height-relaxed; }
+
+.stepBar {
+  display: flex; gap: 0;
+  margin-bottom: $spacing-8;
+  border: 1px solid $border-color;
+}
+.stepItem {
+  flex: 1; padding: 14px $spacing-4;
+  display: flex; gap: $spacing-3; align-items: center;
+  border-right: 1px solid $border-color;
+  color: $text-muted;
+  &:last-child { border-right: 0; }
+}
+.stepActive { color: $text-primary; background: rgba($bronze, 0.05); }
+.stepActive .stepN { color: $bronze; }
+.stepN {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.1em;
+}
+.stepLabel { font-size: $font-size-sm; }
+
+.uploadCard {
+  display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-6;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+.dropZone {
+  border: 2px dashed $border-strong; padding: $spacing-12 $spacing-6;
+  display: flex; flex-direction: column; align-items: center; gap: $spacing-3;
+  cursor: pointer; background: $bg-surface;
+  transition: $transition-default;
+  &:hover { border-color: $lime; background: rgba($lime, 0.04); }
+}
+.dropZoneActive { border-color: $lime; background: rgba($lime, 0.08); }
+.dropIcon {
+  width: 48px; height: 48px; border-radius: 999px;
+  border: 1px solid $border-medium;
+  display: grid; place-items: center;
+  font-size: $font-size-lg; color: $bronze;
+}
+.dropTitle { color: $text-primary; font-size: $font-size-md; }
+.dropHint { font-family: $font-family-mono; font-size: $font-size-xs; color: $text-muted; letter-spacing: 0.06em; }
+
+.mappingBox { border: 1px solid $border-color; padding: $spacing-5; background: $bg-surface; }
+.mappingTable {
+  width: 100%; border-collapse: collapse; margin-top: $spacing-3;
+  font-size: $font-size-sm;
+  th, td { padding: 8px 12px; text-align: left; border-bottom: 1px solid $border-color; }
+  th { font-family: $font-family-mono; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted; }
+  tbody tr:last-child td { border-bottom: 0; }
+}
+.req { color: $vino-soft; font-family: $font-family-mono; font-size: $font-size-xs; }
+.muted { color: $text-muted; }
+.mono { font-family: $font-family-mono; color: $text-secondary; }
+
+.previewHeader {
+  display: flex; justify-content: space-between; align-items: end;
+  margin-bottom: $spacing-5; flex-wrap: wrap; gap: $spacing-4;
+}
+.previewTitle {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; font-weight: $font-weight-medium;
+}
+.previewStats { display: flex; gap: $spacing-6; }
+.stat {}
+.statN {
+  font-family: $font-family-display; font-size: $font-size-2xl;
+  font-weight: $font-weight-medium; color: $text-primary; line-height: 1;
+}
+.statLime { color: $lime-soft; }
+.statCoral { color: $coral; }
+.statVino { color: $vino-soft; }
+.statMuted { color: $text-primary; }
+.statLabel {
+  font-family: $font-family-mono; font-size: 10px;
+  color: $text-muted; letter-spacing: 0.08em; margin-top: 4px;
+  text-transform: uppercase;
+}
+
+.previewTable {
+  border: 1px solid $border-color; background: $bg-surface;
+  overflow-x: auto; margin-bottom: $spacing-5;
+  table { width: 100%; border-collapse: collapse; font-size: $font-size-sm; min-width: 720px; }
+  th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid $border-color; white-space: nowrap; }
+  th {
+    font-family: $font-family-mono; font-size: 10px;
+    letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+    background: rgba(245,247,238,0.02);
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+}
+.rowError { background: rgba($vino, 0.06); }
+.actionBadge {
+  display: inline-block; padding: 2px 8px; border-radius: $border-radius-sm;
+  font-family: $font-family-mono; font-size: 10px; letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.act_create { background: rgba($lime, 0.15); color: $lime-soft; }
+.act_update { background: rgba($coral, 0.15); color: $coral; }
+.act_skip { background: rgba(245,247,238,0.06); color: $text-muted; }
+.errorMsg { color: $vino-soft; font-size: $font-size-xs; }
+.okMsg { color: $lime-soft; font-family: $font-family-mono; font-size: 10px; letter-spacing: 0.06em; }
+.previewMore {
+  padding: 12px; text-align: center; color: $text-muted;
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  border-top: 1px solid $border-color;
+}
+
+.actions {
+  display: flex; gap: $spacing-3; justify-content: flex-end;
+}
+
+.processingBox {
+  padding: $spacing-12; text-align: center;
+  border: 1px solid $border-color; background: $bg-surface;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 2px solid $border-medium;
+  border-top-color: $lime; border-radius: 999px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto $spacing-5;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.processingTitle {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; margin-bottom: $spacing-5;
+}
+.progressBar {
+  width: 100%; max-width: 480px; height: 6px;
+  background: $border-medium; border-radius: 3px; margin: 0 auto;
+  overflow: hidden;
+}
+.progressFill { height: 100%; background: $lime; transition: width 200ms ease; }
+.progressMeta {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.06em; margin-top: $spacing-3;
+}
+
+.summaryCard {
+  padding: $spacing-10; text-align: center;
+  border: 1px solid $border-color; background: $bg-surface;
+}
+.summaryIcon {
+  width: 64px; height: 64px; border-radius: 999px;
+  display: grid; place-items: center; margin: 0 auto $spacing-5;
+  font-size: 28px; border: 1px solid;
+}
+.iconOk { background: rgba($lime, 0.1); border-color: $lime; color: $lime-soft; }
+.iconFail { background: rgba($vino, 0.1); border-color: $vino; color: $vino-soft; }
+.summaryTitle {
+  font-family: $font-family-display; font-size: $font-size-2xl;
+  color: $text-primary; margin-bottom: $spacing-5;
+}
+.summaryStats {
+  display: flex; gap: $spacing-8; justify-content: center;
+  margin-bottom: $spacing-5; flex-wrap: wrap;
+}
+.errorDownload {
+  display: inline-block; margin-bottom: $spacing-5;
+  color: $coral; font-family: $font-family-mono;
+  font-size: $font-size-sm; letter-spacing: 0.06em;
+  text-decoration: none;
+  &:hover { color: $coral-soft; }
+}

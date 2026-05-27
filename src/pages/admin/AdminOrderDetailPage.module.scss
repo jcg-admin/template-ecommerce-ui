@@ -1,98 +1,158 @@
-@use '@styles/abstracts' as *;
+@use '@styles/abstracts/variables' as *;
 
-.page {
-  padding: 1.5rem;
+.loading { padding: $spacing-20; text-align: center; color: $text-muted; }
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em;
+  margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
 }
+.bcCurrent { color: $text-secondary; }
 
-.header {
-  margin-bottom: 1.5rem;
+.hero {
+  display: grid; grid-template-columns: 1fr auto; gap: $spacing-6;
+  padding-bottom: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6; align-items: end;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
 }
-
 .title {
-  font-size: 1.5rem;
-  margin: 0 0 0.25rem;
+  font-family: $font-family-display; font-size: $font-size-4xl;
+  font-weight: $font-weight-normal; color: $text-primary;
+  margin-top: $spacing-2;
+}
+.heroMeta {
+  display: flex; gap: $spacing-3; color: $text-muted;
+  font-size: $font-size-sm; margin-top: 8px; flex-wrap: wrap;
+}
+.heroPills { display: flex; gap: $spacing-2; margin-top: $spacing-3; }
+.heroActions { display: flex; gap: $spacing-2; flex-wrap: wrap; }
+.pill {
+  display: inline-block; padding: 4px 10px; border-radius: $border-radius-sm;
+  font-family: $font-family-mono; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.pill_lime   { background: rgba($lime, 0.15);  color: $lime-soft; }
+.pill_coral  { background: rgba($coral, 0.15); color: $coral; }
+.pill_vino   { background: rgba($vino, 0.18);  color: $vino-soft; }
+.pill_bronze { background: rgba($bronze, 0.15); color: $bronze-soft; }
+.pill_muted  { background: rgba(245,247,238,0.06); color: $text-muted; }
+
+.grid {
+  display: grid; grid-template-columns: 1.6fr 1fr; gap: $spacing-5;
+  @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
+}
+.card {
+  border: 1px solid $border-color; background: $bg-surface;
+  margin-bottom: $spacing-5;
+}
+.cardHeader {
+  padding: 12px $spacing-5; border-bottom: 1px solid $border-color;
+}
+.cardTitle {
+  font-family: $font-family-display; font-size: $font-size-md;
+  font-weight: $font-weight-medium; color: $text-primary;
 }
 
-.meta {
-  display: flex;
-  gap: 1rem;
-  color: $gray-700;
-  margin: 0;
+.timeline { padding: $spacing-5; display: flex; flex-direction: column; gap: 14px; }
+.tlStep { display: flex; align-items: center; gap: $spacing-3; }
+.tlDot {
+  width: 12px; height: 12px; border-radius: 999px;
+  border: 1px dashed $border-strong;
+}
+.tlDotDone { background: $lime; border: 0; }
+.tlDotActive { background: $coral; border: 0; box-shadow: 0 0 0 4px rgba($coral, 0.2); }
+.tlLabel { color: $text-muted; font-size: $font-size-sm; }
+.tlLabelActive { color: $text-primary; font-weight: $font-weight-medium; }
+
+.transitionForm {
+  padding: $spacing-5; border-top: 1px solid $border-color;
+  background: rgba($bronze, 0.04);
+}
+.transitionRow {
+  display: grid; grid-template-columns: 200px 1fr auto; gap: $spacing-3;
+  margin-top: $spacing-3;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+.select, .input {
+  background: transparent; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: 10px 12px;
+  color: $text-primary; font-family: $font-family-base; font-size: $font-size-sm;
+  outline: none;
+  &:focus { border-color: $lime; }
 }
 
-.section {
-  margin-bottom: 1.5rem;
-
-  h2 {
-    font-size: 1.1rem;
-    margin: 0 0 0.5rem;
+.table {
+  width: 100%; border-collapse: collapse; font-size: $font-size-sm;
+  th, td { padding: 12px $spacing-5; text-align: left; border-bottom: 1px solid $border-color; }
+  th {
+    font-family: $font-family-mono; font-size: 10px;
+    font-weight: $font-weight-medium; letter-spacing: 0.12em;
+    text-transform: uppercase; color: $text-muted;
   }
+  tbody tr:last-child td { border-bottom: 0; }
 }
+.right { text-align: right; }
+.mono { font-family: $font-family-mono; color: $text-secondary; }
+.muted { color: $text-muted; font-size: 11px; margin-top: 2px; }
 
-.items {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-
-  .itemRow {
-    display: grid;
-    grid-template-columns: 1fr auto auto;
-    gap: 1rem;
-    padding: 0.5rem 0;
-    border-bottom: 1px solid $gray-200;
-  }
+.side { display: flex; flex-direction: column; gap: $spacing-5;
+  & .card { margin-bottom: 0; }
 }
-
+.addr {
+  padding: $spacing-4 $spacing-5; font-style: normal;
+  color: $text-secondary; line-height: $line-height-relaxed; font-size: $font-size-sm;
+  strong { color: $text-primary; }
+}
 .totals {
-  display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.25rem 1rem;
-  margin: 0;
-
-  dt { font-weight: 500; }
-  dd { margin: 0; text-align: right; }
-
-  .total { font-weight: 700; font-size: 1.1rem; }
+  padding: $spacing-4 $spacing-5; margin: 0;
+  & > div { display: flex; justify-content: space-between; padding: 6px 0; font-size: $font-size-sm; color: $text-secondary; }
+  dt { margin: 0; }
+  dd { margin: 0; color: $text-primary; font-family: $font-family-mono; }
 }
-
-.form {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  margin-top: 0.75rem;
-
-  label {
-    display: flex;
-    flex-direction: column;
-    gap: 0.25rem;
-  }
-
-  input, select, textarea {
-    padding: 0.5rem;
-    border: 1px solid $gray-400;
-    border-radius: 4px;
+.totalsFinal {
+  border-top: 1px solid $border-medium;
+  margin-top: 8px !important; padding-top: 12px !important;
+  & dt { font-family: $font-family-display; font-size: $font-size-base; color: $text-primary !important; }
+  & dd { font-family: $font-family-display !important; }
+}
+.logList {
+  list-style: none; margin: 0; padding: 0;
+  li {
+    padding: 12px $spacing-5; border-bottom: 1px solid $border-color;
+    &:last-child { border-bottom: 0; }
   }
 }
+.logStatus { font-size: $font-size-sm; color: $text-primary; font-weight: $font-weight-medium; }
+.logMeta { font-family: $font-family-mono; font-size: 10px; color: $text-muted; letter-spacing: 0.06em; margin-top: 4px; }
+.logNote { font-size: $font-size-xs; color: $text-secondary; font-style: italic; margin-top: 4px; }
 
-.primaryBtn,
-.secondaryBtn,
-.dangerBtn {
-  padding: 0.6rem 1rem;
-  border: 0;
-  border-radius: 4px;
-  font-weight: 600;
-  cursor: pointer;
-
-  &:disabled { opacity: 0.6; cursor: not-allowed; }
+// Modal
+.modalBackdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65); z-index: $z-modal;
+  display: grid; place-items: center; padding: $spacing-4;
 }
-
-.primaryBtn { background: $indigo-600; color: $bg-surface; }
-.secondaryBtn { background: $gray-200; color: $gray-950; }
-.dangerBtn { background: $danger-strong; color: $bg-surface; }
-
-.error {
-  color: $danger-strong;
-  background: $danger-bg;
-  padding: 0.75rem;
-  border-radius: 4px;
+.modal {
+  background: $bg-surface; border: 1px solid $border-medium;
+  max-width: 480px; width: 100%; padding: $spacing-7;
+}
+.modalTitle {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; margin-bottom: $spacing-3;
+}
+.modalLead {
+  color: $text-secondary; font-size: $font-size-sm;
+  margin-bottom: $spacing-4; line-height: $line-height-relaxed;
+}
+.modalTextarea {
+  width: 100%; background: transparent; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: 12px;
+  color: $text-primary; font-family: $font-family-base; font-size: $font-size-sm;
+  outline: none; resize: vertical;
+  &:focus { border-color: $lime; }
+}
+.modalActions {
+  display: flex; gap: $spacing-3; justify-content: flex-end;
+  margin-top: $spacing-4;
 }

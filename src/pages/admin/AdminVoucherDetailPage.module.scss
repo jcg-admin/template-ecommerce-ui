@@ -1,0 +1,85 @@
+@use '@styles/abstracts/variables' as *;
+
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em; margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  display: flex; justify-content: space-between; align-items: end;
+  padding-bottom: $spacing-5; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6; gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: stretch; }
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-3xl;
+  font-weight: $font-weight-normal; color: $text-primary;
+  font-family: $font-family-mono;
+  letter-spacing: 0.04em;
+  margin-top: $spacing-2;
+}
+.headerActions { display: flex; gap: $spacing-3; }
+
+.layout {
+  display: grid; grid-template-columns: 1.4fr 1fr; gap: $spacing-8;
+  @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
+}
+.form { display: flex; flex-direction: column; gap: $spacing-4; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }
+
+.label {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+  display: block; margin-bottom: 6px;
+}
+.select {
+  width: 100%; background: transparent; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: 14px 16px;
+  color: $text-primary; font-family: $font-family-base; font-size: $font-size-base;
+  outline: none;
+  &:focus { border-color: $lime; }
+}
+.toggle {
+  display: flex; gap: $spacing-2; align-items: center;
+  color: $text-secondary; font-size: $font-size-sm;
+  cursor: pointer; margin-top: $spacing-3;
+}
+
+.changelog {
+  border: 1px solid $border-color; background: $bg-surface;
+  align-self: start;
+  position: sticky; top: $spacing-5;
+  @media (max-width: $bp-lg) { position: static; }
+}
+.cardHeader {
+  padding: 12px $spacing-5; border-bottom: 1px solid $border-color;
+}
+.cardTitle {
+  font-family: $font-family-display; font-size: $font-size-md;
+  font-weight: $font-weight-medium; color: $text-primary;
+}
+.empty { padding: $spacing-8; text-align: center; color: $text-muted; }
+.changelogList { list-style: none; margin: 0; padding: 0; max-height: 480px; overflow-y: auto; }
+.changelogItem {
+  padding: $spacing-4 $spacing-5; border-bottom: 1px solid $border-color;
+  &:last-child { border-bottom: 0; }
+}
+.changelogMeta {
+  font-family: $font-family-mono; font-size: 10px;
+  color: $text-muted; letter-spacing: 0.06em;
+}
+.changelogAction {
+  font-size: $font-size-sm; color: $text-primary;
+  font-weight: $font-weight-medium; margin-top: 4px;
+}
+.changelogDiff {
+  list-style: none; margin: 6px 0 0; padding: 0;
+  font-family: $font-family-mono; font-size: 11px;
+  li { padding: 2px 0; color: $text-secondary; }
+}
+.diffKey { color: $text-muted; }
+.diffFrom { color: $vino-soft; text-decoration: line-through; }
+.diffTo   { color: $lime-soft; }

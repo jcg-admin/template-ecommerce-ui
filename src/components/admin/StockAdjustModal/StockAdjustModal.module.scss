@@ -1,0 +1,52 @@
+@use '@styles/abstracts/variables' as *;
+
+.backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  z-index: $z-modal; display: grid; place-items: center; padding: $spacing-4;
+}
+.modal {
+  background: $bg-surface; border: 1px solid $border-medium;
+  max-width: 520px; width: 100%;
+}
+.header { padding: $spacing-6; border-bottom: 1px solid $border-color; }
+.title {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; margin: $spacing-2 0 0;
+  font-weight: $font-weight-medium;
+}
+.meta {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.06em; margin-top: 6px;
+  strong { color: $text-primary; }
+}
+.dot { margin: 0 $spacing-2; }
+.current { font-family: $font-family-display; font-size: $font-size-md; }
+.form { padding: $spacing-6; display: flex; flex-direction: column; gap: $spacing-4; }
+.label {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+  display: block; margin-bottom: 6px;
+}
+.select {
+  width: 100%; background: transparent; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: 12px;
+  color: $text-primary; font-family: $font-family-base; font-size: $font-size-sm;
+  outline: none;
+  &:focus { border-color: $lime; }
+}
+.preview {
+  padding: 12px; background: rgba($lime, 0.05); border: 1px solid rgba($lime, 0.3);
+  border-radius: $border-radius-sm; font-size: $font-size-sm;
+  display: flex; gap: $spacing-3; align-items: center;
+}
+.previewLabel { color: $text-muted; }
+.previewValue { color: $text-primary; font-family: $font-family-mono; }
+.previewError { color: $vino-soft; }
+.error {
+  padding: 12px; background: rgba($vino, 0.1);
+  border: 1px solid $vino-soft; color: $vino-soft; font-size: $font-size-sm;
+}
+.actions {
+  display: flex; gap: $spacing-3; justify-content: flex-end;
+  margin-top: $spacing-2;
+}

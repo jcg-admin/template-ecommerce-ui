@@ -1,0 +1,57 @@
+@use '@styles/abstracts/variables' as *;
+
+.backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  z-index: $z-modal; display: grid; place-items: center; padding: $spacing-4;
+}
+.modal {
+  background: $bg-surface; border: 1px solid $border-medium;
+  max-width: 560px; width: 100%;
+}
+.header { padding: $spacing-6; border-bottom: 1px solid $border-color; }
+.title {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; margin-top: $spacing-2;
+  font-weight: $font-weight-medium;
+}
+.meta {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.04em; margin-top: 8px;
+  line-height: 1.7;
+  strong { color: $text-primary; }
+}
+.maxAmount { color: $lime-soft !important; }
+
+.form { padding: $spacing-6; display: flex; flex-direction: column; gap: $spacing-4; }
+.label {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+  display: block; margin-bottom: 8px;
+}
+.typeRow { display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-3; }
+.typeCard {
+  display: flex; flex-direction: column; gap: 4px;
+  padding: 12px 14px; border: 1px solid $border-medium;
+  cursor: pointer;
+  input { display: none; }
+}
+.typeCardActive { border-color: $bronze; background: rgba($bronze, 0.06); }
+.typeTitle { font-family: $font-family-display; font-size: $font-size-sm; color: $text-primary; font-weight: $font-weight-medium; }
+.typeSub { font-family: $font-family-mono; font-size: $font-size-xs; color: $text-muted; }
+
+.toggleRow {
+  display: flex; gap: $spacing-2; align-items: center;
+  color: $text-secondary; font-size: $font-size-sm; cursor: pointer;
+}
+.error {
+  padding: 10px 14px; background: rgba($vino, 0.1);
+  border: 1px solid $vino-soft; color: $vino-soft; font-size: $font-size-sm;
+}
+.actions {
+  display: flex; gap: $spacing-3; justify-content: flex-end; margin-top: $spacing-2;
+}
+.hint {
+  margin-top: $spacing-2;
+  font-family: $font-family-mono; font-size: 10px;
+  color: $text-muted; letter-spacing: 0.04em; line-height: 1.6;
+}

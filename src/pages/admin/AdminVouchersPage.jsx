@@ -1,135 +1,136 @@
 /**
- * AdminVouchersPage — ecommerce-ui
- * UC-PRO-02: Listar / editar vouchers
- * UC-PRO-03: Desactivar voucher
+ * AdminVouchersPage — Práctica Yorùbà
+ * Listado de vouchers con filtros + acciones.
+ *
+ * Endpoints:
+ *   GET /admin/vouchers/?status=&q=
+ *   POST /admin/vouchers/<id>/duplicate/
+ *   PATCH /admin/vouchers/<id>/   { is_active }
  */
+
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import {
-  deactivateVoucher,
-  clearVoucherActionState,
-} from '@redux/slices/vouchersSlice';
-import { useVouchers, VOUCHERS_QUERY_KEY } from '@hooks/domain/useVouchers';
-import VoucherCreateForm from '@components/admin/VoucherCreateForm';
-import styles from './AdminVouchersPage.module.scss';
+  fetchAdminVouchers, duplicateVoucher, toggleVoucherActive,
+} from '@redux/slices/adminSlice';
+import { MetaTag, Button } from '@components/common/primitives';
+import styles from './AdminTablePage.module.scss';
 
-const TYPE_LABEL = { PERCENT: 'Porcentaje', FIXED: 'Fijo' };
+const STATUS = [
+  { id: 'active',   label: 'Activos' },
+  { id: 'expired',  label: 'Expirados' },
+  { id: 'exhausted', label: 'Agotados' },
+  { id: 'all',      label: 'Todos' },
+];
 
-function formatValue(voucher) {
-  if (voucher.type === 'PERCENT') return `${voucher.value}%`;
-  return `$${voucher.value}`;
-}
+const TYPE_LABEL = {
+  FIXED:         'Monto fijo',
+  PERCENTAGE:    'Porcentaje',
+  FREE_SHIPPING: 'Envío gratis',
+};
 
 export default function AdminVouchersPage() {
-  const dispatch    = useDispatch();
-  const queryClient = useQueryClient();
-  const { data: items = [], isLoading, isError } = useVouchers();
-  const { isActioning, actionError, lastAction } =
-    useSelector((s) => s.vouchers);
-  const [isCreateOpen, setCreateOpen] = useState(false);
+  const dispatch = useDispatch();
+  const [status, setStatus] = useState('active');
+  const [search, setSearch] = useState('');
+  const vouchers = useSelector((s) => s.admin?.vouchers || []);
+  const isLoading = useSelector((s) => s.admin?.isLoadingVouchers);
 
-  useEffect(() => {
-    if (lastAction === 'created' || lastAction === 'deactivated') {
-      setCreateOpen(false);
-      queryClient.invalidateQueries({ queryKey: VOUCHERS_QUERY_KEY });
-      dispatch(clearVoucherActionState());
-    }
-  }, [lastAction, dispatch, queryClient]);
-
-  const handleDeactivate = (voucher) => {
-    const ok = window.confirm(
-      `Vas a desactivar el cupon ${voucher.code}. Esta accion no se puede deshacer. Continuar?`
-    );
-    if (!ok) return;
-    dispatch(deactivateVoucher(voucher.id));
-  };
+  useEffect(() => { dispatch(fetchAdminVouchers({ status, search })); }, [dispatch, status, search]);
 
   return (
-    <section className={styles.page} aria-labelledby="vouchers-title">
+    <div className={styles.page}>
       <header className={styles.header}>
-        <h1 id="vouchers-title" className={styles.title}>
-          Gestión de Cupones
-        </h1>
-        <button
-          type="button"
-          className={styles.primaryBtn}
-          onClick={() => setCreateOpen(true)}
-        >
-          Nuevo cupon
-        </button>
+        <div>
+          <MetaTag tone="bronze">Comunidad · {vouchers.length} cupones</MetaTag>
+          <h1 className={styles.title}>Vouchers</h1>
+        </div>
+        <div className={styles.headerActions}>
+          <Link to="/admin/vouchers/nuevo"><Button variant="primary">+ Nuevo voucher</Button></Link>
+        </div>
       </header>
 
-      {isLoading && <p>Cargando cupones…</p>}
+      <div className={styles.toolbar}>
+        <div className={styles.filters}>
+          {STATUS.map((s) => (
+            <button
+              key={s.id}
+              className={`${styles.filterBtn} ${status === s.id ? styles.filterBtnActive : ''}`}
+              onClick={() => setStatus(s.id)}
+            >{s.label}</button>
+          ))}
+        </div>
+        <input
+          type="search"
+          placeholder="Buscar por código…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className={styles.search}
+        />
+      </div>
 
-      {isError && (
-        <p role="alert" className={styles.error}>
-          No se pudieron cargar los cupones. Intenta de nuevo.
-        </p>
-      )}
-
-      {actionError && (
-        <p role="alert" className={styles.error}>
-          {typeof actionError === 'string'
-            ? actionError
-            : (actionError?.message ?? 'Ocurrio un error.')}
-        </p>
-      )}
-
-      {!isLoading && items.length === 0 && (
-        <p className={styles.empty}>No se encontraron cupones.</p>
-      )}
-
-      {items.length > 0 && (
+      <div className={styles.tableWrap}>
         <table className={styles.table}>
           <thead>
             <tr>
-              <th>Codigo</th>
+              <th>Código</th>
               <th>Tipo</th>
-              <th>Valor</th>
-              <th>Usos maximos</th>
+              <th>Descuento</th>
+              <th>Usos</th>
               <th>Vigencia</th>
               <th>Estado</th>
-              <th>Acciones</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
-            {items.map((v) => (
+            {isLoading && <tr><td colSpan={7} className={styles.loading}>Cargando…</td></tr>}
+            {!isLoading && vouchers.length === 0 && (
+              <tr><td colSpan={7} className={styles.empty}>Sin vouchers que coincidan</td></tr>
+            )}
+            {!isLoading && vouchers.map((v) => (
               <tr key={v.id}>
-                <td>{v.code}</td>
-                <td>{TYPE_LABEL[v.type] ?? v.type}</td>
-                <td>{formatValue(v)}</td>
-                <td>{v.max_uses ?? 'Sin limite'}</td>
-                <td>{v.ends_at ?? '—'}</td>
                 <td>
-                  <span
-                    className={v.is_active ? styles.badgeActive : styles.badgeInactive}
-                  >
+                  <Link to={`/admin/vouchers/${v.id}`} className={`${styles.itemName} ${styles.mono}`}>
+                    {v.code}
+                  </Link>
+                </td>
+                <td>{TYPE_LABEL[v.voucher_type] || v.voucher_type}</td>
+                <td className={styles.mono}>
+                  {v.voucher_type === 'PERCENTAGE'
+                    ? `${v.discount_pct}%`
+                    : v.voucher_type === 'FIXED'
+                    ? `$${v.discount_value}`
+                    : '—'}
+                </td>
+                <td className={styles.mono}>{v.current_uses} / {v.max_uses || '∞'}</td>
+                <td className={styles.mono}>
+                  {new Date(v.valid_from).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' })} —{' '}
+                  {v.valid_until ? new Date(v.valid_until).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : 'sin caducidad'}
+                </td>
+                <td>
+                  <span className={`${styles.statusPill} ${styles[`pill_${v.is_active ? 'lime' : 'muted'}`]}`}>
                     {v.is_active ? 'Activo' : 'Inactivo'}
                   </span>
                 </td>
-                <td>
-                  {v.is_active && (
-                    <button
-                      type="button"
-                      className={styles.dangerBtn}
-                      aria-label={`Desactivar ${v.code}`}
-                      onClick={() => handleDeactivate(v)}
-                      disabled={isActioning}
-                    >
-                      Desactivar
-                    </button>
-                  )}
+                <td className={styles.actions}>
+                  <button
+                    type="button" className={styles.actionBtn}
+                    onClick={() => dispatch(duplicateVoucher(v.id))}
+                    title="Duplicar"
+                  >⎘</button>
+                  <button
+                    type="button" className={styles.actionBtn}
+                    onClick={() => dispatch(toggleVoucherActive(v.id))}
+                    title={v.is_active ? 'Desactivar' : 'Activar'}
+                  >{v.is_active ? '◐' : '○'}</button>
+                  <Link to={`/admin/vouchers/${v.id}`} className={styles.actionBtn} title="Editar">→</Link>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-      )}
-
-      {isCreateOpen && (
-        <VoucherCreateForm onClose={() => setCreateOpen(false)} />
-      )}
-    </section>
+      </div>
+    </div>
   );
 }

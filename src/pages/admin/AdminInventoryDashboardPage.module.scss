@@ -1,0 +1,91 @@
+@use '@styles/abstracts/variables' as *;
+
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em;
+  display: flex; gap: $spacing-3; margin-bottom: $spacing-6;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  display: flex; justify-content: space-between; align-items: end;
+  padding-bottom: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6;
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-4xl;
+  font-weight: $font-weight-normal; color: $text-primary; margin-top: $spacing-3;
+}
+.alertCta {
+  padding: 10px 16px; border: 1px solid $bronze;
+  color: $bronze-soft; font-family: $font-family-mono; font-size: $font-size-sm;
+  letter-spacing: 0.06em; text-decoration: none;
+  &:hover { background: rgba($bronze, 0.08); }
+}
+
+.kpis {
+  display: grid; grid-template-columns: repeat(5, 1fr); gap: 0;
+  border: 1px solid $border-color; margin-bottom: $spacing-6;
+  @media (max-width: $bp-lg) { grid-template-columns: repeat(3, 1fr); }
+  @media (max-width: $bp-md) { grid-template-columns: repeat(2, 1fr); }
+}
+.kpi {
+  padding: $spacing-5; border-right: 1px solid $border-color;
+  &:last-child { border-right: 0; }
+}
+.kpiLabel {
+  font-family: $font-family-mono; font-size: 10px;
+  color: $text-muted; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.kpiValue {
+  font-family: $font-family-display; font-size: $font-size-2xl;
+  font-weight: $font-weight-medium; color: $text-primary;
+  margin-top: 6px;
+}
+.kpiLime   { color: $lime-soft; }
+.kpiCoral  { color: $coral; }
+.kpiVino   { color: $vino-soft; }
+.kpiBronze { color: $bronze-soft; }
+.kpiMuted  { color: $text-primary; }
+
+.card { border: 1px solid $border-color; background: $bg-surface; }
+.cardHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px $spacing-5; border-bottom: 1px solid $border-color;
+}
+.cardTitle {
+  font-family: $font-family-display; font-size: $font-size-md;
+  font-weight: $font-weight-medium; color: $text-primary;
+}
+.cardLink {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $coral; letter-spacing: 0.08em; text-decoration: none;
+}
+.table {
+  width: 100%; border-collapse: collapse; font-size: $font-size-sm;
+  th, td { padding: 12px $spacing-5; text-align: left; border-bottom: 1px solid $border-color; white-space: nowrap; }
+  th {
+    font-family: $font-family-mono; font-size: 10px;
+    font-weight: $font-weight-medium; letter-spacing: 0.12em;
+    text-transform: uppercase; color: $text-muted;
+  }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover { background: rgba($lime, 0.03); }
+}
+.mono { font-family: $font-family-mono; color: $text-secondary; }
+.muted { color: $text-muted; font-size: 11px; }
+.negative { color: $vino-soft; }
+.positive { color: $lime-soft; }
+.reason { color: $text-secondary; max-width: 240px; white-space: normal; }
+.empty { padding: $spacing-8 !important; text-align: center; color: $text-muted; }
+.pill {
+  display: inline-block; padding: 3px 9px; border-radius: $border-radius-sm;
+  font-family: $font-family-mono; font-size: 10px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.pill_lime   { background: rgba($lime, 0.15);  color: $lime-soft; }
+.pill_coral  { background: rgba($coral, 0.15); color: $coral; }
+.pill_vino   { background: rgba($vino, 0.18);  color: $vino-soft; }
+.pill_bronze { background: rgba($bronze, 0.15); color: $bronze-soft; }
+.pill_muted  { background: rgba(245,247,238,0.06); color: $text-muted; }

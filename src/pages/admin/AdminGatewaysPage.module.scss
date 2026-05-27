@@ -1,0 +1,90 @@
+@use '@styles/abstracts/variables' as *;
+
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em; margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  padding-bottom: $spacing-6; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6;
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-4xl;
+  font-weight: $font-weight-normal; color: $text-primary; margin-top: $spacing-3;
+}
+.lead { color: $text-secondary; margin-top: $spacing-3; max-width: 640px; line-height: $line-height-relaxed; }
+
+.list { display: flex; flex-direction: column; gap: $spacing-4; }
+.card { border: 1px solid $border-color; background: $bg-surface; }
+.cardHeader {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: $spacing-5; border-bottom: 1px solid $border-color; gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: flex-start; }
+}
+.gwName {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; font-weight: $font-weight-medium;
+}
+.gwDesc { color: $text-muted; font-size: $font-size-sm; margin-top: 4px; }
+.gwStatus {
+  display: flex; gap: $spacing-2; align-items: center;
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.statusDot { width: 8px; height: 8px; border-radius: 999px; }
+.statusActive { background: $lime; }
+.statusInactive { background: $text-muted; }
+
+.cardBody {
+  padding: $spacing-5;
+  display: grid; grid-template-columns: 1fr auto; gap: $spacing-6;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+.meta { display: flex; flex-direction: column; gap: 8px; font-size: $font-size-sm; }
+.metaKey { font-family: $font-family-mono; font-size: $font-size-xs; color: $text-muted; letter-spacing: 0.06em; }
+.metaVal { color: $text-primary; }
+.metaCode { font-family: $font-family-mono; color: $lime-soft; background: rgba($lime, 0.08); padding: 2px 6px; border-radius: 2px; }
+.cardActions {
+  display: flex; gap: $spacing-3; align-items: center; flex-wrap: wrap;
+}
+.testOk { color: $lime-soft; font-family: $font-family-mono; font-size: $font-size-xs; letter-spacing: 0.06em; }
+.testFail { color: $vino-soft; font-family: $font-family-mono; font-size: $font-size-xs; letter-spacing: 0.06em; }
+
+.modalBackdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.65);
+  z-index: $z-modal; display: grid; place-items: center; padding: $spacing-4;
+}
+.modal {
+  background: $bg-surface; border: 1px solid $border-medium;
+  max-width: 480px; width: 100%; padding: $spacing-6;
+}
+.modalTitle {
+  font-family: $font-family-display; font-size: $font-size-xl;
+  color: $text-primary; margin-bottom: $spacing-2;
+}
+.modalLead {
+  color: $text-secondary; font-size: $font-size-sm;
+  margin-bottom: $spacing-4; line-height: $line-height-relaxed;
+}
+.modalForm { display: flex; flex-direction: column; gap: $spacing-3; }
+.modalRow { display: flex; flex-direction: column; gap: 6px; }
+.modalLabel {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+}
+.modalSelect {
+  background: transparent; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: 14px 16px;
+  color: $text-primary; font-family: $font-family-base; font-size: $font-size-base;
+}
+.modalToggle {
+  display: flex; gap: $spacing-2; align-items: center;
+  color: $text-secondary; font-size: $font-size-sm; cursor: pointer;
+}
+.modalActions {
+  display: flex; gap: $spacing-3; justify-content: flex-end; margin-top: $spacing-2;
+}

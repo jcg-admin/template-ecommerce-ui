@@ -1,216 +1,164 @@
 /**
- * AdminCategoriesPage — UC-CAT-06
+ * AdminCategoriesPage — Práctica Yorùbà
+ * Árbol de categorías expandible + CRUD inline.
  *
- * Gestion del arbol de categorias del catalogo. CRUD admin:
- *   GET   /api/v1/admin/categories/
- *   POST  /api/v1/admin/categories/
- *   PATCH /api/v1/admin/categories/:id/
- *   POST  /api/v1/admin/categories/:id/deactivate/
- *
- * La jerarquia se persiste con parent_id. La validacion de ciclos vive
- * en el backend (BR-013). El UI muestra el formulario inline para crear
- * o editar una categoria.
+ * Endpoints:
+ *   GET    /admin/categories/         → árbol jerárquico
+ *   POST   /admin/categories/
+ *   PATCH  /admin/categories/<id>/
+ *   DELETE /admin/categories/<id>/
+ *   PATCH  /admin/categories/<id>/move/   { new_parent_id, new_order }
  */
-import { useState } from 'react';
+
+import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useQueryClient } from '@tanstack/react-query';
+import { Link } from 'react-router-dom';
 import {
-  useAdminCategories, ADMIN_CATEGORIES_KEY,
-} from '@hooks/domain/useCategories';
-import {
-  createCategory, updateCategory, deactivateCategory,
-  clearCategoriesActionState,
-} from '@redux/slices/categoriesSlice';
+  fetchAdminCategories, createCategory, updateCategory,
+  deleteCategory, moveCategoryNode,
+} from '@redux/slices/adminSlice';
+import { MetaTag, Button, Field } from '@components/common/primitives';
 import styles from './AdminCategoriesPage.module.scss';
 
-const EMPTY_FORM = { name: '', description: '', parent_id: '', icon_url: '' };
-
 export default function AdminCategoriesPage() {
-  const dispatch    = useDispatch();
-  const queryClient = useQueryClient();
-  const { isActioning, actionError } = useSelector((s) => s.categories);
-  const { data, isLoading, isError } = useAdminCategories();
-  const categories = data?.results ?? [];
+  const dispatch = useDispatch();
+  const tree = useSelector((s) => s.admin?.categoryTree || []);
+  const isLoading = useSelector((s) => s.admin?.isLoadingCategories);
+  const [editing, setEditing] = useState(null);
+  const [creating, setCreating] = useState(null); // parentId
+  const [expanded, setExpanded] = useState(new Set());
 
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [editingId, setEditingId] = useState(null);
-  const [errors, setErrors] = useState({});
+  useEffect(() => { dispatch(fetchAdminCategories()); }, [dispatch]);
 
-  const reset = () => { setForm(EMPTY_FORM); setEditingId(null); setErrors({}); };
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm((p) => ({ ...p, [name]: value }));
-    if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
-  };
-
-  const handleEdit = (cat) => {
-    setEditingId(cat.id);
-    setForm({
-      name:        cat.name ?? '',
-      description: cat.description ?? '',
-      parent_id:   cat.parent_id ?? cat.parent?.id ?? '',
-      icon_url:    cat.icon_url ?? '',
-    });
-    setErrors({});
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const v = {};
-    if (!form.name.trim()) v.name = 'El nombre es obligatorio.';
-    if (Object.keys(v).length) { setErrors(v); return; }
-    const payload = {
-      name: form.name.trim(),
-      description: form.description.trim() || null,
-      icon_url:    form.icon_url.trim() || null,
-      parent_id:   form.parent_id ? Number(form.parent_id) : null,
-    };
-    const action  = editingId
-      ? updateCategory({ id: editingId, ...payload })
-      : createCategory(payload);
-    const result  = await dispatch(action);
-    const ok = editingId
-      ? updateCategory.fulfilled.match(result)
-      : createCategory.fulfilled.match(result);
-    if (ok) {
-      reset();
-      dispatch(clearCategoriesActionState());
-      queryClient.invalidateQueries({ queryKey: ADMIN_CATEGORIES_KEY });
-    }
-  };
-
-  const handleDeactivate = async (id) => {
-    const result = await dispatch(deactivateCategory(id));
-    if (deactivateCategory.fulfilled.match(result)) {
-      dispatch(clearCategoriesActionState());
-      queryClient.invalidateQueries({ queryKey: ADMIN_CATEGORIES_KEY });
-    }
+  const toggle = (id) => {
+    const next = new Set(expanded);
+    next.has(id) ? next.delete(id) : next.add(id);
+    setExpanded(next);
   };
 
   return (
-    <section className={styles.page} aria-labelledby="admin-categories-title">
+    <div className={styles.page}>
+      <nav className={styles.breadcrumb}>
+        <Link to="/admin">Admin</Link><span>/</span>
+        <span className={styles.bcCurrent}>Categorías</span>
+      </nav>
+
       <header className={styles.header}>
-        <h1 id="admin-categories-title" className={styles.title}>
-          Categorias
-        </h1>
-        <p className={styles.subtitle}>
-          Gestiona el arbol de categorias del catalogo.
-        </p>
+        <div>
+          <MetaTag tone="bronze">Configuración del catálogo</MetaTag>
+          <h1 className={styles.title}>Categorías</h1>
+          <p className={styles.lead}>
+            Árbol jerárquico de categorías. Click en una categoría para expandirla,
+            editar o eliminar. La API valida ciclos automáticamente.
+          </p>
+        </div>
+        <Button variant="primary" onClick={() => setCreating(null)}>+ Categoría raíz</Button>
       </header>
 
-      <form className={styles.form} onSubmit={handleSubmit} noValidate>
-        <h2 className={styles.formTitle}>
-          {editingId ? 'Editar categoria' : 'Nueva categoria'}
-        </h2>
-
-        <div className={styles.field}>
-          <label htmlFor="cat-name">Nombre</label>
-          <input
-            id="cat-name"
-            name="name"
-            type="text"
-            value={form.name}
-            onChange={handleChange}
-            autoComplete="off"
+      <div className={styles.tree}>
+        {isLoading && <div className={styles.loading}>Cargando árbol…</div>}
+        {!isLoading && tree.length === 0 && <div className={styles.empty}>Sin categorías. Crea la primera.</div>}
+        {!isLoading && tree.map((node) => (
+          <CategoryNode
+            key={node.id}
+            node={node}
+            depth={0}
+            expanded={expanded}
+            onToggle={toggle}
+            onEdit={(c) => setEditing(c)}
+            onDelete={(c) => {
+              if (window.confirm(`¿Eliminar "${c.name}"? Se moverán sus subcategorías al padre.`)) {
+                dispatch(deleteCategory(c.id));
+              }
+            }}
+            onAddChild={(parentId) => setCreating(parentId)}
+            onMove={(id, dir) => dispatch(moveCategoryNode({ id, direction: dir }))}
           />
-          {errors.name && <p className={styles.fieldError}>{errors.name}</p>}
-        </div>
+        ))}
+      </div>
 
-        <div className={styles.field}>
-          <label htmlFor="cat-description">Descripcion</label>
-          <textarea
-            id="cat-description"
-            name="description"
-            rows={3}
-            value={form.description}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="cat-parent">Categoria padre (opcional)</label>
-          <select
-            id="cat-parent"
-            name="parent_id"
-            value={form.parent_id}
-            onChange={handleChange}
-          >
-            <option value="">— Categoria raiz —</option>
-            {categories
-              .filter((c) => c.id !== editingId)
-              .map((c) => (
-                <option key={c.id} value={c.id}>{c.name}</option>
-              ))}
-          </select>
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="cat-icon">URL de icono (opcional)</label>
-          <input
-            id="cat-icon"
-            name="icon_url"
-            type="url"
-            value={form.icon_url}
-            onChange={handleChange}
-            autoComplete="off"
-          />
-        </div>
-
-        {actionError && (
-          <p role="alert" className={styles.apiError}>
-            {actionError.message ?? 'No se pudo guardar la categoria.'}
-          </p>
-        )}
-
-        <div className={styles.actions}>
-          <button type="submit" disabled={isActioning}>
-            {editingId ? 'Guardar cambios' : 'Crear categoria'}
-          </button>
-          {editingId && (
-            <button type="button" onClick={reset} disabled={isActioning}>
-              Cancelar
-            </button>
-          )}
-        </div>
-      </form>
-
-      {isLoading && <p>Cargando categorias…</p>}
-      {isError && <p role="alert">No se pudo cargar el listado.</p>}
-
-      {!isLoading && categories.length > 0 && (
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>ID</th><th>Nombre</th><th>Padre</th><th>Estado</th><th>Acciones</th>
-            </tr>
-          </thead>
-          <tbody>
-            {categories.map((c) => (
-              <tr key={c.id}>
-                <td>{c.id}</td>
-                <td>{c.name}</td>
-                <td>{c.parent?.name ?? '—'}</td>
-                <td>{c.is_active === false ? 'Inactiva' : 'Activa'}</td>
-                <td>
-                  <button type="button" onClick={() => handleEdit(c)}>
-                    Editar
-                  </button>
-                  {c.is_active !== false && (
-                    <button
-                      type="button"
-                      onClick={() => handleDeactivate(c.id)}
-                      disabled={isActioning}
-                    >
-                      Desactivar
-                    </button>
-                  )}
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+      {(editing || creating !== undefined) && (
+        <CategoryFormModal
+          category={editing}
+          parentId={creating}
+          onSave={async (data) => {
+            if (editing) await dispatch(updateCategory({ id: editing.id, data }));
+            else await dispatch(createCategory({ ...data, parent_id: creating }));
+            setEditing(null); setCreating(undefined);
+          }}
+          onClose={() => { setEditing(null); setCreating(undefined); }}
+        />
       )}
-    </section>
+    </div>
+  );
+}
+
+function CategoryNode({ node, depth, expanded, onToggle, onEdit, onDelete, onAddChild, onMove }) {
+  const hasChildren = node.children?.length > 0;
+  const isOpen = expanded.has(node.id);
+  return (
+    <>
+      <div className={styles.node} style={{ paddingLeft: depth * 24 + 12 }}>
+        <button
+          type="button" className={styles.expandBtn}
+          onClick={() => hasChildren && onToggle(node.id)}
+          style={{ visibility: hasChildren ? 'visible' : 'hidden' }}
+        >{isOpen ? '▼' : '▶'}</button>
+        <div className={styles.nodeInfo}>
+          <span className={styles.nodeName}>{node.name}</span>
+          <span className={styles.nodeMeta}>
+            {node.slug} · {node.product_count || 0} productos
+          </span>
+        </div>
+        {!node.is_active && <span className={styles.inactive}>Inactiva</span>}
+        <div className={styles.nodeActions}>
+          <button type="button" onClick={() => onMove(node.id, 'up')} className={styles.iconBtn} aria-label="Mover arriba">↑</button>
+          <button type="button" onClick={() => onMove(node.id, 'down')} className={styles.iconBtn} aria-label="Mover abajo">↓</button>
+          <button type="button" onClick={() => onAddChild(node.id)} className={styles.iconBtn} aria-label="Añadir hija">+</button>
+          <button type="button" onClick={() => onEdit(node)} className={styles.iconBtn} aria-label="Editar">✎</button>
+          <button type="button" onClick={() => onDelete(node)} className={`${styles.iconBtn} ${styles.iconBtnDelete}`} aria-label="Eliminar">×</button>
+        </div>
+      </div>
+      {hasChildren && isOpen && node.children.map((child) => (
+        <CategoryNode
+          key={child.id} node={child} depth={depth + 1}
+          expanded={expanded} onToggle={onToggle}
+          onEdit={onEdit} onDelete={onDelete}
+          onAddChild={onAddChild} onMove={onMove}
+        />
+      ))}
+    </>
+  );
+}
+
+function CategoryFormModal({ category, parentId, onSave, onClose }) {
+  const [data, setData] = useState({
+    name: category?.name || '',
+    slug: category?.slug || '',
+    is_active: category?.is_active ?? true,
+  });
+  return (
+    <div className={styles.modalBackdrop} onClick={onClose}>
+      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+        <h3 className={styles.modalTitle}>
+          {category ? 'Editar categoría' : 'Nueva categoría'}
+        </h3>
+        <form onSubmit={(e) => { e.preventDefault(); onSave(data); }}>
+          <Field label="Nombre" value={data.name} onChange={(e) => setData({ ...data, name: e.target.value })} required />
+          <div style={{ marginTop: 12 }}>
+            <Field label="Slug" value={data.slug} onChange={(e) => setData({ ...data, slug: e.target.value })} />
+          </div>
+          <label className={styles.checkRow}>
+            <input type="checkbox" checked={data.is_active} onChange={(e) => setData({ ...data, is_active: e.target.checked })} />
+            <span>Categoría activa</span>
+          </label>
+          {parentId && <div className={styles.modalHint}>Se creará como subcategoría de la categoría seleccionada.</div>}
+          <div className={styles.modalActions}>
+            <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
+            <Button type="submit" variant="primary">{category ? 'Guardar' : 'Crear'}</Button>
+          </div>
+        </form>
+      </div>
+    </div>
   );
 }

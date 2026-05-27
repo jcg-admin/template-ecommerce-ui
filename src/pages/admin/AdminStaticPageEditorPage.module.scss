@@ -1,0 +1,114 @@
+@use '@styles/abstracts/variables' as *;
+
+.loading { padding: $spacing-20; text-align: center; color: $text-muted; }
+.page { padding: $spacing-10 $spacing-12 $spacing-16; @media (max-width: $bp-md) { padding: $spacing-6 $content-padding-mobile; } }
+.breadcrumb {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.1em; margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header {
+  display: flex; justify-content: space-between; align-items: end;
+  padding-bottom: $spacing-5; border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-6; gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: stretch; }
+}
+.title {
+  font-family: $font-family-display; font-size: $font-size-3xl;
+  font-weight: $font-weight-normal; color: $text-primary; margin-top: $spacing-3;
+}
+.headerActions { display: flex; gap: $spacing-3; align-items: center; flex-wrap: wrap; }
+.toast {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $lime-soft; letter-spacing: 0.06em;
+}
+
+.layout {
+  display: grid; grid-template-columns: 1fr 320px; gap: $spacing-6;
+  @media (max-width: $bp-lg) { grid-template-columns: 1fr; }
+}
+
+.editor { display: flex; flex-direction: column; gap: $spacing-4; }
+.contentLabel {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.12em; text-transform: uppercase; color: $text-muted;
+  margin-top: $spacing-2;
+}
+.contentArea {
+  width: 100%; min-height: 320px;
+  background: $bg-sunken; border: 1px solid $border-medium;
+  border-radius: $border-radius-sm; padding: $spacing-4;
+  color: $text-primary; font-family: $font-family-mono; font-size: $font-size-sm;
+  line-height: $line-height-relaxed; resize: vertical;
+  outline: none;
+  &:focus { border-color: $lime; }
+}
+.previewBox {
+  border: 1px solid $border-color; background: $bg-surface;
+  margin-top: $spacing-3;
+}
+.previewLabel {
+  padding: 10px $spacing-4; border-bottom: 1px solid $border-color;
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  color: $text-muted; letter-spacing: 0.12em; text-transform: uppercase;
+}
+.previewContent {
+  padding: $spacing-5; color: $text-secondary;
+  line-height: $line-height-relaxed; font-size: $font-size-sm;
+  h2, h3 { color: $text-primary; font-family: $font-family-display; margin-top: $spacing-4; }
+  p { margin-bottom: $spacing-3; }
+  ul { padding-left: $spacing-5; }
+  a { color: $coral; }
+  strong { color: $text-primary; }
+  code { background: rgba($lime, 0.1); padding: 1px 6px; border-radius: 2px; color: $lime-soft; }
+}
+
+.sidebar { border: 1px solid $border-color; background: $bg-surface; align-self: start; position: sticky; top: $spacing-5;
+  @media (max-width: $bp-lg) { position: static; }
+}
+.sidebarTitle {
+  font-family: $font-family-display; font-size: $font-size-md;
+  color: $text-primary; padding: 12px $spacing-4;
+  border-bottom: 1px solid $border-color;
+  font-weight: $font-weight-medium;
+}
+.empty { padding: $spacing-6; text-align: center; color: $text-muted; font-size: $font-size-sm; }
+.versionList { list-style: none; margin: 0; padding: 0; max-height: 540px; overflow-y: auto; }
+.versionItem {
+  border-bottom: 1px solid $border-color; display: flex;
+  &:last-child { border-bottom: 0; }
+  &:hover { background: rgba($lime, 0.03); }
+}
+.versionActive { background: rgba($bronze, 0.06); }
+.versionMain {
+  flex: 1; padding: 12px $spacing-4; background: none; border: 0;
+  text-align: left; cursor: pointer; color: inherit;
+}
+.versionLabel {
+  font-family: $font-family-display; font-size: $font-size-sm;
+  color: $text-primary; font-weight: $font-weight-medium;
+  display: flex; gap: $spacing-2; align-items: center;
+}
+.currentBadge {
+  font-family: $font-family-mono; font-size: 9px;
+  background: $lime; color: $bg-page; padding: 2px 6px;
+  border-radius: 2px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.versionMeta {
+  font-family: $font-family-mono; font-size: 10px;
+  color: $text-muted; letter-spacing: 0.04em; margin-top: 3px;
+}
+.versionNote {
+  font-size: $font-size-xs; color: $text-secondary;
+  font-style: italic; margin-top: 4px;
+}
+.restoreBtn {
+  padding: 0 12px; background: none; border: 0;
+  border-left: 1px solid $border-color;
+  color: $coral; font-family: $font-family-mono;
+  font-size: 10px; letter-spacing: 0.08em;
+  cursor: pointer;
+  &:hover { background: rgba($coral, 0.08); }
+}
