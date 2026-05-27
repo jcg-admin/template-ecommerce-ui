@@ -24,9 +24,18 @@ export default function ProductCard({ product }) {
       {is_featured && <span className={styles.badge}>Destacado</span>}
 
       <div className={styles.imageArea}>
-        <div className={styles.imagePlaceholder}>
-          <span className={styles.sku}>{sku}</span>
-        </div>
+        {product.images?.[0]?.url ? (
+          <img
+            src={product.images[0].url}
+            alt={name}
+            className={styles.image}
+            loading="lazy"
+          />
+        ) : (
+          <div className={styles.imagePlaceholder}>
+            <span className={styles.sku}>{sku}</span>
+          </div>
+        )}
       </div>
 
       <div className={styles.info}>

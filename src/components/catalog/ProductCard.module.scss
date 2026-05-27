@@ -37,6 +37,14 @@
   aspect-ratio:     1 / 1;
   background:       $bg-subtle;
   border-bottom:    1px solid $border-color;
+  overflow:         hidden;
+}
+
+.image {
+  width:      100%;
+  height:     100%;
+  object-fit: cover;
+  display:    block;
 }
 
 .imagePlaceholder {
