@@ -196,4 +196,3 @@ export const fetchOrderDetail = createAsyncThunk(
     }
   },
 );
-export default ordersSlice.reducer;

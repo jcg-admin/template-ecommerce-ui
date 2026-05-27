@@ -277,4 +277,3 @@ export default cartSlice.reducer;
 // diseno Yoruba. El paquete importa addCartItem; nuestro slice usa addToCart.
 // Agregado en F4 de adaptar-sistema-diseno-yoruba (H-F4-01).
 export const addCartItem = addToCart;
-export default cartSlice.reducer;

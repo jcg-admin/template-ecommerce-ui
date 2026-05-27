@@ -50,24 +50,24 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-401 | Adaptar `CatalogPage.jsx` (sidebar, rutas EN) | `src/pages/catalog/CatalogPage.jsx` | Pendiente |
-| T-402 | Adoptar `CatalogPage.module.scss` | `src/pages/catalog/CatalogPage.module.scss` | Pendiente |
-| T-403 | Adaptar `ProductPage.jsx` (images[0].url) | `src/pages/catalog/ProductPage.jsx` | Pendiente |
-| T-404 | Adoptar `ProductPage.module.scss` | `src/pages/catalog/ProductPage.module.scss` | Pendiente |
-| T-405 | Adaptar `HomePage.jsx` (fetchFeaturedProducts, rutas EN) | `src/pages/home/HomePage.jsx` | Pendiente |
-| T-406 | Adoptar `HomePage.module.scss` | `src/pages/home/HomePage.module.scss` | Pendiente |
-| T-407 | Adaptar `CartPage.jsx` (slices existentes) | `src/pages/cart/CartPage.jsx` | Pendiente |
-| T-408 | Adoptar `CartPage.module.scss` | `src/pages/cart/CartPage.module.scss` | Pendiente |
-| T-409 | Adaptar `CheckoutPage.jsx` | `src/pages/checkout/CheckoutPage.jsx` | Pendiente |
-| T-410 | Adoptar `CheckoutPage.module.scss` | `src/pages/checkout/CheckoutPage.module.scss` | Pendiente |
-| T-411 | Adoptar `OrderSuccessPage.jsx` | `src/pages/checkout/OrderSuccessPage.jsx` | Pendiente |
-| T-412 | Adoptar `OrderSuccessPage.module.scss` | `src/pages/checkout/OrderSuccessPage.module.scss` | Pendiente |
-| T-413 | Agregar `PaymentReturnPage.jsx` (nueva) | `src/pages/checkout/PaymentReturnPage.jsx` | Pendiente |
-| T-414 | Agregar `PaymentReturnPage.module.scss` (nueva) | `src/pages/checkout/PaymentReturnPage.module.scss` | Pendiente |
-| T-415 | Agregar `PaymentFailedPage.jsx` (nueva) | `src/pages/checkout/PaymentFailedPage.jsx` | Pendiente |
-| T-416 | Agregar `PaymentFailedPage.module.scss` (nueva) | `src/pages/checkout/PaymentFailedPage.module.scss` | Pendiente |
-| T-417 | Agregar `ExpressCheckoutPage.jsx` (nueva) | `src/pages/checkout/ExpressCheckoutPage.jsx` | Pendiente |
-| T-418 | Agregar `ExpressCheckoutPage.module.scss` (nueva) | `src/pages/checkout/ExpressCheckoutPage.module.scss` | Pendiente |
+| T-401 | Adaptar `CatalogPage.jsx` (sidebar, rutas EN) | `src/pages/catalog/CatalogPage.jsx` | Hecha |
+| T-402 | Adoptar `CatalogPage.module.scss` | `src/pages/catalog/CatalogPage.module.scss` | Hecha |
+| T-403 | Adaptar `ProductPage.jsx` (images[0].url) | `src/pages/catalog/ProductPage.jsx` | Hecha |
+| T-404 | Adoptar `ProductPage.module.scss` | `src/pages/catalog/ProductPage.module.scss` | Hecha |
+| T-405 | Adaptar `HomePage.jsx` (fetchFeaturedProducts, rutas EN) | `src/pages/home/HomePage.jsx` | Hecha |
+| T-406 | Adoptar `HomePage.module.scss` | `src/pages/home/HomePage.module.scss` | Hecha |
+| T-407 | Adaptar `CartPage.jsx` (slices existentes) | `src/pages/cart/CartPage.jsx` | Hecha |
+| T-408 | Adoptar `CartPage.module.scss` | `src/pages/cart/CartPage.module.scss` | Hecha |
+| T-409 | Adaptar `CheckoutPage.jsx` | `src/pages/checkout/CheckoutPage.jsx` | Hecha |
+| T-410 | Adoptar `CheckoutPage.module.scss` | `src/pages/checkout/CheckoutPage.module.scss` | Hecha |
+| T-411 | Adoptar `OrderSuccessPage.jsx` | `src/pages/checkout/OrderSuccessPage.jsx` | Hecha |
+| T-412 | Adoptar `OrderSuccessPage.module.scss` | `src/pages/checkout/OrderSuccessPage.module.scss` | Hecha |
+| T-413 | Agregar `PaymentReturnPage.jsx` (nueva) | `src/pages/checkout/PaymentReturnPage.jsx` | Hecha |
+| T-414 | Agregar `PaymentReturnPage.module.scss` (nueva) | `src/pages/checkout/PaymentReturnPage.module.scss` | Hecha |
+| T-415 | Agregar `PaymentFailedPage.jsx` (nueva) | `src/pages/checkout/PaymentFailedPage.jsx` | Hecha |
+| T-416 | Agregar `PaymentFailedPage.module.scss` (nueva) | `src/pages/checkout/PaymentFailedPage.module.scss` | Hecha |
+| T-417 | Agregar `ExpressCheckoutPage.jsx` (nueva) | `src/pages/checkout/ExpressCheckoutPage.jsx` | Hecha |
+| T-418 | Agregar `ExpressCheckoutPage.module.scss` (nueva) | `src/pages/checkout/ExpressCheckoutPage.module.scss` | Hecha |
 
 ## F5 - Cuenta y auth
 

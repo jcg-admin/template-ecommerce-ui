@@ -278,4 +278,3 @@ export const fetchAddresses = createAsyncThunk(
     }
   },
 );
-export default authSlice.reducer;

@@ -420,3 +420,6 @@ $radius-lg:         $border-radius-lg;
 // Tercera tanda de aliases (hallazgo T-107 build 3)
 $radius-sm:         $border-radius-sm;
 $amber-500:         $coral;              // -> #D86030 (coral como proxy de ámbar)
+
+// Cuarta tanda: spacing faltante (hallazgo F4)
+$spacing-7:  28px;
