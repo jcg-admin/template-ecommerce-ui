@@ -278,3 +278,41 @@ export const fetchAddresses = createAsyncThunk(
     }
   },
 );
+
+// ── Aliases y thunks para compatibilidad con sistema de diseno Yoruba (F5, H-F5-01) ──
+
+export const login             = loginUser;
+export const logoutAllSessions = logoutUser;
+export const resendVerification = resendVerificationEmail;
+
+export const requestPasswordReset = createAsyncThunk(
+  'auth/requestPasswordReset',
+  async ({ email }, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/auth/password-reset/', { email });
+      return res.data;
+    } catch (error) { return rejectWithValue(error.message); }
+  },
+);
+
+export const confirmPasswordReset = createAsyncThunk(
+  'auth/confirmPasswordReset',
+  async ({ uid, token, new_password }, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/auth/password-reset/confirm/', { uid, token, new_password });
+      return res.data;
+    } catch (error) { return rejectWithValue(error.message); }
+  },
+);
+
+export const uploadAvatar = createAsyncThunk(
+  'auth/uploadAvatar',
+  async (file, { rejectWithValue }) => {
+    try {
+      const fd = new FormData();
+      fd.append('avatar', file);
+      const res = await apiService.patch('/api/v1/auth/profile/avatar/', fd);
+      return res.data;
+    } catch (error) { return rejectWithValue(error.message); }
+  },
+);

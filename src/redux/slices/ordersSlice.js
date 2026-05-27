@@ -196,3 +196,14 @@ export const fetchOrderDetail = createAsyncThunk(
     }
   },
 );
+
+// fetchOrders: listado de pedidos del usuario. Agregado en H-F5-01.
+export const fetchOrders = createAsyncThunk(
+  'orders/fetchOrders',
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get('/api/v1/orders/', { params });
+      return res.data;
+    } catch (error) { return rejectWithValue(error.message); }
+  },
+);

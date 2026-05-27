@@ -188,3 +188,7 @@ export const toggleWishlist = ({ productId, inWishlist }) =>
   inWishlist
     ? removeFromWishlist(productId)
     : addToWishlist({ product_id: productId });
+
+// Aliases para compatibilidad con sistema de diseno Yoruba (H-F5-01).
+export const removeWishlistItem = removeFromWishlist;
+export const moveToCart         = moveWishlistItemToCart;
