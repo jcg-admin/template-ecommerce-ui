@@ -38,3 +38,5 @@
 | 2026-05-27T17:04:56 | T-302 hecha | Header.module.scss adoptado del paquete. 0 hex hardcodeados — usa variables semanticas de _variables.scss. Todas las clases necesarias presentes: topStrip, mainBar, brand, searchTrigger, categoriesNav, navLink, cartBtn, actionLink. |
 | 2026-05-27T17:05:28 | T-303 hecha | Footer/index.jsx adoptado con rutas adaptadas a EN. 0 rutas en espanol residuales. |
 | 2026-05-27T17:05:28 | T-304 hecha | Footer.module.scss adoptado. 0 hex hardcodeados. |
+| 2026-05-27T17:06:08 | T-305 hecha | ProductCard.jsx adaptado: rutas /catalog/:slug EN, orisha_name eliminado del JSX y JSDoc, image_url presente (funciona gracias a T-201). |
+| 2026-05-27T17:06:08 | T-306 hecha | ProductCard.module.scss adoptado. 0 hex hardcodeados. |
