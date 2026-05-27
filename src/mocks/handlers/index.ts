@@ -45,9 +45,18 @@ import { paymentsHandlers } from './payments';
 import { inventoryHandlers } from './inventory';
 import { returnsHandlers } from './returns';
 
+// DefinePlugin solo reemplaza accesos estaticos a process.env.VARIABLE.
+// El acceso dinamico process.env[key] deja 'process' sin resolver en
+// el bundle del browser. Se lee cada variable estaticamente.
+const ENV_FLAGS: Record<string, string> = {
+  CATALOG_SOURCE:  process.env.CATALOG_SOURCE  ?? 'mock',
+  AUTH_SOURCE:     process.env.AUTH_SOURCE     ?? 'mock',
+  CART_SOURCE:     process.env.CART_SOURCE     ?? 'mock',
+  PAYMENTS_SOURCE: process.env.PAYMENTS_SOURCE ?? 'mock',
+};
+
 function isMock(key: string): boolean {
-  const value = (process.env[key] ?? 'mock').toLowerCase();
-  return value === 'mock';
+  return (ENV_FLAGS[key] ?? 'mock').toLowerCase() === 'mock';
 }
 
 /**
