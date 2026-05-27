@@ -219,3 +219,79 @@ const paymentsSlice = createSlice({
 
 export const { clearPaymentsActionState } = paymentsSlice.actions;
 export default paymentsSlice.reducer;
+
+// ─── Thunks adicionales para el sistema de diseno Yoruba (F4) ───────────────
+
+/**
+ * initiatePayment — thunk unificado para iniciar un pago.
+ * El paquete Yoruba usa initiatePayment({order_number, gateway}).
+ * Internamente delega a paymentsSlice segun el gateway.
+ * Agregado en H-F4-02 de adaptar-sistema-diseno-yoruba.
+ */
+export const initiatePayment = createAsyncThunk(
+  'payments/initiatePayment',
+  async ({ order_number, gateway }, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post(
+        `/api/v1/payments/${order_number}/initiate/`,
+        { gateway },
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+/**
+ * fetchPaymentHistory — historial de intentos de pago de una orden.
+ * GET /api/v1/payments/:order_number/history/
+ * Usado por PaymentFailedPage. Agregado en H-F4-05.
+ */
+export const fetchPaymentHistory = createAsyncThunk(
+  'payments/fetchPaymentHistory',
+  async (orderNumber, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get(
+        `/api/v1/payments/${orderNumber}/history/`,
+      );
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+/**
+ * fetchExpressEligibility — verifica si el usuario puede hacer express checkout.
+ * GET /api/v1/checkout/eligibility/
+ * Usado por ExpressCheckoutPage. Agregado en H-F4-05.
+ */
+export const fetchExpressEligibility = createAsyncThunk(
+  'payments/fetchExpressEligibility',
+  async (_arg, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get('/api/v1/checkout/eligibility/');
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+
+/**
+ * submitExpress — ejecuta el express checkout con los datos guardados.
+ * POST /api/v1/checkout/express/
+ * Usado por ExpressCheckoutPage. Agregado en H-F4-05.
+ */
+export const submitExpress = createAsyncThunk(
+  'payments/submitExpress',
+  async (_arg, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/checkout/express/');
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
