@@ -1,0 +1,105 @@
+@use '@styles/abstracts/variables' as *;
+
+.loading { padding: $spacing-20; text-align: center; color: $text-muted; background: $bg-page; }
+.page { background: $bg-page; min-height: 60vh; }
+.container {
+  max-width: 820px;
+  margin: 0 auto;
+  padding: $spacing-12 $content-padding-desktop $spacing-24;
+  @media (max-width: $bp-md) { padding: $spacing-8 $content-padding-mobile $spacing-16; }
+}
+.breadcrumb {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 0.1em;
+  margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3; flex-wrap: wrap;
+  a { color: $text-muted; text-decoration: none; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.header { margin-bottom: $spacing-8; }
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-normal;
+  color: $text-primary;
+  margin-top: $spacing-3;
+  letter-spacing: $ls-tight;
+}
+.lead { color: $text-secondary; margin-top: $spacing-3; line-height: $line-height-relaxed; }
+
+.tabs {
+  display: flex;
+  gap: $spacing-8;
+  border-bottom: 1px solid $border-color;
+  margin-bottom: $spacing-7;
+}
+.tab {
+  padding: 12px 0;
+  background: none;
+  border: 0;
+  border-bottom: 1px solid transparent;
+  color: $text-muted;
+  font-family: $font-family-base;
+  font-size: $font-size-sm;
+  cursor: pointer;
+  margin-bottom: -1px;
+}
+.tabActive {
+  color: $text-primary;
+  font-weight: $font-weight-medium;
+  border-bottom-color: $bronze;
+}
+
+.form {}
+.formGroup { display: flex; flex-direction: column; gap: $spacing-4; }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }
+.row3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr 1fr; } }
+
+.optionCard {
+  display: grid;
+  grid-template-columns: 24px 1fr auto;
+  gap: $spacing-4;
+  padding: $spacing-5;
+  border: 1px solid $border-medium;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+  align-items: center;
+  &:hover { border-color: $border-strong; }
+}
+.optionCardActive { border-color: $bronze; background: rgba($bronze, 0.06); }
+.radio {
+  width: 16px; height: 16px;
+  border-radius: 999px;
+  border: 1px solid $border-strong;
+  background: $bg-page;
+}
+.radioActive { border: 5px solid $bronze; }
+.optionT { font-family: $font-family-display; font-size: $font-size-base; color: $text-primary; font-weight: $font-weight-medium; }
+.optionSub { font-size: $font-size-xs; color: $text-muted; margin-top: 3px; }
+.optionPrice { font-family: $font-family-mono; font-size: $font-size-sm; color: $text-primary; }
+
+.error {
+  margin-top: $spacing-4;
+  padding: 12px;
+  background: rgba($vino, 0.1);
+  border: 1px solid $vino-soft;
+  color: $vino-soft;
+  font-size: $font-size-sm;
+}
+
+.actions {
+  margin-top: $spacing-7;
+  display: flex;
+  gap: $spacing-3;
+  align-items: center;
+}
+
+.lockedBox {
+  margin: $spacing-12 0;
+  padding: $spacing-8;
+  border: 1px dashed $border-strong;
+  text-align: center;
+}

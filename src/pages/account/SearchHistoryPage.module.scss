@@ -1,47 +1,86 @@
-@use '@styles/abstracts' as *;
+@use '@styles/abstracts/variables' as *;
 
-.page { max-width: 760px; margin: 0 auto; padding: 24px 16px; }
-.header { margin-bottom: 24px; }
-.title { font-size: 1.5rem; margin: 0 0 6px; }
-.subtitle { color: $gray-700; margin: 0; }
-.list { list-style: none; padding: 0; margin: 0 0 16px; }
-.item {
+.page { background: $bg-page; min-height: 60vh; }
+.container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: $spacing-12 $content-padding-desktop $spacing-24;
+  @media (max-width: $bp-md) { padding: $spacing-8 $content-padding-mobile $spacing-16; }
+}
+.breadcrumb {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 0.1em;
+  margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: $spacing-12;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; gap: $spacing-6; }
+}
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: $spacing-8;
+  gap: $spacing-4;
+  @media (max-width: $bp-md) { flex-direction: column; align-items: flex-start; }
+}
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-normal;
+  color: $text-primary;
+  margin-top: $spacing-3;
+}
+.lead { color: $text-secondary; margin-top: $spacing-2; max-width: 540px; line-height: $line-height-relaxed; }
+.loading { padding: $spacing-12; text-align: center; color: $text-muted; }
+
+.list { list-style: none; margin: 0; padding: 0; border: 1px solid $border-color; }
+.row {
   display: grid;
   grid-template-columns: 1fr auto auto;
-  gap: 12px;
-  padding: 10px 12px;
-  border: 1px solid $gray-200;
-  border-radius: 6px;
-  margin-bottom: 6px;
-  background: $bg-surface;
+  gap: $spacing-4;
+  padding: 14px $spacing-5;
+  border-bottom: 1px solid $border-color;
   align-items: center;
+  &:last-child { border-bottom: 0; }
+  &:hover { background: rgba($lime, 0.03); }
 }
-.term {
-  text-decoration: none; color: $indigo-700; font-weight: 600;
+.queryLink {
+  display: flex; align-items: baseline; gap: $spacing-3;
+  text-decoration: none;
+  color: inherit;
 }
-.term:hover { text-decoration: underline; }
-.date { color: $gray-500; font-size: 0.85rem; }
-.removeBtn {
-  background: transparent; border: 1px solid $gray-400;
-  padding: 4px 10px; border-radius: 4px; cursor: pointer;
-  font-size: 0.85rem;
+.queryIcon { color: $bronze; font-family: $font-family-mono; }
+.query {
+  font-family: $font-family-display;
+  font-size: $font-size-md;
+  color: $text-primary;
 }
-.removeBtn:hover:not([disabled]) { background: $danger-bg; border-color: $danger-strong; color: $danger-strong; }
-.removeBtn[disabled] { opacity: 0.5; cursor: not-allowed; }
-.clearAllBtn {
-  background: $bg-surface;
-  border: 1px solid $danger-strong; color: $danger-strong;
-  padding: 8px 16px; border-radius: 4px; cursor: pointer;
-  font-weight: 600;
+.results {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 0.06em;
 }
-.clearAllBtn:hover:not([disabled]) { background: $danger-strong; color: $bg-surface; }
-.empty, .loading { padding: 24px; text-align: center; color: $gray-700; }
-.error {
-  background: $danger-bg; border: 1px solid $error-border;
-  padding: 10px; border-radius: 4px; color: $danger-strong;
+.when {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 0.06em;
 }
-.success {
-  background: $success-bg; border: 1px solid $success-bg;
-  padding: 10px; border-radius: 4px; color: $success-strong;
+.remove {
+  width: 30px; height: 30px;
+  background: transparent;
+  border: 1px solid $border-medium;
+  color: $text-muted;
+  cursor: pointer;
+  border-radius: $border-radius-sm;
+  &:hover { color: $vino-soft; border-color: $vino-soft; }
 }
-.actions { display: flex; justify-content: flex-end; }
