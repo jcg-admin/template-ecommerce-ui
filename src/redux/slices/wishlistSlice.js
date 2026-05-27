@@ -172,3 +172,19 @@ const wishlistSlice = createSlice({
 
 export const { clearWishlistActionState } = wishlistSlice.actions;
 export default wishlistSlice.reducer;
+
+/**
+ * toggleWishlist — accion compuesta para compatibilidad con el sistema
+ * de diseno Yoruba. Los componentes del paquete usan:
+ *   dispatch(toggleWishlist({ productId: id }))
+ * sin saber si el producto ya esta en la wishlist.
+ *
+ * Recibe { productId, inWishlist } y despacha addToWishlist o
+ * removeFromWishlist segun el estado actual.
+ *
+ * Agregado en T-203 de la iniciativa adaptar-sistema-diseno-yoruba.
+ */
+export const toggleWishlist = ({ productId, inWishlist }) =>
+  inWishlist
+    ? removeFromWishlist(productId)
+    : addToWishlist({ product_id: productId });

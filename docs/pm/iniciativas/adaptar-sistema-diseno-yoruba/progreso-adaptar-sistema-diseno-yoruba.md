@@ -27,3 +27,4 @@
 | 2026-05-27T16:48:16 | F2 iniciada | T-201..T-206. Adaptacion del shape de datos: image_url, toggleWishlist, fetchFeaturedProducts, fetchCategories, filtro is_featured. |
 | 2026-05-27T16:48:38 | T-201 hecha | transform-catalog.mjs: campo image_url agregado como alias de images[0].url. Valor: /catalog/images/<archivo> o null si no hay imagen. |
 | 2026-05-27T16:48:50 | T-202 hecha | catalog.ts regenerado. 256 productos. image_url coincide con images[0].url en el primer producto verificado. |
+| 2026-05-27T16:49:15 | T-203 hecha | wishlistSlice: toggleWishlist agregado como action creator compuesto. Recibe {productId, inWishlist} y despacha addToWishlist o removeFromWishlist segun estado. Compatible con la firma que usan los componentes del paquete Yoruba. |
