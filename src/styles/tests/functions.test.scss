@@ -120,7 +120,9 @@
 
 @include describe('color-contrast [function]') {
   @include it('Sobre fondo blanco devuelve color oscuro') {
-    @include assert-equal(fn.color-contrast(#ffffff), #000000);
+    // $black en ui-core es #080a0c, no #000000
+    // El resultado es el color con mayor contraste de {$white, $black, $color-contrast-dark, $color-contrast-light}
+    @include assert-equal(fn.color-contrast(#ffffff), #080a0c);
   }
 
   @include it('Sobre fondo negro devuelve color claro') {

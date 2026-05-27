@@ -44,36 +44,12 @@
   inset: 0;
 }
 
-@mixin absolute-center {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-}
 
 // ─────────────────────────────────────────────────────────────────────
 // 2. GRID — E-commerce (productos, categorías)
 // ─────────────────────────────────────────────────────────────────────
 
-@mixin product-grid($min: 220px, $gap: $spacing-4) {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax($min, 1fr));
-  gap: $gap;
-}
 
-@mixin category-grid($cols: 4, $gap: $spacing-4) {
-  display: grid;
-  grid-template-columns: repeat($cols, 1fr);
-  gap: $gap;
-
-  @include media-md {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include media-sm {
-    grid-template-columns: 1fr;
-  }
-}
 
 // ─────────────────────────────────────────────────────────────────────
 // 3. BREAKPOINTS — Mobile-first
@@ -91,9 +67,6 @@
   @media (min-width: $bp-lg) { @content; }
 }
 
-@mixin media-xl {
-  @media (min-width: $bp-xl) { @content; }
-}
 
 @mixin media-2xl {
   @media (min-width: $bp-2xl) { @content; }
@@ -193,11 +166,6 @@
   @include btn-variant($primary-color);
 }
 
-@mixin btn-ghost {
-  @include btn-base;
-  @include btn-outline($text-secondary);
-  border-color: transparent;
-}
 
 // ─────────────────────────────────────────────────────────────────────
 // 5. CARDS
@@ -354,14 +322,6 @@
   }
 }
 
-@mixin slide-down($duration: 250ms) {
-  animation: slideDown $duration ease-out forwards;
-
-  @keyframes slideDown {
-    from { opacity: 0; transform: translateY(-16px); }
-    to   { opacity: 1; transform: translateY(0); }
-  }
-}
 
 @mixin scale-in($duration: 200ms) {
   animation: scaleIn $duration ease-out forwards;
@@ -433,14 +393,6 @@
   }
 }
 
-@mixin hover-lift {
-  transition: transform $transition-fast, box-shadow $transition-fast;
-
-  &:hover {
-    transform: translateY(-3px);
-    box-shadow: $shadow-md;
-  }
-}
 
 // ═══════════════════════════════════════════════════════════════════════
 // Fin mixins — ecommerce-ui
@@ -473,14 +425,6 @@
   @include media-down-md { flex-direction: column; align-items: flex-start; }
 }
 
-/// Estado de carga centrado para mientras la API responde.
-@mixin loading-state {
-  @include flex-column-center;
-  min-height: 200px;
-  gap: $spacing-4;
-  color: $text-muted;
-  font-size: $font-size-base;
-}
 
 /// Mensaje de lista vacía.
 @mixin empty-state {
@@ -545,9 +489,3 @@
   }
 }
 
-/// Input de búsqueda dentro de una barra de búsqueda.
-@mixin search-input {
-  @include input-base;
-  flex: 1;
-  min-width: 0;
-}

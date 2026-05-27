@@ -1,4 +1,4 @@
-@use '@styles/abstracts/variables' as *;
+@use '@styles/abstracts' as *;
 
 .backdrop {
   position: fixed; inset: 0; background: rgba(0,0,0,0.65);

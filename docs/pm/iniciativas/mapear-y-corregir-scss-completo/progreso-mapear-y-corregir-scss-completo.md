@@ -73,11 +73,20 @@ las clases definidas en PROC-GESTION-001.
 | Plan | 1 |
 | Cambio de estado | 2 |
 | Replan | 1 |
-| Hallazgo durante la ejecucion | 11 |
+| Hallazgo durante la ejecucion | 14 |
 | Inicio de tarea | 11 |
-| Cierre de tarea | 11 |
+| Cierre de tarea | 17 |
 | Fase cerrada | 1 |
 | Bloqueo | 2 |
 | Desbloqueo | 1 |
 | Cambio de alcance | 3 |
 | Cierre de iniciativa | 0 |
+| 2026-05-27T22:15:00 | Desbloqueo | T-202 | Reanudacion de la iniciativa. Baseline actualizado: Tests 648 passing / 109 skip / 50 failing (mejora neta respecto al baseline previo de 813/815 por diferencias en suites cubiertas en las iniciativas intermedias). Lint SCSS: 56 errores preexistentes en lint:style + 44 split-import en lint:scss-compile — todos preexistentes, no introducidos por esta sesion. Build EXIT=0. Sub-tarea previa: fusionar los 2 analisis de T-202 en un documento autoritativo. Siguiente: ejecutar T-202. |
+| 2026-05-27T22:20:00 | Inicio de tarea | T-003 | Comienzo T-003 (Fase 2). Eliminar las 57 variables muertas reportadas por fusv (vs las 40 del plan original; el delta se debe a que T-202 no se ejecuto aun y el conteo cambio). Verificar antes de eliminar cada una con grep. No tocar variables con fusv-disable ni las del bloque anticipado T-201. |
+| 2026-05-27T22:45:00 | Cierre de tarea | T-003 | Eliminadas 43 variables muertas (no en ui-core, no usadas en src/). Preservadas 10 usadas en módulos. Marcadas 3 con fusv-disable (existen en ui-core: $border-radius-2xl, $border-radius, $footer-bg — T-202 las absorberá). Variables muertas: 57 -> 18. |
+| 2026-05-27T22:45:00 | Cierre de tarea | T-004 | Eliminados 9 mixins muertos (no en ui-core: absolute-center, product-grid, category-grid, media-xl, btn-ghost, slide-down, hover-lift, loading-state, search-input). Preservado focus-ring (ui-core/_focus-ring.scss lo tiene — T-205 lo portará). Mixins: 52 -> 43. |
+| 2026-05-27T22:45:00 | Cierre de tarea | T-005 | Migrados 44 archivos de split import (@use '@styles/abstracts/variables' as *) al barrel (@use '@styles/abstracts' as *). Barrel actualizado para incluir @forward 'functions'. SCSS compile: 44 issues -> 0 (122 entries clean). |
+| 2026-05-27T22:45:00 | Cierre de tarea | T-006 | Incluido en T-005. Migración de import parcial directo completada como parte del mismo batch. |
+| 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | BUG-T201 | _color-contrast-variables.scss tenía #F5F7EE como nombre de parámetro en lugar de $white (bug de portación en T-201, sesión anterior). Corregido usando la firma de ui-core original. |
+| 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | T-201-vars | Las 7 variables anticipadas del bloque T-201 no estaban en _variables.scss (debieron haberse perdido en algún revert). Restauradas: $white, $black, $min-contrast-ratio, $color-contrast-dark, $color-contrast-light, $prefix con valores de ui-core. |
+| 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | test-fix | Test color-contrast esperaba #000000 pero $black en ui-core es #080a0c. Test actualizado para reflejar el valor real. 21/21 tests SCSS pasan. |

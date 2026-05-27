@@ -15,9 +15,6 @@
 $lime:              #8CB800;
 $lime-soft:         #A8C840;
 $lime-deep:         #6A9000;
-$lime-shadow:       #4A6200;
-$lime-tint:         #C8E060;
-$lime-cream:        #EEF4D0;
 
 // Rojo vino — COMPLEMENTARIO
 $vino:              #7A1E1E;
@@ -45,16 +42,12 @@ $primary-color:     $lime;
 $primary-light:     $lime-soft;
 $primary-dark:      $lime-deep;
 $primary-50:        rgba($lime, 0.08);
-$primary-100:       rgba($lime, 0.16);
 
 // Secundario: vino (acentos cálidos)
 $secondary-color:   $vino;
-$secondary-light:   $vino-soft;
-$secondary-dark:    $vino-deep;
 
 // Acento: coral (puente, highlights, info)
 $accent-color:      $coral;
-$accent-light:      $coral-soft;
 $accent-dark:       $rust;
 
 // ─────────────────────────────────────────────────────────────────────
@@ -65,7 +58,6 @@ $bg-page:           #0E1400;    // Verde-negro · fondo principal
 $bg-surface:        #161D04;    // Panel sutil sobre fondo
 $bg-sunken:         #0A1004;    // Footer / sidebar / depresión
 $bg-elevated:       #1F2808;    // Cards elevadas
-$bg-vino-panel:     #2A1010;    // Panel cálido tintado de vino
 $bg-overlay:        rgba(10, 16, 4, 0.78);  // Overlay de modals
 
 // ─────────────────────────────────────────────────────────────────────
@@ -86,8 +78,6 @@ $text-link-hover:   $lime-soft;
 $border-color:      rgba(245, 247, 238, 0.08);
 $border-medium:     rgba(245, 247, 238, 0.14);
 $border-strong:     rgba(245, 247, 238, 0.24);
-$border-focus:      $lime;
-$border-error:      $vino-soft;
 
 // ─────────────────────────────────────────────────────────────────────
 // 6. ESTADOS
@@ -103,16 +93,11 @@ $error-border:      rgba($vino-soft, 0.4);
 
 $warning-color:     $bronze;
 $warning-bg:        rgba($bronze, 0.08);
-$warning-border:    rgba($bronze, 0.3);
 
 $info-color:        $coral;
 $info-bg:           rgba($coral, 0.08);
-$info-border:       rgba($coral, 0.3);
 
 // Stock
-$in-stock-color:    $lime-soft;
-$low-stock-color:   $bronze-soft;
-$out-of-stock-color: $vino-soft;
 
 // ─────────────────────────────────────────────────────────────────────
 // 7. ESPACIADO — Sistema base 4px
@@ -131,13 +116,6 @@ $spacing-16: 64px;
 $spacing-20: 80px;
 $spacing-24: 96px;
 
-$space-xs:   $spacing-1;
-$space-sm:   $spacing-2;
-$space-md:   $spacing-4;
-$space-lg:   $spacing-6;
-$space-xl:   $spacing-8;
-$space-2xl:  $spacing-12;
-$space-3xl:  $spacing-16;
 
 // ─────────────────────────────────────────────────────────────────────
 // 8. TIPOGRAFÍA — Familias
@@ -160,7 +138,6 @@ $font-size-2xl:  24px;
 $font-size-3xl:  30px;
 $font-size-4xl:  36px;
 $font-size-5xl:  48px;
-$font-size-6xl:  64px;
 
 // Pesos
 $font-weight-light:     300;
@@ -168,38 +145,32 @@ $font-weight-normal:    400;
 $font-weight-medium:    500;
 $font-weight-semibold:  600;
 $font-weight-bold:      700;
-$font-weight-extrabold: 800;
 
 // Interlineado
 $line-height-tight:   1.1;
 $line-height-snug:    1.3;
 $line-height-normal:  1.55;
 $line-height-relaxed: 1.65;
-$line-height-loose:   2;
 
 // Letter-spacing semántico
 $ls-tight:  -0.02em;
 $ls-snug:   -0.01em;
-$ls-normal: 0;
 $ls-wide:   0.04em;
-$ls-wider:  0.08em;
 $ls-eyebrow: 0.18em;
 
 // ─────────────────────────────────────────────────────────────────────
 // 9. BORDES Y RADIOS — Tonos sobrios, corporativos
 // ─────────────────────────────────────────────────────────────────────
 
-$border-radius-none: 0;
 $border-radius-sm:   2px;
 $border-radius-md:   3px;
 $border-radius-lg:   4px;
 $border-radius-xl:   8px;
-$border-radius-2xl:  16px;
+$border-radius-2xl:  16px;  // fusv-disable — absorbe T-202 (existe en ui-core)
 $border-radius-full: 9999px;
 
-$border-radius: $border-radius-md;
+$border-radius: $border-radius-md;  // fusv-disable — absorbe T-202 (existe en ui-core)
 
-$border-width-thin:  1px;
 $border-width-base:  1px;
 $border-width-thick: 2px;
 
@@ -216,8 +187,6 @@ $shadow-lg:  0 10px 15px -3px rgba(0, 0, 0, 0.5),
              0 4px 6px -2px rgba(0, 0, 0, 0.3);
 $shadow-xl:  0 20px 25px -5px rgba(0, 0, 0, 0.55),
              0 10px 10px -5px rgba(0, 0, 0, 0.3);
-$shadow-card: $shadow-sm;
-$shadow-card-hover: $shadow-md;
 $shadow-modal: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
 $shadow-glow-lime: 0 0 0 3px rgba($lime, 0.15);
 
@@ -235,29 +204,21 @@ $transition-colors:  background-color $transition-fast,
                      border-color $transition-fast,
                      color $transition-fast,
                      fill $transition-fast;
-$transition-shadow:  box-shadow $transition-fast;
-$transition-transform: transform $transition-fast;
 
 // ─────────────────────────────────────────────────────────────────────
 // 12. Z-INDEX
 // ─────────────────────────────────────────────────────────────────────
 
-$z-hide:              -1;
-$z-base:               0;
-$z-dropdown:        1000;
 $z-sticky:          1020;
 $z-fixed:           1030;
 $z-modal-backdrop:  1040;
 $z-modal:           1050;
-$z-popover:         1060;
-$z-tooltip:         1070;
 $z-toast:           1080;
 
 // ─────────────────────────────────────────────────────────────────────
 // 13. BREAKPOINTS
 // ─────────────────────────────────────────────────────────────────────
 
-$bp-xs:   0;
 $bp-sm:   480px;
 $bp-md:   768px;
 $bp-lg:   1024px;
@@ -275,8 +236,6 @@ $header-border:            $border-color;
 $header-shadow:            none;
 
 $sidebar-width:            260px;
-$sidebar-width-collapsed:  64px;
-$sidebar-width-mobile:     80%;
 $sidebar-bg:               $bg-sunken;
 $sidebar-text:             $text-secondary;
 $sidebar-transition:       width 300ms ease-out;
@@ -286,9 +245,7 @@ $content-padding-desktop:  $spacing-10;
 $content-padding-tablet:   $spacing-4;
 $content-padding-mobile:   $spacing-3;
 
-$footer-height:            auto;
-$footer-bg:                $bg-sunken;
-$footer-text:              $text-secondary;
+$footer-bg:                $bg-sunken;  // fusv-disable — absorbe T-202 (existe en ui-core)
 
 // ─────────────────────────────────────────────────────────────────────
 // 15. COMPONENTES — Botones
@@ -352,6 +309,18 @@ $badge-border-radius: $border-radius-sm;
 $badge-font-size:     $font-size-xs;
 $badge-font-weight:   $font-weight-semibold;
 
+
+// ─────────────────────────────────────────────────────────────────────
+// 19. SISTEMA DE FUNCIONES PORTADAS (T-201)
+// Variables requeridas por las funciones de ui-core portadas en T-201.
+// T-202 las absorberá en sus secciones canónicas.
+// ─────────────────────────────────────────────────────────────────────
+$white:                #fff !default;   // fusv-disable — base de contraste
+$black:                #080a0c !default;   // fusv-disable — base de contraste
+$min-contrast-ratio:   4.5 !default;   // fusv-disable — ratio WCAG AA
+$color-contrast-dark:  $black !default;  // fusv-disable — texto oscuro
+$color-contrast-light: $white !default;  // fusv-disable — texto claro
+$prefix:               "ec-" !default;  // fusv-disable — prefijo CSS custom properties
 // ═══════════════════════════════════════════════════════════════════════
 // ALIASES — compatibilidad con nombres alternativos del proyecto
 // ═══════════════════════════════════════════════════════════════════════
