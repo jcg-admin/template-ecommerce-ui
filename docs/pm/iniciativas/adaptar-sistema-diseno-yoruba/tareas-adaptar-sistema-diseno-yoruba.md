@@ -73,31 +73,31 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-501 | Adaptar `LoginPage.jsx` (split editorial) | `src/pages/auth/LoginPage.jsx` | Pendiente |
-| T-502 | Adoptar `LoginPage.module.scss` | `src/pages/auth/LoginPage.module.scss` | Pendiente |
-| T-503 | Adoptar `RegisterPage.jsx` | `src/pages/auth/RegisterPage.jsx` | Pendiente |
-| T-504 | Adoptar `ForgotPasswordPage.jsx` | `src/pages/auth/ForgotPasswordPage.jsx` | Pendiente |
-| T-505 | Adoptar `ResetPasswordPage.jsx` | `src/pages/auth/ResetPasswordPage.jsx` | Pendiente |
-| T-506 | Agregar `AuthSimplePage.module.scss` (nueva) | `src/pages/auth/AuthSimplePage.module.scss` | Pendiente |
-| T-507 | Adoptar `VerifyEmailPage.jsx` | `src/pages/auth/VerifyEmailPage.jsx` | Pendiente |
-| T-508 | Adaptar `AccountPage.jsx` | `src/pages/account/AccountPage.jsx` | Pendiente |
-| T-509 | Adoptar `AccountPage.module.scss` | `src/pages/account/AccountPage.module.scss` | Pendiente |
-| T-510 | Adoptar `ProfilePage.jsx` | `src/pages/account/ProfilePage.jsx` | Pendiente |
-| T-511 | Adoptar `ProfilePage.module.scss` | `src/pages/account/ProfilePage.module.scss` | Pendiente |
-| T-512 | Adoptar `OrdersPage.jsx` | `src/pages/account/OrdersPage.jsx` | Pendiente |
-| T-513 | Adoptar `OrdersPage.module.scss` | `src/pages/account/OrdersPage.module.scss` | Pendiente |
-| T-514 | Adoptar `OrderDetailPage.jsx` | `src/pages/account/OrderDetailPage.jsx` | Pendiente |
-| T-515 | Adoptar `OrderDetailPage.module.scss` | `src/pages/account/OrderDetailPage.module.scss` | Pendiente |
-| T-516 | Agregar `OrderEditPage.jsx` (nueva) | `src/pages/account/OrderEditPage.jsx` | Pendiente |
-| T-517 | Agregar `OrderEditPage.module.scss` (nueva) | `src/pages/account/OrderEditPage.module.scss` | Pendiente |
-| T-518 | Adoptar `WishlistPage.jsx` | `src/pages/account/WishlistPage.jsx` | Pendiente |
-| T-519 | Adoptar `WishlistPage.module.scss` | `src/pages/account/WishlistPage.module.scss` | Pendiente |
-| T-520 | Agregar `AddressesPage.jsx` (nueva) | `src/pages/account/AddressesPage.jsx` | Pendiente |
-| T-521 | Agregar `AddressesPage.module.scss` (nueva) | `src/pages/account/AddressesPage.module.scss` | Pendiente |
-| T-522 | Agregar `SecurityPage.jsx` (nueva) | `src/pages/account/SecurityPage.jsx` | Pendiente |
-| T-523 | Agregar `SecurityPage.module.scss` (nueva) | `src/pages/account/SecurityPage.module.scss` | Pendiente |
-| T-524 | Agregar `SearchHistoryPage.jsx` (nueva) | `src/pages/account/SearchHistoryPage.jsx` | Pendiente |
-| T-525 | Agregar `SearchHistoryPage.module.scss` (nueva) | `src/pages/account/SearchHistoryPage.module.scss` | Pendiente |
+| T-501 | Adaptar `LoginPage.jsx` (split editorial) | `src/pages/auth/LoginPage.jsx` | Hecha |
+| T-502 | Adoptar `LoginPage.module.scss` | `src/pages/auth/LoginPage.module.scss` | Hecha |
+| T-503 | Adoptar `RegisterPage.jsx` | `src/pages/auth/RegisterPage.jsx` | Hecha |
+| T-504 | Adoptar `ForgotPasswordPage.jsx` | `src/pages/auth/ForgotPasswordPage.jsx` | Hecha |
+| T-505 | Adoptar `ResetPasswordPage.jsx` | `src/pages/auth/ResetPasswordPage.jsx` | Hecha |
+| T-506 | Agregar `AuthSimplePage.module.scss` (nueva) | `src/pages/auth/AuthSimplePage.module.scss` | Hecha |
+| T-507 | Adoptar `VerifyEmailPage.jsx` | `src/pages/auth/VerifyEmailPage.jsx` | Hecha |
+| T-508 | Adaptar `AccountPage.jsx` | `src/pages/account/AccountPage.jsx` | Hecha |
+| T-509 | Adoptar `AccountPage.module.scss` | `src/pages/account/AccountPage.module.scss` | Hecha |
+| T-510 | Adoptar `ProfilePage.jsx` | `src/pages/account/ProfilePage.jsx` | Hecha |
+| T-511 | Adoptar `ProfilePage.module.scss` | `src/pages/account/ProfilePage.module.scss` | Hecha |
+| T-512 | Adoptar `OrdersPage.jsx` | `src/pages/account/OrdersPage.jsx` | Hecha |
+| T-513 | Adoptar `OrdersPage.module.scss` | `src/pages/account/OrdersPage.module.scss` | Hecha |
+| T-514 | Adoptar `OrderDetailPage.jsx` | `src/pages/account/OrderDetailPage.jsx` | Hecha |
+| T-515 | Adoptar `OrderDetailPage.module.scss` | `src/pages/account/OrderDetailPage.module.scss` | Hecha |
+| T-516 | Agregar `OrderEditPage.jsx` (nueva) | `src/pages/account/OrderEditPage.jsx` | Hecha |
+| T-517 | Agregar `OrderEditPage.module.scss` (nueva) | `src/pages/account/OrderEditPage.module.scss` | Hecha |
+| T-518 | Adoptar `WishlistPage.jsx` | `src/pages/account/WishlistPage.jsx` | Hecha |
+| T-519 | Adoptar `WishlistPage.module.scss` | `src/pages/account/WishlistPage.module.scss` | Hecha |
+| T-520 | Agregar `AddressesPage.jsx` (nueva) | `src/pages/account/AddressesPage.jsx` | Hecha |
+| T-521 | Agregar `AddressesPage.module.scss` (nueva) | `src/pages/account/AddressesPage.module.scss` | Hecha |
+| T-522 | Agregar `SecurityPage.jsx` (nueva) | `src/pages/account/SecurityPage.jsx` | Hecha |
+| T-523 | Agregar `SecurityPage.module.scss` (nueva) | `src/pages/account/SecurityPage.module.scss` | Hecha |
+| T-524 | Agregar `SearchHistoryPage.jsx` (nueva) | `src/pages/account/SearchHistoryPage.jsx` | Hecha |
+| T-525 | Agregar `SearchHistoryPage.module.scss` (nueva) | `src/pages/account/SearchHistoryPage.module.scss` | Hecha |
 
 ## F6 - Panel administrativo
 
