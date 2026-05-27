@@ -138,6 +138,9 @@ module.exports = (env, argv) => {
         '@lib':        path.resolve(__dirname, 'src/lib'),
         '@facades':    path.resolve(__dirname, 'src/facades'),
         '@decorators': path.resolve(__dirname, 'src/decorators'),
+        // @assets: alias para src/assets/ — requerido por los componentes del
+        // sistema de diseno Yoruba (Header importa el logo con @assets/...).
+        '@assets':     path.resolve(__dirname, 'src/assets'),
       },
     },
 

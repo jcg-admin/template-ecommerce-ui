@@ -17,3 +17,4 @@
 | 2026-05-27T15:50:16 | T-103 hecha | _typography.scss agregado: Fraunces + IBM Plex Sans + IBM Plex Mono desde Google Fonts. Dependencias verificadas: -family-base, -size-base, -height-normal definidos en el nuevo _variables.scss. |
 | 2026-05-27T15:50:51 | Hallazgo durante T-104 | base/_typography.scss es clases de utilidad (.text-xs, .text-sm). abstracts/_typography.scss (nuevo) define estilos globales html/body/h1-h6. No hay conflicto — responsabilidades distintas. Se importa abstracts/typography ANTES de base/typography para que los estilos base de elementos preceden las clases de utilidad. |
 | 2026-05-27T15:50:51 | T-104 hecha | main.scss actualizado: @use 'abstracts/typography' insertado entre base/reset y base/typography. Verificacion: grep muestra el orden correcto. |
+| 2026-05-27T15:51:09 | T-105 hecha | webpack.config.js: alias @assets agregado apuntando a src/assets/. node --check: OK. |
