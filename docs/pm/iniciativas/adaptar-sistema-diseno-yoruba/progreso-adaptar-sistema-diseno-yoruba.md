@@ -35,3 +35,4 @@
 | 2026-05-27T17:03:12 | F3 iniciada | T-301..T-311. Componentes base: Header, Footer, ProductCard, AccountSidebar, primitives. |
 | 2026-05-27T17:04:31 | Hallazgo durante T-301 | El paquete de referencia usa /mi-cuenta/favoritos para wishlist. Nuestro router usa /account/wishlist. Se adapta. El paquete tiene 5 items de nav con rutas ?cat= en espanol. Se adaptan a ?category= en ingles con los slugs reales del catalogo Oja. |
 | 2026-05-27T17:04:31 | T-301 hecha | Header/index.jsx adaptado: rutas EN (/account, /cart, /catalog, /account/wishlist), nav Yoruba con 5 categorias reales del catalogo Oja, logo via @assets, selectores Redux identicos al repo. |
+| 2026-05-27T17:04:56 | T-302 hecha | Header.module.scss adoptado del paquete. 0 hex hardcodeados — usa variables semanticas de _variables.scss. Todas las clases necesarias presentes: topStrip, mainBar, brand, searchTrigger, categoriesNav, navLink, cartBtn, actionLink. |
