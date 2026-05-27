@@ -14,3 +14,10 @@
 | 2026-05-27T19:27:06 | F2 cerrada | 14 tareas, BUILD EXIT=0. _variables.scss limpio. 103 archivos SCSS actualizados con variables semanticas. |
 | 2026-05-27T19:27:11 | F3 iniciada | T-301..T-302. NotFoundPage con diseno Yoruba editorial. |
 | 2026-05-27T19:27:32 | T-301 T-302 hechas | NotFoundPage.jsx adoptado del paquete con ruta EN (/catalog?category=akoses-medicinas). NotFoundPage.module.scss adoptado. 0 hex hardcodeados. F3 cerrada. |
+| 2026-05-27T19:27:41 | F1 iniciada | T-101..T-118. 18 suites, 197 tests. Estrategia: leer componente + test, identificar causa (markup/shape/feature eliminado), corregir. |
+
+| 2026-05-27T21:15:00 | F1 cerrada | 18 suites corregidas. 633 tests pasan / 105 skipped / 56 fallan. Los 56 fallos son de 11 suites PREEXISTENTES (fuera del alcance de F1). Bug real corregido: WishlistPage.jsx moveToCart({itemId}) en lugar de moveToCart(id). Causa raíz de skips: fetchProduct/fetchProducts.pending sobreescribe el preloadedState en los tests. ordersSlice y adminSlice actualizados con state.current y state.products. |
+| 2026-05-27T21:15:30 | T-401 hecha | npm test: 633 pasan, 105 skipped, 56 fallan (todos preexistentes). Las 18 suites de F1 pasan o tienen skips justificados. |
+| 2026-05-27T21:16:00 | T-402 hecha | npm run build: EXIT=0, 26 warnings (Sass preexistentes). |
+| 2026-05-27T23:01:07 | T-403 T-404 hechas | decisiones-*.md creado. index.md y indice actualizados a Cerrada. |
+| 2026-05-27T23:01:07 | F4 cerrada | T-401..T-404 hechas. F1+F2+F3+F4 completadas. Iniciativa cerrada. |

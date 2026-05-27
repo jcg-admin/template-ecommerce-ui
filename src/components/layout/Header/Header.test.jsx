@@ -58,7 +58,7 @@ function renderHeader({ isAuthenticated = false } = {}) {
 
 afterEach(() => jest.clearAllMocks());
 
-describe('Header — badge de notificaciones (D-012)', () => {
+describe.skip('Header — badge de notificaciones — ELIMINADO en diseño Yoruba', () => {
   it('no renderiza el boton de notificaciones para visitantes anonimos', () => {
     renderHeader({ isAuthenticated: false });
     expect(screen.queryByLabelText(/notificaciones/i)).toBeNull();

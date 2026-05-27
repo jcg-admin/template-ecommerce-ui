@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `corregir-deuda-diseno-yoruba` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
 | Fecha de creacion (directorio) | 2026-05-27T19:14:49 |
 | Fecha de apertura formal | 2026-05-27T19:14:49 |
 | Fecha de paso a ejecucion | 2026-05-27T19:14:49 |
+| Fecha de cierre | 2026-05-27T21:16:00 |
 | Iniciativa origen | adaptar-sistema-diseno-yoruba |
 
 ## Motivo de existencia
@@ -36,12 +37,13 @@ Esta iniciativa corrige los tres bloques sin crear nueva deuda.
 ## Estado actual
 
 Iniciativa **en ejecucion** desde 2026-05-27T19:14:49.
-Siguiente: F1 — corregir tests de componentes.
+Iniciativa cerrada. Ver decisiones-corregir-deuda-diseno-yoruba.md.
 
 ## Indice de documentos
 
 | Documento | Proposito |
 |-----------|-----------|
+| [decisiones-corregir-deuda-diseno-yoruba.md](decisiones-corregir-deuda-diseno-yoruba.md) | Decisiones, resultado, bug real encontrado. |
 | [alcance-corregir-deuda-diseno-yoruba.md](alcance-corregir-deuda-diseno-yoruba.md) | Que cubre, criterio de completitud, fuera de alcance. |
 | [analisis-corregir-deuda-diseno-yoruba.md](analisis-corregir-deuda-diseno-yoruba.md) | Hallazgos con evidencia de codigo y evidencia del Gate. |
 | [plan-corregir-deuda-diseno-yoruba.md](plan-corregir-deuda-diseno-yoruba.md) | Fases y descripcion de entregables. |

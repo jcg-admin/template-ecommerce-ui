@@ -89,7 +89,8 @@ export const adminTransitionOrderStatus = createAsyncThunk(
       const res = await apiService.patch(ADMIN_STATUS_URL(orderNumber), {
         new_status: newStatus,
         notes:      notes || '',
-      });
+  
+    });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
@@ -115,6 +116,9 @@ export const adminCancelOrder = createAsyncThunk(
 // =============================================================================
 
 const initialState = {
+  current:         null,   // order cargada en el detalle (UC-ORD-02)
+  list:            [],     // lista de pedidos (UC-ORD-02-LIST)
+  isLoading:       false,
   isActioning:     false,
   actionError:     null,
   lastAction:      null, // 'checkout' | 'cancelled' | 'address_updated' | 'shipping_updated' | 'admin_transitioned' | 'admin_cancelled'
@@ -150,7 +154,8 @@ const ordersSlice = createSlice({
       state.lastOrder       = null;
     },
   },
-  extraReducers: (builder) => {
+ 
+ extraReducers: (builder) => {
     builder
       .addCase(checkoutOrder.pending,   handlePending)
       .addCase(checkoutOrder.fulfilled, makeFulfilled('checkout'))
@@ -174,7 +179,19 @@ const ordersSlice = createSlice({
 
       .addCase(adminCancelOrder.pending,   handlePending)
       .addCase(adminCancelOrder.fulfilled, makeFulfilled('admin_cancelled'))
-      .addCase(adminCancelOrder.rejected,  handleRejected);
+      .addCase(adminCancelOrder.rejected,  handleRejected)
+      // fetchOrderDetail — agrega state.current (UC-ORD-02)
+      .addCase(fetchOrderDetail.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchOrderDetail.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.current   = action.payload ?? null;
+      })
+      .addCase(fetchOrderDetail.rejected, (state) => {
+        state.isLoading = false;
+        state.current   = null;
+      });
   },
 });
 

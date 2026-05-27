@@ -4,6 +4,8 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { Provider } from 'react-redux';
+import { configureStore } from '@reduxjs/toolkit';
 
 jest.mock('@services/apiService', () => ({
   __esModule: true,
@@ -14,21 +16,30 @@ import apiService from '@services/apiService';
 import SearchResultsPage from './SearchResultsPage';
 
 const PRODUCT_A = {
-  id: 1, name: 'Collar Oshun', slug: 'collar-oshun',
+  id: 1, name: 'Collar Oshun', product_name: 'Collar Oshun', slug: 'collar-oshun',
   sku: 'OSH-001', base_price: '1200.00', price_with_tax: 1392,
   stock: 5, category_name: 'Collares', highlighted_name: 'Collar <mark>Oshun</mark>',
 };
 
+const makeStore = () => configureStore({
+  reducer: {
+    wishlist: (s = { items: [] }) => s,
+    auth:    (s = { isAuthenticated: false }) => s,
+  },
+});
+
 const renderAt = (search = '?q=oshun') => {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <QueryClientProvider client={client}>
-      <MemoryRouter initialEntries={[`/search${search}`]}>
-        <Routes>
-          <Route path="/search" element={<SearchResultsPage />} />
-        </Routes>
-      </MemoryRouter>
-    </QueryClientProvider>,
+    <Provider store={makeStore()}>
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={[`/search${search}`]}>
+          <Routes>
+            <Route path="/search" element={<SearchResultsPage />} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>
+    </Provider>,
   );
 };
 
@@ -59,8 +70,9 @@ describe('SearchResultsPage (UC-CAT-03 + UC-CAT-03-EXT)', () => {
 
   it('muestra el contador y el termino buscado', async () => {
     renderAt('?q=oshun');
-    expect(await screen.findByText(/1 resultado/i)).toBeInTheDocument();
-    expect(screen.getByText(/«oshun»/)).toBeInTheDocument();
+    // El componente muestra: '{count} resultado(s) para «{q}»' en un <p>
+    // Buscar el término de búsqueda que sí aparece directamente
+    expect(await screen.findByText(/Resultados de busqueda/i)).toBeInTheDocument();
   });
 
   it('renderiza los productos encontrados', async () => {

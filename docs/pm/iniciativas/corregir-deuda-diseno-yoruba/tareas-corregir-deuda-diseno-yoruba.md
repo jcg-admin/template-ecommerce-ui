@@ -30,30 +30,30 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-101 | Corregir Header.test.jsx | `src/components/layout/Header/Header.test.jsx` | Pendiente |
-| T-102 | Corregir RelatedProductsSection.test.jsx | `src/components/catalog/RelatedProductsSection.test.jsx` | Pendiente |
-| T-103 | Corregir CartPage.test.jsx (shape item.name -> product_name) | `src/pages/cart/CartPage.test.jsx` | Pendiente |
-| T-104 | Corregir CatalogPage.test.jsx | `src/pages/catalog/CatalogPage.test.jsx` | Pendiente |
-| T-105 | Corregir ProductPage.test.jsx | `src/pages/catalog/ProductPage.test.jsx` | Pendiente |
-| T-106 | Corregir SearchResultsPage.test.jsx | `src/pages/catalog/SearchResultsPage.test.jsx` | Pendiente |
-| T-107 | Corregir HomePage.test.jsx | `src/pages/home/HomePage.test.jsx` | Pendiente |
-| T-108 | Corregir CheckoutPage.test.jsx | `src/pages/checkout/CheckoutPage.test.jsx` | Pendiente |
-| T-109 | Corregir WishlistPage.test.jsx | `src/pages/account/WishlistPage.test.jsx` | Pendiente |
-| T-110 | Corregir AddressesPage.test.jsx | `src/pages/account/AddressesPage.test.jsx` | Pendiente |
-| T-111 | Corregir OrderDetailPage.test.jsx | `src/pages/account/OrderDetailPage.test.jsx` | Pendiente |
-| T-112 | Corregir VerifyEmailPage.test.jsx | `src/pages/auth/VerifyEmailPage.test.jsx` | Pendiente |
-| T-113 | Corregir AdminUsersPage.test.jsx | `src/pages/admin/AdminUsersPage.test.jsx` | Pendiente |
-| T-114 | Corregir AdminUsersPage.roleChange.test.jsx | `src/pages/admin/AdminUsersPage.roleChange.test.jsx` | Pendiente |
-| T-115 | Corregir AdminUserDetailPage.test.jsx | `src/pages/admin/AdminUserDetailPage.test.jsx` | Pendiente |
-| T-116 | Corregir AdminProductsPage.test.jsx | `src/pages/admin/AdminProductsPage.test.jsx` | Pendiente |
-| T-117 | Corregir AccountPage.test.jsx | `tests/unit/pages/AccountPage.test.jsx` | Pendiente |
-| T-118 | Corregir ProfilePage.test.jsx | `tests/unit/pages/ProfilePage.test.jsx` | Pendiente |
+| T-101 | Corregir Header.test.jsx | `src/components/layout/Header/Header.test.jsx` | Hecha |
+| T-102 | Corregir RelatedProductsSection.test.jsx | `src/components/catalog/RelatedProductsSection.test.jsx` | Hecha |
+| T-103 | Corregir CartPage.test.jsx (shape item.name -> product_name) | `src/pages/cart/CartPage.test.jsx` | Hecha |
+| T-104 | Corregir CatalogPage.test.jsx | `src/pages/catalog/CatalogPage.test.jsx` | Hecha |
+| T-105 | Corregir ProductPage.test.jsx | `src/pages/catalog/ProductPage.test.jsx` | Hecha |
+| T-106 | Corregir SearchResultsPage.test.jsx | `src/pages/catalog/SearchResultsPage.test.jsx` | Hecha |
+| T-107 | Corregir HomePage.test.jsx | `src/pages/home/HomePage.test.jsx` | Hecha |
+| T-108 | Corregir CheckoutPage.test.jsx | `src/pages/checkout/CheckoutPage.test.jsx` | Hecha |
+| T-109 | Corregir WishlistPage.test.jsx | `src/pages/account/WishlistPage.test.jsx` | Hecha |
+| T-110 | Corregir AddressesPage.test.jsx | `src/pages/account/AddressesPage.test.jsx` | Hecha |
+| T-111 | Corregir OrderDetailPage.test.jsx | `src/pages/account/OrderDetailPage.test.jsx` | Hecha |
+| T-112 | Corregir VerifyEmailPage.test.jsx | `src/pages/auth/VerifyEmailPage.test.jsx` | Hecha |
+| T-113 | Corregir AdminUsersPage.test.jsx | `src/pages/admin/AdminUsersPage.test.jsx` | Hecha |
+| T-114 | Corregir AdminUsersPage.roleChange.test.jsx | `src/pages/admin/AdminUsersPage.roleChange.test.jsx` | Hecha |
+| T-115 | Corregir AdminUserDetailPage.test.jsx | `src/pages/admin/AdminUserDetailPage.test.jsx` | Hecha |
+| T-116 | Corregir AdminProductsPage.test.jsx | `src/pages/admin/AdminProductsPage.test.jsx` | Hecha |
+| T-117 | Corregir AccountPage.test.jsx | `tests/unit/pages/AccountPage.test.jsx` | Hecha |
+| T-118 | Corregir ProfilePage.test.jsx | `tests/unit/pages/ProfilePage.test.jsx` | Hecha |
 
 ## F4 — Verificacion y cierre
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-401 | `npm test -- --watchAll=false`: 0 suites fallidas | (verificacion) | Pendiente |
-| T-402 | `npm run build`: EXIT=0 sin nuevos errores | (verificacion) | Pendiente |
-| T-403 | Crear `decisiones-corregir-deuda-diseno-yoruba.md` | `docs/pm/iniciativas/corregir-deuda-diseno-yoruba/decisiones-*.md` | Pendiente |
-| T-404 | Cerrar index, tareas, indice; ejecutar I-015; commit de cierre | (cierre) | Pendiente |
+| T-401 | `npm test -- --watchAll=false`: 0 suites fallidas | (verificacion) | Hecha |
+| T-402 | `npm run build`: EXIT=0 sin nuevos errores | (verificacion) | Hecha |
+| T-403 | Crear `decisiones-corregir-deuda-diseno-yoruba.md` | `docs/pm/iniciativas/corregir-deuda-diseno-yoruba/decisiones-*.md` | Hecha |
+| T-404 | Cerrar index, tareas, indice; ejecutar I-015; commit de cierre | (cierre) | Hecha |

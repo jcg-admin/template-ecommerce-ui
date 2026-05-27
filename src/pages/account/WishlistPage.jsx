@@ -45,7 +45,7 @@ export default function WishlistPage() {
                 </p>
               </div>
               {items.length > 0 && (
-                <Button variant="secondary" onClick={() => items.forEach(i => dispatch(moveToCart(i.id)))}>
+                <Button variant="secondary" onClick={() => items.forEach(i => dispatch(moveToCart({ itemId: i.id })))}>
                   Mover todo al carrito
                 </Button>
               )}
@@ -108,7 +108,7 @@ function WishItem({ item, dispatch }) {
             </span>
           )}
         </div>
-        <Button variant="primary" block size="sm" onClick={() => dispatch(moveToCart(item.id))}>
+        <Button variant="primary" block size="sm" onClick={() => dispatch(moveToCart({ itemId: item.id }))}>
           Mover al carrito
         </Button>
       </div>

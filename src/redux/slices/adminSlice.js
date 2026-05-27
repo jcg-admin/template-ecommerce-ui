@@ -219,6 +219,18 @@ const adminSlice = createSlice({
       .addCase(createAdminUser.rejected, (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload;
+      })
+      // fetchAdminProducts — lista de productos del panel admin
+      .addCase(fetchAdminProducts.pending, (state) => {
+        state.isLoadingProducts = true;
+      })
+      .addCase(fetchAdminProducts.fulfilled, (state, action) => {
+        state.isLoadingProducts = false;
+        const payload = action.payload ?? {};
+        state.products = payload.results ?? payload ?? [];
+      })
+      .addCase(fetchAdminProducts.rejected, (state) => {
+        state.isLoadingProducts = false;
       });
   },
 });
@@ -310,3 +322,13 @@ export const fetchAdminPages = createAsyncThunk(
     catch (e) { return rejectWithValue(e.message); }
   },
 );
+
+// toggleUserActive: alias para suspender/reactivar según el estado del usuario
+export const toggleUserActive = (userId) => async (dispatch, getState) => {
+  const user = getState().admin.currentUser;
+  if (user?.is_active) {
+    return dispatch(suspendUser(userId));
+  } else {
+    return dispatch(reactivateUser(userId));
+  }
+};
