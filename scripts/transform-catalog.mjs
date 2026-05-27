@@ -173,6 +173,10 @@ function transformProduct(p, index) {
     images:         mainImg
       ? [{ id: 1, url: `/catalog/images/${mainImg}`, is_main: true }]
       : [{ id: 1, url: '/catalog/images/placeholder.png', is_main: true }],
+    // image_url: alias de images[0].url para compatibilidad con los componentes
+    // del sistema de diseno Yoruba (ProductCard, Header) que usan el campo plano.
+    // Ver hallazgo H-01 en analisis-adaptar-sistema-diseno-yoruba.md.
+    image_url:      mainImg ? `/catalog/images/${mainImg}` : null,
     variants:       [
       { id: 1, name: 'Unico', sku: slugToSku(p.slug) + '-01', stock: p.stock_disponible ?? 10, price: priceWithTax },
     ],

@@ -25,3 +25,4 @@
 | 2026-05-27T16:27:05 | T-107 hecha | Build 5: EXIT=0. compiled with 3 warnings (preexistentes: Sass if() deprecation en _mixins.scss, no introducidos por F1). dist/index.html generado. |
 | 2026-05-27T16:27:05 | F1 cerrada | T-101..T-107 hechas. 5 builds necesarios. 2 hallazgos criticos resueltos: aliases de compatibilidad y conflicto de @use namespace. Build limpio: EXIT=0, 3 warnings preexistentes. |
 | 2026-05-27T16:48:16 | F2 iniciada | T-201..T-206. Adaptacion del shape de datos: image_url, toggleWishlist, fetchFeaturedProducts, fetchCategories, filtro is_featured. |
+| 2026-05-27T16:48:38 | T-201 hecha | transform-catalog.mjs: campo image_url agregado como alias de images[0].url. Valor: /catalog/images/<archivo> o null si no hay imagen. |
