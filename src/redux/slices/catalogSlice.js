@@ -60,6 +60,53 @@ export const searchProducts = createAsyncThunk(
 );
 
 // =============================================================================
+// Thunks adicionales para el sistema de diseno Yoruba (T-204, T-205)
+// Agregados en la iniciativa adaptar-sistema-diseno-yoruba.
+// =============================================================================
+
+/**
+ * fetchFeaturedProducts — GET /api/v1/catalogue/?is_featured=true
+ * Usado por HomePage para mostrar productos destacados.
+ */
+export const fetchFeaturedProducts = createAsyncThunk(
+  'catalog/fetchFeaturedProducts',
+  withCaching(
+    async (_arg, { rejectWithValue }) => {
+      try {
+        const res = await apiService.get('/api/v1/catalogue/', {
+          params: { is_featured: true },
+        });
+        return res.data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    },
+    CACHE_TTL.SHORT,
+    () => 'featured',
+  ),
+);
+
+/**
+ * fetchCategories — GET /api/v1/categories/
+ * Usado por HomePage y Header para mostrar la lista de categorias.
+ */
+export const fetchCategories = createAsyncThunk(
+  'catalog/fetchCategories',
+  withCaching(
+    async (_arg, { rejectWithValue }) => {
+      try {
+        const res = await apiService.get('/api/v1/categories/');
+        return res.data;
+      } catch (error) {
+        return rejectWithValue(error.message);
+      }
+    },
+    CACHE_TTL.LONG,
+    () => 'categories',
+  ),
+);
+
+// =============================================================================
 // Slice
 // =============================================================================
 
