@@ -22,7 +22,10 @@ const CategoryListPage = lazy(() => import('@pages/catalog/CategoryListPage'));
 const SearchResultsPage = lazy(() => import('@pages/catalog/SearchResultsPage'));
 const CartPage        = lazy(() => import('@pages/cart/CartPage'));
 const CheckoutPage    = lazy(() => import('@pages/checkout/CheckoutPage'));
-const OrderSuccessPage = lazy(() => import('@pages/checkout/OrderSuccessPage'));
+const OrderSuccessPage      = lazy(() => import('@pages/checkout/OrderSuccessPage'));
+const ExpressCheckoutPage  = lazy(() => import('@pages/checkout/ExpressCheckoutPage'));
+const PaymentReturnPage    = lazy(() => import('@pages/checkout/PaymentReturnPage'));
+const PaymentFailedPage    = lazy(() => import('@pages/checkout/PaymentFailedPage'));
 const PaymentSelectionPage = lazy(() => import('@pages/checkout/PaymentSelectionPage'));
 
 // Lazy pages — Comms publicas (contacto, newsletter, preguntas)
@@ -44,6 +47,8 @@ const VerifyEmailPage    = lazy(() => import('@pages/auth/VerifyEmailPage'));
 const AccountPage     = lazy(() => import('@pages/account/AccountPage'));
 const OrdersPage      = lazy(() => import('@pages/account/OrdersPage'));
 const OrderDetailPage = lazy(() => import('@pages/account/OrderDetailPage'));
+const OrderEditPage   = lazy(() => import('@pages/account/OrderEditPage'));
+const SecurityPage    = lazy(() => import('@pages/account/SecurityPage'));
 const WishlistPage    = lazy(() => import('@pages/account/WishlistPage'));
 const ProfilePage     = lazy(() => import('@pages/account/ProfilePage'));
 const ChangePasswordPage = lazy(() => import('@pages/account/ChangePasswordPage'));
@@ -167,7 +172,10 @@ export default function AppRouter() {
            * seleccion de gateway tambien (necesaria para invitados).
            */}
           <Route element={<StorefrontLayout />}>
-            <Route path="checkout" element={<CheckoutPage />} />
+            <Route path="checkout"         element={<CheckoutPage />} />
+            <Route path="checkout/express" element={<ExpressCheckoutPage />} />
+            <Route path="order/:id/payment-return" element={<PaymentReturnPage />} />
+            <Route path="order/:id/payment-failed" element={<PaymentFailedPage />} />
             {/* UC-PAY-01 / UC-PAY-02 — Seleccion de gateway de pago */}
             <Route path="checkout/payment/:orderId" element={<PaymentSelectionPage />} />
             <Route path="order/:id/confirmation" element={<OrderSuccessPage />} />
@@ -178,7 +186,9 @@ export default function AppRouter() {
             <Route element={<AccountLayout />}>
               <Route path="account"             element={<AccountPage />} />
               <Route path="account/orders"      element={<OrdersPage />} />
-              <Route path="account/orders/:id"  element={<OrderDetailPage />} />
+              <Route path="account/orders/:id"       element={<OrderDetailPage />} />
+              <Route path="account/orders/:id/edit"  element={<OrderEditPage />} />
+              <Route path="account/security"          element={<SecurityPage />} />
               <Route path="account/wishlist"    element={<WishlistPage />} />
               <Route path="account/profile"     element={<ProfilePage />} />
               {/* UC-AUTH-08 — Cambiar contrasena */}
