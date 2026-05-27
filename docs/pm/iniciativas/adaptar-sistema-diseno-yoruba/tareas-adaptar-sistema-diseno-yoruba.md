@@ -23,12 +23,12 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-201 | Agregar campo `image_url` en `transform-catalog.mjs` | `scripts/transform-catalog.mjs` | Pendiente |
-| T-202 | Regenerar `catalog.ts` con el nuevo campo | `src/mocks/data/catalog.ts` | Pendiente |
-| T-203 | Agregar `toggleWishlist` en `wishlistSlice` | `src/redux/slices/wishlistSlice.js` | Pendiente |
-| T-204 | Agregar `fetchFeaturedProducts` en `catalogSlice` | `src/redux/slices/catalogSlice.js` | Pendiente |
-| T-205 | Agregar `fetchCategories` en `catalogSlice` | `src/redux/slices/catalogSlice.js` | Pendiente |
-| T-206 | Agregar filtro `?is_featured=true` en handler MSW | `src/mocks/handlers/catalog.ts` | Pendiente |
+| T-201 | Agregar campo `image_url` en `transform-catalog.mjs` | `scripts/transform-catalog.mjs` | Hecha |
+| T-202 | Regenerar `catalog.ts` con el nuevo campo | `src/mocks/data/catalog.ts` | Hecha |
+| T-203 | Agregar `toggleWishlist` en `wishlistSlice` | `src/redux/slices/wishlistSlice.js` | Hecha |
+| T-204 | Agregar `fetchFeaturedProducts` en `catalogSlice` | `src/redux/slices/catalogSlice.js` | Hecha |
+| T-205 | Agregar `fetchCategories` en `catalogSlice` | `src/redux/slices/catalogSlice.js` | Hecha |
+| T-206 | Agregar filtro `?is_featured=true` en handler MSW | `src/mocks/handlers/catalog.ts` | Hecha |
 
 ## F3 - Componentes base
 
