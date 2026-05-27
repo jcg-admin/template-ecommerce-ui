@@ -40,3 +40,4 @@
 | 2026-05-27T17:05:28 | T-304 hecha | Footer.module.scss adoptado. 0 hex hardcodeados. |
 | 2026-05-27T17:06:08 | T-305 hecha | ProductCard.jsx adaptado: rutas /catalog/:slug EN, orisha_name eliminado del JSX y JSDoc, image_url presente (funciona gracias a T-201). |
 | 2026-05-27T17:06:08 | T-306 hecha | ProductCard.module.scss adoptado. 0 hex hardcodeados. |
+| 2026-05-27T17:06:37 | T-307..T-310 hechas | AccountSidebar adoptado con rutas EN (/account, /account/orders, etc.). primitives/ adoptado directo (MetaTag, Price, Field, Button, SumRow, EmptyState). 0 hex hardcodeados en ambos. |
