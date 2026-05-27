@@ -29,3 +29,4 @@
 | 2026-05-27T16:48:50 | T-202 hecha | catalog.ts regenerado. 256 productos. image_url coincide con images[0].url en el primer producto verificado. |
 | 2026-05-27T16:49:15 | T-203 hecha | wishlistSlice: toggleWishlist agregado como action creator compuesto. Recibe {productId, inWishlist} y despacha addToWishlist o removeFromWishlist segun estado. Compatible con la firma que usan los componentes del paquete Yoruba. |
 | 2026-05-27T16:49:42 | T-204, T-205 hechas | catalogSlice: fetchFeaturedProducts (GET /api/v1/catalogue/?is_featured=true, cache SHORT) y fetchCategories (GET /api/v1/categories/, cache LONG) agregados. Patron identico a searchProducts con withCaching y clave de cache estatica. |
+| 2026-05-27T16:50:05 | T-206 hecha | Handler MSW catalog.ts: filtro ?is_featured=true agregado. En el mock los primeros 12 productos actuan como featured (no hay campo is_featured en el catalogo de Oja). Decision documentada en el codigo. |

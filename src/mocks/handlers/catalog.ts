@@ -80,17 +80,23 @@ export const catalogHandlers = [
     return HttpResponse.json(product);
   }),
 
-  // GET /api/v1/catalogue/?page=N&category=<slug>
+  // GET /api/v1/catalogue/?page=N&category=<slug>&is_featured=true
   http.get('/api/v1/catalogue/', ({ request }) => {
-    const url     = new URL(request.url);
-    const page    = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10));
-    const catSlug = url.searchParams.get('category') ?? '';
+    const url        = new URL(request.url);
+    const page       = Math.max(1, parseInt(url.searchParams.get('page') ?? '1', 10));
+    const catSlug    = url.searchParams.get('category') ?? '';
+    const isFeatured = url.searchParams.get('is_featured') === 'true';
 
     let all = [...CATALOG_PRODUCTS];
     if (catSlug) {
       // Filtra por all_categories para cubrir las 6 categorias que no
       // tienen categoria_principal en el JSON del scraper (A-07).
       all = all.filter(p => (p as any).all_categories?.includes(catSlug));
+    }
+    // is_featured: en el catalogo real es_destacado vendria del backend.
+    // En el mock usamos los primeros 12 productos como featured (T-206).
+    if (isFeatured) {
+      all = all.filter((_p, i) => i < 12);
     }
 
     const total  = all.length;
