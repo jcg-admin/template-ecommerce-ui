@@ -153,8 +153,8 @@
 
 | ID | Descripcion | Archivo | Estado |
 |----|-------------|---------|--------|
-| T-701 | Ejecutar build demo sin errores (patron R-2.0) | (verificacion) | Pendiente |
-| T-702 | Verificar paleta, imagenes y navegacion en dev server | (verificacion) | Pendiente |
-| T-703 | Ejecutar `npm test` — 0 regresiones | (verificacion) | Pendiente |
-| T-704 | Crear `decisiones-adaptar-sistema-diseno-yoruba.md` | `docs/pm/iniciativas/adaptar-sistema-diseno-yoruba/decisiones-*.md` | Pendiente |
-| T-705 | Cerrar index, tareas e indice; ejecutar I-015; commit de cierre | (cierre) | Pendiente |
+| T-701 | Ejecutar build demo sin errores (patron R-2.0) | (verificacion) | Hecha |
+| T-702 | Verificar paleta, imagenes y navegacion en dev server | (verificacion) | Hecha |
+| T-703 | Ejecutar `npm test` — 0 regresiones | (verificacion) | Hecha |
+| T-704 | Crear `decisiones-adaptar-sistema-diseno-yoruba.md` | `docs/pm/iniciativas/adaptar-sistema-diseno-yoruba/decisiones-*.md` | Hecha |
+| T-705 | Cerrar index, tareas e indice; ejecutar I-015; commit de cierre | (cierre) | Hecha |

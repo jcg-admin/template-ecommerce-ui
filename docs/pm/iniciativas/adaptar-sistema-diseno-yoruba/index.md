@@ -3,11 +3,12 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | `adaptar-sistema-diseno-yoruba` |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Orden de backlog | (vacio: abierta directamente) |
 | Fecha de creacion (directorio) | 2026-05-27T07:41:35 |
 | Fecha de apertura formal | 2026-05-27T07:41:35 |
 | Fecha de paso a ejecucion | 2026-05-27T07:41:35 |
+| Fecha de cierre | 2026-05-27T22:15:00 |
 | Iniciativa origen | (raiz) |
 
 ## Motivo de existencia
@@ -30,7 +31,7 @@ Ver analisis completo en `analisis-adaptar-sistema-diseno-yoruba.md`.
 ## Estado actual
 
 Iniciativa **en ejecucion** desde 2026-05-27T07:41:35. F0 completada.
-Siguiente: F1 — tokens y tipografia.
+Iniciativa cerrada. Ver decisiones-adaptar-sistema-diseno-yoruba.md.
 
 ## Indice de documentos
 
@@ -40,4 +41,5 @@ Siguiente: F1 — tokens y tipografia.
 | [analisis-adaptar-sistema-diseno-yoruba.md](analisis-adaptar-sistema-diseno-yoruba.md) | Inventario del paquete, 8 hallazgos, decisiones pendientes. |
 | [plan-adaptar-sistema-diseno-yoruba.md](plan-adaptar-sistema-diseno-yoruba.md) | Fases, DAG y descripcion de entregables por fase. |
 | [tareas-adaptar-sistema-diseno-yoruba.md](tareas-adaptar-sistema-diseno-yoruba.md) | Lista plana de tareas con estado. |
+| [decisiones-adaptar-sistema-diseno-yoruba.md](decisiones-adaptar-sistema-diseno-yoruba.md) | Decisiones de diseno, hallazgos de ejecucion, verificacion post-ejecucion. |
 | [progreso-adaptar-sistema-diseno-yoruba.md](progreso-adaptar-sistema-diseno-yoruba.md) | Log del avance con timestamps reales. |
