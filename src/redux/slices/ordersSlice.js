@@ -180,3 +180,20 @@ const ordersSlice = createSlice({
 
 export const { clearOrdersActionState } = ordersSlice.actions;
 export default ordersSlice.reducer;
+
+// fetchOrderDetail: lectura de detalle de una orden por order_number.
+// El paquete Yoruba importa fetchOrderDetail para OrderSuccessPage y
+// OrderDetailPage. Las lecturas vivian en React Query (useOrders.js)
+// pero el paquete usa Redux. Agregado en H-F4-03.
+export const fetchOrderDetail = createAsyncThunk(
+  'orders/fetchOrderDetail',
+  async (orderNumber, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get(`/api/v1/orders/${orderNumber}/`);
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+export default ordersSlice.reducer;

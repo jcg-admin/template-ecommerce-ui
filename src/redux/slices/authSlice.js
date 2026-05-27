@@ -262,3 +262,20 @@ const authSlice = createSlice({
 
 export const { clearError, updateUser } = authSlice.actions;
 export default authSlice.reducer;
+
+// fetchAddresses: lectura de direcciones del usuario autenticado.
+// GET /api/v1/auth/addresses/
+// Usado por CheckoutPage y AddressesPage del paquete Yoruba.
+// Agregado en H-F4-04 de adaptar-sistema-diseno-yoruba.
+export const fetchAddresses = createAsyncThunk(
+  'auth/fetchAddresses',
+  async (_arg, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get('/api/v1/auth/addresses/');
+      return res.data;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  },
+);
+export default authSlice.reducer;
