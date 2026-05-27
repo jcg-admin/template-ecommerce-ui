@@ -363,3 +363,60 @@ $warning:        $warning-color;
 $error:          $error-color;
 $border:         $border-color;
 $primary:        $primary-color;
+
+// ─────────────────────────────────────────────────────────────────────
+// ALIASES DE COMPATIBILIDAD — variables del tema anterior
+// ─────────────────────────────────────────────────────────────────────
+// Los modulos SCSS del repo usan estos nombres heredados.
+// Se mapean a los equivalentes semanticos de la nueva paleta.
+// Se eliminaran gradualmente en la iniciativa mapear-y-corregir-scss-completo.
+
+// Alias semanticos directos
+$color-primary:     $primary-color;       // -> $lime
+$color-danger:      $error-color;         // -> $vino-soft
+$surface:           $bg-elevated;
+$bg-subtle:         $bg-sunken;
+$white:             #F5F7EE;              // Off-white de la paleta (no blanco puro)
+$text-strong:       $text-primary;        // -> #F5F7EE
+$font-size-display: $font-size-4xl;
+
+// Tonos de gris — mapeados a la escala de texto oscura
+$gray-50:           rgba($text-primary, 0.04);
+$gray-200:          rgba($text-primary, 0.12);
+$gray-400:          rgba($text-primary, 0.28);
+$gray-600:          $text-muted;          // -> #7A7D62
+$gray-700:          $text-secondary;      // -> #B8B7A5
+
+// Estados semanticos — mapeados a la paleta del brazalete
+$success-strong:    $lime-deep;           // -> #6A9000
+$danger-strong:     $vino-deep;           // -> #5A1212
+$danger-bg:         rgba($vino, 0.12);
+$info-strong:       $bronze;              // -> #B89840
+
+// Colores especificos de UI heredados
+// NOTA: #5a36d0 (violeta badges) no tiene equivalente en la paleta del brazalete.
+// Documentado como deuda en analisis H-08. Se mantiene hasta decision de diseno.
+$indigo-500:        #4A5FC1;
+$amber-900:         $bronze-deep;         // -> #8C7028
+
+// Segunda tanda de aliases de compatibilidad (hallazgo T-107)
+$bg-surface:        $bg-elevated;
+$text-soft:         $text-muted;          // -> #7A7D62
+$gray-500:          rgba($text-primary, 0.20);
+$gray-800:          rgba($text-primary, 0.65);
+$gray-950:          $bg-sunken;
+$danger-deep:       $vino-deep;           // -> #5A1212
+$amber-700:         $rust;                // -> #A07820
+$amber-bg:          rgba($bronze, 0.12);
+$indigo-600:        #1C5BD8;
+$indigo-700:        #1A4F8B;
+$indigo-900:        #14296B;
+$color-error:       $error-color;
+$color-text:        $text-primary;
+$bg-muted:          $bg-sunken;
+$radius-md:         $border-radius-md;
+$radius-lg:         $border-radius-lg;
+
+// Tercera tanda de aliases (hallazgo T-107 build 3)
+$radius-sm:         $border-radius-sm;
+$amber-500:         $coral;              // -> #D86030 (coral como proxy de ámbar)
