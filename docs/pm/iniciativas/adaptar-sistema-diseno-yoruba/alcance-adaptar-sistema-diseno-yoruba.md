@@ -8,6 +8,21 @@
 | Fecha de creacion | 2026-05-27T07:41:35 |
 | Iniciativa origen | (raiz) |
 
+## Premisa verificada
+
+| Campo | Valor |
+|-------|-------|
+| Nivel de gate ejecutado | 0b (RF-6 activo: toca webpack.config.js + SCSS globals) |
+| Red flags activos | RF-6 — fix toca infraestructura compartida (webpack config, SCSS globals) |
+| Resultado | CONFIRMAR con expansion — H-08 era SPECULATIVE, ahora PROVEN con grep ejecutado |
+| Evidencia H-01 | `grep -c "image_url" src/mocks/data/catalog.ts` → 0; campo no existe — PROVEN |
+| Evidencia H-03 | `grep -n "toggleWishlist" src/redux/slices/wishlistSlice.js` → sin resultado — PROVEN |
+| Evidencia H-04 | `grep -n "fetchFeatured\|fetchCategories" src/redux/slices/catalogSlice.js` → sin resultado — PROVEN |
+| Evidencia H-05 | `grep -n "@assets" webpack.config.js` → sin resultado — PROVEN |
+| Evidencia H-07 | `grep -n "catalogo" dist-yoruba-ui/src/components/layout/Header/index.jsx` → linea 27: `/catalogo?cat=por-orisha` — PROVEN |
+| Evidencia H-08 | `grep -rn "#[0-9A-Fa-f]{6}" src/ --include="*.scss" \| grep -v "_variables"` → 31 hex totales (14 styles/tests fixtures, 1 components/, 16 pages/) — PROVEN |
+| Iniciativas previas revisadas | `mapear-y-corregir-scss-completo` (En ejecucion/pausada) cubre hex en SCSS — verificado: no cierra H-08 porque esta pausada y no cubre el reemplazo de _variables.scss |
+
 ## Por que existe esta iniciativa
 
 El template tiene el sistema de diseno generico del bootstrap inicial.
