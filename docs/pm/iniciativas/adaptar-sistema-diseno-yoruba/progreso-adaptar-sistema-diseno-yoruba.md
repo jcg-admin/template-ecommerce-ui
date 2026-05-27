@@ -50,3 +50,5 @@
 | 2026-05-27T17:31:32 | Hallazgo H-F4-04 [PROVEN] | fetchAddresses no existe en authSlice. El slice tiene loginUser, fetchProfile, etc. pero no gestion de direcciones. Solucion: agregar fetchAddresses en authSlice. |
 | 2026-05-27T17:31:32 | Hallazgo H-F4-05 [PROVEN] | fetchExpressEligibility y submitExpress no existen en ningun slice. Los usa ExpressCheckoutPage. fetchPaymentHistory tampoco existe. Solucion: agregar los 3 en paymentsSlice. |
 | 2026-05-27T17:33:15 | T-401 T-402 hechas | CatalogPage adaptada. 0 rutas ES, 0 hex hardcodeados. |
+| 2026-05-27T17:33:39 | Hallazgo H-F4-06 [PROVEN] | ProductPage ya usa product.images[] (array) — no usa image_url. No requiere adaptacion de imagen. El paquete fue disenado para ambos: image_url para ProductCard (lista), images[] para ProductPage (galeria). |
+| 2026-05-27T17:33:39 | T-403 T-404 hechas | ProductPage adaptada. 0 rutas ES, 0 hex. Usa images[] (galeria multi-imagen). |
