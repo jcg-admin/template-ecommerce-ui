@@ -32,6 +32,7 @@ export default function ProductPage() {
   const isLoading = useSelector((s) => s.catalog?.isLoadingDetail);
 
   const [variant, setVariant] = useState(null);
+  const tabsNavRef = useRef(null);
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
 
@@ -197,10 +198,15 @@ export default function ProductPage() {
       </section>
 
       {/* T-602: Tabs para descripcion / especificaciones (BUG-PP01 corregido) */}
-      <section className={styles.descSection}>
+      <section className={styles.descSection} id="product-description">
         <div className={styles.descContainer}>
+          <ScrollSpy
+            ids={['descripcion', 'ritual', 'specs', 'cuidado']}
+            navRef={tabsNavRef}
+            rootMargin="0px 0px -30%"
+          >
           <Tabs defaultTab="descripcion">
-            <TabList>
+            <TabList ref={tabsNavRef}>
               {product.description && <Tab id="descripcion">Descripción</Tab>}
               {product.ritual_meaning && <Tab id="ritual">Significado Yorùbà</Tab>}
               {product.specifications?.length > 0 && <Tab id="specs">Especificaciones</Tab>}
@@ -241,6 +247,7 @@ export default function ProductPage() {
               </TabPanel>
             )}
           </Tabs>
+          </ScrollSpy>
         </div>
       </section>
 

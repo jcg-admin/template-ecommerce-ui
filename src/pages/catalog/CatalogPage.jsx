@@ -33,7 +33,9 @@ export default function CatalogPage() {
     error, searchError, pagination = {},
   } = useSelector((s) => s.catalog || {});
 
-  const qParam = searchParams.get('q') || '';
+  const qParam    = searchParams.get('q') || '';
+  const [activeOrishas, setActiveOrishas] = useState([]);
+  const [activeTypes,   setActiveTypes]   = useState([]);
   const mode = qParam ? 'search' : 'listing';
 
   useEffect(() => {
@@ -91,7 +93,12 @@ export default function CatalogPage() {
 
       <div className={styles.container}>
         <div className={styles.layout}>
-          <FilterSidebar />
+          <FilterSidebar
+          activeOrishas={activeOrishas}
+          setActiveOrishas={setActiveOrishas}
+          activeTypes={activeTypes}
+          setActiveTypes={setActiveTypes}
+        />
 
           <section className={styles.results}>
             <Toolbar count={displayItems.length} total={pagination.count} />
@@ -139,11 +146,43 @@ export default function CatalogPage() {
   );
 }
 
-function FilterSidebar() {
+function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActiveTypes }) {
   return (
     <aside className={styles.sidebar}>
-      <FilterGroup title="Òrìsà" items={ORISHAS} />
-      <FilterGroup title="Tipo de pieza" items={TYPES} />
+      <FilterGroup title="Òrìsà">
+        <div className={styles.chipGroup}>
+          {ORISHAS.map((o) => (
+            <Chip
+              key={o}
+              selectable
+              selected={activeOrishas.includes(o)}
+              onSelect={() => setActiveOrishas((prev) =>
+                prev.includes(o) ? prev.filter(x => x !== o) : [...prev, o]
+              )}
+              onDeselect={() => setActiveOrishas((prev) => prev.filter(x => x !== o))}
+            >
+              {o}
+            </Chip>
+          ))}
+        </div>
+      </FilterGroup>
+      <FilterGroup title="Tipo de pieza">
+        <div className={styles.chipGroup}>
+          {TYPES.map((t) => (
+            <Chip
+              key={t}
+              selectable
+              selected={activeTypes.includes(t)}
+              onSelect={() => setActiveTypes((prev) =>
+                prev.includes(t) ? prev.filter(x => x !== t) : [...prev, t]
+              )}
+              onDeselect={() => setActiveTypes((prev) => prev.filter(x => x !== t))}
+            >
+              {t}
+            </Chip>
+          ))}
+        </div>
+      </FilterGroup>
       <FilterGroup title="Rango de precio">
         <PriceSlider />
       </FilterGroup>

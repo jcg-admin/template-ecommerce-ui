@@ -20,12 +20,13 @@ const STATUS = [
 
 export default function AdminProductsPage() {
   const dispatch = useDispatch();
-  const [filter, setFilter] = useState('all');
-  const [search, setSearch] = useState('');
+  const [filter,     setFilter]     = useState('all');
+  const [search,     setSearch]     = useState('');
+  const [tagFilters, setTagFilters] = useState([]);
   const products = useSelector((s) => s.admin?.products || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingProducts);
 
-  useEffect(() => { dispatch(fetchAdminProducts({ filter, search })); }, [dispatch, filter, search]);
+  useEffect(() => { dispatch(fetchAdminProducts({ filter, search, tags: tagFilters })); }, [dispatch, filter, search, tagFilters]);
 
   return (
     <div className={styles.page}>
@@ -56,6 +57,14 @@ export default function AdminProductsPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className={styles.search}
+        />
+        <ChipInput
+          placeholder="Filtrar por etiqueta…"
+          separator=","
+          createOnBlur
+          value={tagFilters}
+          onChange={setTagFilters}
+          className={styles.tagFilter}
         />
       </div>
 

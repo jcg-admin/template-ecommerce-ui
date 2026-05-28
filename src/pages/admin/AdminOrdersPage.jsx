@@ -34,12 +34,16 @@ const STATUS_TONE = {
 
 export default function AdminOrdersPage() {
   const dispatch = useDispatch();
-  const [filter, setFilter] = useState('all');
-  const [search, setSearch] = useState('');
+  const [filter,    setFilter]    = useState('all');
+  const [search,    setSearch]    = useState('');
+  const [dateStart, setDateStart] = useState(null);
+  const [dateEnd,   setDateEnd]   = useState(null);
   const orders = useSelector((s) => s.admin?.orders || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingOrders);
 
-  useEffect(() => { dispatch(fetchAdminOrders({ filter, search })); }, [dispatch, filter, search]);
+  useEffect(() => {
+    dispatch(fetchAdminOrders({ filter, search, dateStart, dateEnd }));
+  }, [dispatch, filter, search, dateStart, dateEnd]);
 
   return (
     <div className={styles.page}>
@@ -69,6 +73,17 @@ export default function AdminOrdersPage() {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className={styles.search}
+        />
+        <DateRangePicker
+          placeholder={['Fecha inicio', 'Fecha fin']}
+          locale="es-MX"
+          calendars={1}
+          onStartDateChange={setDateStart}
+          onEndDateChange={setDateEnd}
+          onRangeChange={({ startDate, endDate }) => {
+            setDateStart(startDate); setDateEnd(endDate);
+          }}
+          cleaner
         />
       </div>
 

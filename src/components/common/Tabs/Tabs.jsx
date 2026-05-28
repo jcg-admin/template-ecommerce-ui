@@ -1,33 +1,30 @@
 /**
- * Tabs / Tab / TabPanel — ecommerce-ui
- * Implementa el patrón ARIA Tabs con API completa de ui-core-5.25.0 tab.js.
- *
- * Método show() via ref: activa una pestaña desactivando la anterior
- * Eventos: onShow / onShown / onHide / onHidden
- * Navegación por teclado: ArrowLeft/Right, Home, End
- * Orientación: horizontal (default) | vertical
- * Activación: automatic (al navegar) | manual (solo Enter/Space)
- *
- * Iniciativa: integrar-componentes-ui-core-js (completar API)
+ * Tabs / Tab / TabPanel -- ecommerce-ui
+ * Patron ARIA Tabs con API completa de ui-core tab.js.
+ * Metodos: show(id) via ref
+ * Navegacion: ArrowLeft/Right/Up/Down, Home, End
+ * Activacion: automatic | manual
+ * Orientacion: horizontal | vertical
+ * TabList con forwardRef para ScrollSpy
  */
 import {
   createContext, useContext, useState, useId,
   useCallback, useRef, useImperativeHandle, forwardRef,
+  Children, isValidElement,
 } from 'react';
 import styles from './Tabs.module.scss';
 
 const TabsContext = createContext(null);
 
-// ── Tabs ────────────────────────────────────────────────────────────────────
+// Tabs
 export const Tabs = forwardRef(function Tabs({
   defaultTab,
   activeTab: controlled,
   onTabChange,
   children,
   className = '',
-  orientation = 'horizontal', // 'horizontal' | 'vertical'
-  activation  = 'automatic',  // 'automatic' | 'manual'
-  // Eventos globales del sistema de tabs
+  orientation = 'horizontal',
+  activation  = 'automatic',
   onShow,
   onShown,
   onHide,
@@ -47,7 +44,6 @@ export const Tabs = forwardRef(function Tabs({
     onTabChange?.(id);
   }, [controlled, onHide, onHidden, onShow, onShown, onTabChange]);
 
-  // show(id) — equivale a Tab.show() de ui-core
   const show = useCallback((id) => setActiveTab(id, activeTab), [activeTab, setActiveTab]);
 
   useImperativeHandle(ref, () => ({ show }), [show]);
@@ -67,10 +63,20 @@ export const Tabs = forwardRef(function Tabs({
   );
 });
 
-// ── TabList ─────────────────────────────────────────────────────────────────
-export function TabList({ children, className = '', label = 'Navegación por pestañas' }) {
+// TabList con forwardRef para ScrollSpy
+export const TabList = forwardRef(function TabList({
+  children,
+  className = '',
+  label = 'Navegacion por pestanas',
+}, externalRef) {
   const { uid, setActiveTab, activeTab, orientation, activation } = useContext(TabsContext);
   const listRef = useRef(null);
+
+  const setRef = useCallback((el) => {
+    listRef.current = el;
+    if (typeof externalRef === 'function') externalRef(el);
+    else if (externalRef) externalRef.current = el;
+  }, [externalRef]);
 
   const handleKeyDown = useCallback((e) => {
     const tabs = Array.from(
@@ -109,7 +115,7 @@ export function TabList({ children, className = '', label = 'Navegación por pes
 
   return (
     <div
-      ref={listRef}
+      ref={setRef}
       role="tablist"
       className={`${styles.tabList} ${className}`}
       onKeyDown={handleKeyDown}
@@ -119,9 +125,9 @@ export function TabList({ children, className = '', label = 'Navegación por pes
       {children}
     </div>
   );
-}
+});
 
-// ── Tab ─────────────────────────────────────────────────────────────────────
+// Tab
 export const Tab = forwardRef(function Tab({
   id, children, className = '', disabled = false,
   onShow, onHide,
@@ -136,7 +142,6 @@ export const Tab = forwardRef(function Tab({
     onShow?.(id);
   }, [disabled, id, activeTab, setActiveTab, onShow, onHide]);
 
-  // show() — equivale a Tab.show() de ui-core
   useImperativeHandle(ref, () => ({
     show: activate,
     isActive: () => isActive,
@@ -144,7 +149,6 @@ export const Tab = forwardRef(function Tab({
 
   return (
     <button
-      ref={ref ? undefined : undefined} // forwardRef maneja esto
       role="tab"
       id={`tab-${uid}-${id}`}
       aria-selected={isActive}
@@ -166,13 +170,12 @@ export const Tab = forwardRef(function Tab({
   );
 });
 
-// ── TabPanel ─────────────────────────────────────────────────────────────────
+// TabPanel
 export function TabPanel({ tabId, children, className = '', lazy = true }) {
   const { activeTab, uid } = useContext(TabsContext);
   const isActive = activeTab === tabId;
   const [rendered, setRendered] = useState(isActive);
 
-  // lazy: no monta el contenido hasta que el panel se activa por primera vez
   if (isActive && !rendered) setRendered(true);
 
   return (

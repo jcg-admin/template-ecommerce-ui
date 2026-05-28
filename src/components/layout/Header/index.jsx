@@ -11,6 +11,7 @@
  */
 
 import Offcanvas from '@components/common/Offcanvas/Offcanvas';
+import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {
@@ -43,8 +44,9 @@ export default function Header() {
   useKeyboardShortcut({ key: 'k', ctrl: true }, () => dispatch(toggleSearch()));
   const isAuth       = useSelector(selectIsAuthenticated);
   const cartCount    = useSelector(selectCartItemCount);
-  const isSearchOpen = useSelector(selectIsSearchOpen);
-  const user         = useSelector(selectUser);
+  const isSearchOpen  = useSelector(selectIsSearchOpen);
+  const user          = useSelector(selectUser);
+  const [cartOpen, setCartOpen] = useState(false);
   const navigate     = useNavigate();
   const handleLogout = async () => {
     await dispatch(logoutUser());
@@ -140,16 +142,45 @@ export default function Header() {
               Deseos
             </Link>
 
-            <Link
-              to="/cart"
+            <button
+              type="button"
               className={styles.cartBtn}
+              onClick={() => setCartOpen(true)}
               aria-label={`Carrito (${cartCount} ${cartCount === 1 ? 'pieza' : 'piezas'})`}
             >
               Bolsa
               <span className={styles.cartCount}>
                 {cartCount > 99 ? '99+' : cartCount}
               </span>
-            </Link>
+            </button>
+            <Offcanvas
+              open={cartOpen}
+              onClose={() => setCartOpen(false)}
+              placement="end"
+              backdrop
+              keyboard
+              scroll={false}
+            >
+              <div style={{ padding: '24px 20px' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 }}>
+                  <h2 style={{ margin: 0, fontSize: '1.1rem' }}>Tu bolsa ({cartCount})</h2>
+                  <button
+                    type="button"
+                    onClick={() => setCartOpen(false)}
+                    aria-label="Cerrar carrito"
+                    style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1.2rem' }}
+                  >✕</button>
+                </div>
+                {cartCount === 0 ? (
+                  <p style={{ color: '#888', textAlign: 'center', marginTop: 40 }}>Tu bolsa está vacía</p>
+                ) : (
+                  <Link to="/cart" onClick={() => setCartOpen(false)}
+                    style={{ display: 'block', textAlign: 'center', marginTop: 20 }}>
+                    Ver bolsa completa →
+                  </Link>
+                )}
+              </div>
+            </Offcanvas>
           </div>
         </div>
       </div>
