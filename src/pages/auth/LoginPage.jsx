@@ -74,12 +74,21 @@ export default function LoginPage() {
                 value={creds.password}
                 onChange={(e) => setCreds({ ...creds, password: e.target.value })}
                 required
-                error={error}
               />
               <Link to="/auth/forgot-password" className={styles.forgotLink}>
                 ¿OLVIDASTE TU CONTRASEÑA?
               </Link>
             </div>
+
+            {error && (
+              <Alert
+                variant="danger"
+                dismissible
+                onClose={() => setError('')}
+              >
+                {error}
+              </Alert>
+            )}
 
             <label className={styles.checkboxLabel}>
               <input

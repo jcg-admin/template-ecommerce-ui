@@ -116,7 +116,15 @@ export default function RegisterPage() {
               </span>
             </label>
             {errors.terms && <div style={{ color: 'var(--c-vino-soft)', fontSize: 12 }}>{errors.terms}</div>}
-            {errors._form && <div style={{ color: 'var(--c-vino-soft)', fontSize: 13 }}>{errors._form}</div>}
+            {errors._form && (
+              <Alert
+                variant="danger"
+                dismissible
+                onClose={() => setErrors(e => ({ ...e, _form: '' }))}
+              >
+                {errors._form}
+              </Alert>
+            )}
 
             <LoadingButton type="submit" variant="primary" block size="lg" loading={loading} disabledOnLoading>
               Crear mi cuenta
