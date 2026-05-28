@@ -75,7 +75,7 @@ las clases definidas en PROC-GESTION-001.
 | Replan | 1 |
 | Hallazgo durante la ejecucion | 14 |
 | Inicio de tarea | 11 |
-| Cierre de tarea | 17 |
+| Cierre de tarea | 18 |
 | Fase cerrada | 1 |
 | Bloqueo | 2 |
 | Desbloqueo | 1 |
@@ -90,3 +90,5 @@ las clases definidas en PROC-GESTION-001.
 | 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | BUG-T201 | _color-contrast-variables.scss tenía #F5F7EE como nombre de parámetro en lugar de $white (bug de portación en T-201, sesión anterior). Corregido usando la firma de ui-core original. |
 | 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | T-201-vars | Las 7 variables anticipadas del bloque T-201 no estaban en _variables.scss (debieron haberse perdido en algún revert). Restauradas: $white, $black, $min-contrast-ratio, $color-contrast-dark, $color-contrast-light, $prefix con valores de ui-core. |
 | 2026-05-27T22:45:00 | Hallazgo durante la ejecucion | test-fix | Test color-contrast esperaba #000000 pero $black en ui-core es #080a0c. Test actualizado para reflejar el valor real. 21/21 tests SCSS pasan. |
+| 2026-05-27T22:50:00 | Inicio de tarea | T-202 | Comienzo T-202 (F1a). ui-core disponible en /tmp/references/ui-core-5.25.0/. 34 secciones identificadas, 61 colisiones mapeadas — la mayoría son diseño propio del template (preservar con !default). Estrategia: agregar secciones de ui-core con !default en todas sus variables; las nuestras ya definidas sin !default toman precedencia automáticamente en Sass. |
+| 2026-05-27T23:10:00 | Cierre de tarea | T-202 | Integrados tokens de ui-core-5.25.0 en _variables.scss. 23 grupos / 34 secciones portadas con !default. 509 variables nuevas con !default (ui-core toma precedencia sobre cualquier override). 61 colisiones resueltas: nuestros valores de diseño (px, paleta Yoruba, tipografía IBM Plex) preservados sin !default → toman precedencia automática en Sass. Bugs encontrados y resueltos: (1) @use sass:color faltante; (2) $small-font-size y 9 dependencias ausentes agregadas; (3) orden de declaración de $grid-gutter-width; (4) 2 variables con unidades mixtas px+rem comentadas como T-208. Variables: 180 -> 760. SCSS compile: 122 entries clean. 21/21 tests SCSS pasan. |
