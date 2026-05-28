@@ -229,3 +229,4 @@ const DateRangePicker = forwardRef(function DateRangePicker({
 });
 
 export default DateRangePicker;
+export { DateRangePicker };

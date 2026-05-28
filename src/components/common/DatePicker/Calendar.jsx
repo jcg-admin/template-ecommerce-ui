@@ -436,3 +436,4 @@ const Calendar = forwardRef(function Calendar({
 
 export default Calendar;
 export { isToday, isSameDay, isDisabled };
+export { Calendar };

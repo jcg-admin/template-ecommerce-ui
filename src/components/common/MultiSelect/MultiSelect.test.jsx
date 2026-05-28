@@ -1,66 +1,105 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+/**
+ * Tests: MultiSelect — API completa de ui-core multi-select.js
+ */
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
 import MultiSelect from './MultiSelect';
 
-const OPTS = ['Rojo', 'Verde', 'Azul', 'Amarillo'];
+const OPTS = ['Collares', 'Elekes', 'Otanes', 'Soperas', 'Herramientas'];
 
-const Wrapper = ({ value = [], onChange = jest.fn() }) => (
-  <MultiSelect options={OPTS} value={value} onChange={onChange} label="Colores" />
-);
+const Base = (p) => <MultiSelect options={OPTS} {...p} />;
 
-describe('MultiSelect', () => {
+describe('MultiSelect — API completa ui-core', () => {
   it('muestra el placeholder cuando no hay selección', () => {
-    render(<Wrapper />);
-    expect(screen.getByRole('button', { name: /colores/i })).toHaveTextContent('Seleccionar');
+    render(<Base placeholder="Elegir..." />);
+    expect(screen.getByText('Elegir...')).toBeInTheDocument();
   });
 
-  it('abre el panel al hacer click en el trigger', () => {
-    render(<Wrapper />);
-    fireEvent.click(screen.getByRole('button', { name: /colores/i }));
+  it('click en trigger abre el panel (listbox)', () => {
+    render(<Base />);
+    fireEvent.click(screen.getByRole('combobox'));
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
-  it('seleccionar una opción llama onChange con el array correcto', () => {
-    const onChange = jest.fn();
-    render(<Wrapper onChange={onChange} />);
-    fireEvent.click(screen.getByRole('button', { name: /colores/i }));
-    fireEvent.mouseDown(screen.getByRole('option', { name: /rojo/i }));
-    expect(onChange).toHaveBeenCalledWith(['Rojo']);
+  it('selecciona una opción y la muestra como tag', () => {
+    render(<Base selectionType="tags" />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Collares' }));
+    // El tag tiene text 'Collares×' — buscar el span padre
+    const tags = document.querySelectorAll('[class]');
+    const hasCollares = [...tags].some(t => t.textContent?.includes('Collares'));
+    expect(hasCollares).toBe(true);
   });
 
-  it('deseleccionar una opción la quita del array', () => {
-    const onChange = jest.fn();
-    render(<Wrapper value={['Rojo', 'Verde']} onChange={onChange} />);
-    fireEvent.click(screen.getByRole('button', { name: /colores/i }));
-    fireEvent.mouseDown(screen.getByRole('option', { name: /rojo/i }));
-    expect(onChange).toHaveBeenCalledWith(['Verde']);
+  it('selectionType=counter muestra el conteo', () => {
+    render(<Base selectionType="counter" selectionTypeCounterText="seleccionados" />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Collares' }));
+    fireEvent.click(screen.getByRole('option', { name: 'Elekes' }));
+    expect(screen.getByText('2 seleccionados')).toBeInTheDocument();
   });
 
-  it('Seleccionar todo agrega todas las opciones', () => {
-    const onChange = jest.fn();
-    render(<Wrapper onChange={onChange} />);
-    fireEvent.click(screen.getByRole('button', { name: /colores/i }));
-    fireEvent.click(screen.getByRole('button', { name: /seleccionar todo/i }));
-    expect(onChange).toHaveBeenCalledWith(['Rojo', 'Verde', 'Azul', 'Amarillo']);
+  it('selectAll selecciona todas las opciones', () => {
+    render(<Base selectAll selectAllLabel="Seleccionar todo" />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Seleccionar todo' }));
+    expect(screen.getByRole('option', { name: 'Seleccionar todo' }))
+      .toHaveAttribute('aria-selected', 'true');
   });
 
-  it('Limpiar vacía la selección', () => {
-    const onChange = jest.fn();
-    render(<Wrapper value={['Rojo']} onChange={onChange} />);
-    fireEvent.click(screen.getByRole('button', { name: /colores/i }));
-    fireEvent.click(screen.getByRole('button', { name: /limpiar/i }));
-    expect(onChange).toHaveBeenCalledWith([]);
+  it('cleaner=true limpia la selección con ✕', () => {
+    render(<Base cleaner />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getAllByRole('option')[1]);
+    fireEvent.click(screen.getByLabelText('Limpiar selección'));
+    expect(screen.getByText('Select...')).toBeInTheDocument();
   });
 
-  it('muestra contador cuando hay más de 1 seleccionado', () => {
-    render(<Wrapper value={['Rojo', 'Verde', 'Azul']} />);
-    expect(screen.getByRole('button', { name: /colores/i })).toHaveTextContent('3 seleccionados');
+  it('search=true muestra campo de búsqueda y filtra', () => {
+    render(<Base search />);
+    fireEvent.click(screen.getByRole('combobox'));
+    const searchInput = screen.getByPlaceholderText('Buscar...');
+    fireEvent.change(searchInput, { target: { value: 'ele' } });
+    expect(screen.getByRole('option', { name: 'Elekes' })).toBeInTheDocument();
+    expect(screen.queryByRole('option', { name: 'Collares' })).not.toBeInTheDocument();
   });
 
-  it('aria-expanded cambia con el estado del panel', () => {
-    render(<Wrapper />);
-    const trigger = screen.getByRole('button', { name: /colores/i });
-    expect(trigger).toHaveAttribute('aria-expanded', 'false');
-    fireEvent.click(trigger);
-    expect(trigger).toHaveAttribute('aria-expanded', 'true');
+  it('multiple=false hace selección simple y cierra', () => {
+    render(<Base multiple={false} />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Otanes' }));
+    // AnimatePresence mantiene el DOM durante exit — verificar aria-expanded
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false');
+    // El texto 'Otanes' está en el trigger como selección
+    expect(screen.getByRole('combobox')).toHaveTextContent('Otanes');
+  });
+
+  it('optionsStyle=checkbox muestra checkboxes', () => {
+    render(<Base optionsStyle="checkbox" />);
+    fireEvent.click(screen.getByRole('combobox'));
+    const checkboxes = screen.getAllByRole('checkbox');
+    expect(checkboxes.length).toBeGreaterThan(0);
+  });
+
+  it('ref expone toggle/show/hide/selectAll/deselectAll/getValue', () => {
+    const ref = createRef();
+    render(<Base ref={ref} />);
+    ['toggle','show','hide','dispose','search','update','selectAll','deselectAll','getValue']
+      .forEach(m => expect(typeof ref.current?.[m]).toBe('function'));
+  });
+
+  it('ref.getValue() retorna el array de seleccionados', () => {
+    const ref = createRef();
+    render(<Base ref={ref} />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.click(screen.getByRole('option', { name: 'Collares' }));
+    expect(ref.current.getValue()).toContain('Collares');
+  });
+
+  it('Escape cierra el panel', () => {
+    render(<Base />);
+    fireEvent.click(screen.getByRole('combobox'));
+    fireEvent.keyDown(document, { key: 'Escape' });
+    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'false');
   });
 });

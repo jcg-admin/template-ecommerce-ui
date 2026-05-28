@@ -9,6 +9,7 @@
  *   GET /catalogue/categories/
  */
 
+import Chip from '@components/common/Chip/Chip';
 import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';

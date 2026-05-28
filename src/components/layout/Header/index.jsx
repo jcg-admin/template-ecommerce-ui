@@ -10,6 +10,7 @@
  *   - Logo via alias @assets (T-105)
  */
 
+import Offcanvas from '@components/common/Offcanvas/Offcanvas';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import {

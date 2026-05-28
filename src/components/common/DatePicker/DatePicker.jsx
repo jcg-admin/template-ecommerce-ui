@@ -227,3 +227,4 @@ const DatePicker = forwardRef(function DatePicker({
 });
 
 export default DatePicker;
+export { DatePicker };

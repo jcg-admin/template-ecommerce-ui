@@ -1,163 +1,278 @@
 /**
  * MultiSelect — ecommerce-ui
- * Selector múltiple con Popover API + floating-ui.
- * Referencia: ui-core multi-select.js (T-403)
- * Iniciativa: integrar-componentes-ui-core-js
+ * Selector múltiple con API completa de ui-core multi-select.js.
  *
- * @param {Array}    options    — [{label, value}] o strings
- * @param {Array}    value      — array de values seleccionados
- * @param {Function} onChange   — callback([...values])
- * @param {string}   placeholder
- * @param {boolean}  search     — habilita búsqueda interna
- * @param {boolean}  disabled
- * @param {string}   label
+ * Opciones de ui-core:
+ *   multiple: true          — selección múltiple (default)
+ *   search: false           — campo de búsqueda en el panel
+ *   searchNoResultsLabel    — texto cuando no hay resultados
+ *   cleaner: true           — botón ✕ para limpiar todo
+ *   selectAll: true         — opción "seleccionar todo"
+ *   selectAllLabel          — etiqueta del "seleccionar todo"
+ *   selectionType: 'tags'   — 'tags' | 'counter' | 'text'
+ *   selectionTypeCounterText— texto del contador
+ *   placeholder: 'Select...'
+ *   optionsMaxHeight: 'auto'
+ *   optionsStyle: 'checkbox'— 'checkbox' | 'text'
+ *   clearSearchOnSelect: false
+ *   disabled / invalid / valid / required
+ *   name / id
+ *   value: null             — valor inicial
+ *
+ * Métodos via ref: toggle/show/hide/dispose/search/update/selectAll/deselectAll/getValue
  */
-import { useId, useRef, useCallback, useMemo, useState } from 'react';
 import {
-  useFloating as useFloatingLib,
-  autoUpdate, flip, shift, offset,
-} from '@floating-ui/react';
+  useState, useCallback, useRef, useId,
+  useImperativeHandle, forwardRef,
+} from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import useClickOutside from '@hooks/ui/useClickOutside';
+import useEscapeKey    from '@hooks/ui/useEscapeKey';
 import styles from './MultiSelect.module.scss';
 
-function normalize(opt) {
-  return typeof opt === 'string' ? { label: opt, value: opt } : opt;
-}
-
-export default function MultiSelect({
-  options      = [],
-  value        = [],
+const MultiSelect = forwardRef(function MultiSelect({
+  options              = [],
+  value:    controlled,
   onChange,
-  placeholder  = 'Seleccionar…',
-  search       = false,
-  disabled     = false,
-  label,
-  selectAllLabel = 'Seleccionar todo',
-}) {
-  const id       = useId();
-  const panelId  = `ms-panel-${id.replace(/:/g, '')}`;
-  const [query,  setQuery]  = useState('');
-  const [isOpen, setIsOpen] = useState(false);
-  const triggerRef = useRef(null);
+  // Opciones de ui-core
+  multiple             = true,           // Default ui-core
+  search               = false,          // Default ui-core
+  searchNoResultsLabel = 'No results found', // Default ui-core
+  cleaner              = true,           // Default ui-core
+  selectAll            = true,           // Default ui-core
+  selectAllLabel       = 'Select all options', // Default ui-core
+  selectionType        = 'tags',         // Default ui-core: 'tags'|'counter'|'text'
+  selectionTypeCounterText = 'item(s) selected', // Default ui-core
+  placeholder          = 'Select...',   // Default ui-core
+  optionsMaxHeight     = 'auto',
+  optionsStyle         = 'checkbox',    // Default ui-core: 'checkbox'|'text'
+  clearSearchOnSelect  = false,         // Default ui-core
+  disabled             = false,
+  invalid              = false,
+  valid                = false,
+  required             = false,
+  name,
+  id: externalId,
+  onShow, onShown, onHide, onHidden,
+  className            = '',
+}, ref) {
+  const uid     = useId();
+  const inputId = externalId ?? `ms-${uid.replace(/:/g, '')}`;
+  const panelId = `${inputId}-panel`;
 
-  const normalized = useMemo(() => options.map(normalize), [options]);
-
-  const filtered = useMemo(() => {
-    if (!search || !query) return normalized;
-    const q = query.toLowerCase();
-    return normalized.filter((o) => o.label.toLowerCase().includes(q));
-  }, [normalized, search, query]);
-
-  const { refs, floatingStyles } = useFloatingLib({
-    placement: 'bottom-start',
-    whileElementsMounted: autoUpdate,
-    middleware: [offset(4), flip(), shift({ padding: 8 })],
+  const [open,     setOpen]     = useState(false);
+  const [selected, setSelected] = useState(() => {
+    if (controlled !== undefined) return Array.isArray(controlled) ? controlled : [controlled];
+    return [];
   });
+  const [query,    setQuery]    = useState('');
+  const panelRef = useRef(null);
 
-  const toggle = useCallback((optVal) => {
-    if (value.includes(optVal)) {
-      onChange(value.filter((v) => v !== optVal));
-    } else {
-      onChange([...value, optVal]);
+  const sel = controlled !== undefined
+    ? (Array.isArray(controlled) ? controlled : [controlled])
+    : selected;
+
+  const setVal = useCallback((next) => {
+    if (controlled === undefined) setSelected(next);
+    onChange?.(multiple ? next : next[0] ?? null);
+  }, [controlled, onChange, multiple]);
+
+  const show = useCallback(() => {
+    if (disabled) return;
+    setOpen(true); onShow?.();
+    setTimeout(() => onShown?.(), 150);
+  }, [disabled, onShow, onShown]);
+
+  const hide = useCallback(() => {
+    setOpen(false); onHide?.();
+    setTimeout(() => onHidden?.(), 150);
+  }, [onHide, onHidden]);
+
+  const toggle = useCallback(() => open ? hide() : show(), [open, hide, show]);
+
+  // selectAll() / deselectAll() — equivale a métodos públicos de ui-core
+  const selectAllFn   = useCallback(() => setVal(opts().map(getValue)), []);  // eslint-disable-line
+  const deselectAllFn = useCallback(() => setVal([]), [setVal]);
+
+  // getValue() — equivale a MultiSelect.getValue() de ui-core
+  const getValueFn = useCallback(() => sel, [sel]);
+
+  // search(q) — equivale a MultiSelect.search()
+  const searchFn = useCallback((q) => setQuery(q), []);
+
+  // update() — equivale a MultiSelect.update()
+  const updateFn = useCallback(() => {}, []);
+
+  const dispose = useCallback(() => hide(), [hide]);
+
+  useImperativeHandle(ref, () => ({
+    toggle, show, hide, dispose,
+    search: searchFn, update: updateFn,
+    selectAll: selectAllFn, deselectAll: deselectAllFn,
+    getValue: getValueFn,
+  }), [toggle, show, hide, dispose, searchFn, updateFn, selectAllFn, deselectAllFn, getValueFn]);
+
+  useEscapeKey(hide, open);
+  useClickOutside(panelRef, () => { if (open) hide(); }, open);
+
+  const getLabel = (o) => typeof o === 'string' ? o : o.label ?? String(o);
+  const getValue = (o) => typeof o === 'string' ? o : o.value ?? o.label ?? String(o);
+  const opts     = () => options;
+
+  const filtered = query
+    ? options.filter(o => getLabel(o).toLowerCase().includes(query.toLowerCase()))
+    : options;
+
+  const isSelected = (o) => sel.includes(getValue(o));
+
+  const toggle_opt = useCallback((opt) => {
+    const v = getValue(opt);
+    if (!multiple) {
+      setVal([v]);
+      if (clearSearchOnSelect) setQuery('');
+      hide();
+      return;
     }
-  }, [value, onChange]);
+    const next = sel.includes(v) ? sel.filter(x => x !== v) : [...sel, v];
+    setVal(next);
+    if (clearSearchOnSelect) setQuery('');
+  }, [sel, multiple, setVal, clearSearchOnSelect, hide]);
 
-  const selectAll = useCallback(() => {
-    onChange(normalized.map((o) => o.value));
-  }, [normalized, onChange]);
+  // Renderizar la selección actual según selectionType
+  const renderSelection = () => {
+    if (sel.length === 0) return <span className={styles.placeholder}>{placeholder}</span>;
+    if (selectionType === 'counter') return <span>{sel.length} {selectionTypeCounterText}</span>;
+    if (selectionType === 'text')    return <span>{sel.join(', ')}</span>;
+    // 'tags'
+    return sel.map(v => {
+      const label = getLabel(options.find(o => getValue(o) === v) ?? v);
+      return (
+        <span key={v} className={styles.tag}>
+          {label}
+          <button
+            type="button"
+            onClick={e => { e.stopPropagation(); setVal(sel.filter(x => x !== v)); }}
+            aria-label={`Eliminar ${label}`}
+            className={styles.tagRemove}
+          >×</button>
+        </span>
+      );
+    });
+  };
 
-  const clearAll = useCallback(() => onChange([]), [onChange]);
-
-  const setTriggerRef = useCallback((el) => {
-    triggerRef.current = el;
-    refs.setReference(el);
-  }, [refs]);
-
-  const triggerLabel = value.length === 0
-    ? placeholder
-    : value.length === 1
-      ? normalized.find((o) => o.value === value[0])?.label ?? placeholder
-      : `${value.length} seleccionados`;
+  const allSelected = options.length > 0 && options.every(o => sel.includes(getValue(o)));
 
   return (
-    <div className={styles.wrapper}>
-      {label && (
-        <span id={`${id}-label`} className={styles.label}>{label}</span>
-      )}
-
+    <div
+      className={[
+        styles.wrapper,
+        disabled ? styles.disabled : '',
+        invalid  ? styles.invalid  : '',
+        valid    ? styles.valid    : '',
+        className,
+      ].filter(Boolean).join(' ')}
+      ref={panelRef}
+    >
       {/* Trigger */}
-      <button
-        ref={setTriggerRef}
-        type="button"
-        disabled={disabled}
-        className={`${styles.trigger} ${isOpen ? styles.triggerOpen : ''}`}
+      <div
+        id={inputId}
+        role="combobox"
+        aria-expanded={open}
+        aria-controls={panelId}
         aria-haspopup="listbox"
-        aria-expanded={isOpen}
-        aria-labelledby={label ? `${id}-label` : undefined}
-        onClick={() => setIsOpen((v) => !v)}
-        onBlur={() => setTimeout(() => setIsOpen(false), 200)}
+        tabIndex={disabled ? -1 : 0}
+        className={styles.trigger}
+        onClick={() => !disabled && toggle()}
+        onKeyDown={e => (e.key === 'Enter' || e.key === ' ') && !disabled && toggle()}
       >
-        <span className={styles.triggerText}>{triggerLabel}</span>
-        <span className={styles.arrow} aria-hidden="true">
-          {isOpen ? '▲' : '▼'}
-        </span>
-      </button>
+        <div className={styles.selection}>{renderSelection()}</div>
+        {cleaner && sel.length > 0 && (
+          <button
+            type="button"
+            className={styles.cleaner}
+            onClick={e => { e.stopPropagation(); deselectAllFn(); }}
+            aria-label="Limpiar selección"
+            tabIndex={-1}
+          >✕</button>
+        )}
+        <span className={styles.indicator} aria-hidden="true">▾</span>
+      </div>
 
       {/* Panel */}
-      {isOpen && (
-        <div
-          ref={refs.setFloating}
-          id={panelId}
-          className={styles.panel}
-          style={floatingStyles}
-        >
-          {/* Barra de búsqueda interna */}
-          {search && (
-            <div className={styles.searchWrap}>
-              <input
-                type="text"
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="Filtrar…"
-                className={styles.searchInput}
-                aria-label="Filtrar opciones"
-              />
-            </div>
-          )}
+      <AnimatePresence>
+        {open && (
+          <motion.div
+            id={panelId}
+            role="listbox"
+            aria-multiselectable={multiple}
+            className={styles.panel}
+            style={{ maxHeight: optionsMaxHeight !== 'auto' ? optionsMaxHeight : undefined }}
+            initial={{ opacity: 0, y: -4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.12 }}
+          >
+            {search && (
+              <div className={styles.searchWrapper}>
+                <input
+                  type="text"
+                  className={styles.searchInput}
+                  placeholder="Buscar..."
+                  value={query}
+                  onChange={e => setQuery(e.target.value)}
+                  aria-label="Buscar opciones"
+                />
+              </div>
+            )}
 
-          {/* Selectar todo / limpiar */}
-          <div className={styles.actions}>
-            <button type="button" className={styles.actionBtn} onClick={selectAll}>
-              {selectAllLabel}
-            </button>
-            <button type="button" className={styles.actionBtn} onClick={clearAll}
-              disabled={value.length === 0}>
-              Limpiar
-            </button>
-          </div>
+            {selectAll && multiple && (
+              <div
+                role="option"
+                aria-selected={allSelected}
+                className={`${styles.option} ${allSelected ? styles.optionSelected : ''}`}
+                onClick={() => allSelected ? deselectAllFn() : selectAllFn()}
+              >
+                {optionsStyle === 'checkbox' && (
+                  <input type="checkbox" checked={allSelected} readOnly tabIndex={-1}
+                    className={styles.optionCheckbox} />
+                )}
+                <span>{selectAllLabel}</span>
+              </div>
+            )}
 
-          {/* Lista */}
-          <ul role="listbox" className={styles.list} aria-multiselectable="true"
-            aria-label={label ?? 'Opciones'}>
-            {filtered.map((opt) => {
-              const selected = value.includes(opt.value);
+            {filtered.length === 0 && query && (
+              <div className={styles.noResults}>{searchNoResultsLabel}</div>
+            )}
+
+            {filtered.map((opt, i) => {
+              const selected_opt = isSelected(opt);
               return (
-                <li
-                  key={opt.value}
+                <div
+                  key={i}
                   role="option"
-                  aria-selected={selected}
-                  className={`${styles.option} ${selected ? styles.optionSelected : ''}`}
-                  onMouseDown={(e) => { e.preventDefault(); toggle(opt.value); }}
+                  aria-selected={selected_opt}
+                  className={`${styles.option} ${selected_opt ? styles.optionSelected : ''}`}
+                  onClick={() => toggle_opt(opt)}
                 >
-                  <span className={styles.checkbox} aria-hidden="true">
-                    {selected ? '☑' : '☐'}
-                  </span>
-                  {opt.label}
-                </li>
+                  {optionsStyle === 'checkbox' && (
+                    <input type="checkbox" checked={selected_opt} readOnly tabIndex={-1}
+                      className={styles.optionCheckbox} />
+                  )}
+                  <span>{getLabel(opt)}</span>
+                </div>
               );
             })}
-          </ul>
-        </div>
-      )}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Input oculto para formularios */}
+      {name && sel.map((v, i) => (
+        <input key={i} type="hidden" name={name} value={v} />
+      ))}
     </div>
   );
-}
+});
+
+export default MultiSelect;
+export { MultiSelect };

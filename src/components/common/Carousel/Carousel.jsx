@@ -1,131 +1,226 @@
 /**
  * Carousel — ecommerce-ui
- * Carrusel basado en scroll-snap CSS nativo.
- * Sin dependencias de JS para el scroll — el browser gestiona el snapping.
+ * Carrusel con API completa de ui-core-5.25.0 carousel.js.
  *
- * Referencia: ui-core carousel.js (T-502)
- * Iniciativa: integrar-componentes-ui-core-js
+ * Opciones:
+ *   interval: 5000   — ms entre slides (0 = sin auto-avance)
+ *   keyboard: true   — flechas de teclado activan next/prev
+ *   pause: 'hover'   — pausa en hover ('hover' | false)
+ *   ride: false      — 'carousel' = inicia inmediatamente
+ *   touch: true      — soporte swipe táctil
+ *   wrap: true       — volver al inicio al llegar al final
+ *
+ * Props de presentación:
+ *   showDots:    true  — indicadores
+ *   showArrows:  true  — flechas de navegación
+ *   showCaptions: true — captions de cada slide
+ *   dark:        false — variante oscura
+ *
+ * Métodos via ref: next() / prev() / to(index) / pause() / cycle() / dispose()
+ * Eventos: onSlide / onSlid (equivalen a slide.bs.carousel / slid.bs.carousel)
  */
-import { useRef, useState, useCallback, useEffect } from 'react';
+import {
+  useState, useEffect, useCallback, useRef,
+  useImperativeHandle, forwardRef,
+} from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import styles from './Carousel.module.scss';
 
-export default function Carousel({
-  children,
-  autoPlay  = false,
-  interval  = 4000,
-  showDots  = true,
-  showArrows = true,
-  className = '',
-  ariaLabel = 'Carrusel de contenido',
-}) {
-  const trackRef  = useRef(null);
-  const timerRef  = useRef(null);
+const Carousel = forwardRef(function Carousel({
+  children,        // Array de slides
+  // Opciones de ui-core
+  interval       = 5000,  // Default ui-core
+  keyboard       = true,  // Default ui-core
+  pause          = 'hover', // Default ui-core
+  ride           = false, // Default ui-core
+  touch          = true,  // Default ui-core
+  wrap           = true,  // Default ui-core
+  // UI
+  showDots       = true,
+  showArrows     = true,
+  showCaptions   = false,
+  dark           = false,
+  // Callbacks (equivalen a eventos de ui-core)
+  onSlide,   // (from, to, direction) — antes de animar
+  onSlid,    // (from, to, direction) — después de animar
+  className      = '',
+}, ref) {
+  const slides = Array.isArray(children) ? children : [children];
+  const total  = slides.length;
+
   const [current, setCurrent] = useState(0);
-  const count     = Array.isArray(children) ? children.length : 1;
+  const [direction, setDirection] = useState(1);
+  const [paused, setPaused] = useState(false);
+  const intervalRef = useRef(null);
+  const touchStartX = useRef(null);
 
-  const goTo = useCallback((index) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const slide = el.children[index];
-    if (!slide) return;
-    slide.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    setCurrent(index);
-  }, []);
+  const goTo = useCallback((idx) => {
+    const from = current;
+    let to = idx;
+    if (!wrap && (to < 0 || to >= total)) return;
+    to = ((to % total) + total) % total;
 
-  const next = useCallback(() => goTo((current + 1) % count), [goTo, current, count]);
-  const prev = useCallback(() => goTo((current - 1 + count) % count), [goTo, current, count]);
+    const dir = to > from ? 1 : -1;
+    setDirection(dir);
+    onSlide?.(from, to, dir > 0 ? 'next' : 'prev');
+    setCurrent(to);
+    setTimeout(() => onSlid?.(from, to, dir > 0 ? 'next' : 'prev'), 400);
+  }, [current, total, wrap, onSlide, onSlid]);
 
-  // Auto-play con pausa en hover
+  // next() — equivale a Carousel.next()
+  const next = useCallback(() => goTo(current + 1), [goTo, current]);
+  // prev() — equivale a Carousel.prev()
+  const prev = useCallback(() => goTo(current - 1), [goTo, current]);
+  // to(idx) — equivale a Carousel.to()
+  const to = useCallback((idx) => goTo(idx), [goTo]);
+
+  // cycle() — equivale a Carousel.cycle()
+  const cycle = useCallback(() => {
+    if (!interval) return;
+    clearInterval(intervalRef.current);
+    intervalRef.current = setInterval(() => {
+      if (!paused) next();
+    }, interval);
+  }, [interval, paused, next]);
+
+  // pause() — equivale a Carousel.pause()
+  const pauseCarousel = useCallback(() => setPaused(true),  []);
+  const resumeCarousel = useCallback(() => setPaused(false), []);
+  const dispose = useCallback(() => clearInterval(intervalRef.current), []);
+
+  useImperativeHandle(ref, () => ({
+    next, prev, to, pause: pauseCarousel, cycle, dispose,
+    nextWhenVisible: () => { if (document.visibilityState === 'visible') next(); },
+  }), [next, prev, to, pauseCarousel, cycle, dispose]);
+
+  // Auto-avance — ride='carousel' inicia inmediatamente
   useEffect(() => {
-    if (!autoPlay) return;
-    timerRef.current = setInterval(next, interval);
-    return () => clearInterval(timerRef.current);
-  }, [autoPlay, next, interval]);
+    if (!interval) return;
+    if (ride !== 'carousel' && ride !== true) return; // ride:false = no auto-start
+    cycle();
+    return () => clearInterval(intervalRef.current);
+  }, [cycle, ride, interval]);
 
-  const pauseAutoPlay = useCallback(() => clearInterval(timerRef.current), []);
-  const resumeAutoPlay = useCallback(() => {
-    if (!autoPlay) return;
-    timerRef.current = setInterval(next, interval);
-  }, [autoPlay, next, interval]);
-
-  // IntersectionObserver para saber qué slide es visible
+  // keyboard: ArrowLeft/Right
   useEffect(() => {
-    const track = trackRef.current;
-    if (!track || count <= 1) return;
+    if (!keyboard) return;
+    const handler = (e) => {
+      if (e.key === 'ArrowLeft')  prev();
+      if (e.key === 'ArrowRight') next();
+    };
+    document.addEventListener('keydown', handler);
+    return () => document.removeEventListener('keydown', handler);
+  }, [keyboard, next, prev]);
 
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const idx = Array.from(track.children).indexOf(entry.target);
-            if (idx >= 0) setCurrent(idx);
-          }
-        });
-      },
-      { root: track, threshold: 0.6 }
-    );
+  // touch: swipe táctil
+  const handleTouchStart = useCallback((e) => {
+    if (!touch) return;
+    touchStartX.current = e.touches[0].clientX;
+  }, [touch]);
 
-    Array.from(track.children).forEach((slide) => observer.observe(slide));
-    return () => observer.disconnect();
-  }, [count]);
+  const handleTouchEnd = useCallback((e) => {
+    if (!touch || touchStartX.current === null) return;
+    const delta = e.changedTouches[0].clientX - touchStartX.current;
+    if (Math.abs(delta) > 50) {
+      delta > 0 ? prev() : next();
+    }
+    touchStartX.current = null;
+  }, [touch, next, prev]);
+
+  // pause: 'hover' — pausar en mouseenter
+  const pauseHandlers = pause === 'hover'
+    ? { onMouseEnter: pauseCarousel, onMouseLeave: resumeCarousel }
+    : {};
+
+  const variants = {
+    enter: (dir) => ({ x: dir > 0 ? '100%' : '-100%', opacity: 0 }),
+    center: { x: 0, opacity: 1 },
+    exit:  (dir) => ({ x: dir > 0 ? '-100%' : '100%', opacity: 0 }),
+  };
 
   return (
-    <section
-      className={`${styles.carousel} ${className}`}
-      aria-label={ariaLabel}
-      aria-roledescription="carrusel"
-      onMouseEnter={pauseAutoPlay}
-      onMouseLeave={resumeAutoPlay}
+    <div
+      className={[
+        styles.carousel,
+        dark ? styles.dark : '',
+        className,
+      ].filter(Boolean).join(' ')}
+      aria-roledescription="carousel"
+      aria-label="Carrusel de imágenes"
+      {...pauseHandlers}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
     >
-      {/* Track con scroll-snap */}
-      <div ref={trackRef} className={styles.track} aria-live="polite">
-        {Array.isArray(children)
-          ? children.map((child, i) => (
-              <div
-                key={i}
-                className={styles.slide}
-                role="group"
-                aria-roledescription="diapositiva"
-                aria-label={`${i + 1} de ${count}`}
-              >
-                {child}
-              </div>
-            ))
-          : <div className={styles.slide}>{children}</div>
-        }
+      {/* Slides */}
+      <div className={styles.inner} aria-live={paused ? 'polite' : 'off'}>
+        <AnimatePresence initial={false} custom={direction} mode="wait">
+          <motion.div
+            key={current}
+            custom={direction}
+            variants={variants}
+            initial="enter"
+            animate="center"
+            exit="exit"
+            transition={{ duration: 0.35, ease: 'easeInOut' }}
+            className={styles.slide}
+            aria-roledescription="slide"
+            aria-label={`Slide ${current + 1} de ${total}`}
+          >
+            {slides[current]}
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* Controles */}
-      {showArrows && count > 1 && (
-        <>
-          <button
-            className={`${styles.arrow} ${styles.arrowPrev}`}
-            onClick={prev}
-            aria-label="Diapositiva anterior"
-          >‹</button>
-          <button
-            className={`${styles.arrow} ${styles.arrowNext}`}
-            onClick={next}
-            aria-label="Siguiente diapositiva"
-          >›</button>
-        </>
-      )}
-
-      {/* Dots de navegación */}
-      {showDots && count > 1 && (
-        <div className={styles.dots} role="tablist" aria-label="Navegar por diapositivas">
-          {Array.from({ length: count }, (_, i) => (
+      {/* Indicadores — equivalen a .carousel-indicators */}
+      {showDots && total > 1 && (
+        <div className={styles.indicators} role="tablist" aria-label="Indicadores del carrusel">
+          {slides.map((_, i) => (
             <button
               key={i}
               role="tab"
-              className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
               aria-selected={i === current}
-              aria-label={`Ir a diapositiva ${i + 1}`}
-              onClick={() => goTo(i)}
+              aria-label={`Ir al slide ${i + 1}`}
+              className={`${styles.dot} ${i === current ? styles.dotActive : ''}`}
+              onClick={() => to(i)}
             />
           ))}
         </div>
       )}
-    </section>
+
+      {/* Controles — equivalen a .carousel-control-prev/next */}
+      {showArrows && total > 1 && (
+        <>
+          <button
+            className={`${styles.control} ${styles.controlPrev}`}
+            onClick={prev}
+            aria-label="Anterior"
+          >
+            ‹
+          </button>
+          <button
+            className={`${styles.control} ${styles.controlNext}`}
+            onClick={next}
+            aria-label="Siguiente"
+          >
+            ›
+          </button>
+        </>
+      )}
+    </div>
+  );
+});
+
+export default Carousel;
+
+/**
+ * CarouselSlide — wrapper individual para cada slide
+ */
+export function CarouselSlide({ children, caption, className = '' }) {
+  return (
+    <div className={`${styles.slideContent} ${className}`}>
+      {children}
+      {caption && <div className={styles.caption}>{caption}</div>}
+    </div>
   );
 }
+export { Carousel };

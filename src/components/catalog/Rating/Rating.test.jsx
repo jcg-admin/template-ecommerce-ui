@@ -1,47 +1,79 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+/**
+ * Tests: Rating — API completa de ui-core rating.js
+ */
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
 import Rating from './Rating';
 
-describe('Rating', () => {
-  it('renderiza itemCount estrellas', () => {
-    render(<Rating value={0} itemCount={5} />);
-    // 5 radio inputs (uno por estrella)
-    expect(screen.getAllByRole('radio')).toHaveLength(5);
+describe('Rating — API completa ui-core', () => {
+  it('renderiza itemCount estrellas (default 5)', () => {
+    render(<Rating />);
+    expect(screen.getAllByRole('radio').length).toBe(5);
   });
 
-  it('llama onChange con el valor de la estrella clickeada', () => {
+  it('itemCount configura el número de estrellas', () => {
+    render(<Rating itemCount={3} />);
+    expect(screen.getAllByRole('radio').length).toBe(3);
+  });
+
+  it('value selecciona la estrella correspondiente', () => {
+    render(<Rating value={3} />);
+    const radios = screen.getAllByRole('radio');
+    expect(radios[2]).toBeChecked();
+  });
+
+  it('onChange se llama al seleccionar una estrella', () => {
     const onChange = jest.fn();
-    render(<Rating value={0} onChange={onChange} />);
-    fireEvent.click(screen.getByLabelText('3 estrellas'));
+    render(<Rating onChange={onChange} />);
+    fireEvent.click(screen.getAllByRole('radio')[2]);
     expect(onChange).toHaveBeenCalledWith(3);
   });
 
-  it('NO llama onChange en modo readOnly', () => {
+  it('allowClear=true borra el valor al clicar la misma estrella', () => {
     const onChange = jest.fn();
-    render(<Rating value={3} onChange={onChange} readOnly />);
-    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
-    // No hay forma de interactuar
+    render(<Rating value={3} allowClear onChange={onChange} />);
+    fireEvent.click(screen.getAllByRole('radio')[2]);
+    expect(onChange).toHaveBeenCalledWith(null);
+  });
+
+  it('readOnly=true impide cambios', () => {
+    const onChange = jest.fn();
+    render(<Rating value={2} readOnly onChange={onChange} />);
+    fireEvent.click(screen.getAllByRole('radio')[4]);
     expect(onChange).not.toHaveBeenCalled();
   });
 
-  it('tiene aria-label con el valor actual en readOnly', () => {
-    render(<Rating value={4} itemCount={5} readOnly />);
-    expect(screen.getByLabelText('Calificación: 4 de 5')).toBeInTheDocument();
+  it('disabled=true deshabilita los inputs', () => {
+    render(<Rating disabled />);
+    screen.getAllByRole('radio').forEach(r => expect(r).toBeDisabled());
   });
 
-  it('con precision=0.5 renderiza el doble de inputs radio', () => {
-    render(<Rating value={2.5} precision={0.5} itemCount={5} />);
-    expect(screen.getAllByRole('radio')).toHaveLength(10); // 5 enteras + 5 medias
+  it('tooltips=true muestra el número como title', () => {
+    const { container } = render(<Rating tooltips />);
+    const labels = container.querySelectorAll('label[title]');
+    expect(labels.length).toBe(5);
+    expect(labels[0]).toHaveAttribute('title', '1');
   });
 
-  it('input de la estrella marcada está checked', () => {
-    render(<Rating value={3} />);
-    expect(screen.getByLabelText('3 estrellas')).toBeChecked();
+  it('tooltips como array usa las etiquetas', () => {
+    const tips = ['Muy malo','Malo','Regular','Bueno','Excelente'];
+    const { container } = render(<Rating tooltips={tips} />);
+    const label = container.querySelector('label[title="Excelente"]');
+    expect(label).toBeInTheDocument();
   });
 
-  it('botón deshabilitado cuando disabled=true', () => {
-    render(<Rating value={2} disabled />);
-    // En disabled mode usa la misma representación que readOnly
-    expect(screen.queryByRole('radio')).not.toBeInTheDocument();
-    expect(screen.getByLabelText('Calificación: 2 de 5')).toBeInTheDocument();
+  it('ref.update(config) actualiza el valor', () => {
+    const ref = createRef();
+    render(<Rating ref={ref} />);
+    act(() => ref.current.update({ value: 4 }));
+    expect(screen.getAllByRole('radio')[3]).toBeChecked();
+  });
+
+  it('ref.reset() borra el valor', () => {
+    const onChange = jest.fn();
+    const ref = createRef();
+    render(<Rating defaultValue={3} ref={ref} onChange={onChange} />);
+    act(() => ref.current.reset());
+    expect(onChange).toHaveBeenCalledWith(null);
   });
 });

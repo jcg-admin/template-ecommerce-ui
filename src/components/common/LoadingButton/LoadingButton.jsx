@@ -99,3 +99,4 @@ const LoadingButton = forwardRef(function LoadingButton({
 });
 
 export default LoadingButton;
+export { LoadingButton };

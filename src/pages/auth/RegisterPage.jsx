@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '@redux/slices/authSlice';
 import { Button, Field, MetaTag } from '@components/common/primitives';
+import Alert         from '@components/common/Alert/Alert';
+import LoadingButton from '@components/common/LoadingButton/LoadingButton';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from '../auth/LoginPage.module.scss';
 
@@ -116,9 +118,9 @@ export default function RegisterPage() {
             {errors.terms && <div style={{ color: 'var(--c-vino-soft)', fontSize: 12 }}>{errors.terms}</div>}
             {errors._form && <div style={{ color: 'var(--c-vino-soft)', fontSize: 13 }}>{errors._form}</div>}
 
-            <Button type="submit" variant="primary" block size="lg" disabled={loading}>
-              {loading ? 'Creando…' : 'Crear mi cuenta'}
-            </Button>
+            <LoadingButton type="submit" variant="primary" block size="lg" loading={loading} disabledOnLoading>
+              Crear mi cuenta
+            </LoadingButton>
 
             <div className={styles.footer}>
               ¿Ya tienes cuenta? <Link to="/auth/login">Inicia sesión →</Link>

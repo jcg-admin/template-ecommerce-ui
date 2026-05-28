@@ -10,6 +10,7 @@
  *   GET /payments/installments/
  */
 
+import LoadingButton from '@components/common/LoadingButton/LoadingButton';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -317,9 +318,9 @@ function CheckoutSummary({ items, totals, submitting }) {
             <span>Total</span>
             <Price amount={totals.total || 0} size="lg" />
           </div>
-          <Button type="submit" variant="primary" block size="lg" disabled={submitting}>
+          <LoadingButton type="submit" variant="primary" block size="lg" loading={submitting} disabledOnLoading>
             {submitting ? 'Procesando…' : 'Confirmar y pagar'}
-          </Button>
+          </LoadingButton>
           <div className={styles.summaryDisclaimer}>
             Al confirmar aceptas los <Link to="/info/terminos">términos</Link> y el{' '}
             <Link to="/info/privacidad">aviso de privacidad</Link>.

@@ -1,116 +1,187 @@
 /**
  * RangeSlider — ecommerce-ui
- * Slider de valor simple o doble (rango min/max).
- * Basado en <input type=range> nativo — accesibilidad de teclado,
- * touch y ARIA nativos del navegador.
+ * Control deslizante con API completa de ui-core range-slider.js.
  *
- * Referencia: ui-core range-slider.js (T-401)
- * Iniciativa: integrar-componentes-ui-core-js
+ * Opciones de ui-core implementadas:
+ *   min: 0            — valor mínimo
+ *   max: 100          — valor máximo
+ *   step: 1           — paso
+ *   value: 0          — valor inicial (número o [start, end] para range)
+ *   distance: 0       — distancia mínima entre thumbs en range
+ *   labels: false     — array de etiquetas bajo el track
+ *   clickableLabels: true — click en label mueve el thumb
+ *   tooltips: true    — tooltip sobre cada thumb
+ *   tooltipsFormat: null — (value) => string
+ *   track: 'fill'     — 'fill' | 'left' | 'right' | false
+ *   vertical: false   — orientación vertical
+ *   disabled: false
+ *   name: null        — para formularios
  *
- * Props single:
- *   value {number}, onChange(value)
- *
- * Props doble (range):
- *   value {[min,max]}, onChange([min,max]), distance (mínima separación)
+ * Método via ref: update(config)
+ * Evento: onChange(value)
  */
-import { useId, useCallback } from 'react';
+import {
+  useState, useCallback, useRef, useId,
+  useImperativeHandle, forwardRef,
+} from 'react';
 import styles from './RangeSlider.module.scss';
 
-export default function RangeSlider({
-  min        = 0,
-  max        = 100,
-  step       = 1,
-  value,
+const RangeSlider = forwardRef(function RangeSlider({
+  min            = 0,          // Default ui-core
+  max            = 100,        // Default ui-core
+  step           = 1,          // Default ui-core
+  value:         controlled,
+  defaultValue   = 0,
+  distance       = 0,          // Default ui-core
+  labels         = false,      // Default ui-core
+  clickableLabels = true,      // Default ui-core
+  tooltips       = true,       // Default ui-core
+  tooltipsFormat = null,       // Default ui-core
+  track          = 'fill',     // Default ui-core
+  vertical       = false,      // Default ui-core
+  disabled       = false,      // Default ui-core
+  name,                        // Default ui-core
   onChange,
-  distance   = 0,
-  label,
-  disabled   = false,
-  formatValue = (v) => v,
-}) {
-  const id       = useId();
-  const isDouble = Array.isArray(value);
+  className      = '',
+}, ref) {
+  const id  = useId();
+  const isRange = Array.isArray(controlled ?? defaultValue);
 
-  const lo = isDouble ? value[0] : value;
-  const hi = isDouble ? value[1] : null;
+  const [internal, setInternal] = useState(() => {
+    const init = controlled ?? defaultValue;
+    return Array.isArray(init) ? init : [init];
+  });
 
-  const handleLo = useCallback((e) => {
-    const next = Number(e.target.value);
-    if (isDouble) {
-      // garantizar lo <= hi - distance (BUG-CF01 corregido)
-      onChange([Math.min(next, hi - distance), hi]);
-    } else {
-      onChange(next);
+  const vals = (() => {
+    const v = controlled ?? internal[0];
+    if (Array.isArray(v)) return v;
+    return [internal[0]];
+  })();
+
+  const setVals = useCallback((next) => {
+    setInternal(next);
+    onChange?.(isRange ? next : next[0]);
+  }, [onChange, isRange]);
+
+  // update(config) — equivale a RangeSlider.update() de ui-core
+  const update = useCallback((config) => {
+    if (config.value !== undefined) {
+      const v = Array.isArray(config.value) ? config.value : [config.value];
+      setInternal(v);
     }
-  }, [isDouble, hi, distance, onChange]);
+    // min/max/step cambios requieren re-render del padre
+  }, []);
 
-  const handleHi = useCallback((e) => {
-    const next = Number(e.target.value);
-    onChange([lo, Math.max(next, lo + distance)]);
-  }, [lo, distance, onChange]);
+  useImperativeHandle(ref, () => ({ update }), [update]);
 
   const pct = (v) => ((v - min) / (max - min)) * 100;
 
+  const fmtTip = (v) => tooltipsFormat ? tooltipsFormat(v) : String(v);
+
+  const handleChange = useCallback((idx) => (e) => {
+    const newVal = Number(e.target.value);
+    const next   = [...(internal.length > 1 ? internal : [internal[0]])];
+
+    if (next.length === 2 && distance > 0) {
+      if (idx === 0 && newVal > next[1] - distance) return;
+      if (idx === 1 && newVal < next[0] + distance) return;
+    }
+
+    next[idx] = newVal;
+    setVals(next);
+  }, [internal, distance, setVals]);
+
+  // Calcular el estilo del track fill
+  const trackStyle = () => {
+    if (!track || track === false) return {};
+    const start = isRange ? pct(vals[0]) : (track === 'left' ? 0 : pct(vals[0]));
+    const end   = isRange ? pct(vals[1] ?? vals[0]) : (track === 'right' ? 100 : pct(vals[0]));
+    if (vertical) return { bottom: `${start}%`, height: `${end - start}%` };
+    return { left: `${start}%`, width: `${end - start}%` };
+  };
+
+  const wrapperCls = [
+    styles.wrapper,
+    vertical  ? styles.vertical  : '',
+    disabled  ? styles.disabled  : '',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
-    <div className={`${styles.wrapper} ${disabled ? styles.disabled : ''}`}>
-      {label && (
-        <div className={styles.header}>
-          <span className={styles.label}>{label}</span>
-          <span className={styles.values} aria-live="polite">
-            {isDouble
-              ? `${formatValue(lo)} – ${formatValue(hi)}`
-              : formatValue(lo)}
-          </span>
-        </div>
-      )}
+    <div className={wrapperCls}>
+      {/* Track */}
+      <div className={`${styles.track} ${vertical ? styles.trackVertical : ''}`}>
+        {(track && track !== false) && (
+          <div className={styles.trackFill} style={trackStyle()} />
+        )}
 
-      <div className={styles.track}>
-        {/* Track activo (relleno entre thumbs) */}
-        <div
-          className={styles.trackFill}
-          style={isDouble
-            ? { left: `${pct(lo)}%`, width: `${pct(hi) - pct(lo)}%` }
-            : { left: 0, width: `${pct(lo)}%` }
-          }
-        />
+        {/* Thumbs + inputs range */}
+        {vals.map((v, idx) => (
+          <div
+            key={idx}
+            className={styles.thumbWrapper}
+            style={vertical
+              ? { bottom: `${pct(v)}%` }
+              : { left: `${pct(v)}%` }
+            }
+          >
+            {tooltips && (
+              <div className={styles.tooltip} aria-hidden="true">
+                {fmtTip(v)}
+              </div>
+            )}
+            <div className={styles.thumb} aria-label={`Valor ${idx + 1}`} />
+          </div>
+        ))}
 
-        {/* Input lo / single */}
-        <input
-          id={`${id}-lo`}
-          type="range"
-          min={min}
-          max={max}
-          step={step}
-          value={lo}
-          disabled={disabled}
-          onChange={handleLo}
-          className={styles.input}
-          aria-label={isDouble ? 'Valor mínimo' : (label ?? 'Valor')}
-          aria-valuemin={min}
-          aria-valuemax={isDouble ? hi : max}
-          aria-valuenow={lo}
-          aria-valuetext={`${formatValue(lo)}`}
-        />
-
-        {/* Input hi (solo en modo doble) */}
-        {isDouble && (
+        {/* Inputs range invisibles — accesibles */}
+        {vals.map((v, idx) => (
           <input
-            id={`${id}-hi`}
+            key={idx}
             type="range"
+            id={`${id}-${idx}`}
+            name={vals.length > 1 ? (name ? `${name}[${idx}]` : undefined) : name}
             min={min}
             max={max}
             step={step}
-            value={hi}
+            value={v}
             disabled={disabled}
-            onChange={handleHi}
+            onChange={handleChange(idx)}
             className={styles.input}
-            aria-label="Valor máximo"
-            aria-valuemin={lo}
+            aria-label={vals.length > 1
+              ? (idx === 0 ? 'Valor mínimo' : 'Valor máximo')
+              : 'Valor'}
+            aria-valuemin={min}
             aria-valuemax={max}
-            aria-valuenow={hi}
-            aria-valuetext={`${formatValue(hi)}`}
+            aria-valuenow={v}
           />
-        )}
+        ))}
       </div>
+
+      {/* Labels — equivalen a _createLabels en ui-core */}
+      {Array.isArray(labels) && labels.length > 0 && (
+        <div className={styles.labels}>
+          {labels.map((lbl, i) => {
+            const pos = (i / (labels.length - 1)) * 100;
+            const handleLabelClick = clickableLabels
+              ? () => setVals([min + (pos / 100) * (max - min)])
+              : undefined;
+            return (
+              <span
+                key={i}
+                className={`${styles.label} ${clickableLabels ? styles.labelClickable : ''}`}
+                style={{ [vertical ? 'bottom' : 'left']: `${pos}%` }}
+                onClick={handleLabelClick}
+              >
+                {lbl}
+              </span>
+            );
+          })}
+        </div>
+      )}
     </div>
   );
-}
+});
+
+export default RangeSlider;
+export { RangeSlider };

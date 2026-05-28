@@ -1,121 +1,158 @@
 /**
  * Rating — ecommerce-ui
- * Selector de calificación por estrellas.
- * Implementado como radiogroup con inputs radio ocultos y labels SVG.
+ * Control de valoración con API completa de ui-core rating.js.
  *
- * Referencia: ui-core rating.js (T-303)
- * Iniciativa: integrar-componentes-ui-core-js
+ * Opciones de ui-core implementadas:
+ *   itemCount: 5        — número de estrellas
+ *   value: null         — valor inicial
+ *   precision: 1        — 1 = enteros, 0.5 = medias estrellas
+ *   readOnly: false     — solo visualización
+ *   disabled: false
+ *   allowClear: false   — clic en valor activo lo borra
+ *   highlightOnlySelected: false — ilumina solo la seleccionada
+ *   icon: null          — SVG/ReactNode para estrella vacía
+ *   activeIcon: null    — SVG/ReactNode para estrella activa
+ *   tooltips: false     — array de strings | true (usa el número)
+ *   size: null          — 'sm' | 'lg' | null
+ *   name: null          — name del input oculto
  *
- * @param {number}   value       — valor actual (0–itemCount)
- * @param {Function} onChange    — callback(newValue)
- * @param {number}   itemCount   — número de estrellas (default: 5)
- * @param {boolean}  readOnly
- * @param {boolean}  disabled
- * @param {number}   precision   — 1 = estrellas enteras, 0.5 = medias
- * @param {string}   name        — name del radiogroup
+ * Métodos via ref: update(config) / reset()
+ * Evento: onChange(value)
  */
-import { useId, useCallback } from 'react';
+import {
+  useState, useCallback, useId,
+  useImperativeHandle, forwardRef,
+} from 'react';
 import styles from './Rating.module.scss';
 
-const StarIcon = ({ filled, half }) => (
-  <svg viewBox="0 0 24 24" aria-hidden="true" className={styles.starSvg}>
-    <defs>
-      <linearGradient id="half-grad">
-        <stop offset="50%" stopColor="currentColor" />
-        <stop offset="50%" stopColor="transparent" />
-      </linearGradient>
-    </defs>
-    <path
-      d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-      fill={filled ? 'currentColor' : half ? 'url(#half-grad)' : 'none'}
-      stroke="currentColor"
-      strokeWidth="1.5"
-    />
-  </svg>
-);
+// Icono de estrella por defecto
+const StarEmpty  = () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>;
+const StarFilled = () => <svg viewBox="0 0 24 24" fill="currentColor"><path d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.562.562 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg>;
 
-export default function Rating({
-  value     = 0,
+const Rating = forwardRef(function Rating({
+  itemCount            = 5,         // Default ui-core
+  value:    controlled,
+  defaultValue         = null,      // Default ui-core (null = sin valor)
+  precision            = 1,         // Default ui-core
+  readOnly             = false,     // Default ui-core
+  disabled             = false,     // Default ui-core
+  allowClear           = false,     // Default ui-core
+  highlightOnlySelected = false,    // Default ui-core
+  icon                 = null,      // Default ui-core
+  activeIcon           = null,      // Default ui-core
+  tooltips             = false,     // Default ui-core
+  size                 = null,      // Default ui-core
+  name,                             // Default ui-core
   onChange,
-  itemCount = 5,
-  readOnly  = false,
-  disabled  = false,
-  precision = 1,
-  name,
-}) {
-  const id       = useId();
+  className            = '',
+}, ref) {
+  const id = useId();
   const groupName = name ?? `rating-${id.replace(/:/g, '')}`;
-  const isInteractive = !readOnly && !disabled;
 
-  const handleChange = useCallback((newVal) => {
-    if (isInteractive) onChange?.(newVal);
-  }, [isInteractive, onChange]);
+  const [internal, setInternal] = useState(controlled ?? defaultValue ?? null);
+  const [hover,    setHover]    = useState(null);
 
-  const stars = Array.from({ length: itemCount }, (_, i) => {
-    const starVal  = i + 1;
-    const halfVal  = i + 0.5;
-    const filled   = value >= starVal;
-    const half     = !filled && precision === 0.5 && value >= halfVal;
+  const val = controlled !== undefined ? controlled : internal;
 
-    return { starVal, halfVal, filled, half };
-  });
+  const setVal = useCallback((v) => {
+    if (controlled === undefined) setInternal(v);
+    onChange?.(v);
+  }, [controlled, onChange]);
 
-  if (readOnly || disabled) {
-    // Modo solo lectura — display puro, sin inputs
-    return (
-      <div
-        className={`${styles.rating} ${disabled ? styles.disabled : ''}`}
-        aria-label={`Calificación: ${value} de ${itemCount}`}
-        aria-readonly="true"
-      >
-        {stars.map(({ starVal, filled, half }) => (
-          <span key={starVal} className={styles.starWrap}>
-            <StarIcon filled={filled} half={half} />
-          </span>
-        ))}
-      </div>
-    );
-  }
+  // update(config) — equivale a Rating.update() de ui-core
+  const update = useCallback((config) => {
+    if (config.value !== undefined) {
+      if (controlled === undefined) setInternal(config.value);
+    }
+  }, [controlled]);
 
-  // Modo interactivo — radiogroup
+  // reset() — equivale a Rating.reset() de ui-core
+  const reset = useCallback(() => {
+    if (controlled === undefined) setInternal(null);
+    onChange?.(null);
+  }, [controlled, onChange]);
+
+  useImperativeHandle(ref, () => ({ update, reset }), [update, reset]);
+
+  // Generar los valores según precision
+  const steps = precision < 1
+    ? Array.from({ length: itemCount / precision }, (_, i) => (i + 1) * precision)
+    : Array.from({ length: itemCount }, (_, i) => i + 1);
+
+  const isActive = (v) => {
+    const current = hover ?? val ?? 0;
+    if (highlightOnlySelected) return val !== null && Math.abs(val - v) < 0.001;
+    return current >= v;
+  };
+
+  const handleClick = useCallback((v) => {
+    if (readOnly || disabled) return;
+    if (allowClear && val === v) {
+      setVal(null);
+    } else {
+      setVal(v);
+    }
+  }, [readOnly, disabled, allowClear, val, setVal]);
+
+  const getTooltip = (v) => {
+    if (!tooltips) return undefined;
+    if (Array.isArray(tooltips)) return tooltips[v - 1];
+    return String(v);
+  };
+
+  const EmptyIcon  = icon       ? () => icon       : StarEmpty;
+  const ActiveIcon = activeIcon ? () => activeIcon  : StarFilled;
+
+  const wrapperCls = [
+    styles.rating,
+    readOnly  ? styles.readOnly  : '',
+    disabled  ? styles.disabled  : '',
+    size      ? styles[`size_${size}`] : '',
+    className,
+  ].filter(Boolean).join(' ');
+
   return (
-    <fieldset
-      className={styles.rating}
-      role="radiogroup"
-      aria-label={`Calificación de ${itemCount} estrellas`}
-      disabled={disabled}
+    <div
+      className={wrapperCls}
+      role="group"
+      aria-label={`Valoración: ${val ?? 0} de ${itemCount}`}
     >
-      <legend className={styles.srOnly}>Calificación</legend>
-      {stars.map(({ starVal, halfVal, filled, half }) => (
-        <span key={starVal} className={styles.starWrap}>
-          {precision === 0.5 && (
-            <>
-              <input
-                type="radio" name={groupName}
-                id={`${groupName}-${halfVal}`}
-                value={halfVal}
-                checked={value === halfVal}
-                onChange={() => handleChange(halfVal)}
-                className={styles.srOnly}
-                aria-label={`${halfVal} estrellas`}
-              />
-              <label htmlFor={`${groupName}-${halfVal}`} className={styles.halfLabel} />
-            </>
-          )}
-          <input
-            type="radio" name={groupName}
-            id={`${groupName}-${starVal}`}
-            value={starVal}
-            checked={value === starVal}
-            onChange={() => handleChange(starVal)}
-            className={styles.srOnly}
-            aria-label={`${starVal} ${starVal === 1 ? 'estrella' : 'estrellas'}`}
-          />
-          <label htmlFor={`${groupName}-${starVal}`} className={styles.starLabel}>
-            <StarIcon filled={filled} half={half} />
+      {steps.map((v) => {
+        const active = isActive(v);
+        const tip    = getTooltip(v);
+        const label  = `${v} ${v === 1 ? 'estrella' : 'estrellas'}`;
+
+        return (
+          <label
+            key={v}
+            className={`${styles.item} ${active ? styles.itemActive : ''}`}
+            title={tip}
+            aria-label={label}
+          >
+            <input
+              type="radio"
+              name={groupName}
+              value={v}
+              checked={val === v}
+              disabled={disabled || readOnly}
+              onChange={() => handleClick(v)}
+              onClick={() => handleClick(v)}
+              className={styles.radioInput}
+              aria-label={label}
+            />
+            <span
+              className={styles.icon}
+              onMouseEnter={() => !readOnly && !disabled && setHover(v)}
+              onMouseLeave={() => setHover(null)}
+            >
+              {active ? <ActiveIcon /> : <EmptyIcon />}
+            </span>
           </label>
-        </span>
-      ))}
-    </fieldset>
+        );
+      })}
+    </div>
   );
-}
+});
+
+export default Rating;
+export { Rating };

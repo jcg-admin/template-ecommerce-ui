@@ -111,3 +111,4 @@ export default function Alert({
     </AnimatePresence>
   );
 }
+export { Alert };

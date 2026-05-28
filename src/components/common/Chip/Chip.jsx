@@ -119,3 +119,4 @@ export default function Chip({
     </AnimatePresence>
   );
 }
+export { Chip };

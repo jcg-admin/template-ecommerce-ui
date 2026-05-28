@@ -11,6 +11,8 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { login } from '@redux/slices/authSlice';
 import { Button, Field, MetaTag } from '@components/common/primitives';
+import Alert         from '@components/common/Alert/Alert';
+import LoadingButton from '@components/common/LoadingButton/LoadingButton';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './LoginPage.module.scss';
 
@@ -89,9 +91,9 @@ export default function LoginPage() {
               <span>Mantener mi sesión iniciada</span>
             </label>
 
-            <Button type="submit" variant="primary" block size="lg" disabled={loading}>
+            <LoadingButton type="submit" variant="primary" block size="lg" loading={loading} disabledOnLoading>
               {loading ? 'Entrando…' : 'Entrar a mi cuenta'}
-            </Button>
+            </LoadingButton>
 
             <div className={styles.divider}>
               <span>O</span>

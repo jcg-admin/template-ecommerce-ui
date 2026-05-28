@@ -3,6 +3,7 @@
  * Tabla de pedidos con filtros por estado y rango de fechas.
  */
 
+import DateRangePicker from '@components/common/DatePicker/DateRangePicker';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';

@@ -1,57 +1,104 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Tabs, TabList, Tab, TabPanel } from './Tabs';
+/**
+ * Tests: Tabs — API completa de ui-core tab.js
+ * Métodos: show() via ref
+ * Navegación: ArrowLeft/Right, Home, End
+ * Activación: automatic | manual
+ * Eventos: onShow, onShown, onHide, onHidden
+ */
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
+import { Tabs, Tab, TabList, TabPanel } from './Tabs';
 
-const TestTabs = ({ defaultTab = 'a' }) => (
-  <Tabs defaultTab={defaultTab}>
+const Suite = ({ tabsRef, tabRef, ...props }) => (
+  <Tabs defaultTab="a" ref={tabsRef} {...props}>
     <TabList>
-      <Tab id="a">Pestaña A</Tab>
-      <Tab id="b">Pestaña B</Tab>
-      <Tab id="c">Pestaña C</Tab>
+      <Tab id="a" ref={tabRef}>Tab A</Tab>
+      <Tab id="b">Tab B</Tab>
+      <Tab id="c">Tab C</Tab>
     </TabList>
-    <TabPanel tabId="a">Contenido A</TabPanel>
-    <TabPanel tabId="b">Contenido B</TabPanel>
-    <TabPanel tabId="c">Contenido C</TabPanel>
+    <TabPanel tabId="a"><p>Panel A</p></TabPanel>
+    <TabPanel tabId="b"><p>Panel B</p></TabPanel>
+    <TabPanel tabId="c"><p>Panel C</p></TabPanel>
   </Tabs>
 );
 
-describe('Tabs', () => {
+describe('Tabs — API completa ui-core', () => {
   it('muestra el panel del tab activo por defecto', () => {
-    render(<TestTabs defaultTab="a" />);
-    expect(screen.getByText('Contenido A')).toBeInTheDocument();
-    expect(screen.queryByText('Contenido B')).not.toBeInTheDocument();
+    render(<Suite />);
+    expect(screen.getByText('Panel A')).toBeInTheDocument();
+    expect(screen.queryByText('Panel B')).not.toBeInTheDocument();
   });
 
-  it('tab activo tiene aria-selected=true', () => {
-    render(<TestTabs />);
-    expect(screen.getByRole('tab', { name: 'Pestaña A' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('tab', { name: 'Pestaña B' })).toHaveAttribute('aria-selected', 'false');
+  it('click en Tab B activa su panel (show())', () => {
+    render(<Suite />);
+    fireEvent.click(screen.getByRole('tab', { name: 'Tab B' }));
+    expect(screen.getByRole('tab', { name: 'Tab B' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByText('Panel B')).toBeInTheDocument();
   });
 
-  it('click en tab B muestra Contenido B', () => {
-    render(<TestTabs />);
-    fireEvent.click(screen.getByRole('tab', { name: 'Pestaña B' }));
-    expect(screen.getByText('Contenido B')).toBeInTheDocument();
-    expect(screen.queryByText('Contenido A')).not.toBeInTheDocument();
+  it('el tab activo tiene aria-selected=true', () => {
+    render(<Suite />);
+    expect(screen.getByRole('tab', { name: 'Tab A' })).toHaveAttribute('aria-selected', 'true');
+    expect(screen.getByRole('tab', { name: 'Tab B' })).toHaveAttribute('aria-selected', 'false');
   });
 
-  it('flecha derecha mueve el foco al siguiente tab', () => {
-    render(<TestTabs />);
-    screen.getByRole('tab', { name: 'Pestaña A' }).focus();
-    fireEvent.keyDown(screen.getByRole('tablist'), { key: 'ArrowRight' });
-    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Pestaña B' }));
+  it('ArrowRight navega al siguiente tab (activation=automatic)', () => {
+    render(<Suite />);
+    const tabA = screen.getByRole('tab', { name: 'Tab A' });
+    tabA.focus();
+    fireEvent.keyDown(document.activeElement, { key: 'ArrowRight' });
+    expect(screen.getByRole('tab', { name: 'Tab B' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('flecha izquierda en primer tab va al último (wrap)', () => {
-    render(<TestTabs />);
-    screen.getByRole('tab', { name: 'Pestaña A' }).focus();
-    fireEvent.keyDown(screen.getByRole('tablist'), { key: 'ArrowLeft' });
-    expect(document.activeElement).toBe(screen.getByRole('tab', { name: 'Pestaña C' }));
+  it('ArrowLeft navega al tab anterior', () => {
+    render(<Suite />);
+    fireEvent.click(screen.getByRole('tab', { name: 'Tab B' }));
+    screen.getByRole('tab', { name: 'Tab B' }).focus();
+    fireEvent.keyDown(document.activeElement, { key: 'ArrowLeft' });
+    expect(screen.getByRole('tab', { name: 'Tab A' })).toHaveAttribute('aria-selected', 'true');
   });
 
-  it('tabpanel tiene aria-labelledby apuntando al tab', () => {
-    render(<TestTabs />);
-    const panel = screen.getByRole('tabpanel');
-    const tabId = screen.getByRole('tab', { name: 'Pestaña A' }).id;
-    expect(panel).toHaveAttribute('aria-labelledby', tabId);
+  it('Home va al primer tab', () => {
+    render(<Suite />);
+    fireEvent.click(screen.getByRole('tab', { name: 'Tab C' }));
+    screen.getByRole('tab', { name: 'Tab C' }).focus();
+    fireEvent.keyDown(document.activeElement, { key: 'Home' });
+    expect(screen.getByRole('tab', { name: 'Tab A' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('End va al último tab', () => {
+    render(<Suite />);
+    screen.getByRole('tab', { name: 'Tab A' }).focus();
+    fireEvent.keyDown(document.activeElement, { key: 'End' });
+    expect(screen.getByRole('tab', { name: 'Tab C' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('Tabs ref.show(id) activa una pestaña programáticamente', () => {
+    const ref = createRef();
+    render(<Suite tabsRef={ref} />);
+    act(() => ref.current.show('b'));
+    expect(screen.getByRole('tab', { name: 'Tab B' })).toHaveAttribute('aria-selected', 'true');
+  });
+
+  it('onShow se llama al activar un tab', () => {
+    const onShow = jest.fn();
+    render(<Suite onShow={onShow} />);
+    fireEvent.click(screen.getByRole('tab', { name: 'Tab B' }));
+    expect(onShow).toHaveBeenCalledWith('b');
+  });
+
+  it('Tab disabled no se puede activar', () => {
+    render(
+      <Tabs defaultTab="a">
+        <TabList>
+          <Tab id="a">A</Tab>
+          <Tab id="b" disabled>B Disabled</Tab>
+        </TabList>
+        <TabPanel tabId="a"><p>PA</p></TabPanel>
+        <TabPanel tabId="b"><p>PB</p></TabPanel>
+      </Tabs>
+    );
+    fireEvent.click(screen.getByRole('tab', { name: 'B Disabled' }));
+    expect(screen.getByRole('tab', { name: 'A' })).toHaveAttribute('aria-selected', 'true');
   });
 });

@@ -1,73 +1,100 @@
 /**
- * Collapse / Accordion — ecommerce-ui
- * Basado en <details>/<summary> nativo del navegador.
+ * Collapse — ecommerce-ui
+ * Sección colapsable con API completa de ui-core-5.25.0 collapse.js.
  *
- * El browser gestiona nativamente:
- *   - Toggle abierto/cerrado
- *   - Accesibilidad (role=group, aria-expanded del summary)
- *   - El atributo `name` agrupa details en un accordion exclusivo
- *     (Chrome 120+, Firefox 130+)
+ * Opciones:
+ *   toggle: true  — abre/cierra al crear (default ui-core)
+ *   parent: null  — selector del accordeon padre (solo uno abierto a la vez)
  *
- * Referencia: ui-core collapse.js (T-305)
- * Iniciativa: integrar-componentes-ui-core-js
- *
- * @param {string}    summary — título del panel colapsable
- * @param {boolean}   open    — estado controlado (opcional)
- * @param {Function}  onToggle
- * @param {string}    name    — agrupa en accordion exclusivo
- * @param {ReactNode} children
+ * Métodos via ref: toggle() / show() / hide() / dispose()
+ * Eventos: onShow / onShown / onHide / onHidden
  */
+import {
+  useState, useCallback,
+  useImperativeHandle, forwardRef, useId,
+} from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import styles from './Collapse.module.scss';
 
-export function Collapse({
-  summary,
-  open,
-  onToggle,
-  name,
-  className = '',
+const Collapse = forwardRef(function Collapse({
   children,
-}) {
-  const controlled = open !== undefined;
+  trigger,        // Elemento trigger (si no se pasa, solo ref)
+  open: controlled,
+  defaultOpen = false,
+  // Opciones de ui-core
+  toggle: toggleOnMount = false, // toggle:true en ui-core = mostrar al crear si data-toggle
+  parent,         // selector de accordeon (sin uso directo aquí — ver Accordion)
+  horizontal = false, // colapso horizontal en lugar de vertical
+  // Eventos
+  onShow,
+  onShown,
+  onHide,
+  onHidden,
+  className = '',
+}, ref) {
+  const [internalOpen, setInternalOpen] = useState(defaultOpen);
+  const id = useId();
+  const collapseId = `collapse-${id.replace(/:/g, '')}`;
+
+  const isOpen = controlled !== undefined ? controlled : internalOpen;
+
+  // show() — equivale a Collapse.show() de ui-core
+  const show = useCallback(() => {
+    if (controlled === undefined) setInternalOpen(true);
+    onShow?.();
+    setTimeout(() => onShown?.(), 350); // duración de la animación
+  }, [controlled, onShow, onShown]);
+
+  // hide() — equivale a Collapse.hide() de ui-core
+  const hide = useCallback(() => {
+    if (controlled === undefined) setInternalOpen(false);
+    onHide?.();
+    setTimeout(() => onHidden?.(), 350);
+  }, [controlled, onHide, onHidden]);
+
+  // toggle() — equivale a Collapse.toggle() de ui-core
+  const toggleFn = useCallback(() => isOpen ? hide() : show(), [isOpen, hide, show]);
+  const dispose  = useCallback(() => hide(), [hide]);
+
+  useImperativeHandle(ref, () => ({
+    toggle: toggleFn, show, hide, dispose,
+    isShown: () => isOpen,
+  }), [toggleFn, show, hide, dispose, isOpen]);
+
+  const animationAxis = horizontal
+    ? { initial: { width: 0, opacity: 0 }, animate: { width: 'auto', opacity: 1 }, exit: { width: 0, opacity: 0 } }
+    : { initial: { height: 0, opacity: 0 }, animate: { height: 'auto', opacity: 1 }, exit: { height: 0, opacity: 0 } };
 
   return (
-    <details
-      className={`${styles.collapse} ${className}`}
-      open={controlled ? open : undefined}
-      onToggle={onToggle ? (e) => onToggle(e.newState === 'open') : undefined}
-      name={name}
-    >
-      <summary
-        className={styles.summary}
-        onClick={onToggle ? (e) => {
-          // complemento para jsdom — el toggle nativo del browser también lo llama
-          const details = e.currentTarget.closest('details');
-          if (details) setTimeout(() => onToggle(details.hasAttribute('open')), 0);
-        } : undefined}
-      >
-        <span className={styles.summaryText}>{summary}</span>
-        <span className={styles.indicator} aria-hidden="true">›</span>
-      </summary>
-      <div className={styles.body}>
-        {children}
-      </div>
-    </details>
-  );
-}
+    <div className={`${styles.collapse} ${className}`}>
+      {trigger && (
+        <button
+          type="button"
+          className={styles.trigger}
+          onClick={toggleFn}
+          aria-expanded={isOpen}
+          aria-controls={collapseId}
+        >
+          {trigger}
+        </button>
+      )}
 
-/**
- * Accordion — grupo de Collapse con exclusividad nativa via name
- */
-export function Accordion({ items, className = '' }) {
-  const name = `accordion-${Math.random().toString(36).slice(2, 7)}`;
-  return (
-    <div className={`${styles.accordion} ${className}`}>
-      {items.map((item, i) => (
-        <Collapse key={i} summary={item.summary} name={name}>
-          {item.content}
-        </Collapse>
-      ))}
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            id={collapseId}
+            className={`${styles.content} ${horizontal ? styles.horizontal : ''}`}
+            {...animationAxis}
+            transition={{ duration: 0.28, ease: [0.4, 0, 0.2, 1] }}
+            style={{ overflow: 'hidden' }}
+          >
+            {children}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
-}
+});
 
 export default Collapse;
+export { Collapse };

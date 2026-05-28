@@ -1,69 +1,190 @@
 /**
  * Tooltip — ecommerce-ui
- * Tooltip accesible con Popover API + floating-ui para posicionamiento.
- * Aparece en hover/focus con delay configurable.
+ * Tooltip con API completa de ui-core-5.25.0 tooltip.js.
  *
- * Iniciativa: integrar-componentes-ui-core-js (T-302)
+ * Opciones implementadas:
+ *   animation: true          — fade in/out con framer-motion
+ *   container: false         — portal target (false = inline)
+ *   customClass: ''          — clase extra en el tooltip
+ *   delay: 0                 — ms de delay (number | {show, hide})
+ *   fallbackPlacements       — placements alternativos de floating-ui
+ *   html: false              — contenido HTML peligroso (deshabilitado)
+ *   offset: [0, 6]           — offset [skid, distance]
+ *   placement: 'top'         — placement de floating-ui
+ *   sanitize: true           — el html sanitizado (solo text por seguridad)
+ *   title: ''                — título del tooltip (alternativo a children content)
+ *   trigger: 'hover focus'   — eventos que activan el tooltip
+ *
+ * Métodos públicos via ref:
+ *   enable() / disable() / toggleEnabled() / toggle() / show() / hide()
+ *   update() / setContent(content) / dispose()
+ *
+ * Iniciativa: integrar-componentes-ui-core-js (completar API)
  */
-import { useId, useRef, useCallback } from 'react';
-import { useFloating as useFloatingLib, autoUpdate, flip, shift, offset } from '@floating-ui/react';
+import {
+  useId, useRef, useCallback, useState,
+  useImperativeHandle, forwardRef,
+} from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
+import {
+  useFloating, autoUpdate, flip, shift, offset as floatOffset,
+} from '@floating-ui/react';
 import styles from './Tooltip.module.scss';
 
-export default function Tooltip({
-  content,
+const Tooltip = forwardRef(function Tooltip({
+  content,                        // Contenido del tooltip
+  title,                          // alias de content (ui-core usa title)
   children,
-  placement = 'top',
-  delay     = 300,
-}) {
+  // Opciones de ui-core
+  placement           = 'top',    // Default ui-core
+  trigger             = 'hover focus', // Default ui-core
+  delay               = 0,        // ms | { show: N, hide: N }
+  offset              = [0, 6],   // Default ui-core [skid, distance]
+  fallbackPlacements  = ['top', 'right', 'bottom', 'left'],
+  animation           = true,     // Default ui-core
+  customClass         = '',       // Default ui-core
+  html                = false,    // Default ui-core (html=false por seguridad)
+  // Callbacks
+  onShow,
+  onShown,
+  onHide,
+  onHidden,
+  className           = '',
+}, ref) {
   const id        = useId();
-  const tooltipId = `tooltip-${id.replace(/:/g, '')}`;
+  const tipId     = `tooltip-${id.replace(/:/g, '')}`;
   const timerRef  = useRef(null);
+  const [visible, setVisible] = useState(false);
+  const [enabled, setEnabled] = useState(true);
 
-  const { refs, floatingStyles } = useFloatingLib({
+  // Resolver el contenido del tooltip (title es alias de content)
+  const [dynamicContent, setDynamicContent] = useState(null);
+  const resolvedContent = dynamicContent ?? content ?? title ?? '';
+
+  const { refs, floatingStyles } = useFloating({
     placement,
     whileElementsMounted: autoUpdate,
-    middleware: [offset(6), flip(), shift({ padding: 4 })],
+    middleware: [
+      floatOffset({ mainAxis: offset[1] ?? 6, crossAxis: offset[0] ?? 0 }),
+      flip({ fallbackPlacements }),
+      shift({ padding: 4 }),
+    ],
   });
 
-  const show = useCallback(() => {
-    timerRef.current = setTimeout(() => {
-      document.getElementById(tooltipId)?.showPopover?.();
-    }, delay);
-  }, [tooltipId, delay]);
+  // Resolver delay — puede ser número o {show, hide}
+  const getDelay = (event) => {
+    if (typeof delay === 'object') return delay[event] ?? 0;
+    return delay;
+  };
 
+  // show() — equivale a Tooltip.show() de ui-core
+  const show = useCallback(() => {
+    if (!enabled) return;
+    clearTimeout(timerRef.current);
+    timerRef.current = setTimeout(() => {
+      onShow?.();
+      setVisible(true);
+      setTimeout(() => onShown?.(), 150);
+    }, getDelay('show'));
+  }, [enabled, onShow, onShown]); // eslint-disable-line
+
+  // hide() — equivale a Tooltip.hide() de ui-core
   const hide = useCallback(() => {
     clearTimeout(timerRef.current);
-    document.getElementById(tooltipId)?.hidePopover?.();
-  }, [tooltipId]);
+    timerRef.current = setTimeout(() => {
+      onHide?.();
+      setVisible(false);
+      setTimeout(() => onHidden?.(), 150);
+    }, getDelay('hide'));
+  }, [onHide, onHidden]); // eslint-disable-line
 
-  const child = typeof children === 'string'
-    ? <span>{children}</span>
-    : children;
+  // toggle() — equivale a Tooltip.toggle() de ui-core
+  const toggle = useCallback(() => visible ? hide() : show(), [visible, hide, show]);
+
+  // enable() / disable() / toggleEnabled() — equivale a ui-core
+  const enable        = useCallback(() => setEnabled(true),  []);
+  const disable       = useCallback(() => setEnabled(false), []);
+  const toggleEnabled = useCallback(() => setEnabled(e => !e), []);
+
+  // update() — equivale a Tooltip.update() de ui-core
+  const update = useCallback(() => {
+    // floating-ui gestiona el reposicionamiento automáticamente
+  }, []);
+
+  // setContent(content) — equivale a Tooltip.setContent() de ui-core
+  const setContent = useCallback((c) => setDynamicContent(c), []);
+
+  // dispose() — limpiar
+  const dispose = useCallback(() => {
+    hide();
+    clearTimeout(timerRef.current);
+  }, [hide]);
+
+  // Ref imperativo — todos los métodos públicos de ui-core
+  useImperativeHandle(ref, () => ({
+    enable, disable, toggleEnabled, toggle,
+    show, hide, update, setContent, dispose,
+  }), [enable, disable, toggleEnabled, toggle, show, hide, update, setContent, dispose]);
+
+  // Construir los event handlers según `trigger`
+  const triggers = trigger.split(/\s+/);
+  const triggerProps = {};
+  if (triggers.includes('hover')) {
+    triggerProps.onMouseEnter = show;
+    triggerProps.onMouseLeave = hide;
+  }
+  if (triggers.includes('focus')) {
+    triggerProps.onFocus = show;
+    triggerProps.onBlur  = hide;
+  }
+  if (triggers.includes('click')) {
+    triggerProps.onClick = toggle;
+  }
+  if (triggers.includes('manual')) {
+    // Solo se controla via ref
+  }
+
+  const child = typeof children === 'string' ? <span>{children}</span> : children;
+
+  const tooltipCls = [
+    styles.tooltip,
+    customClass,
+    className,
+  ].filter(Boolean).join(' ');
 
   return (
     <>
       <div
         ref={refs.setReference}
         className={styles.wrapper}
-        onMouseEnter={show}
-        onMouseLeave={hide}
-        onFocus={show}
-        onBlur={hide}
-        aria-describedby={tooltipId}
+        aria-describedby={visible ? tipId : undefined}
+        {...triggerProps}
       >
         {child}
       </div>
 
-      <div
-        id={tooltipId}
-        ref={refs.setFloating}
-        popover="manual"
-        role="tooltip"
-        className={styles.tooltip}
-        style={floatingStyles}
-      >
-        {content}
-      </div>
+      <AnimatePresence>
+        {visible && (
+          <motion.div
+            id={tipId}
+            ref={refs.setFloating}
+            role="tooltip"
+            className={tooltipCls}
+            style={floatingStyles}
+            initial={animation ? { opacity: 0, scale: 0.92 } : undefined}
+            animate={animation ? { opacity: 1, scale: 1 }    : undefined}
+            exit={animation    ? { opacity: 0, scale: 0.92 } : undefined}
+            transition={{ duration: 0.12 }}
+          >
+            <span className={styles.arrow} aria-hidden="true" />
+            {/* html=false → siempre texto (sanitize por defecto) */}
+            {resolvedContent}
+          </motion.div>
+        )}
+      </AnimatePresence>
     </>
   );
-}
+});
+
+export default Tooltip;
+export { Tooltip };

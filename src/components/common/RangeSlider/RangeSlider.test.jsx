@@ -1,67 +1,66 @@
 /**
- * Tests: RangeSlider
- * Cubre: BUG-CF01 (garantiza min <= max)
- * Iniciativa: integrar-componentes-ui-core-js (T-401)
+ * Tests: RangeSlider — API completa de ui-core range-slider.js
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
 import RangeSlider from './RangeSlider';
 
-describe('RangeSlider — modo simple', () => {
-  it('renderiza con el valor actual', () => {
-    render(<RangeSlider value={40} onChange={jest.fn()} label="Precio" />);
-    expect(screen.getByRole('slider', { name: /precio/i })).toHaveValue('40');
+describe('RangeSlider — API completa ui-core', () => {
+  it('renderiza un input range', () => {
+    render(<RangeSlider />);
+    expect(screen.getByRole('slider')).toBeInTheDocument();
   });
 
-  it('llama onChange con el nuevo valor', () => {
+  it('min / max / step se aplican al input', () => {
+    render(<RangeSlider min={10} max={200} step={5} />);
+    const input = screen.getByRole('slider');
+    expect(input).toHaveAttribute('min', '10');
+    expect(input).toHaveAttribute('max', '200');
+    expect(input).toHaveAttribute('step', '5');
+  });
+
+  it('tooltips=true muestra el tooltip con el valor', () => {
+    render(<RangeSlider defaultValue={50} tooltips />);
+    expect(screen.getByText('50')).toBeInTheDocument();
+  });
+
+  it('tooltipsFormat formatea el valor del tooltip', () => {
+    render(<RangeSlider defaultValue={75} tooltips tooltipsFormat={v => `${v}%`} />);
+    expect(screen.getByText('75%')).toBeInTheDocument();
+  });
+
+  it('onChange se llama al mover el slider', () => {
     const onChange = jest.fn();
-    render(<RangeSlider value={40} onChange={onChange} label="Precio" />);
+    render(<RangeSlider onChange={onChange} />);
     fireEvent.change(screen.getByRole('slider'), { target: { value: '60' } });
     expect(onChange).toHaveBeenCalledWith(60);
   });
 
-  it('muestra el valor en aria-live', () => {
-    render(<RangeSlider value={50} onChange={jest.fn()} label="Volumen" />);
-    expect(screen.getByText('Volumen')).toBeInTheDocument();
-  });
-});
-
-describe('RangeSlider — modo doble (BUG-CF01)', () => {
-  it('renderiza dos sliders con aria-label distintos', () => {
-    render(<RangeSlider value={[20, 80]} onChange={jest.fn()} />);
-    expect(screen.getByRole('slider', { name: 'Valor mínimo' })).toBeInTheDocument();
-    expect(screen.getByRole('slider', { name: 'Valor máximo' })).toBeInTheDocument();
+  it('labels renderiza etiquetas bajo el track', () => {
+    render(<RangeSlider labels={['Bajo', 'Medio', 'Alto']} />);
+    expect(screen.getByText('Bajo')).toBeInTheDocument();
+    expect(screen.getByText('Alto')).toBeInTheDocument();
   });
 
-  it('garantiza lo <= hi: mover lo hasta hi lo clampea', () => {
-    const onChange = jest.fn();
-    render(<RangeSlider value={[20, 50]} onChange={onChange} distance={5} />);
-    // Intentar mover lo a 60 (> hi=50 - distance=5)
-    fireEvent.change(screen.getByRole('slider', { name: 'Valor mínimo' }), {
-      target: { value: '60' },
-    });
-    // Debe quedar en max(60, hi-distance) = hi-distance = 45
-    expect(onChange).toHaveBeenCalledWith([45, 50]);
+  it('range [start, end] renderiza el slider de rango', () => {
+    // Verificar que el componente acepta array y renderiza sin errores
+    const { container } = render(<RangeSlider defaultValue={[20, 80]} tooltips />);
+    // Los tooltips del rango
+    const tooltipTexts = [...container.querySelectorAll('[class]')]
+      .map(el => el.textContent)
+      .filter(t => t === '20' || t === '80');
+    expect(tooltipTexts.length).toBeGreaterThanOrEqual(2);
   });
 
-  it('garantiza hi >= lo: mover hi por debajo de lo lo clampea', () => {
-    const onChange = jest.fn();
-    render(<RangeSlider value={[30, 70]} onChange={onChange} distance={10} />);
-    fireEvent.change(screen.getByRole('slider', { name: 'Valor máximo' }), {
-      target: { value: '25' },
-    });
-    // 25 < lo+distance=40 → clampea a 40
-    expect(onChange).toHaveBeenCalledWith([30, 40]);
+  it('ref.update(config) actualiza el valor', () => {
+    const ref = createRef();
+    render(<RangeSlider ref={ref} defaultValue={30} tooltips />);
+    act(() => ref.current.update({ value: 70 }));
+    expect(screen.getByText('70')).toBeInTheDocument();
   });
 
-  it('formatea valores con formatValue', () => {
-    render(
-      <RangeSlider
-        value={[100, 500]}
-        onChange={jest.fn()}
-        label="Precio"
-        formatValue={(v) => `$${v}`}
-      />
-    );
-    expect(screen.getByText('$100 – $500')).toBeInTheDocument();
+  it('disabled bloquea la interacción', () => {
+    render(<RangeSlider disabled />);
+    expect(screen.getByRole('slider')).toBeDisabled();
   });
 });

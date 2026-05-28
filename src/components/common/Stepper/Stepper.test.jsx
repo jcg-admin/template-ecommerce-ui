@@ -1,60 +1,92 @@
 /**
- * Tests: Stepper
- * Cubre: BUG-CO01 (aria-current='step'), BUG-CO02 (linear blocks clicking ahead)
- * Iniciativa: integrar-componentes-ui-core-js (T-404)
+ * Tests: Stepper — API completa de ui-core stepper.js
  */
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Stepper } from './Stepper';
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
+import Stepper, { StepPanel } from './Stepper';
 
-const STEPS = [
-  { label: 'Identificación' },
-  { label: 'Envío' },
-  { label: 'Pago' },
-  { label: 'Confirmación' },
-];
+const Steps = ({ stepRef, ...p }) => (
+  <Stepper ref={stepRef} {...p}>
+    <StepPanel label="Información">Panel 1</StepPanel>
+    <StepPanel label="Detalles">Panel 2</StepPanel>
+    <StepPanel label="Confirmación">Panel 3</StepPanel>
+  </Stepper>
+);
 
-describe('Stepper — ARIA (BUG-CO01)', () => {
-  it('tiene role navigation y aria-label', () => {
-    render(<Stepper steps={STEPS} activeStep={1} />);
-    expect(screen.getByRole('navigation', { name: /progreso/i })).toBeInTheDocument();
+describe('Stepper — API completa ui-core', () => {
+  it('muestra el primer paso por defecto', () => {
+    render(<Steps />);
+    expect(screen.getByText('Panel 1')).toBeInTheDocument();
   });
 
-  it('el paso activo tiene aria-current="step"', () => {
-    render(<Stepper steps={STEPS} activeStep={1} />);
-    const items = screen.getAllByRole('listitem');
-    expect(items[1]).toHaveAttribute('aria-current', 'step');
-    expect(items[0]).not.toHaveAttribute('aria-current');
-    expect(items[2]).not.toHaveAttribute('aria-current');
+  it('los tabs muestran los labels de cada paso', () => {
+    render(<Steps />);
+    expect(screen.getByRole('tab', { name: /Información/i })).toBeInTheDocument();
+    expect(screen.getByRole('tab', { name: /Confirmación/i })).toBeInTheDocument();
   });
 
-  it('pasos completados muestran ✓ en el indicador', () => {
-    render(<Stepper steps={STEPS} activeStep={2} />);
-    // Los pasos 0 y 1 deben mostrar ✓
-    const indicators = document.querySelectorAll('[aria-hidden="true"]');
-    const checkmarks = Array.from(indicators).filter(el => el.textContent === '✓');
-    expect(checkmarks.length).toBeGreaterThanOrEqual(2);
-  });
-});
-
-describe('Stepper — linear mode (BUG-CO02)', () => {
-  it('con linear=true NO renderiza botón en pasos pendientes', () => {
-    render(<Stepper steps={STEPS} activeStep={1} linear={true} onStepClick={jest.fn()} />);
-    // Pasos pendientes (2, 3) no deben tener botón clickeable
-    const buttons = screen.getAllByRole('button');
-    // Solo el paso 0 (completado) es clickeable
-    expect(buttons).toHaveLength(1);
+  it('el paso activo tiene aria-current=step', () => {
+    render(<Steps />);
+    expect(screen.getByRole('tab', { name: /Información/i }))
+      .toHaveAttribute('aria-current', 'step');
   });
 
-  it('con linear=false permite click en cualquier paso', () => {
-    render(<Stepper steps={STEPS} activeStep={1} linear={false} onStepClick={jest.fn()} />);
-    // Todos los pasos excepto el activo son clickeables (3 botones)
-    expect(screen.getAllByRole('button').length).toBeGreaterThanOrEqual(3);
+  it('ref.next() avanza al siguiente paso', () => {
+    const ref = createRef();
+    render(<Steps stepRef={ref} />);
+    act(() => ref.current.next());
+    expect(screen.getByText('Panel 2')).toBeInTheDocument();
   });
 
-  it('onStepClick se llama con el índice correcto al click en completado', () => {
-    const onStepClick = jest.fn();
-    render(<Stepper steps={STEPS} activeStep={2} linear={true} onStepClick={onStepClick} />);
-    fireEvent.click(screen.getAllByRole('button')[0]);
-    expect(onStepClick).toHaveBeenCalledWith(0);
+  it('ref.prev() retrocede al paso anterior', () => {
+    const ref = createRef();
+    render(<Steps stepRef={ref} defaultStep={1} />);
+    act(() => ref.current.prev());
+    expect(screen.getByText('Panel 1')).toBeInTheDocument();
+  });
+
+  it('ref.showStep(n) va al paso n', () => {
+    const ref = createRef();
+    render(<Steps stepRef={ref} />);
+    act(() => ref.current.showStep(2));
+    expect(screen.getByText('Panel 3')).toBeInTheDocument();
+  });
+
+  it('linear=true impide al usuario saltar pasos no visitados (click)', () => {
+    render(<Steps linear />);
+    // El tab del paso 2 (idx=2) tiene aria-disabled cuando linear=true y active=0
+    const tabC = screen.getByRole('tab', { name: /Confirmación/i });
+    expect(tabC).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('ref.reset() vuelve al primer paso', () => {
+    const ref = createRef();
+    render(<Steps stepRef={ref} defaultStep={2} />);
+    act(() => ref.current.reset());
+    expect(screen.getByText('Panel 1')).toBeInTheDocument();
+  });
+
+  it('onStepChange se llama al cambiar de paso', () => {
+    const onChange = jest.fn();
+    const ref = createRef();
+    render(<Steps stepRef={ref} onStepChange={onChange} />);
+    act(() => ref.current.next());
+    expect(onChange).toHaveBeenCalledWith(1);
+  });
+
+  it('onFinish se llama al pasar del último paso', () => {
+    const onFinish = jest.fn();
+    const ref = createRef();
+    render(<Steps stepRef={ref} defaultStep={2} onFinish={onFinish} />);
+    act(() => ref.current.next());
+    expect(onFinish).toHaveBeenCalledTimes(1);
+  });
+
+  it('ref expone showStep/next/prev/finish/reset', () => {
+    const ref = createRef();
+    render(<Steps stepRef={ref} />);
+    ['showStep','next','prev','finish','reset','getActiveStep'].forEach(m => {
+      expect(typeof ref.current?.[m]).toBe('function');
+    });
   });
 });

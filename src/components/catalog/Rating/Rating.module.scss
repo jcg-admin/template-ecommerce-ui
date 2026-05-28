@@ -1,3 +1,4 @@
+@use 'sass:color';
 @use '@styles/abstracts' as *;
 
 .rating {
@@ -19,7 +20,7 @@
   cursor: pointer;
   display: flex;
 
-  &:hover { color: darken(#f5a623, 10%); }
+  &:hover { color: color.scale(#f5a623, $lightness: -10%); }
 }
 
 .halfLabel {

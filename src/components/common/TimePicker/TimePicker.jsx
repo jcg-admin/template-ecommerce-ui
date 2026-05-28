@@ -279,3 +279,4 @@ const TimePicker = forwardRef(function TimePicker({
 });
 
 export default TimePicker;
+export { TimePicker };

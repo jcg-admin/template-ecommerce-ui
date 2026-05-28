@@ -126,3 +126,4 @@ const ScrollSpy = forwardRef(function ScrollSpy({
 });
 
 export default ScrollSpy;
+export { ScrollSpy };

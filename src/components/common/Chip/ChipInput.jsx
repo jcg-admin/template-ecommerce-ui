@@ -195,3 +195,4 @@ const ChipInput = forwardRef(function ChipInput({
 });
 
 export default ChipInput;
+export { ChipInput };

@@ -1,58 +1,71 @@
-import { render, screen, fireEvent } from '@testing-library/react';
-import { Collapse, Accordion } from './Collapse';
+/**
+ * Tests: Collapse — API completa de ui-core collapse.js
+ * Opciones: toggle, parent, horizontal
+ * Métodos: toggle, show, hide, dispose, isShown
+ * Eventos: onShow, onShown, onHide, onHidden
+ */
+import { render, screen, fireEvent, act } from '@testing-library/react';
+import { createRef } from 'react';
+import Collapse from './Collapse';
 
-describe('Collapse', () => {
-  it('renderiza el summary y los children', () => {
-    render(<Collapse summary="Título"><p>Contenido</p></Collapse>);
-    expect(screen.getByText('Título')).toBeInTheDocument();
-    expect(screen.getByText('Contenido')).toBeInTheDocument();
+describe('Collapse — API completa ui-core', () => {
+  it('está cerrado por defecto', () => {
+    render(<Collapse trigger="Ver más"><p>Contenido</p></Collapse>);
+    expect(screen.getByRole('button')).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('details está cerrado por defecto', () => {
-    render(<Collapse summary="Título"><p>x</p></Collapse>);
-    expect(screen.getByRole('group')).not.toHaveAttribute('open');
+  it('defaultOpen=true lo muestra al montar', () => {
+    render(<Collapse defaultOpen trigger="T"><p>Visible</p></Collapse>);
+    expect(screen.getByText('Visible')).toBeInTheDocument();
   });
 
-  it('click en summary abre el details', () => {
-    render(<Collapse summary="Click me"><p>Oculto</p></Collapse>);
-    fireEvent.click(screen.getByText('Click me'));
-    expect(screen.getByRole('group')).toHaveAttribute('open');
+  it('click en trigger abre y cierra (toggle)', () => {
+    render(<Collapse trigger="Toggle"><p>Cuerpo</p></Collapse>);
+    const btn = screen.getByRole('button');
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText('Cuerpo')).toBeInTheDocument();
+    fireEvent.click(btn);
+    expect(btn).toHaveAttribute('aria-expanded', 'false');
   });
 
-  it('llama onToggle al disparar el evento toggle del details', () => {
-    // Nota BUG-JSDOM-01: jsdom no dispara toggle automaticamente al hacer click.
-    // Disparamos el evento manualmente para testear el handler.
-    const onToggle = jest.fn();
-    render(<Collapse summary="T" onToggle={onToggle}><p>x</p></Collapse>);
-    const details = document.querySelector('details');
-    fireEvent(details, new Event('toggle'));
-    expect(onToggle).toHaveBeenCalled();
+  it('llama onShow al abrir', () => {
+    const onShow = jest.fn();
+    render(<Collapse trigger="T" onShow={onShow}><p>C</p></Collapse>);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onShow).toHaveBeenCalledTimes(1);
   });
 
-  it('controlado: open=true muestra el details abierto', () => {
-    render(<Collapse summary="T" open={true}><p>Visible</p></Collapse>);
-    expect(screen.getByRole('group')).toHaveAttribute('open');
-  });
-});
-
-describe('Accordion', () => {
-  it('renderiza todos los items', () => {
-    const items = [
-      { summary: '¿Pregunta 1?', content: 'Respuesta 1' },
-      { summary: '¿Pregunta 2?', content: 'Respuesta 2' },
-    ];
-    render(<Accordion items={items} />);
-    expect(screen.getByText('¿Pregunta 1?')).toBeInTheDocument();
-    expect(screen.getByText('¿Pregunta 2?')).toBeInTheDocument();
+  it('llama onHide al cerrar', () => {
+    const onHide = jest.fn();
+    render(<Collapse trigger="T" defaultOpen onHide={onHide}><p>C</p></Collapse>);
+    fireEvent.click(screen.getByRole('button'));
+    expect(onHide).toHaveBeenCalledTimes(1);
   });
 
-  it('todos los details tienen el mismo name (exclusividad nativa)', () => {
-    const items = [
-      { summary: 'A', content: 'a' },
-      { summary: 'B', content: 'b' },
-    ];
-    render(<Accordion items={items} />);
-    const details = document.querySelectorAll('details');
-    expect(details[0].getAttribute('name')).toBe(details[1].getAttribute('name'));
+  it('ref.show() / hide() / toggle()', () => {
+    const ref = createRef();
+    render(<Collapse ref={ref}><p>Content</p></Collapse>);
+    act(() => ref.current.show());
+    expect(ref.current.isShown()).toBe(true);
+    act(() => ref.current.hide());
+    expect(ref.current.isShown()).toBe(false);
+    act(() => ref.current.toggle());
+    expect(ref.current.isShown()).toBe(true);
+  });
+
+  it('ref expone toggle / show / hide / dispose / isShown', () => {
+    const ref = createRef();
+    render(<Collapse ref={ref}><p>C</p></Collapse>);
+    ['toggle','show','hide','dispose','isShown'].forEach(m => {
+      expect(typeof ref.current?.[m]).toBe('function');
+    });
+  });
+
+  it('controlled via open prop', () => {
+    const { rerender } = render(<Collapse open={false}><p>C</p></Collapse>);
+    expect(screen.queryByText('C')).not.toBeInTheDocument();
+    rerender(<Collapse open={true}><p>C</p></Collapse>);
+    expect(screen.getByText('C')).toBeInTheDocument();
   });
 });
