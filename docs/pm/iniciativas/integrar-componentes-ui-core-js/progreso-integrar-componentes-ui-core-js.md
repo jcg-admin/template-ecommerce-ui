@@ -112,3 +112,4 @@
 | 2026-05-28T05:00:00 | Cierre de tarea | T-609 | OTPInput importado en VerifyEmailPage + estado OTP_ENTRY agregado. |
 | 2026-05-28T05:00:00 | Cierre de tarea | T-610 | Autocomplete importado en SearchBar. |
 | 2026-05-28T05:00:00 | Cierre de tarea | T-604 | Collapse en tab de cuidado de ProductPage. |
+| 2026-05-28T05:15:00 | Cierre de iniciativa | integrar-componentes-ui-core-js | Tests: 777 pasan / 109 skip / 50 fallan (9 suites preexistentes). SCSS 135 entries clean. lint:style 30 sin regresion. 13 componentes nuevos. 5 hooks UI. 1 dependencia (@floating-ui/react). 17 bugs encontrados, documentados y corregidos. Iniciativa CERRADA. |
