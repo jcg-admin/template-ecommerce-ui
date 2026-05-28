@@ -9,7 +9,8 @@
  *   GET /catalogue/categories/
  */
 
-import Chip from '@components/common/Chip/Chip';
+import Chip        from '@components/common/Chip/Chip';
+import RangeSlider from '@components/common/RangeSlider/RangeSlider';
 import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
@@ -34,8 +35,12 @@ export default function CatalogPage() {
   } = useSelector((s) => s.catalog || {});
 
   const qParam    = searchParams.get('q') || '';
-  const [activeOrishas, setActiveOrishas] = useState([]);
-  const [activeTypes,   setActiveTypes]   = useState([]);
+  const [activeOrishas, setActiveOrishas]   = useState([]);
+  const [activeTypes,   setActiveTypes]     = useState([]);
+  const [sortOrder,     setSortOrder]       = useState('');
+  const [availability,  setAvailability]    = useState([]);
+  const [priceMin,      setPriceMin]        = useState(0);
+  const [priceMax,      setPriceMax]        = useState(10000);
   const mode = qParam ? 'search' : 'listing';
 
   useEffect(() => {
@@ -43,11 +48,15 @@ export default function CatalogPage() {
       dispatch(searchProducts({ q: qParam }));
     } else {
       dispatch(fetchProducts({
-        orishas: activeOrishas.length > 0 ? activeOrishas : undefined,
-        types:   activeTypes.length   > 0 ? activeTypes   : undefined,
+        orishas:      activeOrishas.length > 0  ? activeOrishas : undefined,
+        types:        activeTypes.length > 0    ? activeTypes   : undefined,
+        ordering:     sortOrder || undefined,
+        availability: availability.length > 0   ? availability  : undefined,
+        price_min:    priceMin > 0              ? priceMin      : undefined,
+        price_max:    priceMax < 10000          ? priceMax      : undefined,
       }));
     }
-  }, [dispatch, qParam, activeOrishas, activeTypes]);
+  }, [dispatch, qParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {
@@ -104,6 +113,10 @@ export default function CatalogPage() {
           setActiveOrishas={setActiveOrishas}
           activeTypes={activeTypes}
           setActiveTypes={setActiveTypes}
+          availability={availability}
+          setAvailability={setAvailability}
+          priceMin={priceMin} priceMax={priceMax}
+          setPriceMin={setPriceMin} setPriceMax={setPriceMax}
         />
 
           <section className={styles.results}>
@@ -152,7 +165,8 @@ export default function CatalogPage() {
   );
 }
 
-function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActiveTypes }) {
+function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActiveTypes,
+  availability, setAvailability, priceMin, priceMax, setPriceMin, setPriceMax }) {
   return (
     <aside className={styles.sidebar}>
       <FilterGroup title="Òrìsà">
@@ -190,12 +204,28 @@ function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActive
         </div>
       </FilterGroup>
       <FilterGroup title="Rango de precio">
-        <PriceSlider />
+        <RangeSlider
+          min={0} max={10000} step={50}
+          defaultValue={[0, 10000]}
+          tooltips
+          tooltipsFormat={(v) => `$${v.toLocaleString('es-MX')}`}
+          onChange={([min, max]) => { setPriceMin(min); setPriceMax(max); }}
+          track="fill"
+        />
       </FilterGroup>
       <FilterGroup title="Disponibilidad">
-        <Check label="Disponible inmediato" checked />
-        <Check label="Sobre pedido" />
-        <Check label="En oferta" />
+        {[['in_stock','Disponible inmediato'],['on_demand','Sobre pedido'],['on_sale','En oferta']].map(([val, lbl]) => (
+          <label key={val} className={styles.check}>
+            <input type="checkbox"
+              checked={availability.includes(val)}
+              onChange={() => setAvailability(prev =>
+                prev.includes(val) ? prev.filter(x => x !== val) : [...prev, val]
+              )}
+            />
+            <span className={styles.checkbox} />
+            <span>{lbl}</span>
+          </label>
+        ))}
       </FilterGroup>
       <Button variant="secondary" block>Limpiar filtros</Button>
     </aside>
@@ -234,7 +264,7 @@ function PriceSlider() {
   );
 }
 
-function Toolbar({ count, total }) {
+function Toolbar({ count, total, sortOrder, onSort }) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.toolbarCount}>
@@ -243,11 +273,11 @@ function Toolbar({ count, total }) {
       <div className={styles.toolbarRight}>
         <label className={styles.sort}>
           <span>Ordenar:</span>
-          <select>
-            <option>Recomendados</option>
-            <option>Precio: menor</option>
-            <option>Precio: mayor</option>
-            <option>Recién llegados</option>
+          <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+            <option value="">Recomendados</option>
+            <option value="base_price">Precio: menor</option>
+            <option value="-base_price">Precio: mayor</option>
+            <option value="-created_at">Recién llegados</option>
           </select>
         </label>
       </div>
