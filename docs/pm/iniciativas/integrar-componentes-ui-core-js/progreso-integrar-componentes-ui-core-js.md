@@ -21,3 +21,4 @@
 | Cierre de tarea | 0 |
 | Cierre de iniciativa | 0 |
 | 2026-05-28T01:10:00 | Analisis | analisis-inicial | Analisis exhaustivo producido (analisis-integrar-componentes-ui-core-js.md). 29 componentes catalogados en 4 bloques. Utilitarios transversales identificados como base de todo. Clasificacion por prioridad: 3 criticos (hooks+Modal+Sidebar+Toast), 4 altos (Dropdown, Tooltip, Rating, Tab), 5 medios, 5 bajos, 4 diferidos. Estimacion total ~22h en 7 fases. |
+| 2026-05-28T01:20:00 | Analisis | estrategia-nativa | Analisis de posicionamiento producido. Decision: floating-ui como unica dependencia nueva, solo para 6 componentes con posicionamiento dinamico. Los 23 restantes usan APIs nativas: <dialog> para Modal/Offcanvas, popover para Tooltip/Dropdown, CSS transitions para el resto. @popperjs/core descartado (modo mantenimiento). CSS Anchor Positioning descartado (Firefox/Safari no lo tienen). |
