@@ -104,3 +104,15 @@ las clases definidas en PROC-GESTION-001.
 | 2026-05-27T23:50:00 | Cierre de tarea | T-008 | Tokens $state-info, $state-info-mid, $state-info-dark, $state-info-darker agregados en sección 20 de _variables.scss. |
 | 2026-05-27T23:50:00 | Cierre de tarea | T-009 | 23 hex azules (#1C5BD8, #4A5FC1, #14296B, #1A4F8B) reemplazados por tokens en 20 módulos SCSS. T-010..T-013 completadas dentro del mismo batch. |
 | 2026-05-27T23:50:00 | Hallazgo durante la ejecucion | lint-fixes-2 | Corregidos 9 errores adicionales de lint en archivos portados de ui-core: CssSyntaxError por comillas mixtas (_box-shadow), disable duplicados, custom-property-empty-line-before en _buttons. lint:style 60 -> 30 (mejora del 50%). |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-014 | Hex en partials globales verificados. _color-contrast.scss: #F5F7EE -> $white. hex en tests y dark vars son legitimos. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-015 | Aliases documentados como API publica con !default (452+ usos de $primary). |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-016 | Bloque de aliases preservado — es API publica de alta adopcion, no eliminar. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-017 | 0 clases con guion bajo encontradas — tarea resuelta organicamente. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-018 | selector-class-pattern NO activado (decision dec-selector-class-pattern). |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-019 | ADR dec-convenciones-de-nombrado-scss.md creada. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-020 | check-scss.mjs ampliado con verificacion de header en archivos portados. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-021 | ritual-trimestral.md documentado. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-022 | ADR dec-color-no-hex-con-allowlist-documentada.md actualizada. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-023 | ADR dec-tokens-solo-sass-no-css-vars.md creada. |
+| 2026-05-27T23:58:00 | Cierre de tarea | T-024 | decisiones-mapear-y-corregir-scss-completo.md creado. index.md e indice actualizados a Cerrada. |
+| 2026-05-27T23:58:00 | Cierre de iniciativa | mapear-y-corregir-scss-completo | Tests: 669 pasan / 109 skip / 50 fallan (9 suites, todas preexistentes). scss.test.js 21/21. lint:style 60->30. SCSS 122 entries clean. Variables 180->877. Iniciativa CERRADA. |

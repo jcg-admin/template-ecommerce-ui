@@ -84,6 +84,22 @@ for (const file of files) {
   checkImports(file);
 }
 
+// T-020: Verificar que los archivos portados de ui-core tienen header de atribución
+function checkPortedFiles(file) {
+  if (!file.includes('src/styles/abstracts/')) return;
+  if (!file.endsWith('.scss') || file.endsWith('_index.scss')) return;
+  const src = readFileSync(file, 'utf8');
+  if (src.includes('ui-core-5.25.0') && !src.includes('Atribución:')) {
+    failed++;
+    console.error(`\n\x1b[31m✗\x1b[0m ${relative(repoRoot, file)}`);
+    console.error('  -> archivo portado de ui-core sin header de atribución');
+  }
+}
+
+for (const file of files) {
+  checkPortedFiles(file);
+}
+
 for (const file of files) {
   try {
     compile(file, {

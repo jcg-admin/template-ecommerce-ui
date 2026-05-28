@@ -334,16 +334,20 @@ $state-info-mid:    #4A5FC1;   // azul medio — estado refunded/secondary
 $state-info-dark:   #1A4F8B;   // azul oscuro — botones admin primarios
 $state-info-darker: #14296B;   // azul muy oscuro — hover states
 // ═══════════════════════════════════════════════════════════════════════
-// ALIASES — compatibilidad con nombres alternativos del proyecto
+// ALIASES — API pública del template (T-015)
+// Estos son alias semánticos de alta adopción en el codebase:
+//   $primary (452 usos), $error (120), $border (1097), $success (68)
+// No se eliminan porque son el vocabulario real de los módulos SCSS.
+// La migración sería a T-202 tokens cuando el dark mode (T-208) esté activo.
 // ═══════════════════════════════════════════════════════════════════════
-$bg-card:        $card-bg;
-$primary-tint:   $primary-50;
-$text-on-btn:    $text-inverse;
-$success:        $success-color;
-$warning:        $warning-color;
-$error:          $error-color;
-$border:         $border-color;
-$primary:        $primary-color;
+$bg-card:        $card-bg !default;       // 4 usos  — alias de $card-bg
+$primary-tint:   $primary-50 !default;   // 2 usos  — alias de $primary-50
+$text-on-btn:    $text-inverse !default; // 6 usos  — alias de $text-inverse
+$success:        $success-color !default; // 68 usos — alias de $success-color
+$warning:        $warning-color !default; // 18 usos — alias de $warning-color
+$error:          $error-color !default;  // 120 usos — alias de $error-color
+$border:         $border-color !default; // 1097 usos — alias de $border-color
+$primary:        $primary-color !default; // 452 usos — alias de $primary-color
 
 // ─────────────────────────────────────────────────────────────────────
 
