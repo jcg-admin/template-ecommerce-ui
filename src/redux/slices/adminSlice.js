@@ -123,6 +123,28 @@ const adminSlice = createSlice({
     userError:        null,
     actionError:      null,
     lastAction:       null,    // 'suspended' | 'reactivated' | 'created'
+    // HALLAZGO-ADMIN-SLICE-01: claves agregadas 2026-05-28
+    currentProduct:     null,
+    isLoadingProduct:   false,
+    productImages:      [],
+    csvImport:          { status: 'idle', result: null, errors: [] },
+    productVariants:    [],
+    isLoadingVariants:  false,
+    variantTypes:       [],
+    isLoadingVariantTypes: false,
+    gateways:           [],
+    isLoadingGateways:  false,
+    gatewayTestResults: {},
+    shippingMethods:    [],
+    isLoadingShipping:  false,
+    staticPages:        [],
+    currentPage:        null,
+    isLoadingPages:     false,
+    currentVoucher:     null,
+    isLoadingVoucher:   false,
+    inventoryDashboard: null,
+    stockAlerts:        [],
+    isLoadingInventory: false,
   },
 
   reducers: {
@@ -526,6 +548,417 @@ export const downloadPriceTemplate = createAsyncThunk(
     try {
       const res = await apiService.get('/api/v1/admin/price-sync/template/');
       return res.data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// =============================================================================
+// HALLAZGO-ADMIN-SLICE-01: Thunks faltantes — implementados 2026-05-28
+// =============================================================================
+
+// ── Producto detalle ─────────────────────────────────────────────────────────
+export const fetchAdminProduct = createAsyncThunk(
+  'admin/fetchProduct',
+  async (id, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/products/${id}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createProduct = createAsyncThunk(
+  'admin/createProduct',
+  async (data, { rejectWithValue }) => {
+    try { return (await apiService.post('/api/v1/admin/products/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateProduct = createAsyncThunk(
+  'admin/updateProduct',
+  async ({ id, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/products/${id}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const uploadProductImage = createAsyncThunk(
+  'admin/uploadProductImage',
+  async ({ productId, file }, { rejectWithValue }) => {
+    try {
+      const fd = new FormData();
+      fd.append('image', file);
+      return (await apiService.post(`/api/v1/admin/products/${productId}/images/`, fd)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteProductImage = createAsyncThunk(
+  'admin/deleteProductImage',
+  async ({ productId, imageId }, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/admin/products/${productId}/images/${imageId}/`);
+      return imageId;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const reorderProductImages = createAsyncThunk(
+  'admin/reorderProductImages',
+  async ({ productId, order }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/admin/products/${productId}/images/reorder/`, { order }
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Importación de productos ─────────────────────────────────────────────────
+export const uploadProductCSV = createAsyncThunk(
+  'admin/uploadProductCSV',
+  async (file, { rejectWithValue }) => {
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      return (await apiService.post('/api/v1/admin/products/import/', fd)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const confirmProductImport = createAsyncThunk(
+  'admin/confirmProductImport',
+  async (importId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/products/import/${importId}/confirm/`
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const fetchImportStatus = createAsyncThunk(
+  'admin/fetchImportStatus',
+  async (importId, { rejectWithValue }) => {
+    try {
+      return (await apiService.get(`/api/v1/admin/products/import/${importId}/`)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const downloadImportTemplate = createAsyncThunk(
+  'admin/downloadImportTemplate',
+  async (_, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/products/import/template/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Variantes ────────────────────────────────────────────────────────────────
+export const fetchProductVariants = createAsyncThunk(
+  'admin/fetchProductVariants',
+  async (productId, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/products/${productId}/variants/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const bulkUpdateVariants = createAsyncThunk(
+  'admin/bulkUpdateVariants',
+  async ({ productId, variants }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/admin/products/${productId}/variants/bulk/`, { variants }
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const regenerateVariants = createAsyncThunk(
+  'admin/regenerateVariants',
+  async (productId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/products/${productId}/variants/regenerate/`
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Tipos de variante ────────────────────────────────────────────────────────
+export const fetchVariantTypes = createAsyncThunk(
+  'admin/fetchVariantTypes',
+  async (productId, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/products/${productId}/variant-types/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createVariantType = createAsyncThunk(
+  'admin/createVariantType',
+  async ({ productId, data }, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/products/${productId}/variant-types/`, data
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateVariantType = createAsyncThunk(
+  'admin/updateVariantType',
+  async ({ productId, typeId, data }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/admin/products/${productId}/variant-types/${typeId}/`, data
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteVariantType = createAsyncThunk(
+  'admin/deleteVariantType',
+  async ({ productId, typeId }, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/admin/products/${productId}/variant-types/${typeId}/`);
+      return typeId;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createVariantOption = createAsyncThunk(
+  'admin/createVariantOption',
+  async ({ productId, typeId, data }, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/`, data
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateVariantOption = createAsyncThunk(
+  'admin/updateVariantOption',
+  async ({ productId, typeId, optionId, data }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`, data
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteVariantOption = createAsyncThunk(
+  'admin/deleteVariantOption',
+  async ({ productId, typeId, optionId }, { rejectWithValue }) => {
+    try {
+      await apiService.delete(
+        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`
+      );
+      return optionId;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Pasarelas de pago ────────────────────────────────────────────────────────
+export const fetchGateways = createAsyncThunk(
+  'admin/fetchGateways',
+  async (_, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/gateways/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateGateway = createAsyncThunk(
+  'admin/updateGateway',
+  async ({ id, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/gateways/${id}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const testGatewayConnection = createAsyncThunk(
+  'admin/testGatewayConnection',
+  async (gateway, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/gateways/${gateway}/test/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Métodos de envío ─────────────────────────────────────────────────────────
+export const fetchShippingMethods = createAsyncThunk(
+  'admin/fetchShippingMethods',
+  async (_, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/shipping-methods/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createShippingMethod = createAsyncThunk(
+  'admin/createShippingMethod',
+  async (data, { rejectWithValue }) => {
+    try { return (await apiService.post('/api/v1/admin/shipping-methods/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateShippingMethod = createAsyncThunk(
+  'admin/updateShippingMethod',
+  async ({ id, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/shipping-methods/${id}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteShippingMethod = createAsyncThunk(
+  'admin/deleteShippingMethod',
+  async (id, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/admin/shipping-methods/${id}/`);
+      return id;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Páginas estáticas (CMS) ──────────────────────────────────────────────────
+
+
+export const fetchAdminPage = createAsyncThunk(
+  'admin/fetchAdminPage',
+  async (slug, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const savePageDraft = createAsyncThunk(
+  'admin/savePageDraft',
+  async ({ slug, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const publishPage = createAsyncThunk(
+  'admin/publishPage',
+  async (slug, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/pages/${slug}/publish/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const restorePageVersion = createAsyncThunk(
+  'admin/restorePageVersion',
+  async ({ slug, versionId }, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/pages/${slug}/restore/${versionId}/`
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createAdminPage = createAsyncThunk(
+  'admin/createAdminPage',
+  async (data, { rejectWithValue }) => {
+    try { return (await apiService.post('/api/v1/admin/pages/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateAdminPage = createAsyncThunk(
+  'admin/updateAdminPage',
+  async ({ slug, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Vouchers / Cupones ────────────────────────────────────────────────────────
+export const fetchAdminVoucher = createAsyncThunk(
+  'admin/fetchAdminVoucher',
+  async (id, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/vouchers/${id}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createVoucher = createAsyncThunk(
+  'admin/createVoucher',
+  async (data, { rejectWithValue }) => {
+    try { return (await apiService.post('/api/v1/admin/vouchers/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateVoucher = createAsyncThunk(
+  'admin/updateVoucher',
+  async ({ id, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/vouchers/${id}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteVoucher = createAsyncThunk(
+  'admin/deleteVoucher',
+  async (id, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/admin/vouchers/${id}/`);
+      return id;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Usuarios admin — acciones faltantes ─────────────────────────────────────
+export const setUserActiveStatus = createAsyncThunk(
+  'admin/setUserActiveStatus',
+  async ({ userId, active }, { rejectWithValue }) => {
+    try {
+      const url = active
+        ? `/api/v1/admin/users/${userId}/reactivate/`
+        : `/api/v1/admin/users/${userId}/suspend/`;
+      return (await apiService.post(url)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const resetUserPassword = createAsyncThunk(
+  'admin/resetUserPassword',
+  async (userId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(`/api/v1/admin/users/${userId}/reset-password/`)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const makeUserAdmin = createAsyncThunk(
+  'admin/makeUserAdmin',
+  async ({ userId, isAdmin }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/admin/users/${userId}/`, { is_staff: isAdmin }
+      )).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ── Categorías — acciones faltantes ─────────────────────────────────────────
+export const deleteCategory = createAsyncThunk(
+  'admin/deleteCategory',
+  async (id, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/admin/categories/${id}/`);
+      return id;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const moveCategoryNode = createAsyncThunk(
+  'admin/moveCategoryNode',
+  async ({ id, targetId, position }, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/admin/categories/${id}/move/`, { target: targetId, position }
+      )).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );

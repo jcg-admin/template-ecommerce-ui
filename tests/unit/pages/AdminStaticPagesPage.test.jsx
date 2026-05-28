@@ -12,10 +12,7 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn() },
 }));
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchAdminPages: jest.fn(() => ({ type: 'admin/fetchAdminPages' })),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
 import AdminStaticPagesPage from '../../../src/pages/admin/AdminStaticPagesPage';
 

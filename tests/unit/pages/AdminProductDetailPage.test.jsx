@@ -6,16 +6,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider }                 from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { configureStore }           from '@reduxjs/toolkit';
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchAdminProduct:    (id) => ({ type: 'admin/fetchProduct/pending' }),
-  createProduct:        (data) => (d) => Promise.resolve({ id: 99 }),
-  updateProduct:        (args) => (d) => Promise.resolve({}),
-  deleteProduct:        (id) => (d) => Promise.resolve({}),
-  uploadProductImage:   (args) => (d) => Promise.resolve({}),
-  deleteProductImage:   (args) => (d) => Promise.resolve({}),
-  reorderProductImages: (args) => (d) => Promise.resolve({}),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 import adminReducer from '../../../src/redux/slices/adminSlice';
 
 jest.mock('@services/apiService', () => ({

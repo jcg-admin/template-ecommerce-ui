@@ -39,9 +39,15 @@ export default function CatalogPage() {
   const mode = qParam ? 'search' : 'listing';
 
   useEffect(() => {
-    if (qParam) dispatch(searchProducts({ q: qParam }));
-    else dispatch(fetchProducts());
-  }, [dispatch, qParam]);
+    if (qParam) {
+      dispatch(searchProducts({ q: qParam }));
+    } else {
+      dispatch(fetchProducts({
+        orishas: activeOrishas.length > 0 ? activeOrishas : undefined,
+        types:   activeTypes.length   > 0 ? activeTypes   : undefined,
+      }));
+    }
+  }, [dispatch, qParam, activeOrishas, activeTypes]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {

@@ -7,12 +7,7 @@ import { Provider }     from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 // Mock de funciones no existentes en adminSlice
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchGateways:         () => ({ type: 'admin/fetchGateways/pending' }),
-  updateGateway:         () => ({ type: 'admin/updateGateway/pending' }),
-  testGatewayConnection: (gw) => (dispatch) => Promise.resolve({ status: 'ok' }),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 import adminReducer from '../../../src/redux/slices/adminSlice';
 
 jest.mock('@services/apiService', () => ({

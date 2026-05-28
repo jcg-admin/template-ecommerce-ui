@@ -17,6 +17,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   selectIsAuthenticated,
   selectCartItemCount,
+  selectCartItems,
   selectIsSearchOpen,
 } from '@redux/selectors';
 import { toggleSearch, openModal } from '@redux/slices/uiSlice';
@@ -44,6 +45,7 @@ export default function Header() {
   useKeyboardShortcut({ key: 'k', ctrl: true }, () => dispatch(toggleSearch()));
   const isAuth       = useSelector(selectIsAuthenticated);
   const cartCount    = useSelector(selectCartItemCount);
+  const cartItems    = useSelector(selectCartItems) ?? [];
   const isSearchOpen  = useSelector(selectIsSearchOpen);
   const user          = useSelector(selectUser);
   const [cartOpen, setCartOpen] = useState(false);
@@ -174,10 +176,34 @@ export default function Header() {
                 {cartCount === 0 ? (
                   <p style={{ color: '#888', textAlign: 'center', marginTop: 40 }}>Tu bolsa está vacía</p>
                 ) : (
-                  <Link to="/cart" onClick={() => setCartOpen(false)}
-                    style={{ display: 'block', textAlign: 'center', marginTop: 20 }}>
-                    Ver bolsa completa →
-                  </Link>
+                  <>
+                    {cartItems.slice(0, 3).map((item, i) => (
+                      <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 12,
+                        padding: '10px 0', borderBottom: '1px solid #eee' }}>
+                        {item.image_url && (
+                          <img src={item.image_url} alt=""
+                            style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4 }} />
+                        )}
+                        <div style={{ flex: 1 }}>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{item.name}</div>
+                          <div style={{ fontSize: '0.8rem', color: '#888' }}>
+                            {item.quantity} × ${(item.price || 0).toLocaleString('es-MX')}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {cartItems.length > 3 && (
+                      <p style={{ fontSize: '0.8rem', color: '#888', marginBottom: 8 }}>
+                        + {cartItems.length - 3} pieza{cartItems.length - 3 !== 1 ? 's' : ''} más
+                      </p>
+                    )}
+                    <Link to="/cart" onClick={() => setCartOpen(false)}
+                      style={{ display: 'block', textAlign: 'center', marginTop: 16,
+                        padding: '10px', background: 'var(--c-coral-soft)',
+                        color: '#fff', borderRadius: 4, textDecoration: 'none' }}>
+                      Ver bolsa completa →
+                    </Link>
+                  </>
                 )}
               </div>
             </Offcanvas>

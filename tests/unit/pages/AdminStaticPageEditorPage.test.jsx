@@ -17,12 +17,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ slug: 'about' }),
   useNavigate: () => jest.fn(),
 }));
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchAdminPage:   jest.fn(() => ({ type: 'admin/fetchPage' })),
-  updateAdminPage:  jest.fn(() => ({ type: 'admin/updatePage' })),
-  createAdminPage:  jest.fn(() => ({ type: 'admin/createPage' })),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
 import AdminStaticPageEditorPage from '../../../src/pages/admin/AdminStaticPageEditorPage';
 

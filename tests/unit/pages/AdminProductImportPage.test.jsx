@@ -12,11 +12,7 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn() },
 }));
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  uploadProductCSV: jest.fn(() => ({ type: 'admin/uploadCSV' })),
-  downloadProductTemplate: jest.fn(() => ({ type: 'admin/downloadTemplate' })),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
 import AdminProductImportPage from '../../../src/pages/admin/AdminProductImportPage';
 

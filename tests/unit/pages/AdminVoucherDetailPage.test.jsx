@@ -18,13 +18,7 @@ jest.mock('react-router-dom', () => ({
 }));
 const mockNavigate = jest.fn();
 
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchAdminVoucher: jest.fn(() => ({ type: 'admin/fetchVoucher' })),
-  createVoucher:     jest.fn(() => ({ type: 'admin/createVoucher' })),
-  updateVoucher:     jest.fn(() => ({ type: 'admin/updateVoucher' })),
-  deleteVoucher:     jest.fn(() => ({ type: 'admin/deleteVoucher' })),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
 import AdminVoucherDetailPage from '../../../src/pages/admin/AdminVoucherDetailPage';
 

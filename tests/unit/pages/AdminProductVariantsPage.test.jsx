@@ -17,13 +17,7 @@ jest.mock('react-router-dom', () => ({
   useParams: () => ({ id: '42' }),
   useNavigate: () => jest.fn(),
 }));
-jest.mock('../../../src/redux/slices/adminSlice', () => ({
-  ...jest.requireActual('../../../src/redux/slices/adminSlice'),
-  fetchProductVariants:  jest.fn(() => ({ type: 'admin/fetchVariants' })),
-  updateVariant:         jest.fn(() => ({ type: 'admin/updateVariant' })),
-  deleteVariant:         jest.fn(() => ({ type: 'admin/deleteVariant' })),
-  adjustVariantStock:    jest.fn(() => ({ type: 'admin/adjustStock' })),
-}));
+// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
 import AdminProductVariantsPage from '../../../src/pages/admin/AdminProductVariantsPage';
 

@@ -101,3 +101,50 @@
 | Hooks dominio sin test | 29 | **0** |
 | Hooks utils sin test | 12 | **0** |
 | SCSS issues | 0 | **0** |
+
+---
+
+## Hallazgos post-cierre (seguimiento de la deuda técnica)
+
+## HALLAZGO-ADMIN-SLICE-02 — toggleUserActive duplicado (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta (SyntaxError bloqueaba todo el slice)
+- **Descripción**: `adminSlice.js` tenía `toggleUserActive` definido dos veces:
+  una como thunk manual (función que despacha suspendUser/reactivateUser) y otra
+  como el nuevo `createAsyncThunk`. Babel levantaba `Identifier already declared`.
+- **Corrección**: El nuevo thunk fue renombrado a `setUserActiveStatus`.
+
+## HALLAZGO-ADMIN-SLICE-03 — fetchAdminPages duplicado (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta (SyntaxError)
+- **Descripción**: `fetchAdminPages` fue agregado dos veces al implementar los thunks
+  faltantes. La primera definición ya existía en el slice.
+- **Corrección**: Eliminada la segunda definición.
+
+## MEJORA-CART-01 — CartDrawer mostraba solo cartCount (MEJORADO)
+- **Fecha**: 2026-05-28
+- **Descripción**: El CartDrawer en el Header solo mostraba el conteo de items.
+  Ahora usa `selectCartItems` para mostrar los primeros 3 items con imagen,
+  nombre, cantidad y precio, más un enlace "Ver bolsa completa".
+
+## MEJORA-CATALOG-01 — Chips de Òrìsà/Tipo no filtraban (MEJORADO)
+- **Fecha**: 2026-05-28
+- **Descripción**: Los Chips seleccionables en CatalogPage actualizaban el estado
+  local pero no lo pasaban al dispatch de `fetchProducts`. Ahora el `useEffect`
+  incluye `activeOrishas` y `activeTypes` en las dependencias y los pasa al thunk.
+
+## IMPLEMENTADO-ADMIN-SLICE-01 — 42 thunks nuevos en adminSlice (COMPLETADO)
+- **Fecha**: 2026-05-28
+- **Descripción**: Se implementaron 42 nuevos thunks que las páginas admin necesitaban:
+  productos (fetchAdminProduct, createProduct, updateProduct, uploadProductImage, deleteProductImage, reorderProductImages),
+  importación CSV (uploadProductCSV, confirmProductImport, fetchImportStatus, downloadImportTemplate),
+  variantes (fetchProductVariants, bulkUpdateVariants, regenerateVariants),
+  tipos de variante (fetchVariantTypes, createVariantType, updateVariantType, deleteVariantType,
+    createVariantOption, updateVariantOption, deleteVariantOption),
+  gateways (fetchGateways, updateGateway, testGatewayConnection),
+  envío (fetchShippingMethods, createShippingMethod, updateShippingMethod, deleteShippingMethod),
+  páginas CMS (fetchAdminPage, savePageDraft, publishPage, restorePageVersion, createAdminPage, updateAdminPage),
+  vouchers (fetchAdminVoucher, createVoucher, updateVoucher, deleteVoucher),
+  usuarios (setUserActiveStatus, resetUserPassword, makeUserAdmin),
+  categorías (deleteCategory, moveCategoryNode).
+- **Estado**: adminSlice pasa de 30 a 72 thunks implementados.
