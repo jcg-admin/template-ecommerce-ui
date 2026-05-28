@@ -52,7 +52,7 @@
   cursor: pointer;
 
   &:disabled { opacity: 0.6; cursor: not-allowed; }
-  &:not(:disabled):hover { background: #14296B; }
+  &:not(:disabled):hover { background: $state-info-darker; }
 }
 
 .error   { color: $vino-deep; }

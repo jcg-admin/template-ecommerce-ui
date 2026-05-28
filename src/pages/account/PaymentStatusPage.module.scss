@@ -21,7 +21,7 @@
 .status_APPROVED  { color: $lime-deep; font-weight: 600; }
 .status_REJECTED  { color: $vino-deep; font-weight: 600; }
 .status_PENDING   { color: $primary-color; font-weight: 600; }
-.status_REFUNDED  { color: #4A5FC1; font-weight: 600; }
+.status_REFUNDED  { color: $state-info-mid; font-weight: 600; }
 .status_CANCELLED { color: $text-muted; font-weight: 600; }
 .statusDefault    { color: $text-primary; font-weight: 600; }
 .errorCode { font-family: monospace; color: $vino-deep; }
@@ -35,7 +35,7 @@
   text-decoration: none;
   font-weight: 600;
 }
-.secondaryLink { color: #4A5FC1; text-decoration: underline; }
+.secondaryLink { color: $state-info-mid; text-decoration: underline; }
 .error {
   background: rgba($vino, 0.12);
   color: $vino-deep;

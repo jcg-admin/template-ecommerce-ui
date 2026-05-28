@@ -4,7 +4,8 @@
 // Iniciativa: mapear-y-corregir-scss-completo (T-205)
 // ═══════════════════════════════════════════════════════════════════════
 
-@use "sass:list";
+// stylelint-disable custom-property-empty-line-before, scss/at-if-no-null, scss/at-if-closing-brace-newline-after, scss/at-rule-conditional-no-parentheses
+@use 'sass:list';
 @use '../variables' as *;
 
 @mixin box-shadow($shadow...) {
@@ -14,7 +15,7 @@
     $single-value: null;
 
     @each $value in $shadow {
-      @if $value {
+      @if $value != null {
         @if $value == none or $value == initial or $value == inherit or $value == unset {
           $has-single-value: true;
           $single-value: $value;

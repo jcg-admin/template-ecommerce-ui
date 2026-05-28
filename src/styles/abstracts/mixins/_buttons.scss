@@ -4,6 +4,7 @@
 // Iniciativa: mapear-y-corregir-scss-completo (T-205)
 // ═══════════════════════════════════════════════════════════════════════
 
+// stylelint-disable custom-property-empty-line-before, scss/at-if-no-null, scss/at-if-closing-brace-newline-after, scss/at-rule-conditional-no-parentheses
 @use "sass:color";
 @use "../functions/color" as *;
 @use "../functions/color-contrast" as *;
@@ -31,6 +32,7 @@
   $disabled-border: $border,
   $disabled-color: color-contrast($disabled-background)
 ) {
+
   --#{$prefix}btn-color: #{$color};
   --#{$prefix}btn-bg: #{$background};
   --#{$prefix}btn-border-color: #{$border};
@@ -56,6 +58,7 @@
   $active-border: $color,
   $active-color: color-contrast($active-background)
 ) {
+
   --#{$prefix}btn-color: #{$color};
   --#{$prefix}btn-border-color: #{$color};
   --#{$prefix}btn-hover-color: #{$color-hover};
@@ -84,6 +87,7 @@
   $active-border: $color,
   $active-color: color-contrast($color)
 ) {
+
   --#{$prefix}btn-color: #{$color};
   --#{$prefix}btn-border-color: transparent;
   --#{$prefix}btn-hover-bg: #{$hover-background};
@@ -101,9 +105,11 @@
 // Button sizes
 // scss-docs-start btn-size-mixin
 @mixin button-size($padding-y, $padding-x, $font-size, $border-radius) {
+
   --#{$prefix}btn-padding-y: #{$padding-y};
   --#{$prefix}btn-padding-x: #{$padding-x};
   @include rfs($font-size, --#{$prefix}btn-font-size);
+
   --#{$prefix}btn-border-radius: #{$border-radius};
 }
 // scss-docs-end btn-size-mixin

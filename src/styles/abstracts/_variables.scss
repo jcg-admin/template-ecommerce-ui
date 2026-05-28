@@ -322,6 +322,17 @@ $min-contrast-ratio:   4.5 !default;   // fusv-disable — ratio WCAG AA
 $color-contrast-dark:  $black !default;  // fusv-disable — texto oscuro
 $color-contrast-light: $white !default;  // fusv-disable — texto claro
 $prefix:               "ec-" !default;  // fusv-disable — prefijo CSS custom properties
+
+// ─────────────────────────────────────────────────────────────────────
+// 20. ESTADO — Colores de información (azul legacy)
+// Usados en badges de estado, pagos, devoluciones y botones de admin.
+// No pertenecen a la paleta Yoruba pero son necesarios funcionalmente.
+// T-008: tokenizados a partir de los hex colors #1C5BD8, #4A5FC1, etc.
+// ─────────────────────────────────────────────────────────────────────
+$state-info:        #1C5BD8;   // azul primario de info/aprobado
+$state-info-mid:    #4A5FC1;   // azul medio — estado refunded/secondary
+$state-info-dark:   #1A4F8B;   // azul oscuro — botones admin primarios
+$state-info-darker: #14296B;   // azul muy oscuro — hover states
 // ═══════════════════════════════════════════════════════════════════════
 // ALIASES — compatibilidad con nombres alternativos del proyecto
 // ═══════════════════════════════════════════════════════════════════════

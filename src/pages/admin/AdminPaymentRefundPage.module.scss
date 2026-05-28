@@ -1,7 +1,7 @@
 @use '@styles/abstracts' as *;
 
 .page { max-width: 720px; margin: 2rem auto; padding: 1.5rem; }
-.backLink { color: #4A5FC1; text-decoration: none; font-size: .9rem; }
+.backLink { color: $state-info-mid; text-decoration: none; font-size: .9rem; }
 .header { margin: 1rem 0 1.5rem; }
 .title { font-size: 1.75rem; margin: 0 0 .25rem; color: $text-primary; }
 .subtitle { color: $text-muted; margin: 0; }

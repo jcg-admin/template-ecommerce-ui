@@ -147,7 +147,8 @@
   transition: $transition-colors;
 
   // highlight from search results
-  :global(mark) {
+  /* stylelint-disable-next-line selector-pseudo-class-no-unknown */
+:global(mark) {
     background: rgba($lime, 0.25);
     color: $text-primary;
     padding: 0 2px;

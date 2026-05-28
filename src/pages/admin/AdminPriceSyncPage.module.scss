@@ -32,12 +32,12 @@
 .formActions { display: flex; gap: 8px; }
 .primaryBtn, .secondaryBtn {
   padding: 8px 16px; border-radius: 4px; cursor: pointer;
-  font-size: 0.95rem; border: 1px solid #1A4F8B;
+  font-size: 0.95rem; border: 1px solid $state-info-dark;
 }
-.primaryBtn { background: #1A4F8B; color: $bg-elevated; }
-.primaryBtn:hover:not([disabled]) { background: #1A4F8B; }
+.primaryBtn { background: $state-info-dark; color: $bg-elevated; }
+.primaryBtn:hover:not([disabled]) { background: $state-info-dark; }
 .primaryBtn[disabled] { opacity: 0.5; cursor: not-allowed; }
-.secondaryBtn { background: $bg-elevated; color: #1A4F8B; }
+.secondaryBtn { background: $bg-elevated; color: $state-info-dark; }
 .secondaryBtn:hover { background: rgba($text-primary, 0.04); }
 
 .table {

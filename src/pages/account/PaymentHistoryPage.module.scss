@@ -29,7 +29,7 @@
 .status_APPROVED  { color: $lime-deep; }
 .status_REJECTED  { color: $vino-deep; }
 .status_PENDING   { color: $primary-color; }
-.status_REFUNDED  { color: #4A5FC1; }
+.status_REFUNDED  { color: $state-info-mid; }
 .status_CANCELLED { color: $text-muted; }
 .statusDefault    { color: $text-primary; }
 .errorCode { font-family: monospace; font-size: .85rem; color: $vino-deep; margin: .35rem 0 0; }

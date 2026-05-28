@@ -71,7 +71,7 @@
 .itemDate { color: rgba(0, 0, 0, 0.6); font-size: 0.9rem; }
 
 .badgeOpen    { @include badge-base; background: rgba(244, 162, 0, 0.18);  color: $rust; }
-.badgeReplied { @include badge-base; background: rgba(64, 132, 245, 0.18); color: #1C5BD8; }
+.badgeReplied { @include badge-base; background: rgba(64, 132, 245, 0.18); color: $state-info; }
 .badgeClosed  { @include badge-base; background: rgba(0, 0, 0, 0.08);     color: rgba(0, 0, 0, 0.55); }
 
 .empty {

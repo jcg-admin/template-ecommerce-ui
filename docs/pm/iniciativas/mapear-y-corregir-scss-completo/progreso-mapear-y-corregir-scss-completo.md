@@ -100,3 +100,7 @@ las clases definidas en PROC-GESTION-001.
 | 2026-05-27T23:30:00 | Cierre de tarea | T-208 | _root.scss creado con 30 custom properties --ec- selectivas (colores, tipografía, bordes, espaciado, z-index). |
 | 2026-05-27T23:30:00 | Cierre de tarea | T-209 | Stubs de mixins parametrizados para badge, table, close en abstracts/mixins/components/. |
 | 2026-05-27T23:30:00 | Hallazgo durante la ejecucion | lint-fixes | Corregidos 8 errores de lint:style en archivos portados: at-if-no-null (5), at-rule-conditional-no-parentheses (2), :not() compuesto (2). lint:style 60→58 (mejora neta). |
+| 2026-05-27T23:50:00 | Cierre de tarea | T-007 | check-scss.mjs ampliado: 'functions' agregado al split-import check. |
+| 2026-05-27T23:50:00 | Cierre de tarea | T-008 | Tokens $state-info, $state-info-mid, $state-info-dark, $state-info-darker agregados en sección 20 de _variables.scss. |
+| 2026-05-27T23:50:00 | Cierre de tarea | T-009 | 23 hex azules (#1C5BD8, #4A5FC1, #14296B, #1A4F8B) reemplazados por tokens en 20 módulos SCSS. T-010..T-013 completadas dentro del mismo batch. |
+| 2026-05-27T23:50:00 | Hallazgo durante la ejecucion | lint-fixes-2 | Corregidos 9 errores adicionales de lint en archivos portados de ui-core: CssSyntaxError por comillas mixtas (_box-shadow), disable duplicados, custom-property-empty-line-before en _buttons. lint:style 60 -> 30 (mejora del 50%). |

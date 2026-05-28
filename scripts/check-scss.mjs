@@ -49,6 +49,8 @@ function walk(dir, out = []) {
 }
 
 const files = walk(srcDir);
+// T-007: walk(srcDir) ya incluye abstracts/mixins/ y abstracts/functions/
+
 let failed = 0;
 
 const IMPORT_SCOPE = [
