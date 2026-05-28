@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | cobertura-tests-completa |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Fecha de apertura | 2026-05-28 |
 | Origen | Auditoría post-integración ui-core — 12 páginas sin test, 23 slices sin test, 40+ hooks sin test |
 

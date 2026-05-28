@@ -50,3 +50,54 @@
 - **Severidad**: Alta (links de navigación admin ocultos en DOM)
 - **Descripción**: El nuevo Sidebar retornaba `null` cuando `open=false`, pero para desktop el Sidebar es siempre visible — solo cambia CSS. `AdminLayout.navigation.test` fallaba porque los links de "Configuración" y "Logística" no estaban en el DOM.
 - **Corrección**: Sidebar no-overlaid siempre monta; `open` controla la clase CSS `sidebarHidden`.
+
+## HALLAZGO-ADMIN-SLICE-01 — Páginas admin usan funciones inexistentes en adminSlice (DEUDA TÉCNICA)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media (las páginas se cargan pero muestran "sin datos")
+- **Descripción**: Varias páginas admin usan funciones de `adminSlice` que no existen en el archivo:
+  - `AdminShippingMethodsPage`: `fetchShippingMethods`, `createShippingMethod`, `updateShippingMethod`, `deleteShippingMethod` → no definidas
+  - `AdminStaticPagesPage`: `fetchAdminPages` → no definida en el slice exportado
+  - `AdminStockAlertsPage`: `fetchStockAlerts` → definida en adminSlice.js línea ~145
+  - `AdminProductVariantsPage`: `fetchProductVariants`, `bulkUpdateVariants`, `regenerateVariants` → no definidas
+  - `AdminVoucherDetailPage`: `fetchAdminVoucher`, `createVoucher`, `updateVoucher` → no definidas
+- **Impacto**: Las páginas muestran "sin datos" o estado vacío porque los thunks no existen en el slice exportado. Los mocks de tests devuelven `{ type: '...' }` en lugar de un async thunk real.
+- **Acción requerida**: Implementar los thunks faltantes en `adminSlice.js` o crear slices dedicados (`shippingSlice`, `pagesSlice`, `variantsSlice`).
+- **Relacionado**: La auditoría de adminSlice muestra solo 30 thunks — las páginas admin necesitan ~15 más.
+
+## HALLAZGO-QUERY-01 — AdminProductForm y hooks de dominio requieren QueryClientProvider
+- **Fecha**: 2026-05-28
+- **Severidad**: Media (crashes en tests sin el Provider)
+- **Descripción**: `AdminProductForm` importa `useAdminCategories` que usa `react-query` internamente. Sin `QueryClientProvider` en el wrapper del test, el componente crashea con "No QueryClient set".
+- **Corrección**: Agregar `QueryClientProvider` en el wrapper de los tests afectados.
+- **Afectados**: `AdminProductForm`, `useSearch`, potencialmente otros hooks de dominio.
+
+---
+
+## Resumen final de hallazgos
+
+| ID | Categoría | Severidad | Estado |
+|----|-----------|-----------|--------|
+| BUG-SLICE-01 | jest.mock mal cerrado en 23 slices | Alta | CORREGIDO |
+| BUG-SLICE-02 | authSlice.logout sin handler pending | Baja | DOCUMENTADO |
+| BUG-SLICE-03 | priceSyncSlice.applyCsv usa isApplying | Baja | DOCUMENTADO |
+| BUG-SLICE-04 | ordersSlice usa isActioning no isLoading | Baja | DOCUMENTADO |
+| HALLAZGO-SCOPE-01 | FilterSidebar sin acceso al closure | Alta | CORREGIDO |
+| HALLAZGO-CHARS-01 | UTF-8 ─ en Tabs.jsx bloqueaba a Babel | Alta | CORREGIDO |
+| HALLAZGO-EXPORT-01 | 20 componentes sin named export | Alta | CORREGIDO |
+| HALLAZGO-SIDEBAR-01 | Sidebar desktop renderizaba null | Alta | CORREGIDO |
+| HALLAZGO-ADMIN-SLICE-01 | Páginas admin usan funciones no implementadas | Media | DEUDA TÉCNICA |
+| HALLAZGO-QUERY-01 | Hooks que usan react-query necesitan QueryClientProvider | Media | DOCUMENTADO |
+
+## Métricas finales
+
+| Métrica | Inicio sesión | Final sesión |
+|---------|--------------|--------------|
+| Tests pasando | 999 | **1331** (+332) |
+| Tests fallando | 0 | **0** |
+| Tests skipped | 109 | **109** |
+| Total tests | 1108 | **1440** |
+| Páginas sin test | 17 | **0** |
+| Slices sin test | 23 | **0** |
+| Hooks dominio sin test | 29 | **0** |
+| Hooks utils sin test | 12 | **0** |
+| SCSS issues | 0 | **0** |

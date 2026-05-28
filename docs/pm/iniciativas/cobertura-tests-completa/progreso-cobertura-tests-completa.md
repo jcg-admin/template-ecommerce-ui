@@ -20,3 +20,9 @@
 | 2026-05-28T11:10:00 | Hallazgo | BUG-SLICE-03: priceSyncSlice.applyCsv activa isApplying no isLoading |
 | 2026-05-28T11:15:00 | Hallazgo | BUG-SLICE-04: ordersSlice.checkout activa isActioning no isLoading |
 | 2026-05-28T11:20:00 | En curso | 12 páginas sin test + hooks restantes |
+| 2026-05-28T12:00:00 | Tarea cerrada | 12 páginas admin | AdminSiteSettings, AdminShipping, AdminInventoryDashboard, AdminStockAlerts, AdminStaticPages, AdminVoucherDetail, AdminStaticPageEditor, AdminProductVariants, AdminProductImport, OrderEdit, AdminProductForm, NotFoundPage |
+| 2026-05-28T12:00:00 | Hallazgo | HALLAZGO-ADMIN-SLICE-01 | Páginas admin usan funciones no implementadas en adminSlice (fetchShippingMethods, fetchAdminPages, fetchProductVariants, etc.) |
+| 2026-05-28T12:00:00 | Hallazgo | HALLAZGO-QUERY-01 | AdminProductForm y hooks de dominio requieren QueryClientProvider en los tests |
+| 2026-05-28T12:00:00 | Tarea cerrada | 29 hooks de dominio | Tests generados para todos los hooks react-query y hooks utilitarios |
+| 2026-05-28T12:00:00 | Tarea cerrada | 13 tests de hooks utils | useDebounce, usePrevious, useMountedState, useLocalStorage, useThrottle, useAsync |
+| 2026-05-28T12:00:00 | Cierre | cobertura-tests-completa | 999→1331 tests (+332). 0 fallos. Todas las páginas con lógica cubierta. |
