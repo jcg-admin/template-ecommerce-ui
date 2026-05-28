@@ -73,3 +73,9 @@
 | 2026-05-28T02:30:00 | Cierre de tarea | T-206 | Integrado en primitivos. Tests previos: delta cero. |
 | 2026-05-28T02:30:00 | Inicio de tarea | T-207 | Field primitivo: prop passwordToggle con useState para alternar type=password/text. |
 | 2026-05-28T02:30:00 | Cierre de tarea | T-207 | Integrado en primitivos. Tests: 698 passing (vs 669 baseline). |
+| 2026-05-28T03:00:00 | Inicio de tarea | T-202 | Sidebar comun con backdrop accesible, scroll lock, Escape y narrow. Corrección BUG-S01..S05. |
+| 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-S03 | AdminLayout.jsx tenia ADMIN_NAV inline con 25+ items divergente de la lista de AdminSidebar (8 items). Dos fuentes de verdad. Corrección: lista canónica migrada a AdminSidebar. |
+| 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-S04 | Overlay mobile sin role=button ni aria-label. Corregido en Sidebar comun. |
+| 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-S05 | aria-label del hamburguesa siempre 'Abrir menú' sin importar el estado. Corregido: aria-label dinamico + aria-expanded. |
+| 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-CSS-MOD-01 | toHaveClass('sidebarNarrow') falla con CSS Modules porque Jest ve el hash. Patron correcto: data-attribute para testear estado estructural. |
+| 2026-05-28T03:00:00 | Cierre de tarea | T-202 | 7/7 tests Sidebar. BUG-S01..S05 corregidos. AdminLayout/index.jsx eliminado. AdminSidebar con lista canónica completa. Tests: 698 -> 705 (+7). |

@@ -1,0 +1,52 @@
+// Sidebar — ecommerce-ui
+// Iniciativa: integrar-componentes-ui-core-js (T-202)
+@use '@styles/abstracts' as *;
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100dvh;
+  width: 260px;            // $sidebar-width del bloque T-202
+  background: $bg-sunken;
+  border-right: 1px solid $border-color;
+  overflow-y: auto;
+  overflow-x: hidden;
+  z-index: 200;
+  transition: width 250ms ease, transform 250ms ease;
+  display: flex;
+  flex-direction: column;
+
+  // Mobile: oculto por defecto, se desliza con open
+  @media (max-width: 768px) {
+    transform: translateX(-100%);
+
+    &.sidebarOpen {
+      transform: translateX(0);
+    }
+  }
+
+  // Modo narrow: rail de iconos (64px)
+  &.sidebarNarrow {
+    width: 64px;
+    overflow: hidden;
+
+    // Los textos se ocultan, solo iconos visibles
+    :global(.sidebar-label) {
+      display: none;
+    }
+  }
+}
+
+// Backdrop mobile (BUG-S04 corregido)
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 199;
+  cursor: pointer;
+
+  @media (min-width: 769px) {
+    display: none;
+  }
+}
