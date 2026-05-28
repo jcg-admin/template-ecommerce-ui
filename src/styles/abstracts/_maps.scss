@@ -1,0 +1,53 @@
+@use 'sass:map';
+// ═══════════════════════════════════════════════════════════════════════
+// Mapas SCSS — ecommerce-ui
+// Portado de ui-core-5.25.0 (MIT) — docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-204)
+//
+// Los mapas principales ($colors, $grays, $theme-colors, $spacers,
+// $grid-breakpoints) están en _variables.scss (bloque T-202).
+// Este archivo agrega mapas de utilidad adicionales y re-exporta
+// los principales para que los partials que necesiten iterar sobre
+// colores o breakpoints puedan hacer:
+//   @use 'abstracts/maps' as maps;
+//   @each $name, $value in maps.$theme-colors { ... }
+// ═══════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+
+// Re-exportaciones explícitas de los mapas clave
+// (ya definidos en _variables.scss vía T-202)
+// Los módulos pueden importar este archivo para acceder a los mapas.
+
+// Mapa de todos los colores del tema para generar utilidades
+// scss-docs-start utilities-colors
+$all-colors: map.merge(
+  $colors,
+  $grays
+) !default;
+// scss-docs-end utilities-colors
+
+// Mapa de colores de fondo para utilidades
+// scss-docs-start utilities-bg-colors
+$utilities-bg-colors: map.merge(
+  $theme-colors,
+  (
+    'black':        $black,
+    'white':        $white,
+    'transparent':  transparent
+  )
+) !default;
+// scss-docs-end utilities-bg-colors
+
+// Mapa de colores de texto para utilidades
+// scss-docs-start utilities-text-colors
+$utilities-text-colors: map.merge(
+  $theme-colors,
+  (
+    'black':    $black,
+    'white':    $white,
+    'body':     $body-color,
+    'muted':    $text-muted,
+  )
+) !default;
+// scss-docs-end utilities-text-colors

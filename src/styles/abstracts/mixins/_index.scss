@@ -1,0 +1,21 @@
+// Mixins barrel — portados de ui-core-5.25.0 (T-205)
+// Re-exporta todos los mixins disponibles.
+
+@forward 'breakpoints';
+@forward 'transition';
+@forward 'text-truncate';
+@forward 'visually-hidden';
+@forward 'border-radius';
+@forward 'box-shadow';
+@forward 'focus-ring';
+@forward 'grid';
+@forward 'container';
+@forward 'forms';
+@forward 'buttons';
+@forward 'gradients';
+
+// Mixins propios del template ecommerce-ui
+@forward '../mixins';  // _mixins.scss en abstracts/
+
+// Componentes como mixins (T-209)
+@forward 'components';

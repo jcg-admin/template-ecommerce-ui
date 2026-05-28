@@ -9,7 +9,7 @@
 .inputWrapper {
   @include flex-start;
   position:   relative;
-  background: #F5F7EE;
+  background: $text-primary;
   border:     1px solid $border-color;
   border-radius: $border-radius-md;
   transition: border-color 0.15s;

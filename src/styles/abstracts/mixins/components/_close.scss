@@ -1,0 +1,18 @@
+// ═══════════════════════════════════════════════════════════════════════
+// _close.scss — convertido a mixin parametrizado de ui-core-5.25.0 (MIT)
+// Atribución: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-209)
+// Uso: @use 'abstracts/mixins/components/close' as comp;
+//      .mi-badge { @include comp.close-styles; }
+// ═══════════════════════════════════════════════════════════════════════
+
+@use '../variables' as *;
+@use '../../sass:math' as math;  // si necesario
+
+// El código fuente de ui-core para _close.scss — usar como referencia
+// al construir los módulos CSS específicos del template.
+// En lugar de importar clases globales de Bootstrap/CoreUI,
+// copiamos los tokens relevantes a los .module.scss que los necesiten.
+
+// Tokens de close ya disponibles en _variables.scss (bloque T-202):
+// Ver scss-docs-start close-variables en _variables.scss

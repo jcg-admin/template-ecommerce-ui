@@ -1,0 +1,64 @@
+// ═══════════════════════════════════════════════════════════════════════
+// _root.scss — CSS Custom Properties
+// Filtro selectivo de ui-core-5.25.0/scss/_root.scss (MIT)
+// docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-208)
+//
+// Solo se exponen los tokens que JS razonablemente podría necesitar leer.
+// Prefijo: --ec- (prefijo del template, Decision D-PREFIJO)
+// ═══════════════════════════════════════════════════════════════════════
+
+@use 'variables' as *;
+
+:root {
+  // ── Paleta principal ──────────────────────────────────────────────
+  --ec-primary:            #{$primary-color};
+  --ec-secondary:          #{$secondary-color};
+  --ec-accent:             #{$accent-color};
+  --ec-success:            #{$success-color};
+  --ec-warning:            #{$warning-color};
+  --ec-error:              #{$error-color};
+
+  // ── Superficies ───────────────────────────────────────────────────
+  --ec-bg-page:            #{$bg-page};
+  --ec-bg-surface:         #{$bg-surface};
+  --ec-bg-sunken:          #{$bg-sunken};
+  --ec-bg-elevated:        #{$bg-elevated};
+
+  // ── Texto ─────────────────────────────────────────────────────────
+  --ec-text-primary:       #{$text-primary};
+  --ec-text-secondary:     #{$text-secondary};
+  --ec-text-muted:         #{$text-muted};
+  --ec-text-inverse:       #{$text-inverse};
+
+  // ── Tipografía ────────────────────────────────────────────────────
+  --ec-font-family-base:   #{$font-family-base};
+  --ec-font-family-heading:#{$font-family-heading};
+  --ec-font-family-mono:   #{$font-family-mono};
+  --ec-font-size-base:     #{$font-size-base};
+  --ec-line-height-base:   #{$line-height-base};
+
+  // ── Bordes ────────────────────────────────────────────────────────
+  --ec-border-color:       #{$border-color};
+  --ec-border-radius-sm:   #{$border-radius-sm};
+  --ec-border-radius-md:   #{$border-radius-md};
+  --ec-border-radius-lg:   #{$border-radius-lg};
+
+  // ── Espaciado ─────────────────────────────────────────────────────
+  --ec-spacing-1:          #{$spacing-1};
+  --ec-spacing-2:          #{$spacing-2};
+  --ec-spacing-4:          #{$spacing-4};
+  --ec-spacing-8:          #{$spacing-8};
+
+  // ── Transiciones ──────────────────────────────────────────────────
+  --ec-transition-base:    #{$transition-base};
+
+  // ── Z-index ───────────────────────────────────────────────────────
+  --ec-z-sticky:           #{$z-sticky};
+  --ec-z-modal:            #{$z-modal};
+  --ec-z-tooltip:          #{$z-tooltip};
+}
+
+// Resolución de variables T-202 que referenciaban var(--#{$prefix}X)
+// Ahora que estas custom properties existen, las variables SCSS
+// que usaban indireccion pueden actualizarse en una tarea futura.

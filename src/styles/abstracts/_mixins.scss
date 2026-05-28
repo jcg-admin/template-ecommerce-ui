@@ -356,6 +356,8 @@
 // para garantizar que el elemento queda visualmente oculto manteniendo la
 // accesibilidad. Patron estandar documentado en MDN y libros de a11y.
 /* stylelint-disable declaration-no-important */
+// T-206: Nuestro visually-hidden. ui-core/_visually-hidden.scss es la versión canónica.
+// Usar: @use 'abstracts/mixins/visually-hidden' as * para la versión portada.
 @mixin visually-hidden {
   position: absolute !important;
   width: 1px !important;

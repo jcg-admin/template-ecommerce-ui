@@ -1,0 +1,14 @@
+// ═══════════════════════════════════════════════════════════════════════
+// _text-truncate.scss — portado de ui-core-5.25.0 (MIT)
+// Atribución: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-205)
+// ═══════════════════════════════════════════════════════════════════════
+
+// Text truncate
+// Requires inline-block or block for proper styling
+
+@mixin text-truncate() {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

@@ -1,0 +1,15 @@
+// ═══════════════════════════════════════════════════════════════════════
+// _focus-ring.scss — portado de ui-core-5.25.0 (MIT)
+// Atribución: docs/licenses/ui-core-5.25.0-LICENSE.md
+// Iniciativa: mapear-y-corregir-scss-completo (T-205)
+// ═══════════════════════════════════════════════════════════════════════
+
+@use '../variables' as *;
+
+@mixin focus-ring($color: null) {
+  @if $color {
+    --#{$prefix}focus-ring-color: #{$color};
+  }
+  outline: 0;
+  box-shadow: 0 0 var(--#{$prefix}focus-ring-blur) var(--#{$prefix}focus-ring-width) var(--#{$prefix}focus-ring-color);
+}
