@@ -35,6 +35,24 @@
 
 | 2026-05-28T01:30:00 | Cambio de estado | En analisis -> En ejecucion | Alcance aprobado. Tareas definidas (T-001..T-610, 35 tareas, ~16h). Principios rectores: maximo nativo + floating-ui como unica dependencia. DAG de dependencias declarado. Criterio de completitud verificable definido. |
 | 2026-05-28T01:30:00 | Plan | plan-tareas | tareas-integrar-componentes-ui-core-js.md producido. 6 fases: F0 dependencia, F1 hooks, F2 existentes mejorados, F3 alta prioridad, F4 media, F5 bajo impacto + F6 integracion en paginas. Estimacion revisada: ~16h (vs 22h inicial). Delta: APIs nativas eliminan la necesidad de implementar FocusTrap y ScrollBarHelper como hooks separados. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-001 | Instalar @floating-ui/react@0.27.19. Delta tests: cero. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-001 | @floating-ui/react en dependencies. Tests 669/828 sin cambio. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-101 | useClickOutside — hook con mousedown+touchstart, cleanup en unmount. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-101 | 4/4 tests pasan. Click dentro: no llama. Click fuera: llama. enabled=false: silencia. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-102 | useEscapeKey — keydown listener con guard de key=Escape. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-102 | 4/4 tests pasan. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-103 | useKeyboardShortcut — combinaciones ctrl/meta/shift/alt + key. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-103 | 4/4 tests pasan. Ctrl+K llama. K sola no. Ctrl+J no. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-104 | useScrollLock — overflow:hidden + compensacion ancho scrollbar. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-104 | 3/3 tests pasan. Restaura overflow original en cleanup. |
+| 2026-05-28T02:00:00 | Inicio de tarea | T-105 | useFloating — wrapper de @floating-ui/react con defaults del template. |
+| 2026-05-28T02:00:00 | Cierre de tarea | T-105 | 3/3 tests pasan. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-M01 | RefundModal: backdrop manual div+onClick/stopPropagation. Sin focus trap, sin scroll lock, sin Escape. WCAG 2.4.3. Correccion: T-201. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-M02 | StockAdjustModal: mismos bugs que BUG-M01. Correccion: T-201+T-204. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-T01 | ToastContainer: timer no se pausa en hover. Toasts de error desaparecen mientras el usuario los lee. Correccion: T-205. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-T02 | ToastContainer: todos los toasts con aria-live=polite. Errores deberían ser role=alert (assertive). WCAG 4.1.3. Correccion: T-205. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-S01 | AdminSidebar: sin modo narrow, sin backdrop mobile, sin scroll lock en mobile. Correccion: T-202. |
+| 2026-05-28T02:00:00 | Hallazgo durante la ejecucion | BUG-S02 | AdminLayout duplicado: AdminLayout.jsx + AdminLayout/index.jsx. Divergencia de logica. Correccion: consolidar en T-202. |
 ## Contadores
 
 | Clase | Conteo |
@@ -42,9 +60,10 @@
 | Apertura iniciativa | 1 |
 | Analisis | 2 |
 | Hallazgo durante el analisis | 20 |
-| Inicio de tarea | 0 |
-| Cierre de tarea | 0 |
+| Inicio de tarea | 5 |
+| Cierre de tarea | 5 |
 | Cierre de iniciativa | 0 |
 
 | Cambio de estado | 1 |
 | Plan | 1 |
+| Hallazgo durante la ejecucion | 6 |

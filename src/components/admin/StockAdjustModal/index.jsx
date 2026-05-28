@@ -11,6 +11,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { adjustProductStock, adjustVariantStock } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import Modal from '@components/common/Modal/Modal';
 import styles from './StockAdjustModal.module.scss';
 
 const TYPES = [
@@ -53,8 +54,7 @@ export default function StockAdjustModal({ item, onClose, onSaved }) {
   );
 
   return (
-    <div className={styles.backdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+    <Modal open={true} onClose={onClose} className={styles.modal}>
         <header className={styles.header}>
           <MetaTag tone="bronze">Ajuste de inventario</MetaTag>
           <h2 className={styles.title}>{item.product_name}</h2>
@@ -115,7 +115,6 @@ export default function StockAdjustModal({ item, onClose, onSaved }) {
             </Button>
           </div>
         </form>
-      </div>
-    </div>
-  );
+  </Modal>
+);
 }

@@ -1,0 +1,29 @@
+// Modal — ecommerce-ui
+// Iniciativa: integrar-componentes-ui-core-js (T-201)
+@use '@styles/abstracts' as *;
+
+.dialog {
+  // El dialog ocupa el top layer nativamente — no necesitamos z-index manual
+  position: fixed;
+  inset: 0;
+  margin: auto;
+
+  width: min(90vw, 560px);
+  max-height: min(90vh, 800px);
+  overflow-y: auto;
+
+  background: $bg-elevated;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+  padding: 0;
+
+  // Quitar el borde nativo del dialog
+  outline: none;
+  box-shadow: $shadow-lg;
+
+  // El ::backdrop es el fondo oscuro gestionado nativamente
+  &::backdrop {
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(2px);
+  }
+}
