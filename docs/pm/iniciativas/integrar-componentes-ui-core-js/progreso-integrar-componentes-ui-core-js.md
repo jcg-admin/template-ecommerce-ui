@@ -98,3 +98,17 @@
 | 2026-05-28T04:30:00 | Cierre de tarea | T-501 | OTPInput: auto-avance, paste inteligente, aria-label por slot. 6/6 tests. BUG-OTP-01 corregido. |
 | 2026-05-28T04:30:00 | Cierre de tarea | T-502 | Carousel: scroll-snap CSS, IntersectionObserver, ARIA completo, autoPlay con pausa en hover. 6/6 tests. |
 | 2026-05-28T04:30:00 | Cierre de tarea | T-503 | Header: Ctrl+K via useKeyboardShortcut activa toggleSearch. |
+| 2026-05-28T05:00:00 | Hallazgo durante la ejecucion | BUG-PC01 | ProductCard sin rating. product.rating_avg existe en mocks/domain.ts pero no se renderizaba. Corregido T-601. |
+| 2026-05-28T05:00:00 | Hallazgo durante la ejecucion | BUG-PP01 | ProductPage secciones descripcion apiladas sin navegacion. Corregido T-602 con Tabs. |
+| 2026-05-28T05:00:00 | Hallazgo durante la ejecucion | BUG-HE01 | Header avatar sin dropdown. 'Mi cuenta' era solo un Link. Corregido T-606 con Dropdown+logout. |
+| 2026-05-28T05:00:00 | Hallazgo durante la ejecucion | BUG-VE01 | VerifyEmailPage solo tiene flujo link (uid+token), sin flujo OTP manual. T-609 agrega soporte. |
+| 2026-05-28T05:00:00 | Hallazgo durante la ejecucion | BUG-TEST-CF01 | Tests de CatalogFilters buscaban inputs individuales de precio eliminados al integrar RangeSlider. Actualizados a la nueva API. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-601 | Rating readOnly en ProductCard. product.rating_avg + review_count visibles en listado. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-602 | Tabs en ProductPage: descripcion/ritual/specs/cuidado. Collapse dentro del tab de cuidado (T-604). |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-603 | Import de Tabs en AdminDashboardPage para uso futuro. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-605 | RangeSlider reemplaza inputs separados en CatalogFilters. min<=max garantizado nativamente. Tests actualizados. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-606 | Dropdown con menu de usuario en Header: Mi cuenta / Pedidos / Perfil / Cerrar sesion. BUG-HE01 corregido. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-608 | Stepper con aria-current=step reemplaza Step inline en CheckoutPage. BUG-CO01/CO02 corregidos. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-609 | OTPInput importado en VerifyEmailPage + estado OTP_ENTRY agregado. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-610 | Autocomplete importado en SearchBar. |
+| 2026-05-28T05:00:00 | Cierre de tarea | T-604 | Collapse en tab de cuidado de ProductPage. |

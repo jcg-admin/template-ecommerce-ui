@@ -17,6 +17,9 @@ import { addCartItem } from '@redux/slices/cartSlice';
 import { toggleWishlist } from '@redux/slices/wishlistSlice';
 import ProductCard from '@components/catalog/ProductCard';
 import { MetaTag, Price, Button } from '@components/common/primitives';
+import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
+import { Collapse } from '@components/common/Collapse/Collapse';
+import Rating from '@components/catalog/Rating/Rating';
 import styles from './ProductPage.module.scss';
 
 export default function ProductPage() {
@@ -191,31 +194,31 @@ export default function ProductPage() {
         </div>
       </section>
 
-      {/* Description */}
+      {/* T-602: Tabs para descripcion / especificaciones (BUG-PP01 corregido) */}
       <section className={styles.descSection}>
         <div className={styles.descContainer}>
-          <div className={styles.descSidebar}>
-            <MetaTag tone="bronze">Sobre esta pieza</MetaTag>
-            <h2 className={styles.descSidebarTitle}>Información del producto</h2>
-          </div>
-          <div className={styles.descBlocks}>
+          <Tabs defaultTab="descripcion">
+            <TabList>
+              {product.description && <Tab id="descripcion">Descripción</Tab>}
+              {product.ritual_meaning && <Tab id="ritual">Significado Yorùbà</Tab>}
+              {product.specifications?.length > 0 && <Tab id="specs">Especificaciones</Tab>}
+              {product.care_instructions && <Tab id="cuidado">Cuidado</Tab>}
+            </TabList>
+
             {product.description && (
-              <DescBlock title="Descripción">
+              <TabPanel tabId="descripcion">
                 <div dangerouslySetInnerHTML={{ __html: product.description }} />
-              </DescBlock>
+              </TabPanel>
             )}
+
             {product.ritual_meaning && (
-              <DescBlock title="Significado en la religión Yorùbà">
+              <TabPanel tabId="ritual">
                 <div dangerouslySetInnerHTML={{ __html: product.ritual_meaning }} />
-              </DescBlock>
+              </TabPanel>
             )}
-            {product.care_instructions && (
-              <DescBlock title="Cuidado y conservación">
-                <div dangerouslySetInnerHTML={{ __html: product.care_instructions }} />
-              </DescBlock>
-            )}
+
             {product.specifications?.length > 0 && (
-              <DescBlock title="Especificaciones">
+              <TabPanel tabId="specs">
                 <div className={styles.specs}>
                   {product.specifications.map(([k, v]) => (
                     <div key={k} className={styles.specRow}>
@@ -224,9 +227,18 @@ export default function ProductPage() {
                     </div>
                   ))}
                 </div>
-              </DescBlock>
+              </TabPanel>
             )}
-          </div>
+
+            {/* T-604: Collapse dentro del tab de cuidado */}
+            {product.care_instructions && (
+              <TabPanel tabId="cuidado">
+                <Collapse summary="Instrucciones de cuidado y conservación" open={true}>
+                  <div dangerouslySetInnerHTML={{ __html: product.care_instructions }} />
+                </Collapse>
+              </TabPanel>
+            )}
+          </Tabs>
         </div>
       </section>
 

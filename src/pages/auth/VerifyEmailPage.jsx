@@ -13,6 +13,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import { verifyEmail, resendVerification } from '@redux/slices/authSlice';
 import { Button, Field, MetaTag } from '@components/common/primitives';
+import OTPInput from '@components/auth/OTPInput/OTPInput';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from '../auth/AuthSimplePage.module.scss';
 
@@ -22,6 +23,7 @@ const STATE = {
   SUCCESS: 'success',
   EXPIRED: 'expired',
   ALREADY: 'already_verified',
+  OTP_ENTRY: 'otp_entry',
   INVALID: 'invalid_token',
 };
 
@@ -33,6 +35,7 @@ export default function VerifyEmailPage() {
   const initialEmail = params.get('email') || '';
 
   const [state, setState] = useState(uid && token ? STATE.LOADING : STATE.CHECK_INBOX);
+  const [otpCode, setOtpCode] = useState('');
   const [email, setEmail] = useState(initialEmail);
   const [resent, setResent] = useState(false);
 

@@ -19,6 +19,10 @@ import {
 } from '@redux/selectors';
 import { toggleSearch, openModal } from '@redux/slices/uiSlice';
 import useKeyboardShortcut from '@hooks/ui/useKeyboardShortcut';
+import { selectUser } from '@redux/selectors';
+import { logoutUser } from '@redux/slices/authSlice';
+import { useNavigate } from 'react-router-dom';
+import Dropdown, { DropdownItem, DropdownDivider } from '@components/common/Dropdown/Dropdown';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './Header.module.scss';
 
@@ -39,6 +43,12 @@ export default function Header() {
   const isAuth       = useSelector(selectIsAuthenticated);
   const cartCount    = useSelector(selectCartItemCount);
   const isSearchOpen = useSelector(selectIsSearchOpen);
+  const user         = useSelector(selectUser);
+  const navigate     = useNavigate();
+  const handleLogout = async () => {
+    await dispatch(logoutUser());
+    navigate('/auth/login');
+  };
 
   return (
     <header className={styles.header}>
@@ -99,10 +109,22 @@ export default function Header() {
 
           {/* Actions */}
           <div className={styles.actions}>
+            {/* T-606: Dropdown de usuario (BUG-HE01 corregido) */}
             {isAuth ? (
-              <Link to="/account" className={styles.actionLink}>
-                Mi cuenta
-              </Link>
+              <Dropdown
+                trigger={
+                  <span className={styles.actionLink} aria-label="Menu de usuario">
+                    {user?.first_name || 'Mi cuenta'} ▾
+                  </span>
+                }
+                placement="bottom-end"
+              >
+                <DropdownItem onClick={() => navigate('/account')}>Mi cuenta</DropdownItem>
+                <DropdownItem onClick={() => navigate('/account/orders')}>Mis pedidos</DropdownItem>
+                <DropdownItem onClick={() => navigate('/account/profile')}>Perfil</DropdownItem>
+                <DropdownDivider />
+                <DropdownItem onClick={handleLogout}>Cerrar sesión</DropdownItem>
+              </Dropdown>
             ) : (
               <button
                 type="button"

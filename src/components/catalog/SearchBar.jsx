@@ -4,6 +4,7 @@
  * Mínimo 2 caracteres para ejecutar búsqueda (FR-CAT-03.02).
  */
 import { useState } from 'react';
+import Autocomplete from '@components/common/Autocomplete/Autocomplete';
 import styles from './SearchBar.module.scss';
 
 const MIN_LENGTH = 2;

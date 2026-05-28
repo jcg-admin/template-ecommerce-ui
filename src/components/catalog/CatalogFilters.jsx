@@ -12,6 +12,7 @@
  */
 import { useState, useEffect } from 'react';
 import { useCategories } from '@hooks/domain/useCategories';
+import RangeSlider from '@components/common/RangeSlider/RangeSlider';
 import styles from './CatalogFilters.module.scss';
 
 function flattenTree(nodes, depth = 0, acc = []) {
@@ -38,6 +39,13 @@ export default function CatalogFilters({
   const [priceMin, setPriceMin] = useState(priceMinProp);
   const [priceMax, setPriceMax] = useState(priceMaxProp);
   const [priceError, setPriceError] = useState('');
+  // T-605: handler del RangeSlider (BUG-CF01 corregido — garantiza min<=max)
+  const handleRangeChange = ([lo, hi]) => {
+    setPriceMin(lo);
+    setPriceMax(hi);
+    setPriceError('');
+    onChange?.({ price_min: lo || null, price_max: hi || null });
+  };
 
   useEffect(() => { setPriceMin(priceMinProp); }, [priceMinProp]);
   useEffect(() => { setPriceMax(priceMaxProp); }, [priceMaxProp]);
@@ -99,42 +107,22 @@ export default function CatalogFilters({
         </select>
       </div>
 
-      {/* UC-CAT-05: rango de precio */}
-      <form className={styles.group} onSubmit={handlePriceApply}>
-        <fieldset className={styles.fieldset}>
-          <legend className={styles.label}>Precio (con IVA)</legend>
-          <div className={styles.priceRow}>
-            <label className={styles.priceLabel}>
-              Min
-              <input
-                type="number"
-                inputMode="decimal"
-                min="0"
-                value={priceMin}
-                onChange={(e) => setPriceMin(e.target.value)}
-                aria-label="Precio minimo"
-              />
-            </label>
-            <label className={styles.priceLabel}>
-              Max
-              <input
-                type="number"
-                inputMode="decimal"
-                min="0"
-                value={priceMax}
-                onChange={(e) => setPriceMax(e.target.value)}
-                aria-label="Precio maximo"
-              />
-            </label>
-          </div>
-          {priceError && (
-            <p role="alert" className={styles.error}>{priceError}</p>
-          )}
-          <button type="submit" className={styles.applyBtn}>
-            Aplicar precio
-          </button>
-        </fieldset>
-      </form>
+      {/* UC-CAT-05: rango de precio — T-605 RangeSlider (BUG-CF01 corregido) */}
+      <div className={styles.group}>
+        <RangeSlider
+          label="Precio (con IVA)"
+          min={0}
+          max={10000}
+          step={50}
+          distance={100}
+          value={[Number(priceMin) || 0, Number(priceMax) || 10000]}
+          onChange={handleRangeChange}
+          formatValue={(v) => `$${v.toLocaleString('es-MX')}`}
+        />
+        {priceError && (
+          <p role="alert" className={styles.error}>{priceError}</p>
+        )}
+      </div>
 
       <button type="button" className={styles.clearBtn} onClick={handleClear}>
         Limpiar filtros

@@ -23,6 +23,7 @@
 import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { toggleWishlist } from '@redux/slices/wishlistSlice';
+import Rating from '@components/catalog/Rating/Rating';
 import styles from './ProductCard.module.scss';
 
 function formatPrice(amount) {
@@ -115,6 +116,16 @@ export default function ProductCard({ product, inWishlist = false }) {
           className={styles.name}
           dangerouslySetInnerHTML={{ __html: highlighted_name || name }}
         />
+
+        {/* T-601: Rating del producto (BUG-PC01 corregido) */}
+        {product.rating_avg != null && (
+          <div className={styles.ratingRow}>
+            <Rating value={product.rating_avg} readOnly itemCount={5} />
+            {product.review_count > 0 && (
+              <span className={styles.ratingCount}>({product.review_count})</span>
+            )}
+          </div>
+        )}
 
         <div className={styles.pricing}>
           <span className={styles.price}>

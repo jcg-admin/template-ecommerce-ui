@@ -9,6 +9,7 @@ import { Link } from 'react-router-dom';
 import { fetchAdminMetrics } from '@redux/slices/adminSlice';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import styles from './AdminDashboardPage.module.scss';
+import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
 
 export default function AdminDashboardPage() {
   const dispatch = useDispatch();

@@ -173,3 +173,16 @@
   color: $text-muted;
   text-decoration: line-through;
 }
+
+/* T-601: Rating añadido */
+.rating {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin: 4px 0;
+}
+
+.ratingCount {
+  font-size: 0.75rem;
+  color: var(--text-muted, #7A7D62);
+}

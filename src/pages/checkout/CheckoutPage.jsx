@@ -16,6 +16,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { fetchAddresses } from '@redux/slices/authSlice';
 import { createOrder, initiatePayment } from '@redux/slices/paymentsSlice';
 import { MetaTag, Price, Button, Field, SumRow } from '@components/common/primitives';
+import { Stepper } from '@components/common/Stepper/Stepper';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './CheckoutPage.module.scss';
 
@@ -70,12 +71,18 @@ export default function CheckoutPage() {
               <span className={styles.brandTag}>Ifá · Òrìsà · Olódùmarè</span>
             </span>
           </Link>
-          <div className={styles.steps}>
-            <Step n="01" label="Carrito"        state="done" />
-            <Step n="02" label="Datos y envío"  state="active" />
-            <Step n="03" label="Pago"           state="pending" />
-            <Step n="04" label="Confirmación"   state="pending" />
-          </div>
+          {/* T-608: Stepper accesible (BUG-CO01 + BUG-CO02 corregidos) */}
+          <Stepper
+            activeStep={1}
+            linear={true}
+            steps={[
+              { label: 'Carrito' },
+              { label: 'Datos y envío' },
+              { label: 'Pago' },
+              { label: 'Confirmación' },
+            ]}
+            className={styles.steps}
+          />
           <div className={styles.secureBadge}>PAGO PROTEGIDO · SSL/TLS</div>
         </div>
       </header>
