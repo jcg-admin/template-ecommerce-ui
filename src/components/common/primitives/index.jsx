@@ -1,3 +1,4 @@
+import { useState } from 'react';
 /**
  * Common primitives — Práctica Yorùbà
  * Componentes pequeños reutilizados en todas las pages.
@@ -55,22 +56,40 @@ export function Field({
   placeholder = '', type = 'text', textarea = false,
   required = false, error = null,
   hint = null,
+  passwordToggle = false,  // T-207: toggle show/hide en campos password
 }) {
+  const [showPassword, setShowPassword] = useState(false);
   const Input = textarea ? 'textarea' : 'input';
-  const inputProps = textarea ? { rows: 3 } : { type };
+
+  const resolvedType = (type === 'password' && passwordToggle)
+    ? (showPassword ? 'text' : 'password')
+    : type;
+  const inputProps = textarea ? { rows: 3 } : { type: resolvedType };
 
   return (
     <label className={styles.field}>
       <span className={styles.fieldLabel}>{label}</span>
-      <Input
-        name={name}
-        value={value || ''}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
-        className={`${styles.fieldInput} ${error ? styles.fieldInputError : ''}`}
-        {...inputProps}
-      />
+      <div className={`${styles.fieldInputWrapper} ${passwordToggle ? styles.fieldHasToggle : ''}`}>
+        <Input
+          name={name}
+          value={value || ''}
+          onChange={onChange}
+          placeholder={placeholder}
+          required={required}
+          className={`${styles.fieldInput} ${error ? styles.fieldInputError : ''}`}
+          {...inputProps}
+        />
+        {passwordToggle && type === 'password' && (
+          <button
+            type="button"
+            className={styles.fieldPasswordToggle}
+            onClick={() => setShowPassword(v => !v)}
+            aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}
+          >
+            {showPassword ? '◎' : '○'}
+          </button>
+        )}
+      </div>
       {error && <span className={styles.fieldError}>{error}</span>}
       {!error && hint && <span className={styles.fieldHint}>{hint}</span>}
     </label>
@@ -82,18 +101,31 @@ export function Field({
 // ─────────────────────────────────────────────────────────────────────
 export function Button({
   children, variant = 'primary', size = 'md', block = false,
-  type = 'button', onClick, disabled = false, ...rest
+  type = 'button', onClick, disabled = false,
+  loading = false,  // T-206: spinner inline + deshabilita
+  ...rest
 }) {
   const cls = [
     styles.btn,
     styles[`btn_${variant}`],
     styles[`btn_${size}`],
     block && styles.btnBlock,
+    loading && styles.btnLoading,
   ].filter(Boolean).join(' ');
 
   return (
-    <button type={type} onClick={onClick} disabled={disabled} className={cls} {...rest}>
-      {children}
+    <button
+      type={type}
+      onClick={onClick}
+      disabled={disabled || loading}
+      className={cls}
+      aria-busy={loading}
+      {...rest}
+    >
+      {loading && <span className={styles.btnSpinner} aria-hidden="true" />}
+      <span className={loading ? styles.btnChildrenLoading : undefined}>
+        {children}
+      </span>
     </button>
   );
 }

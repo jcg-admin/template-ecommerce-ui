@@ -67,3 +67,9 @@
 | Cambio de estado | 1 |
 | Plan | 1 |
 | Hallazgo durante la ejecucion | 6 |
+| 2026-05-28T02:30:00 | Inicio de tarea | T-205 | ToastContainer: corregir BUG-T01 y BUG-T02. Timer pausado en hover/focus. role=alert para error/warning, role=status para success/info. |
+| 2026-05-28T02:30:00 | Cierre de tarea | T-205 | 6/6 tests pasan. BUG-T01 y BUG-T02 corregidos. |
+| 2026-05-28T02:30:00 | Inicio de tarea | T-206 | Button primitivo: prop loading con spinner CSS + aria-busy + disabled. |
+| 2026-05-28T02:30:00 | Cierre de tarea | T-206 | Integrado en primitivos. Tests previos: delta cero. |
+| 2026-05-28T02:30:00 | Inicio de tarea | T-207 | Field primitivo: prop passwordToggle con useState para alternar type=password/text. |
+| 2026-05-28T02:30:00 | Cierre de tarea | T-207 | Integrado en primitivos. Tests: 698 passing (vs 669 baseline). |
