@@ -79,3 +79,9 @@
 | 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-S05 | aria-label del hamburguesa siempre 'Abrir menú' sin importar el estado. Corregido: aria-label dinamico + aria-expanded. |
 | 2026-05-28T03:00:00 | Hallazgo durante la ejecucion | BUG-CSS-MOD-01 | toHaveClass('sidebarNarrow') falla con CSS Modules porque Jest ve el hash. Patron correcto: data-attribute para testear estado estructural. |
 | 2026-05-28T03:00:00 | Cierre de tarea | T-202 | 7/7 tests Sidebar. BUG-S01..S05 corregidos. AdminLayout/index.jsx eliminado. AdminSidebar con lista canónica completa. Tests: 698 -> 705 (+7). |
+| 2026-05-28T03:45:00 | Cierre de tarea | T-301 | Dropdown con Popover API (popover=auto) + floating-ui. 6/6 tests. |
+| 2026-05-28T03:45:00 | Cierre de tarea | T-302 | Tooltip con delay configurable, popover=manual, aria-describedby. 6/6 tests. |
+| 2026-05-28T03:45:00 | Cierre de tarea | T-303 | Rating como radiogroup con precision=0.5, readOnly, disabled. 7/7 tests. |
+| 2026-05-28T03:45:00 | Cierre de tarea | T-304 | Tabs con ARIA tablist completo, navegacion por flechas, wrap. 6/6 tests. |
+| 2026-05-28T03:45:00 | Hallazgo durante la ejecucion | BUG-JSDOM-01 | jsdom no dispara evento 'toggle' de <details>. Tests ajustados con fireEvent manual. En browser real funciona correctamente. |
+| 2026-05-28T03:45:00 | Cierre de tarea | T-305 | Collapse (<details>) y Accordion (exclusividad via name). 7/7 tests. |

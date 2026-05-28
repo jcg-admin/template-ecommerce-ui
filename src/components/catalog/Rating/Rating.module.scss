@@ -1,0 +1,37 @@
+@use '@styles/abstracts' as *;
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  border: none;
+  padding: 0;
+  margin: 0;
+  color: #f5a623;   // amber — token de estrellas, no variable aún
+
+  &.disabled { opacity: 0.5; }
+}
+
+.starWrap { position: relative; display: inline-flex; }
+.starSvg  { width: 20px; height: 20px; display: block; }
+
+.starLabel {
+  cursor: pointer;
+  display: flex;
+
+  &:hover { color: darken(#f5a623, 10%); }
+}
+
+.halfLabel {
+  position: absolute;
+  left: 0; top: 0;
+  width: 50%; height: 100%;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.srOnly {
+  position: absolute; width: 1px; height: 1px;
+  padding: 0; margin: -1px; overflow: hidden;
+  clip: rect(0,0,0,0); border: 0;
+}

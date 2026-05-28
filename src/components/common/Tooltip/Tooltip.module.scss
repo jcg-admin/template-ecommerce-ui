@@ -1,0 +1,23 @@
+@use '@styles/abstracts' as *;
+
+.wrapper { display: inline-flex; }
+
+.tooltip {
+  background: $bg-sunken;
+  color: $text-primary;
+  font-size: $font-size-xs;
+  padding: $spacing-1 $spacing-2;
+  border-radius: $border-radius-sm;
+  border: 1px solid $border-color;
+  box-shadow: $shadow-sm;
+  max-width: 240px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 1;
+  transition: opacity 150ms ease;
+
+  @starting-style {
+    &:popover-open { opacity: 0; }
+  }
+}
