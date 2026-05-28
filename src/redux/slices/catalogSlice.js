@@ -110,6 +110,35 @@ export const fetchCategories = createAsyncThunk(
 // Slice
 // =============================================================================
 
+// BUG-SH01: declarados ANTES del slice para evitar forward reference en addCase
+export const fetchSearchHistory = createAsyncThunk(
+  'catalog/fetchSearchHistory',
+  async (_, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/search/history/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const deleteSearchTerm = createAsyncThunk(
+  'catalog/deleteSearchTerm',
+  async (id, { rejectWithValue }) => {
+    try {
+      await apiService.delete(`/api/v1/search/history/${id}/`);
+      return id;
+    }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const clearSearchHistory = createAsyncThunk(
+  'catalog/clearSearchHistory',
+  async (_, { rejectWithValue }) => {
+    try { await apiService.delete('/api/v1/search/history/'); return true; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+
 const catalogSlice = createSlice({
   name: 'catalog',
   initialState: {
@@ -224,7 +253,18 @@ const catalogSlice = createSlice({
       .addCase(searchProducts.rejected, (state, action) => {
         state.isSearching = false;
         state.searchError = action.payload;
-      });
+      })
+      // BUG-SH01: historial de búsqueda
+      .addCase(fetchSearchHistory.pending,   (s) => { s.isLoadingSearchHistory = true; })
+      .addCase(fetchSearchHistory.fulfilled, (s, a) => {
+        s.isLoadingSearchHistory = false;
+        s.searchHistory = a.payload?.results ?? a.payload ?? [];
+      })
+      .addCase(fetchSearchHistory.rejected,  (s) => { s.isLoadingSearchHistory = false; })
+      .addCase(deleteSearchTerm.fulfilled,   (s, a) => {
+        s.searchHistory = s.searchHistory.filter(i => i.id !== a.meta.arg);
+      })
+      .addCase(clearSearchHistory.fulfilled, (s) => { s.searchHistory = []; });
   },
 });
 
@@ -234,3 +274,5 @@ export const {
 } = catalogSlice.actions;
 
 export default catalogSlice.reducer;
+
+// ─────────────────────────────────────────────────────────────────────────────

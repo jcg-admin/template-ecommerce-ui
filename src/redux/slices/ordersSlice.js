@@ -191,6 +191,19 @@ const ordersSlice = createSlice({
       .addCase(fetchOrderDetail.rejected, (state) => {
         state.isLoading = false;
         state.current   = null;
+      })
+      // BUG-OR-01 corregido: fetchOrders no tenía extraReducers — list nunca se actualizaba
+      .addCase(fetchOrders.pending, (state) => {
+        state.isLoading = true;
+      })
+      .addCase(fetchOrders.fulfilled, (state, action) => {
+        state.isLoading = false;
+        // El endpoint retorna { count, results } (PaginatedResponse)
+        state.list = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchOrders.rejected, (state) => {
+        state.isLoading = false;
+        state.list = [];
       });
   },
 });

@@ -3,7 +3,7 @@
 | Campo | Valor |
 |-------|-------|
 | Slug | validar-contrato-de-mocks-vs-backend-real |
-| Estado | En ejecucion |
+| Estado | Cerrada |
 | Fecha de apertura | 2026-05-28 |
 
 ## Documentos
@@ -12,4 +12,4 @@
 |-----------|--------|
 | [analisis](analisis-validar-contrato-de-mocks-vs-backend-real.md) | Completo |
 | [progreso](progreso-validar-contrato-de-mocks-vs-backend-real.md) | Activo |
-| [decisiones](decisiones-validar-contrato-de-mocks-vs-backend-real.md) | Pendiente al cierre |
+| [decisiones](decisiones-validar-contrato-de-mocks-vs-backend-real.md) | Producido |

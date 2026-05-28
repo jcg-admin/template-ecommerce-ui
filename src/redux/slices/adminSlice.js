@@ -101,6 +101,21 @@ const adminSlice = createSlice({
     },
     search: '',
 
+    metrics:          null,   // BUG-ADM-01: agregado — antes no existía
+    isLoadingMetrics: false,
+    metricsError:     null,
+    // BUG-ADM-05: listado de órdenes admin
+    orders:           [],
+    isLoadingOrders:  false,
+    // BUG-ADM-02: orden admin individual
+    currentOrder:     null,
+    isLoadingOrder:   false,
+    // BUG-ADM-03: vouchers admin
+    vouchers:         [],
+    isLoadingVouchers: false,
+    // BUG-ADM-04: categorías admin
+    categoryTree:     [],
+    isLoadingCategories: false,
     isLoading:        false,
     isLoadingUser:    false,
     isActioning:      false,   // suspend / reactivate / create
@@ -231,6 +246,61 @@ const adminSlice = createSlice({
       })
       .addCase(fetchAdminProducts.rejected, (state) => {
         state.isLoadingProducts = false;
+      })
+      // BUG-ADM-05: fetchAdminOrders (listado paginado)
+      .addCase(fetchAdminOrders.pending,   (state) => { state.isLoadingOrders = true; })
+      .addCase(fetchAdminOrders.fulfilled, (state, action) => {
+        state.isLoadingOrders = false;
+        state.orders = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchAdminOrders.rejected,  (state) => { state.isLoadingOrders = false; })
+      // BUG-ADM-02: fetchAdminOrder, updateOrderStatus, adminCancelOrder
+      .addCase(fetchAdminOrder.pending,   (state) => { state.isLoadingOrder = true; })
+      .addCase(fetchAdminOrder.fulfilled, (state, action) => {
+        state.isLoadingOrder = false;
+        state.currentOrder   = action.payload ?? null;
+      })
+      .addCase(fetchAdminOrder.rejected,  (state) => { state.isLoadingOrder = false; })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        if (state.currentOrder) state.currentOrder.status = action.payload?.status;
+      })
+      .addCase(adminCancelOrder.fulfilled, (state) => {
+        if (state.currentOrder) state.currentOrder.status = 'CANCELLED';
+      })
+      // BUG-ADM-03: fetchAdminVouchers
+      .addCase(fetchAdminVouchers.pending,   (state) => { state.isLoadingVouchers = true; })
+      .addCase(fetchAdminVouchers.fulfilled, (state, action) => {
+        state.isLoadingVouchers = false;
+        state.vouchers = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchAdminVouchers.rejected,  (state) => { state.isLoadingVouchers = false; })
+      // BUG-ADM-04: fetchAdminCategories, createCategory, updateCategory
+      .addCase(fetchAdminCategories.pending,   (state) => { state.isLoadingCategories = true; })
+      .addCase(fetchAdminCategories.fulfilled, (state, action) => {
+        state.isLoadingCategories = false;
+        state.categoryTree = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchAdminCategories.rejected,  (state) => { state.isLoadingCategories = false; })
+      .addCase(createCategory.fulfilled, (state, action) => {
+        if (action.payload) state.categoryTree.push(action.payload);
+      })
+      .addCase(updateCategory.fulfilled, (state, action) => {
+        if (!action.payload) return;
+        const idx = state.categoryTree.findIndex(c => c.id === action.payload.id);
+        if (idx >= 0) state.categoryTree[idx] = action.payload;
+      })
+            // BUG-ADM-01 corregido: fetchAdminMetrics sin addCase — state.metrics nunca se actualizaba
+      .addCase(fetchAdminMetrics.pending, (state) => {
+        state.isLoadingMetrics = true;
+        state.metricsError     = null;
+      })
+      .addCase(fetchAdminMetrics.fulfilled, (state, action) => {
+        state.isLoadingMetrics = false;
+        state.metrics          = action.payload ?? null;
+      })
+      .addCase(fetchAdminMetrics.rejected, (state, action) => {
+        state.isLoadingMetrics = false;
+        state.metricsError     = action.payload ?? 'Error al cargar métricas';
       });
   },
 });
@@ -332,3 +402,130 @@ export const toggleUserActive = (userId) => async (dispatch, getState) => {
     return dispatch(reactivateUser(userId));
   }
 };
+// ─────────────────────────────────────────────────────────────────────────────
+// BUG-ADM-02: fetchAdminOrder, updateOrderStatus, adminCancelOrder
+// Importados por AdminOrderDetailPage pero no definidos en el slice.
+// ─────────────────────────────────────────────────────────────────────────────
+export const fetchAdminOrder = createAsyncThunk(
+  'admin/fetchAdminOrder',
+  async (orderNumber, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/orders/${orderNumber}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateOrderStatus = createAsyncThunk(
+  'admin/updateOrderStatus',
+  async ({ orderNumber, status, note }, { rejectWithValue }) => {
+    try {
+      return (await apiService.patch(
+        `/api/v1/orders/${orderNumber}/status/`,
+        { status, notes: note },
+      )).data;
+    }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const adminCancelOrder = createAsyncThunk(
+  'admin/adminCancelOrder',
+  async ({ orderNumber, reason }, { rejectWithValue }) => {
+    try {
+      return (await apiService.post(
+        `/api/v1/orders/${orderNumber}/cancel/`,
+        { reason },
+      )).data;
+    }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUG-ADM-03: fetchAdminVouchers, duplicateVoucher, toggleVoucherActive
+// Importados por AdminVouchersPage pero no definidos en el slice.
+// ─────────────────────────────────────────────────────────────────────────────
+export const fetchAdminVouchers = createAsyncThunk(
+  'admin/fetchAdminVouchers',
+  async (params = {}, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/vouchers/', { params })).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const duplicateVoucher = createAsyncThunk(
+  'admin/duplicateVoucher',
+  async (id, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/duplicate/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const toggleVoucherActive = createAsyncThunk(
+  'admin/toggleVoucherActive',
+  async (id, { rejectWithValue }) => {
+    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/toggle/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUG-ADM-04: fetchAdminCategories, createCategory, updateCategory
+// Importados por AdminCategoriesPage pero no definidos en el slice.
+// ─────────────────────────────────────────────────────────────────────────────
+export const fetchAdminCategories = createAsyncThunk(
+  'admin/fetchAdminCategories',
+  async (_, { rejectWithValue }) => {
+    try { return (await apiService.get('/api/v1/admin/categories/')).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const createCategory = createAsyncThunk(
+  'admin/createCategory',
+  async (data, { rejectWithValue }) => {
+    try { return (await apiService.post('/api/v1/admin/categories/', data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const updateCategory = createAsyncThunk(
+  'admin/updateCategory',
+  async ({ id, data }, { rejectWithValue }) => {
+    try { return (await apiService.patch(`/api/v1/admin/categories/${id}/`, data)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// ─────────────────────────────────────────────────────────────────────────────
+// BUG-PS02: uploadPriceCSV, confirmPriceSync, downloadPriceTemplate
+// Importados por AdminPriceSyncPage pero no definidos.
+// ─────────────────────────────────────────────────────────────────────────────
+export const uploadPriceCSV = createAsyncThunk(
+  'admin/uploadPriceCSV',
+  async (file, { rejectWithValue }) => {
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      return (await apiService.post('/api/v1/admin/price-sync/preview-csv/', fd)).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const confirmPriceSync = createAsyncThunk(
+  'admin/confirmPriceSync',
+  async (syncId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post('/api/v1/admin/price-sync/apply-csv/', { sync_id: syncId })).data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const downloadPriceTemplate = createAsyncThunk(
+  'admin/downloadPriceTemplate',
+  async (_, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get('/api/v1/admin/price-sync/template/');
+      return res.data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);

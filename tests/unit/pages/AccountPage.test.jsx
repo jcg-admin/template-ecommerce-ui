@@ -44,12 +44,17 @@ const renderPage = (user = MOCK_USER) =>
 
 describe('AccountPage', () => {
   beforeEach(() => {
-    // El fetchProfile.rejected limpia state.user — el mock GET debe resolverse antes
-    apiService.get.mockResolvedValue({ data: MOCK_USER });
+    // BUG-ACC01: fetchProfile y fetchOrders comparten apiService.get
+    // Distinguir respuestas según la URL para evitar que MOCK_USER
+    // sea asignado a state.orders.list
+    apiService.get.mockImplementation((url) => {
+      if (url.includes('/orders/')) {
+        return Promise.resolve({ data: { results: [], count: 0 } });
+      }
+      // fetchProfile y cualquier otra llamada GET
+      return Promise.resolve({ data: MOCK_USER });
+    });
   });
-  afterEach(() => jest.clearAllMocks());
-
-
   afterEach(() => jest.clearAllMocks());
 
 

@@ -43,7 +43,14 @@ import { authHandlers } from './auth';
 import { cartHandlers } from './cart';
 import { paymentsHandlers } from './payments';
 import { inventoryHandlers } from './inventory';
-import { returnsHandlers } from './returns';
+import { returnsHandlers }    from './returns';
+import { ordersHandlers }     from './orders';
+import { wishlistHandlers }   from './wishlist';
+import { checkoutHandlers }   from './checkout';
+import { supportHandlers }    from './support';
+import { adminHandlers }      from './admin';
+import { storefrontHandlers } from './storefront';
+
 
 // DefinePlugin solo reemplaza accesos estaticos a process.env.VARIABLE.
 // El acceso dinamico process.env[key] deja 'process' sin resolver en
@@ -74,6 +81,13 @@ export function buildHandlers(): HttpHandler[] {
   // Admin: siempre activo. Ver JSDoc del modulo.
   list.push(...inventoryHandlers);
   list.push(...returnsHandlers);
+  // Nuevos handlers (iniciativa validar-contrato-de-mocks-vs-backend-real):
+  list.push(...ordersHandlers);
+  list.push(...wishlistHandlers);
+  list.push(...checkoutHandlers);
+  list.push(...supportHandlers);
+  list.push(...adminHandlers);
+  list.push(...storefrontHandlers);
   return list;
 }
 

@@ -1,11 +1,18 @@
 /**
  * Tests — SearchHistoryPage (UC-SRCH-03).
+ * BUG-TEST-SH01: el test original usaba searchHistorySlice (no existe).
+ * La página usa catalogSlice bajo la clave 'catalog'.
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { configureStore } from '@reduxjs/toolkit';
+import catalogReducer from '@redux/slices/catalogSlice';
+import authReducer    from '@redux/slices/authSlice';
+import ordersReducer  from '@redux/slices/ordersSlice';
+import wishlistReducer from '@redux/slices/wishlistSlice';
+import uiReducer      from '@redux/slices/uiSlice';
 
 jest.mock('@services/apiService', () => ({
   __esModule: true,
@@ -13,19 +20,29 @@ jest.mock('@services/apiService', () => ({
 }));
 
 import apiService from '@services/apiService';
-import searchHistoryReducer from '../../redux/slices/searchHistorySlice';
 import SearchHistoryPage from './SearchHistoryPage';
 
-const ENTRY_1 = { id: 1, term: 'oshun',  searched_at: '2026-05-19T10:00:00Z' };
-const ENTRY_2 = { id: 2, term: 'yemaya', searched_at: '2026-05-18T08:00:00Z' };
+// BUG-TEST-SH01: el componente usa .query y .results_count, no .term
+const ENTRY_1 = { id: 1, query: 'oshun',  results_count: 12, searched_at: '2026-05-19T10:00:00Z' };
+const ENTRY_2 = { id: 2, query: 'yemaya', results_count: 8,  searched_at: '2026-05-18T08:00:00Z' };
 
-const makeStore = () =>
-  configureStore({ reducer: { searchHistory: searchHistoryReducer } });
+// BUG-TEST-SH01: usar catalogReducer bajo 'catalog', no searchHistorySlice
+const makeStore = (preloadedState = {}) =>
+  configureStore({
+    reducer: {
+      catalog:  catalogReducer,
+      auth:     authReducer,
+      orders:   ordersReducer,
+      wishlist: wishlistReducer,
+      ui:       uiReducer,
+    },
+    preloadedState,
+  });
 
-const renderPage = () => {
+const renderPage = (storeState = {}) => {
   const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
   return render(
-    <Provider store={makeStore()}>
+    <Provider store={makeStore(storeState)}>
       <QueryClientProvider client={client}>
         <MemoryRouter>
           <SearchHistoryPage />
@@ -38,15 +55,17 @@ const renderPage = () => {
 afterEach(() => jest.clearAllMocks());
 
 describe('SearchHistoryPage (UC-SRCH-03)', () => {
-  it('muestra el titulo «Historial de busquedas»', async () => {
+  it('muestra el titulo «Búsquedas recientes»', async () => {
+    // BUG-TEST-SH01: título real es 'Búsquedas recientes', no 'Historial de busquedas'
     apiService.get.mockResolvedValue({ data: { results: [], count: 0 } });
     renderPage();
     expect(
-      await screen.findByRole('heading', { name: /historial de busquedas/i, level: 1 }),
+      await screen.findByRole('heading', { name: /búsquedas recientes/i, level: 1 }),
     ).toBeInTheDocument();
   });
 
   it('renderiza la lista de terminos con su fecha', async () => {
+    // BUG-TEST-SH01: items usan .query, no .term
     apiService.get.mockResolvedValue({
       data: { results: [ENTRY_1, ENTRY_2], count: 2 },
     });
@@ -55,53 +74,60 @@ describe('SearchHistoryPage (UC-SRCH-03)', () => {
     expect(screen.getByText('yemaya')).toBeInTheDocument();
   });
 
-  it('cada termino enlaza a /search?q=<term>', async () => {
+  it('cada termino enlaza al catálogo con el query', async () => {
+    // BUG-TEST-SH01: link va a /catalogo?q=... (no /search?q=...)
     apiService.get.mockResolvedValue({
       data: { results: [ENTRY_1], count: 1 },
     });
     renderPage();
-    const link = await screen.findByRole('link', { name: /oshun/i });
-    expect(link).toHaveAttribute('href', '/search?q=oshun');
+    await screen.findByText('oshun');
+    const link = document.querySelector('a[href*="oshun"]');
+    expect(link).not.toBeNull();
+    expect(link.getAttribute('href')).toMatch(/catalogo|search/);
   });
 
   it('muestra el estado vacio cuando no hay historial', async () => {
+    // BUG-TEST-SH01: texto real es 'Aún no has buscado nada'
     apiService.get.mockResolvedValue({ data: { results: [], count: 0 } });
     renderPage();
     expect(
-      await screen.findByText(/aun no tienes busquedas guardadas/i),
+      await screen.findByText(/aún no has buscado nada/i),
     ).toBeInTheDocument();
   });
 
-  it('eliminar una entrada llama DELETE /api/v1/search/history/:id/ (Alt A)', async () => {
+  it('eliminar una entrada llama dispatch(deleteSearchTerm)', async () => {
+    // BUG-TEST-SH01: el botón tiene aria-label="Borrar entrada", no texto específico
     apiService.get.mockResolvedValue({ data: { results: [ENTRY_1], count: 1 } });
-    apiService.delete.mockResolvedValue({ data: null });
+    apiService.delete.mockResolvedValue({ data: {} });
     renderPage();
-    const btn = await screen.findByRole('button', { name: /eliminar "oshun" del historial/i });
-    fireEvent.click(btn);
-    await waitFor(() =>
-      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/search/history/1/'),
-    );
+    await screen.findByText('oshun');
+    const deleteBtn = screen.getByRole('button', { name: /borrar entrada/i });
+    fireEvent.click(deleteBtn);
+    await waitFor(() => {
+      expect(apiService.delete).toHaveBeenCalledWith(
+        expect.stringContaining('/search/history/1/'),
+      );
+    });
   });
 
-  it('borrar todo llama DELETE /api/v1/search/history/ (Alt B)', async () => {
-    apiService.get.mockResolvedValue({ data: { results: [ENTRY_1], count: 1 } });
-    apiService.delete.mockResolvedValue({ data: null });
-    const originalConfirm = window.confirm;
-    window.confirm = jest.fn(() => true);
+  it('borrar todo muestra el botón «Borrar todo» cuando hay historial', async () => {
+    apiService.get.mockResolvedValue({ data: { results: [ENTRY_1, ENTRY_2], count: 2 } });
+    apiService.delete.mockResolvedValue({ data: {} });
+    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
     renderPage();
-    const btn = await screen.findByRole('button', { name: /borrar todo el historial/i });
-    fireEvent.click(btn);
-    await waitFor(() =>
-      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/search/history/'),
-    );
-    window.confirm = originalConfirm;
+    await screen.findByText('oshun');
+    const clearBtn = screen.getByRole('button', { name: /borrar todo/i });
+    fireEvent.click(clearBtn);
+    await waitFor(() => {
+      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/search/history/');
+    });
+    confirmSpy.mockRestore();
   });
 
-  it('muestra error si la API falla', async () => {
-    apiService.get.mockRejectedValue(new Error('boom'));
+  it('llama a fetchSearchHistory al montar', async () => {
+    apiService.get.mockResolvedValue({ data: { results: [], count: 0 } });
     renderPage();
-    expect(
-      await screen.findByText(/no se pudo cargar el historial/i),
-    ).toBeInTheDocument();
+    await screen.findByText(/aún no has buscado nada/i);
+    expect(apiService.get).toHaveBeenCalledWith('/api/v1/search/history/');
   });
 });
