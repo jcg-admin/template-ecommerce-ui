@@ -85,3 +85,16 @@
 | 2026-05-28T03:45:00 | Cierre de tarea | T-304 | Tabs con ARIA tablist completo, navegacion por flechas, wrap. 6/6 tests. |
 | 2026-05-28T03:45:00 | Hallazgo durante la ejecucion | BUG-JSDOM-01 | jsdom no dispara evento 'toggle' de <details>. Tests ajustados con fireEvent manual. En browser real funciona correctamente. |
 | 2026-05-28T03:45:00 | Cierre de tarea | T-305 | Collapse (<details>) y Accordion (exclusividad via name). 7/7 tests. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-CO01 | CheckoutPage Step sin ARIA: sin aria-current, sin role list/listitem. WCAG 2.4.3. Correccion: T-404. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-CO02 | CheckoutPage muestra todos los pasos simultáneamente sin validacion por paso. T-404 Stepper con linear=true. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-CF01 | CatalogFilters: dos inputs separados min/max sin garantia min<=max. T-401 RangeSlider con distance. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-SB01 | SearchBar sin autocompletado. T-402 Autocomplete. T-503 Ctrl+K. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-OTP-01 | OTPInput: ''.padEnd(n,'') con fillString vacio no rellena (ECMAScript spec). Componente renderizaba 0 inputs. Corregido con Array.from. |
+| 2026-05-28T04:30:00 | Hallazgo durante la ejecucion | BUG-JSDOM-02 | inputs con inputMode dentro de group no son queryables por role=textbox en jsdom. Patron correcto: querySelectorAll('input[aria-label]'). |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-401 | RangeSlider: single y doble con garantia min<=max via distance. 7/7 tests. BUG-CF01 corregido. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-402 | Autocomplete: combobox ARIA, filtrado, teclado, floating-ui. 7/7 tests. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-403 | MultiSelect: listbox ARIA, selectAll, clearAll, search interno. 8/8 tests. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-404 | Stepper: aria-current=step, linear mode, onStepClick. 6/6 tests. BUG-CO01/CO02 corregidos. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-501 | OTPInput: auto-avance, paste inteligente, aria-label por slot. 6/6 tests. BUG-OTP-01 corregido. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-502 | Carousel: scroll-snap CSS, IntersectionObserver, ARIA completo, autoPlay con pausa en hover. 6/6 tests. |
+| 2026-05-28T04:30:00 | Cierre de tarea | T-503 | Header: Ctrl+K via useKeyboardShortcut activa toggleSearch. |

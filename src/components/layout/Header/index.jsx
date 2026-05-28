@@ -18,6 +18,7 @@ import {
   selectIsSearchOpen,
 } from '@redux/selectors';
 import { toggleSearch, openModal } from '@redux/slices/uiSlice';
+import useKeyboardShortcut from '@hooks/ui/useKeyboardShortcut';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './Header.module.scss';
 
@@ -33,6 +34,8 @@ const MAIN_NAV = [
 
 export default function Header() {
   const dispatch     = useDispatch();
+  // T-503: Ctrl+K activa/desactiva el buscador (BUG-SB01 - mejora de accesibilidad)
+  useKeyboardShortcut({ key: 'k', ctrl: true }, () => dispatch(toggleSearch()));
   const isAuth       = useSelector(selectIsAuthenticated);
   const cartCount    = useSelector(selectCartItemCount);
   const isSearchOpen = useSelector(selectIsSearchOpen);

@@ -1,0 +1,50 @@
+@use '@styles/abstracts' as *;
+
+.wrapper { position: relative; }
+.label   { display: block; font-size: $font-size-sm; margin-bottom: $spacing-1; color: $text-secondary; }
+
+.input {
+  width: 100%;
+  padding: $spacing-2 $spacing-3;
+  background: $bg-surface;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  outline: none;
+  transition: border-color $transition-base;
+
+  &:focus { border-color: $primary-color; }
+  &:disabled { opacity: 0.5; cursor: not-allowed; }
+}
+
+.list {
+  background: $bg-elevated;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  box-shadow: $shadow-md;
+  max-height: 240px;
+  overflow-y: auto;
+  padding: $spacing-1 0;
+  list-style: none;
+  margin: 0;
+  z-index: 9999;
+}
+
+.option {
+  padding: $spacing-2 $spacing-3;
+  cursor: pointer;
+  font-size: $font-size-sm;
+  color: $text-primary;
+  transition: background $transition-base;
+
+  &:hover        { background: $bg-surface; }
+  &.optionActive { background: $bg-surface; font-weight: $font-weight-medium; }
+}
+
+.noResults {
+  padding: $spacing-3;
+  color: $text-muted;
+  font-size: $font-size-sm;
+  text-align: center;
+}
