@@ -957,3 +957,101 @@ export { default as Alert } from './Alert/Alert';
 | Estilos de import de LoadingButton encontrados | 3 (2 válidos, 1 bug) |
 | Tests regresionados | 0 |
 | Tests totales | 1330 pasando, 0 fallos |
+
+---
+
+## HALLAZGOS DE LA AUDITORÍA DE FASE 3
+
+---
+
+### HALLAZGO-AUD-F3-01 — saving declarado pero setSaving nunca llamado (bug residual de Fase 6)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F3-01 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 3 |
+| Tipo | Bug residual — onSubmit inline ignoraba el estado saving |
+| Severidad | MEDIA — LoadingButton presente pero spinner nunca visible |
+| Estado | CORREGIDO en la auditoría de Fase 3 |
+
+**Descripción:**
+Al verificar que `loading={saving}` realmente activaba el spinner del
+`LoadingButton`, se encontró que `saving` se declaraba con `useState(false)`
+pero `setSaving` nunca se llamaba. El `onSubmit` del formulario era un
+inline handler síncrono que ignoraba por completo el estado:
+
+```jsx
+// ANTES — saving declarado pero sin efecto
+const [saving, setSaving] = useState(false);  // declarado pero muerto
+// ...
+onSubmit={(e) => { e.preventDefault(); onSave(data); }}  // síncrono, ignora saving
+```
+
+Este bug existía desde el commit `fd40ba4` (Fase 6) — la documentación
+de esa fase decía que el `handleSubmit async` fue implementado, pero el
+código fuente mostraba el inline handler sin modificar.
+
+**Fix aplicado:**
+
+```jsx
+// DESPUÉS — handleSubmit async con try/finally
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  setSaving(true);
+  try { await onSave(data); }
+  finally { setSaving(false); }
+};
+// ...
+onSubmit={handleSubmit}
+```
+
+**Flujo correcto ahora:**
+1. Usuario hace clic en "Guardar dirección"
+2. `setSaving(true)` → `LoadingButton` muestra spinner
+3. `await onSave(data)` → dispara `dispatch(createAddress(data))`
+4. `finally: setSaving(false)` → spinner desaparece (tanto si hay error como si no)
+
+---
+
+### HALLAZGO-AUD-F3-02 — 0 colisiones entre barrel @components/common y primitives
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F3-02 |
+| Fecha | 2026-05-29 |
+| Tipo | Auditoría preventiva — resultado limpio |
+
+**Descripción:**
+Se verificó que ningún nombre de componente está exportado en ambos barrels
+simultáneamente, lo que podría causar ambigüedad en imports.
+
+`@components/common/primitives` exporta exactamente:
+`Button`, `EmptyState`, `Field`, `MetaTag`, `Price`, `SumRow`
+
+`@components/common` exporta (entre otros):
+`Alert`, `Autocomplete`, `Calendar`, `Carousel`, `Chip`, `ChipInput`,
+`Collapse`, `DatePicker`, `DateRangePicker`, `Dropdown`, `LoadingButton`,
+`Modal`, `MultiSelect`, `Offcanvas`, `Popover`, `RangeSlider`,
+`ScrollSpy`, `Stepper`, `TimePicker`, `Toast`, `Tooltip`
+
+Sin solapamiento — el sistema de barrels está correctamente particionado.
+
+---
+
+### RESUMEN DE LA AUDITORÍA DE FASE 3
+
+| Verificación | Resultado |
+|-------------|-----------|
+| Import de LoadingButton en línea correcta | OK |
+| Cadena barrel → archivo físico → export default | OK |
+| LoadingButton ausente en barrel de primitives | OK |
+| 0 residuos del bug en 99 páginas | OK |
+| 0 componentes mal importados desde primitives | OK |
+| 0 colisiones entre barrels | OK |
+| LoadingButton acepta props loading y variant | OK |
+| saving declarado y setSaving llamado | **BUG → CORREGIDO** |
+| handleSubmit async con try/finally | OK tras corrección |
+| Tests: 1330 pasando | OK |
+
+**10/10 verificaciones limpias. 1 bug residual de Fase 6 encontrado y corregido.**

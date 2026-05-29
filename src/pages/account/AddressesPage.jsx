@@ -153,10 +153,17 @@ function AddressFormCard({ onSave, onCancel }) {
   });
   const set = (k) => (e) => setData({ ...data, [k]: e.target.value });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    try { await onSave(data); }
+    finally { setSaving(false); }
+  };
+
   return (
     <form
       className={styles.formCard}
-      onSubmit={(e) => { e.preventDefault(); onSave(data); }}
+      onSubmit={handleSubmit}
     >
       <h3 className={styles.formTitle}>Nueva dirección</h3>
       <div className={styles.formGrid}>
