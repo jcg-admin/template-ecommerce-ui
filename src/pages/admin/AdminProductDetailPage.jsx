@@ -17,6 +17,7 @@ import {
   uploadProductImage, deleteProductImage, reorderProductImages,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminProductDetailPage.module.scss';
 
 const TABS = [
@@ -33,6 +34,7 @@ const slugify = (s) =>
 export default function AdminProductDetailPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const navigate = useNavigate();
   const isNew = id === 'nuevo';
 
@@ -76,17 +78,18 @@ export default function AdminProductDetailPage() {
     } finally { setSaving(false); }
   };
 
-  const handleDelete = async () => {
-    if (window.confirm(`¿Eliminar "${form.name}"? Esta acción es irreversible.`)) {
-      await dispatch(deleteProduct(id));
-      navigate('/admin/products');
-    }
+  const handleDelete = () => {
+    setConfirm({
+      message: `¿Eliminar "${form.name}"? Esta acción es irreversible.`,
+      action:  async () => { await dispatch(deleteProduct(id)); navigate('/admin/products'); },
+    });
   };
 
   if (!isNew && isLoading) return <div className={styles.loading}>Cargando producto…</div>;
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <Link to="/admin/products">Productos</Link><span>/</span>
@@ -199,6 +202,14 @@ export default function AdminProductDetailPage() {
         {errors._form && <div className={styles.errorBox}>{errors._form}</div>}
       </form>
     </div>
+
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }
 
@@ -220,6 +231,6 @@ function ImageGallery({ images, onUpload, onDelete, onReorder }) {
         <input type="file" multiple accept="image/*" onChange={handleUpload} hidden />
         <span>+ Subir</span>
       </label>
-    </div>
+      </div>
   );
 }

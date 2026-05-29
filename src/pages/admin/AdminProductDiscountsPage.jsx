@@ -22,6 +22,7 @@ import {
 } from '@redux/slices/productDiscountsSlice';
 import ProductDiscountCreateForm from '@components/admin/ProductDiscountCreateForm';
 import ProductDiscountEditForm   from '@components/admin/ProductDiscountEditForm';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminProductDiscountsPage.module.scss';
 
 const STATUS_OPTIONS = [
@@ -63,6 +64,7 @@ function formatValidity(from, until) {
 
 export default function AdminProductDiscountsPage() {
   const dispatch    = useDispatch();
+const [confirm, setConfirm] = useState(null);
   const queryClient = useQueryClient();
   const { isActioning, actionError, lastAction } =
     useSelector((s) => s.productDiscounts);
@@ -86,16 +88,16 @@ export default function AdminProductDiscountsPage() {
   }, [lastAction, dispatch, queryClient]);
 
   const handleDeactivate = (discount) => {
-    const ok = window.confirm(
-      `Vas a desactivar el descuento de ${discount.product_name}. ` +
-      `El precio del producto volvera a $${Number(discount.original_price).toFixed(2)}. Continuar?`,
-    );
-    if (!ok) return;
-    dispatch(deactivateProductDiscount(discount.id));
+    setConfirm({
+      message: `Vas a desactivar el descuento de ${discount.product_name}. ` +
+               `El precio volverá a $${Number(discount.original_price).toFixed(2)}. ¿Continuar?`,
+      action:  () => dispatch(deactivateProductDiscount(discount.id)),
+    });
   };
 
   return (
-    <section className={styles.page} aria-labelledby="discounts-title">
+    <>
+      <section className={styles.page} aria-labelledby="discounts-title">
       <header className={styles.header}>
         <h1 id="discounts-title" className={styles.title}>
           Descuentos de Producto
@@ -208,6 +210,13 @@ export default function AdminProductDiscountsPage() {
           onClose={() => setEditingDiscount(null)}
         />
       )}
-    </section>
+      </section>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

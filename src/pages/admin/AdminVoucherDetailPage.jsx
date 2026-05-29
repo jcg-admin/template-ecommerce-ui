@@ -14,6 +14,7 @@ import {
   fetchAdminVoucher, createVoucher, updateVoucher, deleteVoucher,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminVoucherDetailPage.module.scss';
 
 const TYPES = [
@@ -26,6 +27,7 @@ export default function AdminVoucherDetailPage() {
   const { id } = useParams();
   const isNew = id === 'nuevo';
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const navigate = useNavigate();
   const voucher = useSelector((s) => s.admin?.currentVoucher);
   const changelog = useSelector((s) => s.admin?.voucherChangelog || []);
@@ -62,7 +64,8 @@ export default function AdminVoucherDetailPage() {
   };
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <Link to="/admin/vouchers">Vouchers</Link><span>/</span>
@@ -78,12 +81,10 @@ export default function AdminVoucherDetailPage() {
         </div>
         <div className={styles.headerActions}>
           {!isNew && (
-            <Button variant="ghost" onClick={() => {
-              if (window.confirm(`¿Eliminar voucher "${form.code}"?`)) {
-                dispatch(deleteVoucher(id));
-                navigate('/admin/vouchers');
-              }
-            }}>Eliminar</Button>
+            <Button variant="ghost" onClick={() => setConfirm({
+                  message: `¿Eliminar voucher "${form.code}"? Esta acción no se puede deshacer.`,
+                  action:  () => { dispatch(deleteVoucher(id)); navigate('/admin/vouchers'); },
+                })}>Eliminar</Button>
           )}
           <Button type="submit" form="voucher-form" variant="primary" disabled={saving}>
             {saving ? 'Guardando…' : (isNew ? 'Crear voucher' : 'Guardar cambios')}
@@ -163,6 +164,13 @@ export default function AdminVoucherDetailPage() {
           </aside>
         )}
       </div>
-    </div>
+      </div>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

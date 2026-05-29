@@ -18,10 +18,12 @@ import {
   deleteCategory, moveCategoryNode,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminCategoriesPage.module.scss';
 
 export default function AdminCategoriesPage() {
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const tree = useSelector((s) => s.admin?.categoryTree || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingCategories);
   const [editing, setEditing] = useState(null);
@@ -37,7 +39,8 @@ export default function AdminCategoriesPage() {
   };
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <span className={styles.bcCurrent}>Categorías</span>
@@ -67,9 +70,10 @@ export default function AdminCategoriesPage() {
             onToggle={toggle}
             onEdit={(c) => setEditing(c)}
             onDelete={(c) => {
-              if (window.confirm(`¿Eliminar "${c.name}"? Se moverán sus subcategorías al padre.`)) {
-                dispatch(deleteCategory(c.id));
-              }
+              setConfirm({
+                  message: `¿Eliminar "${c.name}"? Se moverán sus subcategorías al nivel raíz.`,
+                  action: () => dispatch(deleteCategory(c.id)),
+                });
             }}
             onAddChild={(parentId) => setCreating(parentId)}
             onMove={(id, dir) => dispatch(moveCategoryNode({ id, direction: dir }))}
@@ -90,6 +94,14 @@ export default function AdminCategoriesPage() {
         />
       )}
     </div>
+
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }
 
@@ -159,6 +171,6 @@ function CategoryFormModal({ category, parentId, onSave, onClose }) {
           </div>
         </form>
       </div>
-    </div>
+      </div>
   );
 }

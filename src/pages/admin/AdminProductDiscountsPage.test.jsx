@@ -11,6 +11,21 @@ import { MemoryRouter }    from 'react-router-dom';
 import { configureStore }  from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
+
+jest.mock('@components/shared/ConfirmModal/ConfirmModal', () => {
+  const React = require('react');
+  return {
+    __esModule: true,
+    default: function ConfirmModal({ open, onConfirm, onClose, message }) {
+      if (!open) return null;
+      return React.createElement('div', { 'data-testid': 'confirm-modal' },
+        React.createElement('p', null, message),
+        React.createElement('button', { type: 'button', onClick: onConfirm }, 'Confirmar'),
+        React.createElement('button', { type: 'button', onClick: onClose }, 'Cancelar'),
+      );
+    },
+  };
+});
 jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn() },
@@ -143,37 +158,33 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
       data: { ...DISCOUNTS[0], is_active: false },
     });
 
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
-
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
     await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
       name: /Desactivar descuento Camiseta del catálogo/i,
     }));
+    await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
         expect.stringContaining('/admin/product-discounts/1/deactivate/'),
       );
     });
-
-    confirmSpy.mockRestore();
   });
 
   it('no llama al endpoint si el admin cancela la confirmacion', async () => {
     apiService.get.mockResolvedValue({ data: { results: DISCOUNTS } });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
-
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
     await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
       name: /Desactivar descuento Camiseta del catálogo/i,
     }));
+    await waitFor(() => screen.getByRole('button', { name: /Cancelar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Cancelar/i }));
     expect(apiService.post).not.toHaveBeenCalled();
-
-    confirmSpy.mockRestore();
   });
 
   it('muestra mensaje de error cuando la desactivacion falla', async () => {
@@ -184,20 +195,18 @@ describe('AdminProductDiscountsPage — desactivar (UC-DASH-03)', () => {
         status: 409,
       }),
     );
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
-
     render(wrap(<AdminProductDiscountsPage />, makeStore()));
     await screen.findByText('Camiseta del catálogo');
 
     fireEvent.click(screen.getByRole('button', {
       name: /Desactivar descuento Camiseta del catálogo/i,
     }));
+    await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
 
     expect(
       await screen.findByText(/no se pudo desactivar/i),
     ).toBeInTheDocument();
-
-    confirmSpy.mockRestore();
   });
 });
 

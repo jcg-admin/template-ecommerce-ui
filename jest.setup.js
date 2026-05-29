@@ -124,3 +124,14 @@ afterAll(() => {
 });
 
 jest.setTimeout(10000);
+
+// Polyfill de HTMLDialogElement para jsdom — necesario para el componente Modal
+// y ConfirmModal que usan <dialog> nativo. jsdom no implementa showModal/close.
+if (typeof HTMLDialogElement !== 'undefined') {
+  if (!HTMLDialogElement.prototype.showModal) {
+    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+  }
+  if (!HTMLDialogElement.prototype.close) {
+    HTMLDialogElement.prototype.close = function () { this.open = false; };
+  }
+}

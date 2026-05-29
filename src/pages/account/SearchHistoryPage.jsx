@@ -8,7 +8,7 @@
  *   DELETE /catalogue/search/history/       (clear all)
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState} from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
@@ -16,17 +16,20 @@ import {
 } from '@redux/slices/catalogSlice';
 import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, EmptyState } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './SearchHistoryPage.module.scss';
 
 export default function SearchHistoryPage() {
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const items = useSelector((s) => s.catalog?.searchHistory || []);
   const isLoading = useSelector((s) => s.catalog?.isLoadingSearchHistory);
 
   useEffect(() => { dispatch(fetchSearchHistory()); }, [dispatch]);
 
   return (
-    <main className={styles.page}>
+    <>
+      <main className={styles.page}>
       <div className={styles.container}>
         <nav className={styles.breadcrumb}>
           <Link to="/account">Mi cuenta</Link><span>/</span>
@@ -49,7 +52,7 @@ export default function SearchHistoryPage() {
                 <Button
                   variant="ghost"
                   onClick={() => {
-                    if (window.confirm('¿Borrar todo el historial?')) dispatch(clearSearchHistory());
+                    setConfirm({ message: '¿Borrar todo el historial de búsqueda?', action: () => dispatch(clearSearchHistory()) });
                   }}
                 >Borrar todo</Button>
               )}
@@ -96,6 +99,13 @@ export default function SearchHistoryPage() {
           </section>
         </div>
       </div>
-    </main>
+      </main>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

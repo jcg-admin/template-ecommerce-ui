@@ -113,15 +113,16 @@ describe('SearchHistoryPage (UC-SRCH-03)', () => {
   it('borrar todo muestra el botón «Borrar todo» cuando hay historial', async () => {
     apiService.get.mockResolvedValue({ data: { results: [ENTRY_1, ENTRY_2], count: 2 } });
     apiService.delete.mockResolvedValue({ data: {} });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
     renderPage();
     await screen.findByText('oshun');
     const clearBtn = screen.getByRole('button', { name: /borrar todo/i });
     fireEvent.click(clearBtn);
+    // Confirmar en el Modal
+    await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
     await waitFor(() => {
       expect(apiService.delete).toHaveBeenCalledWith('/api/v1/search/history/');
     });
-    confirmSpy.mockRestore();
   });
 
   it('llama a fetchSearchHistory al montar', async () => {

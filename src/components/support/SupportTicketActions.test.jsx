@@ -7,6 +7,21 @@ import { Provider }     from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 
+
+jest.mock('@components/shared/ConfirmModal/ConfirmModal', () => {
+  const React = require('react');
+  return {
+    __esModule: true,
+    default: function ConfirmModal({ open, onConfirm, onClose, message }) {
+      if (!open) return null;
+      return React.createElement('div', { 'data-testid': 'confirm-modal' },
+        React.createElement('p', null, message),
+        React.createElement('button', { type: 'button', onClick: onConfirm }, 'Confirmar'),
+        React.createElement('button', { type: 'button', onClick: onClose }, 'Cancelar'),
+      );
+    },
+  };
+});
 jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn() },
@@ -65,13 +80,16 @@ describe('SupportTicketActions (UC-SUPP-04)', () => {
     apiService.post.mockResolvedValue({
       data: { id: 7, status: 'CLOSED' },
     });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(wrap(
       <SupportTicketActions ticket={{ id: 7, status: 'OPEN' }} />,
       makeStore(),
     ));
+    // Abrir el Modal de confirmación
     fireEvent.click(screen.getByRole('button', { name: /Cerrar ticket/i }));
+    // Confirmar en el Modal
+    await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
@@ -79,41 +97,39 @@ describe('SupportTicketActions (UC-SUPP-04)', () => {
         expect.any(Object),
       );
     });
-
-    confirmSpy.mockRestore();
   });
 
-  it('no cierra si el usuario cancela la confirmacion', () => {
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
-
+  it('no cierra si el usuario cancela la confirmacion', async () => {
     render(wrap(
       <SupportTicketActions ticket={{ id: 7, status: 'OPEN' }} />,
       makeStore(),
     ));
+    // Abrir el Modal y cancelar
     fireEvent.click(screen.getByRole('button', { name: /Cerrar ticket/i }));
+    await waitFor(() => screen.getByRole('button', { name: /Cancelar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Cancelar/i }));
 
     expect(apiService.post).not.toHaveBeenCalled();
-    confirmSpy.mockRestore();
   });
 
   it('llama al endpoint de reabrir al confirmar', async () => {
     apiService.post.mockResolvedValue({
       data: { id: 7, status: 'OPEN' },
     });
-    const confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(true);
 
     render(wrap(
       <SupportTicketActions ticket={{ id: 7, status: 'CLOSED' }} />,
       makeStore(),
     ));
+    // Abrir Modal y confirmar
     fireEvent.click(screen.getByRole('button', { name: /Reabrir ticket/i }));
+    await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
         expect.stringContaining('/support/tickets/7/reopen/'),
       );
     });
-
-    confirmSpy.mockRestore();
   });
 });

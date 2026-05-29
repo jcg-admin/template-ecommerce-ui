@@ -7,6 +7,21 @@ import { configureStore } from '@reduxjs/toolkit';
 import adminReducer from '@redux/slices/adminSlice';
 import uiReducer   from '@redux/slices/uiSlice';
 
+
+jest.mock('@components/shared/ConfirmModal/ConfirmModal', () => {
+  const React = require('react');
+  return {
+    __esModule: true,
+    default: function ConfirmModal({ open, onConfirm, onClose, message }) {
+      if (!open) return null;
+      return React.createElement('div', { 'data-testid': 'confirm-modal' },
+        React.createElement('p', null, message),
+        React.createElement('button', { type: 'button', onClick: onConfirm }, 'Confirmar'),
+        React.createElement('button', { type: 'button', onClick: onClose }, 'Cancelar'),
+      );
+    },
+  };
+});
 jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: {

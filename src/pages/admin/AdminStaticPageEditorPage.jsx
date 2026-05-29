@@ -16,11 +16,13 @@ import {
   fetchAdminPage, savePageDraft, publishPage, restorePageVersion,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminStaticPageEditorPage.module.scss';
 
 export default function AdminStaticPageEditorPage() {
   const { slug } = useParams();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const page = useSelector((s) => s.admin?.currentPage);
   const versions = useSelector((s) => s.admin?.pageVersions || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingPages);
@@ -48,21 +50,25 @@ export default function AdminStaticPageEditorPage() {
     } finally { setSaving(false); }
   };
 
-  const handlePublish = async () => {
-    if (!window.confirm('¿Publicar esta versión? El contenido será visible públicamente.')) return;
-    setSaving(true);
-    try {
-      await dispatch(publishPage(slug)).unwrap();
-      setSavedToast('Publicado ✓');
-      setTimeout(() => setSavedToast(''), 2500);
-    } finally { setSaving(false); }
+  const handlePublish = () => {
+    setConfirm({
+      message: '¿Publicar esta versión? El contenido será visible públicamente.',
+      action:  async () => {
+        setSaving(true);
+        try {
+          await dispatch(publishPage(slug)).unwrap();
+          setSavedToast('Publicado ✓');
+          setTimeout(() => setSavedToast(''), 2500);
+        } finally { setSaving(false); }
+      },
+    });
   };
 
   const handleRestore = (versionId) => {
-    if (window.confirm(`¿Restaurar versión v${versions.find(v => v.id === versionId)?.version}? Se creará un nuevo borrador.`)) {
-      dispatch(restorePageVersion({ slug, versionId }));
-      setActiveVersionId(null);
-    }
+    setConfirm({
+      message: `¿Restaurar versión v${versions.find(v => v.id === versionId)?.version}? Se creará un nuevo borrador.`,
+      action:  () => { dispatch(restorePageVersion({ slug, versionId })); setActiveVersionId(null); },
+    });
   };
 
   if (isLoading) return <div className={styles.loading}>Cargando…</div>;
@@ -72,7 +78,8 @@ export default function AdminStaticPageEditorPage() {
     : form.content;
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <Link to="/admin/pages">Páginas</Link><span>/</span>
@@ -157,6 +164,13 @@ export default function AdminStaticPageEditorPage() {
           </ul>
         </aside>
       </div>
-    </div>
+      </div>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

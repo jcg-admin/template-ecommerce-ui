@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAdminProducts, deleteProduct, toggleProductFeatured } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminTablePage.module.scss';
 
 const STATUS = [
@@ -20,6 +21,7 @@ const STATUS = [
 
 export default function AdminProductsPage() {
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const [filter,     setFilter]     = useState('all');
   const [search,     setSearch]     = useState('');
   const [tagFilters, setTagFilters] = useState([]);
@@ -29,7 +31,8 @@ export default function AdminProductsPage() {
   useEffect(() => { dispatch(fetchAdminProducts({ filter, search, tags: tagFilters })); }, [dispatch, filter, search, tagFilters]);
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <header className={styles.header}>
         <div>
           <MetaTag tone="bronze">Catálogo · {products.length} productos</MetaTag>
@@ -132,7 +135,7 @@ export default function AdminProductsPage() {
                     type="button"
                     className={`${styles.actionBtn} ${styles.actionDelete}`}
                     onClick={() => {
-                      if (window.confirm(`¿Eliminar "${p.name}"?`)) dispatch(deleteProduct(p.id));
+                      setConfirm({ message: `¿Eliminar "${p.name}"? Esta acción es irreversible.`, action: () => dispatch(deleteProduct(p.id)) });
                     }}
                     title="Eliminar"
                   >×</button>
@@ -142,6 +145,15 @@ export default function AdminProductsPage() {
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        confirmLabel="Confirmar"
+        variant="danger"
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

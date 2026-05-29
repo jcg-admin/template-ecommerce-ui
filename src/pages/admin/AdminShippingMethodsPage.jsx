@@ -14,10 +14,12 @@ import {
   fetchShippingMethods, createShippingMethod, updateShippingMethod, deleteShippingMethod,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminTablePage.module.scss';
 
 export default function AdminShippingMethodsPage() {
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const methods = useSelector((s) => s.admin?.shippingMethods || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingShipping);
   const [editing, setEditing] = useState(null);
@@ -25,7 +27,8 @@ export default function AdminShippingMethodsPage() {
   useEffect(() => { dispatch(fetchShippingMethods()); }, [dispatch]);
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <header className={styles.header}>
         <div>
           <MetaTag tone="bronze">Configuración · {methods.length} métodos</MetaTag>
@@ -71,7 +74,7 @@ export default function AdminShippingMethodsPage() {
                   <button
                     className={`${styles.actionBtn} ${styles.actionDelete}`}
                     onClick={() => {
-                      if (window.confirm(`¿Eliminar "${m.name}"?`)) dispatch(deleteShippingMethod(m.id));
+                      setConfirm({ message: `¿Eliminar "${m.name}"?`, action: () => dispatch(deleteShippingMethod(m.id)) });
                     }}
                     title="Eliminar"
                   >×</button>
@@ -94,6 +97,14 @@ export default function AdminShippingMethodsPage() {
         />
       )}
     </div>
+
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }
 
@@ -138,6 +149,6 @@ function MethodModal({ method, onClose, onSave }) {
           </div>
         </form>
       </div>
-    </div>
+      </div>
   );
 }

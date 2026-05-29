@@ -1665,3 +1665,177 @@ el panel admin sea accesible por múltiples roles con distintos niveles de confi
 
 **12/12 checks OK. 1 bug adicional (Footer) encontrado y corregido.**
 **Total slugs MSW post-auditoría: 13**
+
+---
+
+## HALLAZGOS DE FASE 7 Y SU AUDITORÍA
+
+---
+
+### RESUMEN EJECUTIVO FASE 7 — BUG-CONF-01
+
+**Objetivo:** Eliminar los 14 usos de `window.confirm` distribuidos en 11 archivos.
+
+**Solución:** Componente `ConfirmModal` reutilizable + estado local `useState(confirm)` + patrón `setConfirm({ message, action })` en cada página.
+
+**Archivos nuevos:**
+- `src/components/shared/ConfirmModal/ConfirmModal.jsx` (61L)
+- `src/components/shared/ConfirmModal/ConfirmModal.module.scss` (19L)
+- `src/components/shared/ConfirmModal/__mocks__/ConfirmModal.jsx` — mock con `React.createElement` para tests
+
+**Archivos modificados:** 11 páginas/componentes + 6 tests + `jest.setup.js` (polyfill HTMLDialogElement)
+
+---
+
+### HALLAZGO-F7-01 — add_confirm_modal_jsx() insertó Modal en subcomponente incorrecto
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-01 |
+| Tipo | Bug de implementación — herramienta de inserción imprecisa |
+| Severidad | ALTA — ReferenceError en runtime |
+| Estado | CORREGIDO |
+
+**Descripción:**
+La función `add_confirm_modal_jsx()` buscaba el último cierre `');\n}'` del archivo
+para insertar el Modal. En páginas con subcomponentes internos al final del archivo
+(`CategoryFormModal`, `MethodModal`, `ImageGallery`, `OptionInlineForm`), el Modal
+se insertaba en la función interna en lugar del componente principal.
+
+**Páginas afectadas:** `AdminCategoriesPage`, `AdminShippingMethodsPage`,
+`AdminProductDetailPage`, `AdminVariantTypesPage`.
+
+**Fix:** Mover el Modal al cierre del Fragment `</>` del componente principal.
+
+**Convención permanente:** En páginas con múltiples return o subcomponentes internos,
+verificar manualmente que `<ConfirmModal>` está en la función exportada, no en una función interna.
+
+---
+
+### HALLAZGO-F7-02 — SupportTicketActions tiene early returns múltiples
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-02 |
+| Tipo | Arquitectura especial — componente con múltiples ramas de return |
+| Estado | CORREGIDO con variable compartida `confirmModal` |
+
+**Descripción:**
+`SupportTicketActions` tiene tres ramas de return: una para `CLOSED`, una para
+statuses closables, y `return null`. Cada rama necesitaba incluir el `<ConfirmModal>`.
+
+**Solución:** Variable `confirmModal` definida una vez antes de los returns:
+```jsx
+const confirmModal = (
+  <ConfirmModal open={confirm !== null} message={...} onConfirm={...} onClose={...} />
+);
+// Cada rama: return (<>...</>{confirmModal}</>)
+```
+
+**Convención permanente documentada:** Cuando un componente tiene múltiples early
+returns, declarar `const confirmModal = (...)` antes de los returns e incluirlo
+en cada rama, o consolidar los returns en uno solo.
+
+---
+
+### HALLAZGO-F7-03 — MockReturnValue de window.confirm residual en test de reabrir
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-03 |
+| Estado | CORREGIDO |
+
+**Descripción:**
+El test "llama al endpoint de reabrir al confirmar" en `SupportTicketActions.test.jsx`
+no fue actualizado al patrón Modal. Usaba `jest.spyOn(window, 'confirm').mockReturnValue(true)`.
+
+**Fix:** Reemplazado por `fireEvent.click('Reabrir ticket')` → `waitFor('Confirmar')` → `fireEvent.click('Confirmar')`.
+
+---
+
+### HALLAZGO-F7-04 — AdminProductDiscountsPage sin useState(confirm) por espacios extra
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-04 |
+| Tipo | Bug de implementación — ancla de reemplazo no encontrada |
+| Estado | CORREGIDO |
+
+**Descripción:**
+`add_confirm_state()` buscaba `"const dispatch = useDispatch();"` pero
+`AdminProductDiscountsPage` tenía `"const dispatch    = useDispatch();"` (4 espacios extra).
+El `useState(confirm)` nunca se declaró → `ReferenceError: setConfirm is not defined`.
+
+**Fix:** Búsqueda exacta del texto con espacios y reemplazo manual.
+
+---
+
+### HALLAZGO-F7-05 — Polyfill HTMLDialogElement requerido en jest.setup.js
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-05 |
+| Estado | IMPLEMENTADO |
+
+**Descripción:**
+jsdom no implementa `HTMLDialogElement.prototype.showModal()` ni `close()`.
+El Modal usa `<dialog>` nativo — sin el polyfill el componente no abre en tests.
+
+El polyfill se agregó en `jest.setup.js` (aplicado globalmente a todos los tests):
+```javascript
+if (typeof HTMLDialogElement !== 'undefined') {
+  if (!HTMLDialogElement.prototype.showModal) {
+    HTMLDialogElement.prototype.showModal = function () { this.open = true; };
+  }
+  if (!HTMLDialogElement.prototype.close) {
+    HTMLDialogElement.prototype.close = function () { this.open = false; };
+  }
+}
+```
+
+---
+
+### HALLAZGO-F7-06 — Mock de ConfirmModal necesita React.createElement (no JSX) en factory
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F7-06 |
+| Estado | IMPLEMENTADO |
+
+**Descripción:**
+Las factories de `jest.mock()` no soportan JSX directamente cuando el factory
+se ejecuta antes del transform de Babel. El mock inicial usaba JSX y el componente
+se renderizaba vacío.
+
+**Solución:** Usar `React.createElement` en la factory:
+```javascript
+jest.mock('@components/shared/ConfirmModal/ConfirmModal', () => {
+  const React = require('react');
+  return {
+    __esModule: true,
+    default: function ConfirmModal({ open, onConfirm, onClose, message }) {
+      if (!open) return null;
+      return React.createElement('div', { 'data-testid': 'confirm-modal' },
+        React.createElement('button', { type: 'button', onClick: onConfirm }, 'Confirmar'),
+        React.createElement('button', { type: 'button', onClick: onClose }, 'Cancelar'),
+      );
+    },
+  };
+});
+```
+
+---
+
+### AUDITORÍA POST-FASE 7 — 9/9 checks OK
+
+| Verificación | Resultado |
+|-------------|-----------|
+| 0 window.confirm funcionales en el proyecto | OK |
+| 0 setConfirm sin useState(null) | OK |
+| ConfirmModal en componente principal | OK |
+| 0 spyOn(window.confirm) en tests | OK |
+| ConfirmModal.jsx: 7 props presentes | OK |
+| 148 SCSS entries, 0 issues | OK |
+| 6 tests con mock React.createElement | OK |
+| SupportTicketActions: confirmModal en ambas ramas | OK |
+| Tests: 1330 pasando, 0 fallos | OK |

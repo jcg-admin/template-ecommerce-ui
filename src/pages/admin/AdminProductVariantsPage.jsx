@@ -16,11 +16,13 @@ import {
   fetchProductVariants, bulkUpdateVariants, regenerateVariants,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminVariantsPage.module.scss';
 
 export default function AdminProductVariantsPage() {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const variants = useSelector((s) => s.admin?.productVariants || []);
   const [edited, setEdited] = useState({});
   const [selected, setSelected] = useState(new Set());
@@ -70,7 +72,8 @@ export default function AdminProductVariantsPage() {
   const hasChanges = Object.keys(edited).length > 0;
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <Link to="/admin/products">Productos</Link><span>/</span>
@@ -90,9 +93,10 @@ export default function AdminProductVariantsPage() {
           <Button
             variant="secondary"
             onClick={() => {
-              if (window.confirm('Re-generar combinaciones: se crearán nuevas variantes para tipos sin combinación. Las variantes existentes se conservan.')) {
-                dispatch(regenerateVariants(productId));
-              }
+              setConfirm({
+      message: 'Re-generar combinaciones: se crearán nuevas variantes por cada combinación de opciones. ¿Continuar?',
+      action:  () => dispatch(generateVariants(productId)),
+    });
             }}
           >Re-generar combinaciones</Button>
           <Button variant="primary" onClick={handleSave} disabled={!hasChanges || saving}>
@@ -201,6 +205,13 @@ export default function AdminProductVariantsPage() {
           </tbody>
         </table>
       </div>
-    </div>
+      </div>
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }

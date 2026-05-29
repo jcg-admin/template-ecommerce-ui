@@ -17,18 +17,21 @@ import {
   createVariantOption, updateVariantOption, deleteVariantOption,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminVariantsPage.module.scss';
 
 export default function AdminVariantTypesPage() {
   const { id: productId } = useParams();
   const dispatch = useDispatch();
+  const [confirm, setConfirm] = useState(null);
   const types = useSelector((s) => s.admin?.variantTypes || []);
   const [editingType, setEditingType] = useState(null);
 
   useEffect(() => { dispatch(fetchVariantTypes(productId)); }, [dispatch, productId]);
 
   return (
-    <div className={styles.page}>
+    <>
+      <div className={styles.page}>
       <nav className={styles.breadcrumb}>
         <Link to="/admin">Admin</Link><span>/</span>
         <Link to="/admin/products">Productos</Link><span>/</span>
@@ -66,11 +69,10 @@ export default function AdminVariantTypesPage() {
             type={type}
             productId={productId}
             onEdit={() => setEditingType(type)}
-            onDelete={() => {
-              if (window.confirm(`¿Eliminar "${type.name}" y todas sus opciones?`)) {
-                dispatch(deleteVariantType({ productId, typeId: type.id }));
-              }
-            }}
+            onDelete={() => setConfirm({
+              message: `¿Eliminar "${type.name}" y todas sus opciones?`,
+              action:  () => dispatch(deleteVariantType({ productId, typeId: type.id })),
+            })}
           />
         ))}
       </div>
@@ -90,6 +92,14 @@ export default function AdminVariantTypesPage() {
         />
       )}
     </div>
+
+      <ConfirmModal
+        open={confirm !== null}
+        message={confirm?.message ?? ''}
+        onConfirm={() => { confirm?.action(); setConfirm(null); }}
+        onClose={() => setConfirm(null)}
+      />
+    </>
   );
 }
 
@@ -126,11 +136,10 @@ function VariantTypeCard({ type, productId, onEdit, onDelete }) {
               <button
                 type="button"
                 className={`${styles.smallBtn} ${styles.smallBtnDelete}`}
-                onClick={() => {
-                  if (window.confirm(`¿Eliminar opción "${opt.label}"?`)) {
-                    dispatch(deleteVariantOption({ productId, typeId: type.id, optionId: opt.id }));
-                  }
-                }}
+                onClick={() => setConfirm({
+                  message: `¿Eliminar opción "${opt.label}"?`,
+                  action:  () => dispatch(deleteVariantOption({ productId, typeId: type.id, optionId: opt.id })),
+                })}
               >×</button>
             </div>
           </div>
@@ -228,6 +237,6 @@ function OptionInlineForm({ onCancel, onSave }) {
       <input className={styles.inlineInput} placeholder="Sub-etiqueta (opcional)" value={subLabel} onChange={(e) => setSubLabel(e.target.value)} />
       <button type="submit" className={styles.smallBtn} disabled={!label.trim()}>✓</button>
       <button type="button" onClick={onCancel} className={styles.smallBtn}>×</button>
-    </form>
+      </form>
   );
 }
