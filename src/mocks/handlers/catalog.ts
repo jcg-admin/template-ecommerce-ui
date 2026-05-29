@@ -58,10 +58,10 @@ export const catalogHandlers = [
     // frontend muestra todos de una vez. La paginacion artificial
     // (A-02) generaba un `next` hardcodeado a page=2 que no funcionaba.
     const body: PaginatedResponse<typeof results[number]> = {
-      count:    results.length,
+      count:    total,
       results,
-      next:     null,
-      previous: null,
+      next:     page < pages ? `/api/v1/catalogue/?page=${page + 1}` : null,
+      previous: page > 1    ? `/api/v1/catalogue/?page=${page - 1}` : null,
     };
     return HttpResponse.json(body);
   }),

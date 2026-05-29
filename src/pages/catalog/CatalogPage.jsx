@@ -153,10 +153,10 @@ export default function CatalogPage() {
               </div>
             )}
 
-            {pagination.total_pages > 1 && (
+            {pagination.totalPages > 1 && (
               <Pagination
                 current={pagination.page}
-                total={pagination.total_pages}
+                total={pagination.totalPages}
                 onPage={(p) => dispatch(setPage(p))}
               />
             )}
