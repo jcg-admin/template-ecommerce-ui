@@ -69,3 +69,4 @@ codigo local de este repositorio.
 | [integrar-componentes-ui-core-js](integrar-componentes-ui-core-js/) | Cerrada | Solicitud usuario (cierre de mapear-y-corregir-scss-completo) | Adaptar la logica de comportamiento y accesibilidad de los 29 componentes vanilla JS de ui-core-5.25.0 al stack React del template, mediante hooks y componentes funcionales propios. No se importan los JS de ui-core en produccion. | |
 | [implementar-componentes-diferidos-ui-core](implementar-componentes-diferidos-ui-core/) | Cerrada | Auditoría de cobertura ui-core-5.25.0 | Implementar los 11 componentes diferidos con toda su lógica y API. | |
 | [cobertura-tests-completa](cobertura-tests-completa/) | Cerrada | Auditoría post-integración | Tests al 100% de páginas, slices y hooks críticos | |
+| [auditar-rutas-y-flujos](auditar-rutas-y-flujos/) | En ejecucion | Prueba visual en browser | 88 rutas auditadas, 12 huerfanas, 10 flujos definidos | |
