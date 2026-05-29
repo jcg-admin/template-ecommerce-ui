@@ -119,6 +119,19 @@ const AdminSystemSettingsPage        = lazy(() => import('@pages/admin/AdminSyst
 const AdminBackupsPage               = lazy(() => import('@pages/admin/AdminBackupsPage'));
 // UC-LOG-08 — Panel operacional de logistica
 const AdminLogisticsPage             = lazy(() => import('@pages/admin/AdminLogisticsPage'));
+// Páginas huérfanas registradas en Fase 2 (auditar-rutas-y-flujos)
+const AdminVoucherDetailPage    = lazy(() => import('@pages/admin/AdminVoucherDetailPage'));
+const AdminProductDetailPage    = lazy(() => import('@pages/admin/AdminProductDetailPage'));
+const AdminProductImportPage    = lazy(() => import('@pages/admin/AdminProductImportPage'));
+const AdminVariantTypesPage     = lazy(() => import('@pages/admin/AdminVariantTypesPage'));
+const AdminProductVariantsPage  = lazy(() => import('@pages/admin/AdminProductVariantsPage'));
+const AdminStaticPagesPage      = lazy(() => import('@pages/admin/AdminStaticPagesPage'));
+const AdminStaticPageEditorPage = lazy(() => import('@pages/admin/AdminStaticPageEditorPage'));
+const AdminGatewaysPage         = lazy(() => import('@pages/admin/AdminGatewaysPage'));
+const AdminShippingMethodsPage  = lazy(() => import('@pages/admin/AdminShippingMethodsPage'));
+const AdminSiteSettingsPage     = lazy(() => import('@pages/admin/AdminSiteSettingsPage'));
+const AdminInventoryDashboardPage = lazy(() => import('@pages/admin/AdminInventoryDashboardPage'));
+const AdminStockAlertsPage      = lazy(() => import('@pages/admin/AdminStockAlertsPage'));
 // UC-CFG-01..05 — Hub de configuracion
 const AdminConfigPage                = lazy(() => import('@pages/admin/AdminConfigPage'));
 
@@ -231,8 +244,16 @@ export default function AppRouter() {
               <Route path="admin/products"           element={<AdminProductsPage />} />
               {/* UC-CAT-09 — Crear producto */}
               <Route path="admin/products/new"       element={<AdminProductCreatePage />} />
+              {/* Importación masiva de productos via CSV */}
+              <Route path="admin/products/import"    element={<AdminProductImportPage />} />
               {/* UC-CAT-10 — Editar producto */}
               <Route path="admin/products/:id/edit"  element={<AdminProductEditPage />} />
+              {/* Vista de solo lectura del producto */}
+              <Route path="admin/products/:id"       element={<AdminProductDetailPage />} />
+              {/* Tipos de variante del producto */}
+              <Route path="admin/products/:id/variant-types" element={<AdminVariantTypesPage />} />
+              {/* Tabla de combinaciones de variantes (bulk edit) */}
+              <Route path="admin/products/:id/variants/matrix" element={<AdminProductVariantsPage />} />
               {/* UC-CAT-06 — Gestionar categorias */}
               <Route path="admin/categories"         element={<AdminCategoriesPage />} />
               {/* UC-CAT-12 — Sincronizar precios en lote */}
@@ -253,11 +274,17 @@ export default function AppRouter() {
               <Route path="admin/users"       element={<AdminUsersPage />} />
               <Route path="admin/users/:pk"   element={<AdminUserDetailPage />} />
               <Route path="admin/vouchers"    element={<AdminVouchersPage />} />
+              {/* Detalle y creación de voucher — cubre /admin/vouchers/nuevo y /admin/vouchers/:id */}
+              <Route path="admin/vouchers/:id"  element={<AdminVoucherDetailPage />} />
               <Route path="admin/support"     element={<AdminSupportPage />} />
               <Route path="admin/returns"     element={<AdminReturnsPage />} />
               <Route path="admin/returns/:id" element={<AdminReturnDetailPage />} />
               <Route path="admin/inventory"                       element={<AdminInventoryPage />} />
               <Route path="admin/inventory/import"                element={<AdminInventoryImportPage />} />
+              {/* Dashboard de métricas de inventario */}
+              <Route path="admin/inventory/dashboard"             element={<AdminInventoryDashboardPage />} />
+              {/* Alertas de stock bajo o agotado */}
+              <Route path="admin/inventory/stock-alerts"          element={<AdminStockAlertsPage />} />
               <Route path="admin/inventory/:variantId/movements"  element={<AdminInventoryMovementsPage />} />
               <Route path="admin/inventory/:variantId/adjust"     element={<AdminInventoryAdjustPage />} />
               {/* UC-CHT-03 / UC-CHT-04 — Variantes de producto */}
@@ -294,6 +321,13 @@ export default function AppRouter() {
               <Route path="admin/payments/:paymentId/refund"      element={<AdminPaymentRefundPage />} />
               {/* UC-LOG-08 — Panel operacional de logistica */}
               <Route path="admin/logistics"                       element={<AdminLogisticsPage />} />
+              {/* CMS — Gestión de páginas estáticas */}
+              <Route path="admin/pages"                           element={<AdminStaticPagesPage />} />
+              <Route path="admin/pages/:slug"                     element={<AdminStaticPageEditorPage />} />
+              {/* Configuración específica: gateways, envío, sitio */}
+              <Route path="admin/config/gateways"                 element={<AdminGatewaysPage />} />
+              <Route path="admin/config/shipping"                 element={<AdminShippingMethodsPage />} />
+              <Route path="admin/config/site"                     element={<AdminSiteSettingsPage />} />
               {/* UC-CFG-01..05 — Hub de configuracion */}
               <Route path="admin/config"                          element={<AdminConfigPage />} />
             </Route>

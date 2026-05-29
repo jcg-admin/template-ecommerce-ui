@@ -357,3 +357,172 @@ y siguen pendientes:
 | HALLAZGO-UX-01 | Loading infinito en 3 páginas cuando recurso no existe | Alta | PENDIENTE (Fase 4) |
 | HALLAZGO-MSW-01 | 8 endpoints sin mock MSW | Media | PENDIENTE (Fase 5) |
 | HALLAZGO-SLICE-CONFLICT-01 | createProduct en productsSlice vs adminSlice | Media | PENDIENTE (Fase 6) |
+
+
+---
+
+## HALLAZGOS FASE 2 — Registrar páginas huérfanas en el router
+
+---
+
+## HALLAZGO-FASE2-01 — AdminStaticPagesPage enlaza a /admin/pages/:slug sin /edit (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE2-01 |
+| Fecha | 2026-05-28 |
+| Severidad | Baja — afecta solo la decisión de naming de ruta |
+| Estado | DOCUMENTADO — ruta ajustada al JSX real |
+
+**Descripción:**
+El plan original proponía `/admin/pages/:slug/edit` para el editor de páginas CMS.
+Al leer el JSX real de `AdminStaticPagesPage`, los botones de "Ver" y "Editar" enlazan a:
+```jsx
+<Link to={`/admin/pages/${p.slug}`} ...>
+```
+Sin el segmento `/edit`. Igualmente `AdminStaticPageEditorPage` usa `useParams()` 
+extrayendo `{ slug }` y su link de vuelta es a `/admin/pages`.
+
+**Decisión:** La ruta registrada es `/admin/pages/:slug` (sin `/edit`) para
+coincidir con los links existentes en la lista.
+
+---
+
+## HALLAZGO-FASE2-02 — AdminVouchersPage ya tenía links a rutas inexistentes (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE2-02 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — botones "Ver detalle" y "Editar" iban a 404 |
+| Estado | CORREGIDO — ruta /admin/vouchers/:id registrada |
+
+**Descripción:**
+`AdminVouchersPage` tenía desde antes links a `/admin/vouchers/:id` y a
+`/admin/vouchers/nuevo`. Al no estar registrada la ruta en el router, estos
+botones producían navegación a `/404` silenciosamente.
+
+La página `AdminVoucherDetailPage` maneja ambos casos en la misma ruta:
+```jsx
+const { id } = useParams();
+const isNew  = id === 'nuevo';   // true → modo crear, false → modo editar
+```
+
+**Corrección:** Una sola ruta `/admin/vouchers/:id` cubre ambos casos:
+- `/admin/vouchers/nuevo` → modo crear (isNew=true)
+- `/admin/vouchers/5`     → modo editar (isNew=false, carga el voucher)
+
+---
+
+## HALLAZGO-FASE2-03 — AdminConfigPage no enlazaba a páginas CRUD específicas (PARCIAL)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE2-03 |
+| Fecha | 2026-05-28 |
+| Severidad | Media — las rutas de config específicas existen pero no están enlazadas desde el hub |
+| Estado | PARCIAL — tarjeta UC-CFG-04 habilitada, resto permanece apuntando a páginas genéricas |
+
+**Descripción:**
+El hub `/admin/config` enlazaba a:
+- `/admin/payments` en lugar de `/admin/config/gateways` (CRUD de gateways)
+- `/admin/logistics` en lugar de `/admin/config/shipping` (CRUD de métodos de envío)
+- `/admin/system-settings` en lugar de `/admin/config/site` (config del sitio)
+- Sin ruta para `/admin/pages` (tarjeta con `pending: true` y `aria-disabled`)
+
+Las páginas CRUD específicas (`AdminGatewaysPage`, `AdminShippingMethodsPage`,
+`AdminSiteSettingsPage`) son funcionalidad adicional y complementaria a las
+páginas genéricas existentes. El hub puede convivir con ambas.
+
+**Corrección aplicada:** La tarjeta UC-CFG-04 fue habilitada con `to: '/admin/pages'`.
+Las demás tarjetas mantienen sus rutas genéricas existentes que ya funcionan.
+
+**Pendiente:** Evaluar si vale la pena actualizar las otras 3 tarjetas para apuntar
+a las páginas CRUD específicas en lugar de las genéricas.
+
+---
+
+## HALLAZGO-FASE2-04 — Test de AdminConfigPage verificaba badge "Próximamente" eliminado (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE2-04 |
+| Fecha | 2026-05-28 |
+| Severidad | Baja — 1 test fallando |
+| Estado | CORREGIDO — test actualizado |
+
+**Descripción:**
+`AdminConfigPage.test.jsx` tenía un test que verificaba que la tarjeta UC-CFG-04
+mostraba el badge "Próximamente". Al habilitar la tarjeta en Fase 2, el badge
+desapareció y el test falló.
+
+**Corrección:** Test actualizado para verificar:
+- UC-CFG-04 ahora es un `<Link>` a `/admin/pages` (no un `<div aria-disabled>`)
+- No hay ningún `[aria-disabled="true"]` en el DOM
+- El link de contenido estático apunta correctamente a `/admin/pages`
+
+---
+
+## HALLAZGO-FASE2-05 — React Router v6 no requiere orden específico para rutas literales (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE2-05 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO |
+
+**Descripción:**
+El plan original indicaba que `/admin/products/import` debía ir
+ANTES de `/admin/products/:id` para evitar que el param capturara "import".
+
+En React Router v6 con `<Routes>`, el algoritmo usa **best-match scoring** y
+no el orden de declaración. Los segmentos literales (`import`) siempre ganan
+sobre los parámetros dinámicos (`:id`) en el mismo nivel jerárquico,
+independientemente del orden en el JSX.
+
+**Por tanto:** `/admin/products/import` matchea correctamente aunque esté
+declarada después de `/admin/products/:id`. El mismo principio aplica a:
+- `/admin/inventory/dashboard` vs `/admin/inventory/:variantId/movements`
+- `/admin/inventory/stock-alerts` vs `/admin/inventory/:variantId/adjust`
+
+**Convención adoptada:** Aunque no es obligatorio, se mantiene la convención
+de declarar las rutas literales antes de las paramétricas del mismo prefijo
+por claridad de lectura.
+
+---
+
+## RESUMEN EJECUTIVO FASE 2
+
+| Métrica | Valor |
+|---------|-------|
+| Páginas huérfanas registradas | 12 |
+| Lazy imports agregados | 12 |
+| Rutas nuevas en AppRouter | 12 |
+| Tarjetas AdminConfigPage habilitadas | 1 (UC-CFG-04 → /admin/pages) |
+| Tests corregidos | 1 (AdminConfigPage.test.jsx) |
+| Tests regresionados | 0 |
+| check-scss | 146 entries, 0 issues |
+| Tests finales | 1331 pasando, 0 fallos |
+
+**Hallazgos clave:**
+- AdminStaticPagesPage usaba `/admin/pages/:slug` sin `/edit` — ruta ajustada al JSX real
+- AdminVouchersPage tenía links a rutas inexistentes desde antes de esta fase
+- AdminVoucherDetailPage maneja crear y editar en una sola ruta con `id === "nuevo"`
+- React Router v6 no requiere orden específico para rutas literales vs paramétricas
+
+**Rutas registradas:**
+```
+/admin/vouchers/:id
+/admin/products/import
+/admin/products/:id
+/admin/products/:id/variant-types
+/admin/products/:id/variants/matrix
+/admin/pages
+/admin/pages/:slug
+/admin/config/gateways
+/admin/config/shipping
+/admin/config/site
+/admin/inventory/dashboard
+/admin/inventory/stock-alerts
+```
