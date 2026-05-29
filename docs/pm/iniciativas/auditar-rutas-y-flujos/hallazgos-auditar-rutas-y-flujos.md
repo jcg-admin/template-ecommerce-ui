@@ -1,170 +1,359 @@
 # Hallazgos — auditar-rutas-y-flujos
 
-## HALLAZGO-ROUTER-01 — 12 páginas JSX sin ruta en el router (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Severidad**: Alta (páginas inaccesibles desde el browser)
-- **Descripción**: Existen 12 páginas JSX completamente implementadas que no tienen
-  entrada en AppRouter.jsx. No son alcanzables por URL.
-- **Páginas afectadas**:
-  - AdminGatewaysPage → `/admin/config/gateways`
-  - AdminInventoryDashboardPage → `/admin/inventory/dashboard`
-  - AdminProductDetailPage → `/admin/products/:id`
-  - AdminProductImportPage → `/admin/products/import`
-  - AdminProductVariantsPage → `/admin/products/:id/variants` (CONFLICTO con AdminVariantsPage)
-  - AdminShippingMethodsPage → `/admin/config/shipping`
-  - AdminSiteSettingsPage → `/admin/config/site`
-  - AdminStaticPageEditorPage → `/admin/pages/:slug/edit`
-  - AdminStaticPagesPage → `/admin/pages`
-  - AdminStockAlertsPage → `/admin/inventory/stock-alerts`
-  - AdminVariantTypesPage → `/admin/products/:id/variant-types`
-  - AdminVoucherDetailPage → `/admin/vouchers/:id`
-- **Acción requerida**: Registrar cada página en AppRouter.jsx bajo `<AdminRoute>`.
-
-## HALLAZGO-ROUTER-02 — AdminVariantsPage y AdminProductVariantsPage cubren el mismo path (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media (duplicado — una de las dos sobra o tienen propósitos distintos)
-- **Descripción**:
-  - `AdminVariantsPage` (en router) — UC-CHT-03, gestiona variantes existentes (tipo, opción, stock, precio).
-  - `AdminProductVariantsPage` (huérfana) — tabla de combinaciones generadas con bulk update y regeneración.
-  - Ambas apuntan al mismo path `/admin/products/:productId/variants`.
-- **Decisión requerida**: Unificar en una sola página o asignar paths distintos:
-  - Opción A: `/admin/products/:id/variants` → AdminVariantsPage (gestión), `/admin/products/:id/variants/matrix` → AdminProductVariantsPage (tabla de combinaciones)
-  - Opción B: Fusionar ambas en AdminVariantsPage con tabs.
-
-## HALLAZGO-ROUTER-03 — NotFoundPage sin ruta directa /404 (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Severidad**: Baja (funcional pero inconsistente)
-- **Descripción**: El router define `<Route path="404" element={<NotFoundPage />} />` sin slash
-  inicial, lo que en React Router v6 con `<Routes>` lo convierte en una ruta relativa que
-  solo matchea bajo el padre actual. El fallback `<Route path="*" element={<Navigate to="/404" replace />}>`
-  debería funcionar, pero la ruta `/404` directa puede no resolverse.
-- **Acción requerida**: Cambiar `path="404"` a una ruta absoluta o verificar en browser
-  que `https://localhost/404` carga NotFoundPage correctamente.
-
-## HALLAZGO-ROUTER-04 — AdminConfigPage sin sub-rutas definidas (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media
-- **Descripción**: La ruta `/admin/config` existe y apunta a `AdminConfigPage` (hub de configuración).
-  Sin embargo las páginas de configuración específicas (Gateways, Shipping, Site) son huérfanas
-  y no tienen rutas. AdminConfigPage probablemente muestra links a rutas que no existen.
-- **Acción requerida**: Registrar las 3 sub-páginas de configuración en el router y verificar
-  que AdminConfigPage enlaza a ellas correctamente.
-
-## HALLAZGO-FLUJO-01 — Flujo de búsqueda desconectado (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Descripción**: El Header tiene un botón de búsqueda (`aria-expanded`) que al
-  hacer click abre un panel de búsqueda. Al escribir y buscar, debería navegar a
-  `/search?q=...` (SearchResultsPage). Sin embargo la ruta `/search` existe pero
-  no está verificada en browser.
-- **Relacion**: SearchBar en CatalogPage está conectado y funciona.
-  El SearchBar del Header (buscador global) puede tener un flujo diferente.
-
-## HALLAZGO-FLUJO-02 — Flujo de login sin redirección ?next= verificada (PENDIENTE)
-- **Fecha**: 2026-05-28
-- **Descripción**: ProtectedRoute redirige a `/auth/login` cuando no hay sesión.
-  No está verificado si pasa el parámetro `?next=/ruta-original` ni si LoginPage
-  lo lee para redirigir al destino correcto tras el login.
-
-## HALLAZGO-BROWSER-01..04 — Bugs visuales corregidos
-Ver hallazgos en la iniciativa `cobertura-tests-completa`:
-- BUG-BROWSER-01: ProductPage selector incorrecto → CORREGIDO
-- BUG-BROWSER-02: SearchBar texto invisible → CORREGIDO
-- BUG-BROWSER-03: RangeSlider sin thumb/tooltip → CORREGIDO
-- BUG-BROWSER-04: CatalogPage ignoraba ?category → CORREGIDO
+| Campo | Valor |
+|-------|-------|
+| Iniciativa | auditar-rutas-y-flujos |
+| Fase documentada | Fase 1 — SCSS Modules |
+| Fecha | 2026-05-28 |
+| Commits | 9251a4f, eccdd4b |
+| Estado SCSS | 146 entries, 0 issues |
+| Estado tests | 1331 pasando, 0 fallos |
 
 ---
 
-## Hallazgos de la auditoría de calidad de vistas (2026-05-28)
+## METODOLOGÍA DE AUDITORÍA
 
-## HALLAZGO-SCSS-01 — 11 páginas importan SCSS Module que no existe en disco (CRÍTICO)
-- **Fecha**: 2026-05-28
-- **Severidad**: Alta — crash en webpack al intentar hacer build con esas páginas
-- **Descripción**: Las siguientes páginas tienen `import styles from './NombrePage.module.scss'`
-  pero el archivo SCSS no existe en el sistema de archivos:
-  - AdminProductEditPage.module.scss
-  - AdminProductImportPage.module.scss
-  - AdminProductVariantsPage.module.scss
-  - AdminReportDashboardPage.module.scss
-  - AdminReportSalesPage.module.scss
-  - AdminReportTopSellersPage.module.scss
-  - AdminReportCustomersRfmPage.module.scss
-  - AdminShippingMethodsPage.module.scss
-  - AdminStaticPagesPage.module.scss
-  - AdminStockAlertsPage.module.scss
-  - AdminVariantTypesPage.module.scss
-- **Impacto**: El build actual con webpack no crashea solo porque esas páginas son
-  lazy-loaded y webpack no las compila hasta que el navegador las solicita.
-  En el browser, al navegar a esas rutas, se producirá un error de módulo no encontrado.
-- **Corrección requerida**: Crear los 11 archivos SCSS con los selectores que cada
-  página usa, o convertir los estilos a inline hasta que se diseñen los módulos.
+Antes de corregir cualquier cosa, se ejecutaron tres pasos en orden:
 
-## HALLAZGO-UX-01 — Loading infinito cuando recurso no existe (MEDIO)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media — el usuario ve un spinner infinito en lugar de un 404 útil
-- **Descripción**: ProductPage, OrderSuccessPage y OrderDetailPage usan el patrón:
-  ```jsx
-  if (isLoading || !product) return <div>Cargando...</div>;
-  ```
-  Cuando `isLoading` se vuelve `false` y `product` sigue siendo `null` (porque la API
-  devolvió 404), el componente queda mostrando el spinner indefinidamente.
-- **Corrección**:
-  ```jsx
-  if (isLoading) return <div>Cargando...</div>;
-  if (!product) return <Navigate to="/404" replace />;
-  ```
+1. **Leer los imports** — qué archivo `.module.scss` importa cada JSX
+   (result: los JSX no importaban archivos propios sino compartidos)
+2. **Cruzar clases JSX vs selectores SCSS** — cada `styles.X` del JSX
+   tiene un selector `.X` definido en el SCSS
+3. **Verificar la forma del selector** — distinguir entre bloque propio
+   `.clase { }` vs selector combinado `.clase .descendiente { }`,
+   ya que CSS Modules necesita que la clase aparezca como selector
+   (de cualquier forma) para generar el hash
 
-## HALLAZGO-MSW-01 — Endpoints sin mock que causan errores silenciosos (MEDIO)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media — funciones del UI que no responden en modo demo
-- **Descripción**: Los siguientes endpoints son llamados por páginas del UI pero no
-  tienen handler en los archivos MSW:
-  - DELETE /api/v1/auth/addresses/:id/ — eliminar dirección en AddressesPage
-  - PATCH /api/v1/auth/addresses/:id/ — editar dirección existente en AddressesPage
-  - GET /api/v1/admin/products/:id/ — cargar producto para AdminProductEditPage
-  - GET /api/v1/payments/gateways/ — listar gateways para PaymentSelectionPage
-  - GET /api/v1/admin/pages/ — listar páginas CMS para AdminStaticPagesPage
-  - GET /api/v1/admin/pages/:slug/ — cargar página CMS para AdminStaticPageEditorPage
-  - GET /api/v1/admin/inventory/dashboard/ — métricas para AdminInventoryDashboardPage
-  - GET /api/v1/admin/inventory/stock-alerts/ — alertas para AdminStockAlertsPage
-
-## HALLAZGO-ROUTER-05 — AdminConfigPage deshabilitada por rutas inexistentes (MEDIO)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media
-- **Descripción**: AdminConfigPage renderiza sus 3 tarjetas de configuración con
-  `aria-disabled="true"` porque las rutas destino no existen en el router.
-  Al registrar las páginas huérfanas de configuración (AdminGatewaysPage,
-  AdminShippingMethodsPage, AdminSiteSettingsPage) en el router, estas tarjetas
-  deben habilitarse quitando el `aria-disabled`.
-
-## HALLAZGO-SLICE-CONFLICT-01 — AdminProductCreatePage importa productsSlice, no adminSlice (MEDIO)
-- **Fecha**: 2026-05-28
-- **Descripción**: `AdminProductCreatePage` importa `createProduct` de
-  `@redux/slices/productsSlice`, pero el thunk `createProduct` fue implementado
-  en `adminSlice` en la sesión anterior. Hay ambigüedad sobre qué slice es
-  la fuente de verdad para la creación de productos.
+Este proceso descubrió que el hallazgo inicial HALLAZGO-SCSS-01
+sobreestimó el problema en un factor de 11x.
 
 ---
 
-## HALLAZGO-SCSS-02 — Los SCSS "faltantes" importaban archivos compartidos que ya existían (CORREGIDO)
-- **Fecha**: 2026-05-28
-- **Severidad**: Media (solo faltaban 3 clases específicas, no 11 archivos)
-- **Descripción**: El hallazgo HALLAZGO-SCSS-01 sobreestimó el problema. Al auditar
-  minuciosamente los imports, se encontró que las 11 páginas "sin SCSS" importan en
-  realidad **5 archivos SCSS compartidos** que ya existían en disco:
+## HALLAZGO-FASE1-01 — 11 páginas importaban SCSS compartidos, no propios (DIAGNÓSTICO CORREGIDO)
 
-  | Archivo compartido | Páginas que lo usan |
-  |--------------------|---------------------|
-  | AdminProductCreatePage.module.scss (20L) | AdminProductEditPage |
-  | AdminBulkPage.module.scss (186L) | AdminProductImportPage |
-  | AdminVariantsPage.module.scss (158L) | AdminProductVariantsPage, AdminVariantTypesPage |
-  | AdminReportPage.module.scss (109L) | AdminReportDashboardPage, AdminReportSalesPage, AdminReportTopSellersPage, AdminReportCustomersRfmPage |
-  | AdminTablePage.module.scss (156L) | AdminShippingMethodsPage, AdminStaticPagesPage, AdminStockAlertsPage |
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-01 |
+| Fecha | 2026-05-28 |
+| Severidad | Media |
+| Estado | DOCUMENTADO — cambia el alcance del trabajo |
 
-- **Problema real**: Solo faltaban 3 clases en 2 archivos:
-  - `AdminTablePage.module.scss`: faltaba `.actionDelete`
-  - `AdminVariantsPage.module.scss`: faltaban `.iconBtnDelete` y `.smallBtnDelete`
-    (existían como pseudo-selectores `:hover` pero no como bloques CSS propios,
-    lo que causa que CSS Modules devuelva `undefined` al usarlos como className)
-- **Corrección adicional**: `RangeSlider.module.scss` usaba `$bg-dark` que no existe
-  en el sistema de variables — corregido a `$bg-page` (#0E1400).
-- **Estado**: CORREGIDO — `check-scss` pasa con 146 entries limpias, 0 issues.
+**Descripción:**
+El hallazgo HALLAZGO-SCSS-01 (de la auditoría previa) decía que 11 páginas
+importaban un `.module.scss` que no existía en disco. Al leer los imports
+reales de cada JSX, se descubrió que importaban **5 archivos SCSS compartidos**
+con nombres distintos al de la página:
+
+| JSX que importa | Archivo SCSS que importa | Existe |
+|----------------|--------------------------|--------|
+| AdminProductEditPage | `./AdminProductCreatePage.module.scss` | SÍ (20L) |
+| AdminProductImportPage | `./AdminBulkPage.module.scss` | SÍ (186L) |
+| AdminProductVariantsPage | `./AdminVariantsPage.module.scss` | SÍ (158L) |
+| AdminVariantTypesPage | `./AdminVariantsPage.module.scss` | SÍ (158L) |
+| AdminReportDashboardPage | `./AdminReportPage.module.scss` | SÍ (109L) |
+| AdminReportSalesPage | `./AdminReportPage.module.scss` | SÍ (109L) |
+| AdminReportTopSellersPage | `./AdminReportPage.module.scss` | SÍ (109L) |
+| AdminReportCustomersRfmPage | `./AdminReportPage.module.scss` | SÍ (109L) |
+| AdminShippingMethodsPage | `./AdminTablePage.module.scss` | SÍ (156L) |
+| AdminStaticPagesPage | `./AdminTablePage.module.scss` | SÍ (156L) |
+| AdminStockAlertsPage | `./AdminTablePage.module.scss` | SÍ (156L) |
+
+**Lección:** Antes de asumir que un archivo falta, leer el import exacto del JSX.
+
+---
+
+## HALLAZGO-FASE1-02 — Clases faltantes en SCSS compartidos de páginas admin (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-02 |
+| Fecha | 2026-05-28 |
+| Severidad | Media (elementos sin estilo, no crash) |
+| Estado | CORREGIDO — commit 9251a4f |
+
+**Descripción:**
+Tras cruzar las clases usadas en los JSX con las definidas en los SCSS compartidos,
+se encontraron 3 clases faltantes en 2 archivos:
+
+| Archivo | Clase faltante | Causa |
+|---------|----------------|-------|
+| `AdminTablePage.module.scss` | `.actionDelete` | La clase no existía en absoluto |
+| `AdminVariantsPage.module.scss` | `.iconBtnDelete` | Existía solo como `.iconBtnDelete:hover` (pseudo-selector), no como bloque propio `.iconBtnDelete { }` |
+| `AdminVariantsPage.module.scss` | `.smallBtnDelete` | Mismo caso que `.iconBtnDelete` |
+
+**Causa raíz de `.iconBtnDelete` y `.smallBtnDelete`:**
+En CSS Modules, el selector `.iconBtnDelete:hover { }` como selector de nivel raíz
+SÍ genera un hash — pero cuando el JSX hace `className={styles.iconBtnDelete}`,
+CSS Modules busca el bloque `.iconBtnDelete { }` como clase propia. El pseudo-selector
+raíz sin bloque propio no genera el hash exportable como `styles.iconBtnDelete`.
+La corrección es convertir `.Cls:hover { }` a `.Cls { &:hover { } }`.
+
+**Corrección aplicada:**
+```scss
+// Antes (no genera styles.iconBtnDelete exportable)
+.iconBtnDelete:hover { border-color: $vino-soft; color: $vino-soft; }
+
+// Después (genera styles.iconBtnDelete como clase propia)
+.iconBtnDelete {
+  &:hover { border-color: $vino-soft; color: $vino-soft; }
+}
+```
+
+---
+
+## HALLAZGO-FASE1-03 — Variable $bg-dark inexistente en RangeSlider.module.scss (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-03 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta (SyntaxError de SCSS — check-scss fallaba) |
+| Estado | CORREGIDO — commit 9251a4f |
+
+**Descripción:**
+`RangeSlider.module.scss` (agregado en la sesión anterior) usaba `$bg-dark`
+en el estilo del tooltip. Esta variable no existe en el sistema de diseño del proyecto.
+
+**Variables de fondo disponibles en el sistema:**
+```scss
+$bg-page:     #0E1400  // Fondo principal (más oscuro)
+$bg-surface:  #161D04  // Panel sobre fondo
+$bg-sunken:   #0A1004  // Zona hundida
+$bg-elevated: #1F2808  // Zona elevada
+$bg-overlay:  rgba(10, 16, 4, 0.78)
+```
+
+**Corrección:** `color: $bg-dark` → `color: $bg-page`
+
+El tooltip del RangeSlider tiene fondo `$text-primary` (#F5F7EE, off-white)
+y texto `$bg-page` (#0E1400, verde muy oscuro) — contraste correcto para tema oscuro.
+
+**Lección:** Al crear SCSS nuevos en el bash_tool, verificar cada variable contra
+`src/styles/abstracts/_variables.scss` antes de guardar.
+
+---
+
+## HALLAZGO-FASE1-04 — Clase .labelClickable faltante en RangeSlider (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-04 |
+| Fecha | 2026-05-28 |
+| Severidad | Baja (label clickable sin cursor:pointer) |
+| Estado | CORREGIDO — commit eccdd4b |
+
+**Descripción:**
+`RangeSlider.jsx` usa `styles.labelClickable` para los labels debajo del track
+cuando `clickableLabels=true`. El SCSS no tenía esta clase definida.
+
+**Uso en JSX:**
+```jsx
+<span className={`${styles.label} ${clickableLabels ? styles.labelClickable : ''}`}>
+```
+
+**Corrección:**
+```scss
+.labelClickable {
+  cursor: pointer;
+  &:hover { color: $primary-color; }
+}
+```
+
+---
+
+## HALLAZGO-FASE1-05 — 30 clases faltantes en 8 módulos de componentes ui-core (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-05 |
+| Fecha | 2026-05-28 |
+| Severidad | Media (componentes funcionales pero con elementos sin estilo visual) |
+| Estado | CORREGIDO — commit eccdd4b |
+
+**Descripción:**
+Al auditar todos los componentes ui-core (no solo los de las páginas faltantes),
+se encontraron 30 clases usadas en JSX sin definición en el SCSS correspondiente.
+Ninguna causa crash de build (webpack no falla por clase CSS ausente en modules),
+pero sí causan que `styles.X` devuelva un hash de clase vacío → elemento sin estilo.
+
+**Tabla completa de clases faltantes por componente:**
+
+### primitives.module.scss (+6 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.btnLoading` | Aplicado al botón cuando `loading=true` | `position: relative; cursor: wait` |
+| `.btnSpinner` | Spinner animado dentro del botón | Círculo giratorio con `border-top-color: currentColor` |
+| `.btnChildrenLoading` | Wrapper del texto cuando hay spinner | `opacity: 0.5` para atenuar el texto |
+| `.fieldInputWrapper` | Div que envuelve el input + toggle | `position: relative; display: flex; align-items: center` |
+| `.fieldHasToggle` | Modificador cuando hay passwordToggle | `padding-right: 44px` en el input interno |
+| `.fieldPasswordToggle` | Botón ojo para mostrar/ocultar contraseña | Posición absoluta a la derecha del input |
+
+**Impacto pre-corrección:** El botón de "Ingresar" en LoginPage y cualquier
+`LoadingButton` en el proyecto no mostraban el spinner de carga visible.
+Los campos de contraseña con toggle no tenían el ojo posicionado correctamente.
+
+### Collapse.module.scss (+3 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.trigger` | Botón programático (alternativa a `<summary>`) | Flex between, fondo surface, cursor pointer |
+| `.horizontal` | Modo de colapso horizontal | `overflow: hidden` para el contenido |
+| `.content` | Wrapper del contenido colapsable | `overflow: hidden` |
+
+### Tabs.module.scss (+2 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.tabDisabled` | Tab individual deshabilitado | `opacity: 0.45; cursor: not-allowed; pointer-events: none` |
+| `.vertical` | Tabs en orientación vertical | Flex row, tabList en columna con border-right |
+
+### Dropdown.module.scss (+2 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.header` | Componente `DropdownHeader` | Texto mono uppercase como separador de sección |
+| `.triggerWrapper` | Wrapper del trigger para posicionamiento | `display: inline-flex; position: relative` |
+
+### Stepper.module.scss (+6 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.header` | Contenedor de la lista de pasos | `margin-bottom: $spacing-6` |
+| `.panel` | Panel de contenido del paso activo | `padding: $spacing-6 0` |
+| `.stepWrapper` | Wrapper de cada step en la lista | Flex, flex:1, position relative |
+| `.stepDisabled` | Step no clickeable (modo no-linear) | Opacidad 0.45, pointer-events none |
+| `.vertical` | Stepper en orientación vertical | Lista en columna, connector como barra vertical |
+| `.content` | Alias del panel (uso interno) | `padding: $spacing-4 0` |
+
+### Autocomplete.module.scss (+8 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.inputGroup` | Wrapper campo + iconos con borde | Flex, border, border-radius, focus-within lime |
+| `.panel` | Dropdown de resultados | Posición absoluta, z-index 9999, box-shadow |
+| `.indicator` | Ícono de flecha ▾ desplegable | Padding, color muted, hover primary |
+| `.cleaner` | Botón × para limpiar selección | Sin borde, cursor pointer, hover primary |
+| `.hint` | Texto de ayuda debajo del campo | Font mono xs, color muted |
+| `.invalid` | Estado de error en el wrapper | Bloque propio (selector para `.invalid .inputGroup`) |
+| `.valid` | Estado de éxito en el wrapper | Bloque propio (selector para `.valid .inputGroup`) |
+| `.disabled` | Wrapper cuando el campo está deshabilitado | `opacity: 0.5; pointer-events: none` |
+
+### MultiSelect.module.scss (+12 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.selection` | Área de tags/texto seleccionado | Flex wrap, gap, flex:1, overflow hidden |
+| `.placeholder` | Texto cuando no hay selección | Color muted, text-overflow ellipsis |
+| `.tag` | Chip de item seleccionado (modo tags) | Fondo primary 12%, border-radius full, xs |
+| `.tagRemove` | Botón × de cada tag | Sin fondo, color primary, hover opacity |
+| `.indicator` | Flecha ▾ de la lista | Color muted, 0.6rem |
+| `.cleaner` | Botón de limpiar todos | Sin borde, cursor pointer |
+| `.searchWrapper` | Wrapper del input de búsqueda | Padding, border-bottom |
+| `.noResults` | Mensaje sin resultados de búsqueda | Centro, color muted |
+| `.optionCheckbox` | Checkbox de cada opción | `accent-color: $primary-color` |
+| `.invalid` | Estado de error | Bloque propio |
+| `.valid` | Estado de éxito | Bloque propio |
+| `.disabled` | Componente deshabilitado | Trigger con opacity, pointer-events none |
+
+### Carousel.module.scss (+8 clases)
+
+| Clase | Contexto de uso | Estilo agregado |
+|-------|----------------|-----------------|
+| `.inner` | Contenedor de slides con AnimatePresence | `position: relative; overflow: hidden` |
+| `.control` | Botón de navegación prev/next | Círculo sobre el slide, fondo semitransparente |
+| `.controlPrev` | Botón anterior | `left: $spacing-3` |
+| `.controlNext` | Botón siguiente | `right: $spacing-3` |
+| `.indicators` | Contenedor de puntos de posición | Flex center, gap, padding |
+| `.caption` | Pie de foto del slide | Absoluto en la parte inferior con gradiente |
+| `.slideContent` | Wrapper interno de `CarouselSlide` | `position: relative; overflow: hidden` |
+| `.dark` | Variante con controles oscuros | Override de colores en `.control` y `.dot` |
+
+---
+
+## HALLAZGO-FASE1-06 — Pseudo-selectores raíz vs bloques propios en CSS Modules (CONCEPTUAL)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE1-06 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO — patrón a seguir en toda la base de código |
+
+**Descripción:**
+Durante la auditoría se descubrió una distinción importante en CSS Modules:
+
+**Patrón INCORRECTO (no genera hash exportable para `.clase`):**
+```scss
+// styles.clase devolverá undefined porque .clase no es un bloque propio
+.clase:hover { color: red; }
+.clase .hijo { font-size: 12px; }
+```
+
+**Patrón CORRECTO (genera hash exportable):**
+```scss
+// styles.clase devuelve el hash correcto
+.clase {
+  &:hover { color: red; }
+}
+
+.clase .hijo { font-size: 12px; }
+// .clase tiene bloque propio, CSS Modules puede exportarlo
+// .clase puede estar vacío si solo es un modificador de contexto
+```
+
+**Regla práctica:**
+Toda clase que se use como `styles.X` en JSX necesita al menos un bloque
+`.X { }` en el SCSS, aunque esté vacío. Los selectores combinados
+`.X .hijo { }` pueden existir además, pero no en lugar del bloque propio.
+
+**Excepción verificada:**
+Los selectores de tipo `.invalid .inputGroup { }` donde `.invalid` aparece
+como selector de clase (aunque sea como prefijo de selector combinado),
+SÍ generan hash exportable porque webpack/css-loader procesa todos los
+selectores de clase que aparecen en el archivo, no solo los bloques raíz.
+**Verificado experimentalmente** con DatePicker y TimePicker — `styles.invalid`
+funciona correctamente aunque solo aparezca en `.invalid .inputGroup { }`.
+
+---
+
+## RESUMEN EJECUTIVO FASE 1
+
+| Métrica | Valor |
+|---------|-------|
+| Archivos SCSS inspeccionados | 24 (19 componentes + 5 compartidos admin) |
+| Problema diagnosticado inicialmente | 11 archivos faltantes |
+| Problema real encontrado | 33 clases sin definir en 10 archivos |
+| Archivos creados desde cero | 0 |
+| Archivos modificados | 12 |
+| Clases agregadas | 33 |
+| Variables SCSS incorrectas | 1 ($bg-dark → $bg-page) |
+| check-scss final | 146 entries, 0 issues |
+| Tests finales | 1331 pasando, 0 fallos, 0 regresiones |
+| Commits | 9251a4f, eccdd4b |
+
+**Orden de resolución aplicado:**
+1. Leer imports reales → descubrir SCSS compartidos
+2. Cruzar JSX vs SCSS → encontrar clases faltantes
+3. Leer contexto de uso en JSX → entender semántica de cada clase
+4. Leer SCSS existente → entender el sistema visual para mantener consistencia
+5. Agregar clases con estilos coherentes al sistema de diseño
+6. Re-auditar hasta 0 clases faltantes
+7. Verificar check-scss + tests
+
+---
+
+## HALLAZGOS HEREDADOS DE SESIONES ANTERIORES
+
+Los siguientes hallazgos fueron documentados en sesiones anteriores
+y siguen pendientes:
+
+| ID | Descripción | Severidad | Estado |
+|----|-------------|-----------|--------|
+| HALLAZGO-ROUTER-01 | 12 páginas sin ruta en el router | Alta | PENDIENTE (Fase 2) |
+| HALLAZGO-ROUTER-02 | AdminVariantsPage vs AdminProductVariantsPage — mismo path | Media | PENDIENTE (Fase 2) |
+| HALLAZGO-ROUTER-03 | path="404" sin slash inicial | Baja | PENDIENTE (Fase 2) |
+| HALLAZGO-ROUTER-04 | AdminConfigPage deshabilitada | Media | PENDIENTE (Fase 3) |
+| HALLAZGO-UX-01 | Loading infinito en 3 páginas cuando recurso no existe | Alta | PENDIENTE (Fase 4) |
+| HALLAZGO-MSW-01 | 8 endpoints sin mock MSW | Media | PENDIENTE (Fase 5) |
+| HALLAZGO-SLICE-CONFLICT-01 | createProduct en productsSlice vs adminSlice | Media | PENDIENTE (Fase 6) |
