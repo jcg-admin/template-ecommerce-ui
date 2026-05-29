@@ -280,4 +280,146 @@ export const adminHandlers = [
       message: 'Backup iniciado correctamente',
     }, { status: 202 })
   ),
+
+  // ── Producto admin individual ────────────────────────────────────────
+  http.get('/api/v1/admin/products/:id/', ({ params }) => {
+    const id = Number(params.id);
+    const p  = _adminProducts.find((x) => x.id === id);
+    if (!p) return HttpResponse.json({ detail: 'No encontrado' }, { status: 404 });
+    return HttpResponse.json({ ...p, images: [], variants: [] });
+  }),
+
+  http.patch('/api/v1/admin/products/:id/', async ({ params, request }) => {
+    const id   = Number(params.id);
+    const body = await request.json();
+    const idx  = _adminProducts.findIndex((x) => x.id === id);
+    if (idx < 0) return HttpResponse.json({ detail: 'No encontrado' }, { status: 404 });
+    _adminProducts[idx] = { ..._adminProducts[idx], ...body };
+    return HttpResponse.json(_adminProducts[idx]);
+  }),
+
+  // ── Gateways de pago — configuración ────────────────────────────────
+  http.get('/api/v1/admin/gateways/', () =>
+    HttpResponse.json({
+      count: 2,
+      results: [
+        {
+          id: 'mercadopago', label: 'MercadoPago', is_active: true,
+          mode: 'sandbox', last_test_at: '2026-05-20T10:00:00Z',
+          meta: {
+            label: 'MercadoPago',
+            desc: 'Pagos con tarjeta, OXXO y transferencia SPEI.',
+            fields: ['public_key', 'access_token'],
+          },
+        },
+        {
+          id: 'paypal', label: 'PayPal', is_active: false,
+          mode: 'sandbox', last_test_at: null,
+          meta: {
+            label: 'PayPal',
+            desc: 'Pagos internacionales con cuenta PayPal o tarjeta.',
+            fields: ['client_id', 'client_secret'],
+          },
+        },
+      ],
+    })
+  ),
+
+  http.patch('/api/v1/admin/gateways/:id/', async ({ params, request }) => {
+    const body = await request.json();
+    return HttpResponse.json({ id: params.id, ...body });
+  }),
+
+  http.post('/api/v1/admin/gateways/:id/test/', ({ params }) =>
+    HttpResponse.json({
+      ok:         true,
+      gateway_id: params.id,
+      message:    `Conexión con ${params.id} en modo sandbox verificada correctamente.`,
+      latency_ms: 142,
+    })
+  ),
+
+  // ── Métodos de envío ─────────────────────────────────────────────────
+  http.get('/api/v1/admin/shipping-methods/', () =>
+    HttpResponse.json({
+      count: 3,
+      results: [
+        { id: 1, name: 'DHL Express', carrier: 'DHL',  price: 120, free_threshold: 1500, min_days: 1, max_days: 3,  is_active: true },
+        { id: 2, name: 'Fedex Estándar', carrier: 'FedEx', price: 85,  free_threshold: 1000, min_days: 3, max_days: 7,  is_active: true },
+        { id: 3, name: 'Estafeta Económico', carrier: 'Estafeta', price: 55, free_threshold: 800, min_days: 5, max_days: 10, is_active: false },
+      ],
+    })
+  ),
+
+  // ── Páginas CMS estáticas ────────────────────────────────────────────
+  http.get('/api/v1/admin/pages/', () =>
+    HttpResponse.json({
+      count: 3,
+      results: [
+        { slug: 'acerca-de',    title: 'Acerca de Oja Yoruba', status: 'published', last_published_at: '2026-04-01T00:00:00Z', version: 3 },
+        { slug: 'terminos',     title: 'Términos y condiciones', status: 'published', last_published_at: '2026-03-15T00:00:00Z', version: 2 },
+        { slug: 'privacidad',   title: 'Aviso de privacidad', status: 'draft', last_published_at: null, version: 1 },
+      ],
+    })
+  ),
+
+  http.get('/api/v1/admin/pages/:slug/', ({ params }) => {
+    const pages: Record<string, object> = {
+      'acerca-de':  { slug: 'acerca-de',  title: 'Acerca de Oja Yoruba', status: 'published', content: '<p>Somos una tienda especializada en productos para la práctica yorùbá.</p>', draft_content: null, meta_description: 'Oja Yoruba — Tienda de productos rituales y espirituales.', last_published_at: '2026-04-01T00:00:00Z', version: 3 },
+      'terminos':   { slug: 'terminos',   title: 'Términos y condiciones', status: 'published', content: '<p>Estos son nuestros términos.</p>', draft_content: null, meta_description: 'Términos y condiciones de uso.', last_published_at: '2026-03-15T00:00:00Z', version: 2 },
+      'privacidad': { slug: 'privacidad', title: 'Aviso de privacidad', status: 'draft', content: '<p>Este es el contenido publicado.</p>', draft_content: '<p>Este es el borrador actualizado.</p>', meta_description: 'Aviso de privacidad de Oja Yoruba.', last_published_at: null, version: 1 },
+    };
+    const page = pages[params.slug as string];
+    if (!page) return HttpResponse.json({ detail: 'Página no encontrada' }, { status: 404 });
+    return HttpResponse.json(page);
+  }),
+
+  http.patch('/api/v1/admin/pages/:slug/', async ({ params, request }) => {
+    const body = await request.json();
+    return HttpResponse.json({ slug: params.slug, ...body, status: 'draft' });
+  }),
+
+  http.post('/api/v1/admin/pages/:slug/publish/', ({ params }) =>
+    HttpResponse.json({
+      slug:               params.slug,
+      status:             'published',
+      last_published_at:  new Date().toISOString(),
+    })
+  ),
+
+  // ── Vouchers — detalle, crear, actualizar, eliminar ──────────────────
+  http.get('/api/v1/admin/vouchers/:id/', ({ params }) => {
+    const id   = Number(params.id);
+    const base = createVoucher({ code: `DEMO${id}` });
+    return HttpResponse.json({
+      id,
+      code:                   base.code,
+      voucher_type:           base.type === 'PERCENT' ? 'PERCENTAGE' : 'FIXED',
+      discount_value:         base.value,
+      discount_pct:           base.type === 'PERCENT' ? base.value : 0,
+      max_discount:           '',
+      min_order_amount:       500,
+      max_uses:               100,
+      current_uses:           Math.floor(Math.random() * 20),
+      restricted_to_email:    '',
+      valid_from:             '2026-01-01',
+      valid_until:            '2026-12-31',
+      is_active:              true,
+    });
+  }),
+
+  http.post('/api/v1/admin/vouchers/', async ({ request }) => {
+    const body = await request.json();
+    const id   = Math.floor(Math.random() * 9000) + 1000;
+    return HttpResponse.json({ id, ...body }, { status: 201 });
+  }),
+
+  http.patch('/api/v1/admin/vouchers/:id/', async ({ params, request }) => {
+    const body = await request.json();
+    return HttpResponse.json({ id: Number(params.id), ...body });
+  }),
+
+  http.delete('/api/v1/admin/vouchers/:id/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
 ];

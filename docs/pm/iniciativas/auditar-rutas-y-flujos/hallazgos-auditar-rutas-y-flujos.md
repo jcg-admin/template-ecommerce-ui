@@ -712,3 +712,139 @@ await waitFor(() => expect(screen.getByText(/expected/)).toBeInTheDocument());
 | Tests corregidos | 2 |
 | Tests regresionados | 0 |
 | Total tests | 1330 pasando, 0 fallos |
+
+
+---
+
+## HALLAZGOS FASE 5 — MSW handlers faltantes
+
+---
+
+## HALLAZGO-FASE5-01 — URLs del plan diferían de las URLs reales en el código (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE5-01 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — los handlers con URL incorrecta nunca interceptarían las llamadas reales |
+| Estado | CORREGIDO — handlers agregados con URLs reales del slice |
+
+**Descripción:**
+El plan de implementación documentaba URLs basadas en convención REST, pero
+`adminSlice.js` usaba rutas distintas. Al auditar thunk por thunk se encontraron
+4 discrepancias:
+
+| URL del plan | URL real (adminSlice) | Thunk |
+|-------------|----------------------|-------|
+| `/api/v1/admin/config/gateways/` | `/api/v1/admin/gateways/` | `fetchGateways` |
+| `/api/v1/admin/config/shipping/` | `/api/v1/admin/shipping-methods/` | `fetchShippingMethods` |
+| `/api/v1/admin/inventory/dashboard/` | `/api/v1/admin/inventory/` (mismo que listado) | `fetchInventoryDashboard` |
+| `/api/v1/admin/inventory/stock-alerts/` | `/api/v1/admin/inventory/alerts/` | `fetchStockAlerts` |
+
+**Lección:** Siempre extraer las URLs de los thunks del slice — nunca inferir
+la URL a partir del nombre de la página o de convenciones REST asumidas.
+
+---
+
+## HALLAZGO-FASE5-02 — fetchInventoryDashboard reutiliza el endpoint de listado (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE5-02 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO |
+
+**Descripción:**
+`AdminInventoryDashboardPage` usa `fetchInventoryDashboard` que llama a
+`/api/v1/admin/inventory/` — el mismo endpoint que el listado de inventario.
+El handler ya existía en `inventory.ts` con el listado básico.
+La página deriva las métricas del mismo array de items (stock bajo, agotado, etc.).
+
+**Implicación:** El "dashboard" de inventario es una vista derivada del listado,
+no un endpoint separado con métricas pre-calculadas. Esto es coherente
+con la simplicidad del proyecto demo.
+
+---
+
+## HALLAZGO-FASE5-03 — GET /api/v1/admin/inventory/alerts/ no estaba en inventory.ts (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE5-03 |
+| Fecha | 2026-05-28 |
+| Severidad | Media — AdminStockAlertsPage mostraba pantalla vacía en modo demo |
+| Estado | CORREGIDO |
+
+**Descripción:**
+`fetchStockAlerts` llama a `/api/v1/admin/inventory/alerts/`. El handler no existía.
+La corrección filtra `state.items` del mismo `inventory.ts` donde ya viven
+los datos de inventario:
+
+```typescript
+http.get('/api/v1/admin/inventory/alerts/', () => {
+  const alerts = state.items
+    .filter((item) => item.stock <= item.min_threshold)
+    .map((item) => ({ ...item, threshold: item.min_threshold }));
+  return HttpResponse.json({ count: alerts.length, results: alerts });
+})
+```
+
+Con los datos iniciales: OSHU-MD (stock:2, threshold:3) y YEMA-CH (stock:0, threshold:2)
+aparecen como alertas.
+
+---
+
+## HALLAZGO-FASE5-04 — adminSlice tiene thunks de gateways y shipping no documentados (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE5-04 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO |
+
+**Descripción:**
+Al auditar `adminSlice.js` se encontraron thunks adicionales no documentados
+en ninguna iniciativa previa:
+
+| Thunk | URL | Estado MSW |
+|-------|-----|-----------|
+| `fetchGateways` | `GET /api/v1/admin/gateways/` | Agregado en F5 |
+| `updateGateway` | `PATCH /api/v1/admin/gateways/:id/` | Agregado en F5 |
+| `testGatewayConnection` | `POST /api/v1/admin/gateways/:id/test/` | Agregado en F5 |
+| `fetchShippingMethods` | `GET /api/v1/admin/shipping-methods/` | Agregado en F5 |
+| `createShippingMethod` | `POST /api/v1/admin/shipping-methods/` | PENDIENTE |
+| `updateShippingMethod` | `PATCH /api/v1/admin/shipping-methods/:id/` | PENDIENTE |
+| `deleteShippingMethod` | `DELETE /api/v1/admin/shipping-methods/:id/` | PENDIENTE |
+| `fetchAdminPages` | `GET /api/v1/admin/pages/` | Agregado en F5 |
+| `fetchAdminPage` | `GET /api/v1/admin/pages/:slug/` | Agregado en F5 |
+| `savePageDraft` | `PATCH /api/v1/admin/pages/:slug/` | Agregado en F5 |
+| `publishPage` | `POST /api/v1/admin/pages/:slug/publish/` | Agregado en F5 |
+| `fetchAdminVoucher` | `GET /api/v1/admin/vouchers/:id/` | Agregado en F5 |
+| `createVoucher` | `POST /api/v1/admin/vouchers/` | Agregado en F5 |
+| `updateVoucher` | `PATCH /api/v1/admin/vouchers/:id/` | Agregado en F5 |
+| `deleteVoucher` | `DELETE /api/v1/admin/vouchers/:id/` | Agregado en F5 |
+
+**Endpoints de shipping PENDIENTES**: los 3 endpoints CRUD de métodos de envío
+no se incluyeron en el scope de F5 porque `AdminShippingMethodsPage` solo
+usa `fetchShippingMethods` para el listado; las acciones de crear/editar/eliminar
+son funcionalidad de la página pero no bloquean el flujo principal del demo.
+
+---
+
+## RESUMEN EJECUTIVO FASE 5
+
+| Métrica | Valor |
+|---------|-------|
+| Handlers agregados | 17 |
+| Archivos modificados | 3 (storefront.ts, admin.ts, inventory.ts) |
+| URLs corregidas respecto al plan | 4 |
+| Total endpoints MSW | 109 (antes: 92) |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |
+
+**Distribución por archivo:**
+- `storefront.ts`: +2 (PATCH y DELETE addresses)
+- `admin.ts`: +14 (products/:id, gateways x3, shipping, pages x4, vouchers x4)
+- `inventory.ts`: +1 (alerts)

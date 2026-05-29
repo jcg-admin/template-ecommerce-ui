@@ -166,5 +166,22 @@ export const __inventoryState = state;
 export const __resetInventoryState = () => {
   state.items = initialItems();
   state.movements = initialMovements();
-  state.importReports = [];
+  state.importReports = [
+  // ── Stock-Alerts — SKUs con stock bajo o agotado ───────────────────
+  http.get('/api/v1/admin/inventory/alerts/', () => {
+    const alerts = state.items
+      .filter((item) => item.stock <= item.min_threshold)
+      .map((item) => ({
+        variant_id:    item.variant_id,
+        product_id:    item.variant_id,
+        sku:           item.sku,
+        product_name:  item.product_name,
+        variant_label: item.sku,
+        orisha_name:   'Oshún',
+        stock:         item.stock,
+        threshold:     item.min_threshold,
+      }));
+    return HttpResponse.json({ count: alerts.length, results: alerts });
+  }),
+];
 };

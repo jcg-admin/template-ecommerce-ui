@@ -51,6 +51,25 @@ const _addresses: Address[] = [
     country: 'MX',
     is_default: false,
   },
+
+  // ── Actualizar dirección existente (PATCH) ──────────────────────────
+  http.patch('/api/v1/auth/addresses/:id/', async ({ params, request }) => {
+    const id   = Number(params.id);
+    const body = await request.json() as Partial<Address>;
+    const idx  = _addresses.findIndex((a) => a.id === id);
+    if (idx < 0) return HttpResponse.json({ detail: 'No encontrada' }, { status: 404 });
+    _addresses[idx] = { ..._addresses[idx], ...body };
+    return HttpResponse.json(_addresses[idx]);
+  }),
+
+  // ── Eliminar dirección (DELETE) ───────────────────────────────────────
+  http.delete('/api/v1/auth/addresses/:id/', ({ params }) => {
+    const id  = Number(params.id);
+    const idx = _addresses.findIndex((a) => a.id === id);
+    if (idx < 0) return HttpResponse.json({ detail: 'No encontrada' }, { status: 404 });
+    _addresses.splice(idx, 1);
+    return new HttpResponse(null, { status: 204 });
+  }),
 ];
 
 export const storefrontHandlers = [
