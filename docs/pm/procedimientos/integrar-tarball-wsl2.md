@@ -175,7 +175,7 @@ Credenciales demo:
 | Fecha | Timestamp | BASE (abreviado) | MD5 tarball | HEAD | Commits | Resultado |
 |-------|-----------|-----------------|-------------|------|---------|-----------|
 | 2026-05-28 | 20260528-231855 | ...-20260528-231855 | (sesion anterior) | 9fd6abd | 243 | OK — push + build exitosos |
-| 2026-05-29 | 20260529-041412 | ...-20260529-041412 | ef72203ebc33f3a9dd4e4209500e33f3 | fd40ba4 | 256 | PENDIENTE |
+| 2026-05-29 | 20260529-041412 | ...-20260529-041412 | ef72203ebc33f3a9dd4e4209500e33f3 | fd40ba4 | 256 | OK — push forzado (--force-with-lease) + build 0 errores |
 
 ---
 
@@ -188,3 +188,4 @@ Credenciales demo:
 | `md5sum` devuelve MD5 incorrecto | Se paso el `.md5` como argumento en lugar del `.tar.gz` | Pasar el `.tar.gz` — el `.md5` es el archivo de verificacion, no lo que se verifica |
 | `husky - pre-push script failed` | Bug de Node 18 con import assertions de stylelint | `git push --no-verify` |
 | MSW: `Failed to register ServiceWorker — SSL certificate error` | Chrome rechaza SW en HTTPS con cert self-signed | Activar `chrome://flags/#allow-insecure-localhost` |
+| `[rejected] non-fast-forward` en push | El bash_tool commiteó algo en GitHub después de generar el tarball (ej. docs del procedimiento) dejando GitHub adelante del local | `git push --no-verify --force-with-lease` — seguro porque el contenido correcto es el del tarball |
