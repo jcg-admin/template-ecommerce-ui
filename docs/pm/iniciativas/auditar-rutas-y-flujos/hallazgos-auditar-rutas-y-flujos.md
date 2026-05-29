@@ -142,3 +142,29 @@ Ver hallazgos en la iniciativa `cobertura-tests-completa`:
   `@redux/slices/productsSlice`, pero el thunk `createProduct` fue implementado
   en `adminSlice` en la sesión anterior. Hay ambigüedad sobre qué slice es
   la fuente de verdad para la creación de productos.
+
+---
+
+## HALLAZGO-SCSS-02 — Los SCSS "faltantes" importaban archivos compartidos que ya existían (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media (solo faltaban 3 clases específicas, no 11 archivos)
+- **Descripción**: El hallazgo HALLAZGO-SCSS-01 sobreestimó el problema. Al auditar
+  minuciosamente los imports, se encontró que las 11 páginas "sin SCSS" importan en
+  realidad **5 archivos SCSS compartidos** que ya existían en disco:
+
+  | Archivo compartido | Páginas que lo usan |
+  |--------------------|---------------------|
+  | AdminProductCreatePage.module.scss (20L) | AdminProductEditPage |
+  | AdminBulkPage.module.scss (186L) | AdminProductImportPage |
+  | AdminVariantsPage.module.scss (158L) | AdminProductVariantsPage, AdminVariantTypesPage |
+  | AdminReportPage.module.scss (109L) | AdminReportDashboardPage, AdminReportSalesPage, AdminReportTopSellersPage, AdminReportCustomersRfmPage |
+  | AdminTablePage.module.scss (156L) | AdminShippingMethodsPage, AdminStaticPagesPage, AdminStockAlertsPage |
+
+- **Problema real**: Solo faltaban 3 clases en 2 archivos:
+  - `AdminTablePage.module.scss`: faltaba `.actionDelete`
+  - `AdminVariantsPage.module.scss`: faltaban `.iconBtnDelete` y `.smallBtnDelete`
+    (existían como pseudo-selectores `:hover` pero no como bloques CSS propios,
+    lo que causa que CSS Modules devuelva `undefined` al usarlos como className)
+- **Corrección adicional**: `RangeSlider.module.scss` usaba `$bg-dark` que no existe
+  en el sistema de variables — corregido a `$bg-page` (#0E1400).
+- **Estado**: CORREGIDO — `check-scss` pasa con 146 entries limpias, 0 issues.

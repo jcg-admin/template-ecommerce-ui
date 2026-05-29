@@ -45,7 +45,9 @@
   cursor: pointer; font-size: 13px;
   &:hover { border-color: $bronze; color: $bronze-soft; }
 }
-.iconBtnDelete:hover { border-color: $vino-soft; color: $vino-soft; }
+.iconBtnDelete {
+  &:hover { border-color: $vino-soft; color: $vino-soft; }
+}
 
 .options { padding: $spacing-3 $spacing-5 $spacing-4; display: flex; flex-direction: column; gap: $spacing-2; }
 .option {
@@ -64,7 +66,9 @@
   &:hover { border-color: $bronze; color: $bronze-soft; }
   &:disabled { opacity: 0.4; cursor: not-allowed; }
 }
-.smallBtnDelete:hover { border-color: $vino-soft; color: $vino-soft; }
+.smallBtnDelete {
+  &:hover { border-color: $vino-soft; color: $vino-soft; }
+}
 .addOption {
   padding: 8px; background: transparent; border: 1px dashed $border-medium;
   color: $text-muted; cursor: pointer;

@@ -146,7 +146,9 @@
   font-size: 13px;
   &:hover { border-color: $bronze; color: $bronze-soft; }
 }
-.actionDelete:hover { border-color: $vino-soft; color: $vino-soft; }
+.actionDelete {
+  &:hover { border-color: $vino-soft; color: $vino-soft; }
+}
 
 .loading, .empty {
   padding: $spacing-12 !important;
