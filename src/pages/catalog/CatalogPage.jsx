@@ -11,7 +11,7 @@
 
 import Chip        from '@components/common/Chip/Chip';
 import RangeSlider from '@components/common/RangeSlider/RangeSlider';
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
 import {
@@ -33,6 +33,8 @@ export default function CatalogPage() {
     searchQuery, isLoading, isSearching,
     error, searchError, pagination = {},
   } = useSelector((s) => s.catalog || {});
+  const currentPage = pagination?.page ?? 1;
+
 
   const qParam       = searchParams.get('q')        || '';
   const categoryParam = searchParams.get('category') || '';
@@ -43,6 +45,24 @@ export default function CatalogPage() {
   const [priceMin,      setPriceMin]        = useState(0);
   const [priceMax,      setPriceMax]        = useState(10000);
   const mode = qParam ? 'search' : 'listing';
+
+
+  // Resetear a página 1 cuando cambia cualquier filtro
+  const prevFiltersRef = useRef({ qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax });
+  useEffect(() => {
+    const prev = prevFiltersRef.current;
+    const changed =
+      prev.qParam !== qParam ||
+      prev.categoryParam !== categoryParam ||
+      prev.activeOrishas !== activeOrishas ||
+      prev.activeTypes !== activeTypes ||
+      prev.sortOrder !== sortOrder ||
+      prev.availability !== availability ||
+      prev.priceMin !== priceMin ||
+      prev.priceMax !== priceMax;
+    if (changed && currentPage !== 1) dispatch(setPage(1));
+    prevFiltersRef.current = { qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax };
+  }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax, currentPage]);
 
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
@@ -57,9 +77,10 @@ export default function CatalogPage() {
         availability: availability.length > 0   ? availability  : undefined,
         price_min:    priceMin > 0              ? priceMin      : undefined,
         price_max:    priceMax < 10000          ? priceMax      : undefined,
+        page:         currentPage,
       }));
     }
-  }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax]);
+  }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax, currentPage]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {
