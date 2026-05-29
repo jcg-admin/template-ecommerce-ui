@@ -39,7 +39,7 @@ Corregir los 16 bugs encontrados en la auditoría sistemática de las 99 página
 | F3 | BUG-LB-01 — LoadingButton desde barrel incorrecto | COMPLETADA |
 | F4 | BUG-SL-01..06 — selectores incorrectos (6 páginas) | PENDIENTE |
 | F5 | BUG-TH-03 — addCase faltantes en adminSlice | PENDIENTE |
-| F6 | BUG-RT-02 — 7 rutas /info/* sin registrar | PENDIENTE |
+| F6 | BUG-RT-02 — 7 rutas /info/* sin registrar | COMPLETADA |
 | F7 | BUG-CONF-01 — window.confirm en 10 páginas | PENDIENTE |
 | F8 | BUG-MSW-01 — count incorrecto en handlers | PENDIENTE |
 | F9 | BUG-LOG-01 + BUG-SL-06 — antipatrones menores | PENDIENTE |

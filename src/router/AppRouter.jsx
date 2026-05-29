@@ -30,6 +30,7 @@ const PaymentSelectionPage = lazy(() => import('@pages/checkout/PaymentSelection
 
 // Lazy pages — Comms publicas (contacto, newsletter, preguntas)
 const ContactPage               = lazy(() => import('@pages/ContactPage'));
+const InfoPage                  = lazy(() => import('@pages/info/InfoPage'));
 const NewsletterSubscribePage   = lazy(() => import('@pages/NewsletterSubscribePage'));
 const NewsletterUnsubscribePage = lazy(() => import('@pages/NewsletterUnsubscribePage'));
 const ProductQuestionAskPage    = lazy(() => import('@pages/catalog/ProductQuestionAskPage'));
@@ -154,7 +155,9 @@ export default function AppRouter() {
             <Route path="catalog/:slug" element={<ProductPage />} />
             <Route path="cart" element={<CartPage />} />
             {/* UC-COM-01 — Formulario publico de contacto */}
-            <Route path="contact" element={<ContactPage />} />
+            <Route path="contact"     element={<ContactPage />} />
+            {/* UC-CMS-01 — Páginas de contenido estático (terms, privacidad, envíos, ifá) */}
+            <Route path="info/:slug" element={<InfoPage />} />
             {/* UC-NEW-01 — Suscripcion publica al newsletter */}
             <Route path="newsletter" element={<NewsletterSubscribePage />} />
             {/* UC-NEW-02 — Desuscripcion via token firmado */}

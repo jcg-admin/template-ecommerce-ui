@@ -227,7 +227,7 @@ isLoadingSearchHistory: false,
 | F3 — Import incorrecto | BUG-LB-01 | COMPLETADA |
 | F4 — Selectores incorrectos | BUG-SL-01..05 | COMPLETADA |
 | F5 — addCase + state faltante | BUG-TH-03, BUG-SL-03, BUG-SL-04 | COMPLETADA |
-| F6 — Rutas /info/* | BUG-RT-02 | PENDIENTE |
+| F6 — Rutas /info/* | BUG-RT-02 | COMPLETADA |
 | F7 — window.confirm | BUG-CONF-01 | PENDIENTE |
 | F8 — count en MSW | BUG-MSW-01 | PENDIENTE |
 | F9 — Antipatrones | BUG-SL-06, BUG-LOG-01 | PENDIENTE |

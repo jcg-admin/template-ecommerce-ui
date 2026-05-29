@@ -317,7 +317,7 @@ Solo `Button`, `Field`, `MetaTag`, `Price`, `SumRow`, `EmptyState`, `StepPanel`,
 |-------|-------|
 | ID | BUG-RT-02 |
 | Severidad | MEDIA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 6 |
 | Verificado | Sí |
 
 **Síntoma:** Los links de "Términos", "Privacidad", "Sobre Ifa", "Envíos", "Santoral"
@@ -1479,3 +1479,111 @@ claves declaradas en el `initialState`.
 | pageVersions sin initialState | PENDIENTE CONOCIDO |
 
 **10/10 verificaciones OK. 0 bugs nuevos. 1 pendiente preexistente confirmado.**
+
+---
+
+## HALLAZGOS DE FASE 6
+
+---
+
+### HALLAZGO-F6-01 — Las variables SCSS usadas inicialmente eran inexistentes en el proyecto
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F6-01 |
+| Fecha | 2026-05-29 |
+| Fase | F6 |
+| Tipo | Bug detectado antes del commit — variables SCSS incorrectas |
+| Severidad | ALTA — habría roto la compilación SCSS |
+| Estado | CORREGIDO antes del commit |
+
+**Descripción:**
+La primera versión de `InfoPage.module.scss` usaba variables que no existen
+en el proyecto (`$color-body`, `$color-heading`, `$font-heading`, `$font-mono`,
+`$color-link`, `$color-muted`). Los nombres correctos en el proyecto son:
+
+| Variable usada (incorrecta) | Variable real en el proyecto |
+|-----------------------------|------------------------------|
+| `$color-heading` | `$text-primary` |
+| `$color-body` | `$text-secondary` |
+| `$color-muted` | `$text-muted` |
+| `$color-link` | `$text-link` |
+| `$font-heading` | `$font-family-display` |
+| `$font-mono` | `$font-family-mono` |
+
+**Lección:** Antes de crear un SCSS nuevo, leer un SCSS de página existente
+que funcione (ej. `AccountPage.module.scss`) para copiar el patrón exacto
+de variables, en lugar de inferir los nombres.
+
+---
+
+### HALLAZGO-F6-02 — Los slugs en/es (/info/terms y /info/privacy) tienen su propio contenido
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F6-02 |
+| Fecha | 2026-05-29 |
+| Fase | F6 |
+| Tipo | Hallazgo de análisis — decisión de diseño |
+
+**Descripción:**
+El plan original proponía redirigir `/info/privacy` → `/info/privacidad` y
+`/info/terms` → `/info/terminos`. Al analizar el uso en las páginas:
+
+- `RegisterPage` usa `/info/terms` y `/info/privacy` (inglés — coherente con
+  el contexto bilingüe del registro)
+- `CheckoutPage` usa `/info/terminos` y `/info/privacidad` (español)
+
+**Decisión:** Mantener ambos slugs con contenido propio en inglés y español
+en el MSW. `RegisterPage` no requiere cambios — los slugs `terms` y `privacy`
+ahora tienen contenido en inglés que es apropiado para ese contexto.
+
+---
+
+### HALLAZGO-F6-03 — InfoPage usa el endpoint de admin, no uno público
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F6-03 |
+| Fecha | 2026-05-29 |
+| Fase | F6 |
+| Tipo | Deuda técnica — endpoint admin usado como endpoint público en el demo |
+| Severidad | BAJA — funciona en demo, requiere endpoint público en producción |
+
+**Descripción:**
+`InfoPage` usa `fetchAdminPage(slug)` → `GET /api/v1/admin/pages/:slug/`.
+En producción debería existir un endpoint público `GET /api/v1/pages/:slug/`
+sin autenticación de admin.
+
+Para el demo esto es aceptable — el endpoint de admin devuelve el contenido
+publicado y el MSW no verifica credenciales.
+
+**Deuda:** Crear endpoint público + thunk `fetchPublicPage` cuando se integre
+el backend real.
+
+---
+
+### RESUMEN EJECUTIVO FASE 6
+
+| Acción | Resultado |
+|--------|-----------|
+| InfoPage.jsx creada | 64 líneas — carga por slug desde adminSlice.currentPage |
+| InfoPage.module.scss creada | 58 líneas — corregida tras detectar variables incorrectas |
+| Ruta `info/:slug` en StorefrontLayout | Pública, sin auth |
+| Lazy import en AppRouter.jsx | OK |
+| MSW: 5 slugs nuevos en GET /admin/pages/:slug/ | ifa, santoral, envios, terms, privacy |
+| SCSS: 146 → 147 entries | 0 issues |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |
+
+**Las 7 rutas /info/* ahora resuelven correctamente:**
+
+| Ruta | Slug MSW | Idioma |
+|------|----------|--------|
+| `/info/ifa` | ifa | ES |
+| `/info/santoral` | santoral | ES |
+| `/info/envios` | envios | ES |
+| `/info/privacidad` | privacidad | ES |
+| `/info/terminos` | terminos | ES |
+| `/info/privacy` | privacy | EN |
+| `/info/terms` | terms | EN |

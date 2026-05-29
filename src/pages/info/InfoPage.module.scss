@@ -1,0 +1,57 @@
+@use '@styles/abstracts' as *;
+
+.page {
+  background:  $bg-page;
+  min-height:  60vh;
+}
+
+.container {
+  max-width:  $content-max-width;
+  margin:     0 auto;
+  padding:    $spacing-16 $content-padding-desktop $spacing-24;
+
+  @media (max-width: $bp-md) {
+    padding: $spacing-10 $content-padding-mobile $spacing-16;
+  }
+}
+
+.loading {
+  padding:     $spacing-16 $content-padding-desktop;
+  color:       $text-muted;
+  font-family: $font-family-mono;
+  font-size:   14px;
+}
+
+.title {
+  font-family:   $font-family-display;
+  font-size:     clamp(24px, 4vw, 36px);
+  font-weight:   $font-weight-medium;
+  color:         $text-primary;
+  margin-bottom: $spacing-8;
+  line-height:   1.2;
+}
+
+.body {
+  font-size:     16px;
+  line-height:   1.8;
+  color:         $text-secondary;
+  margin-bottom: $spacing-8;
+
+  h2, h3 { font-family: $font-family-display; margin: $spacing-6 0 $spacing-3; }
+  p      { margin-bottom: $spacing-4; }
+  ul, ol { padding-left: $spacing-6; margin-bottom: $spacing-4; }
+  li     { margin-bottom: $spacing-2; }
+  a      { color: $text-link; text-decoration: underline; }
+}
+
+.back {
+  display:          inline-block;
+  margin-top:       $spacing-8;
+  font-family:      $font-family-mono;
+  font-size:        13px;
+  letter-spacing:   0.05em;
+  color:            $text-muted;
+  text-decoration:  none;
+
+  &:hover { color: $text-primary; }
+}
