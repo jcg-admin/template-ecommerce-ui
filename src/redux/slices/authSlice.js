@@ -20,9 +20,11 @@ import { withLogging } from '@decorators/withLogging';
 export const loginUser = createAsyncThunk(
   'auth/login',
   withLogging(
-    async ({ username, password }, { rejectWithValue }) => {
+    async ({ username, email, password }, { rejectWithValue }) => {
+      // Aceptar email como alias de username
+      const user = username || email;
       try {
-        const response = await apiService.post('/api/v1/auth/login/', { username, password });
+        const response = await apiService.post('/api/v1/auth/login/', { username: user, password });
         return response.data;
       } catch (error) {
         return rejectWithValue(error.message || 'Error al iniciar sesion');

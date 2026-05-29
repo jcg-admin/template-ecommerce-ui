@@ -134,7 +134,7 @@ export default function Header() {
               <button
                 type="button"
                 className={styles.actionLink}
-                onClick={() => dispatch(openModal({ modal: 'auth' }))}
+                onClick={() => navigate('/auth/login')}
               >
                 Ingresar
               </button>

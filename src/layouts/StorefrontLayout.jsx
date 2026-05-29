@@ -8,12 +8,14 @@ import { Outlet } from 'react-router-dom';
 import Header from '@components/layout/Header';
 import Footer from '@components/layout/Footer';
 import ToastContainer from '@components/common/Toast/ToastContainer';
+import SearchModal    from '@components/common/SearchModal/SearchModal';
 import ErrorBoundary from '@components/shared/ErrorBoundary';
 import styles from './StorefrontLayout.module.scss';
 
 export default function StorefrontLayout() {
   return (
     <div className={styles.root}>
+      <SearchModal />
       <Header />
       <main className={styles.main}>
         <ErrorBoundary>
