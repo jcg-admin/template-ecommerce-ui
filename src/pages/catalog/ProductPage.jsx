@@ -13,7 +13,7 @@ import Popover    from '@components/common/Popover/Popover';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams, useNavigate } from 'react-router-dom';
+import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import { fetchProduct } from '@redux/slices/catalogSlice';
 import { addCartItem } from '@redux/slices/cartSlice';
 import { toggleWishlist } from '@redux/slices/wishlistSlice';
