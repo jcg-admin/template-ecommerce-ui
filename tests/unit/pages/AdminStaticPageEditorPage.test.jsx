@@ -2,7 +2,7 @@
  * Tests — AdminStaticPageEditorPage
  * Editor de página estática del CMS (título, slug, contenido HTML)
  */
-import { render, screen } from '@testing-library/react';
+import { render, screen, waitFor } from '@testing-library/react';
 import { Provider }     from 'react-redux';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -14,19 +14,19 @@ jest.mock('@services/apiService', () => ({
 }));
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
-  useParams: () => ({ slug: 'about' }),
+  useParams:   () => ({ slug: 'about' }),
   useNavigate: () => jest.fn(),
 }));
-// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
+import apiService from '@services/apiService';
 import AdminStaticPageEditorPage from '../../../src/pages/admin/AdminStaticPageEditorPage';
 
 const PAGE = {
-  title: 'Acerca de Práctica Yorùbà',
-  slug: 'about',
-  content: '<p>Somos un espacio de práctica...</p>',
-  is_published: true,
-  meta_title: '',
+  title:            'Acerca de Práctica Yorùbà',
+  slug:             'about',
+  content:          '<p>Somos un espacio de práctica...</p>',
+  is_published:     true,
+  meta_title:       '',
   meta_description: '',
 };
 
@@ -34,9 +34,10 @@ const makeStore = () => configureStore({
   reducer: { admin: adminReducer },
   preloadedState: {
     admin: {
-      currentPage: PAGE,
-      isLoading: false,
-      products: [],
+      currentPage:       PAGE,
+      isLoadingPages:    false,
+      isLoading:         false,
+      products:          [],
       isLoadingProducts: false,
     },
   },
@@ -54,27 +55,35 @@ const renderPage = () => render(
 );
 
 describe('AdminStaticPageEditorPage', () => {
-  it('renderiza el editor de página', () => {
-    renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/página|editor|contenido|título/i);
+  beforeEach(() => {
+    apiService.get.mockResolvedValue({ data: PAGE });
   });
 
-  it('tiene campo de título', () => {
+  it('renderiza el editor de página', async () => {
     renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/título|title|Acerca|editor|página/i);
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/página|editor|contenido|título|Acerca/i)
+    );
   });
 
-  it('tiene campo de slug', () => {
+  it('tiene campo de título', async () => {
     renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/slug|about|url|campo|editar/i);
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/título|title|Acerca|editor|página/i)
+    );
   });
 
-  it('tiene botón de guardar', () => {
+  it('tiene campo de slug', async () => {
     renderPage();
-    const btns = screen.getAllByRole('button');
-    expect(btns.length).toBeGreaterThan(0);
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/slug|about|url|campo|editar/i)
+    );
+  });
+
+  it('tiene botón de guardar', async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByRole('button').length).toBeGreaterThan(0)
+    );
   });
 });

@@ -226,7 +226,7 @@ isLoadingSearchHistory: false,
 | F2 — Thunks equivocados | BUG-TH-01, BUG-TH-02 | COMPLETADA |
 | F3 — Import incorrecto | BUG-LB-01 | COMPLETADA |
 | F4 — Selectores incorrectos | BUG-SL-01..05 | COMPLETADA |
-| F5 — addCase + state faltante | BUG-TH-03, BUG-SL-03, BUG-SL-04 | PENDIENTE |
+| F5 — addCase + state faltante | BUG-TH-03, BUG-SL-03, BUG-SL-04 | COMPLETADA |
 | F6 — Rutas /info/* | BUG-RT-02 | PENDIENTE |
 | F7 — window.confirm | BUG-CONF-01 | PENDIENTE |
 | F8 — count en MSW | BUG-MSW-01 | PENDIENTE |

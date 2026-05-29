@@ -106,7 +106,7 @@ state.isLoading = true;  // ← clave real
 |-------|-------|
 | ID | BUG-SL-03 |
 | Severidad | ALTA |
-| Estado | PARCIAL — selector OK, pendiente addCase en Fase 5 |
+| Estado | CORREGIDO — Fase 5 (addCase + siteSettings en initialState) |
 | Archivo | src/pages/admin/AdminSiteSettingsPage.jsx |
 | Verificado | Sí |
 
@@ -132,7 +132,7 @@ no tiene `addCase` → el state nunca se actualiza.
 |-------|-------|
 | ID | BUG-SL-04 |
 | Severidad | ALTA |
-| Estado | PARCIAL — currentVoucher OK en init, voucherChangelog pendiente Fase 5 |
+| Estado | CORREGIDO — Fase 5 (addCase + voucherChangelog en initialState) |
 | Archivo | src/pages/admin/AdminVoucherDetailPage.jsx |
 | Verificado | Sí |
 
@@ -246,7 +246,7 @@ import { initiatePayment } from '@redux/slices/paymentsSlice';
 |-------|-------|
 | ID | BUG-TH-03 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 5 |
 | Archivos | src/redux/slices/adminSlice.js |
 | Páginas afectadas | AdminInventoryDashboardPage, AdminStockAlertsPage |
 | Verificado | Sí |
@@ -1283,3 +1283,106 @@ isLoadingProducts:  false,
 | Tests: 1330 pasando | OK |
 
 **8 checks OK. 3 bugs adicionales corregidos. 1 pendiente para Fase 5.**
+
+---
+
+## HALLAZGOS DE FASE 5
+
+---
+
+### HALLAZGO-F5-01 — adminSlice tiene 72 thunks, 54 sin addCase (solo 12 corregidos en F5)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F5-01 |
+| Fecha | 2026-05-29 |
+| Fase | F5 |
+| Tipo | Inventario de deuda técnica |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO |
+
+**Descripción:**
+Al inventariar todos los thunks de `adminSlice` antes de insertar los `addCase`,
+se encontró que el slice tiene 72 thunks definidos y solo 8 tenían `addCase`
+antes de Fase 5.
+
+Fase 5 agregó 12 thunks más (los del scope: BUG-TH-03, BUG-SL-03, BUG-SL-04,
+más `fetchAdminPages`/`fetchAdminPage`/`savePageDraft`/`publishPage`).
+
+**Estado post-Fase 5:**
+
+| Estado | Thunks |
+|--------|--------|
+| Con addCase | 20 (8 originales + 12 agregados) |
+| Sin addCase | 52 |
+| Total | 72 |
+
+Los 52 thunks sin addCase representan funcionalidad de paneles admin que
+actualmente no responde visualmente (sin spinner, sin datos actualizados).
+Se agregan como deuda técnica a corregir en fases posteriores.
+
+---
+
+### HALLAZGO-F5-02 — AdminStaticPageEditorPage.test tenía preloadedState sin isLoadingPages
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F5-02 |
+| Fecha | 2026-05-29 |
+| Fase | F5 |
+| Tipo | Test roto — mismo patrón que HALLAZGO-F4-03 y HALLAZGO-FASE4-05 |
+| Estado | CORREGIDO |
+
+**Descripción:**
+Al agregar el `addCase` de `fetchAdminPage`, el thunk al dispararse en el
+`useEffect` pone `isLoadingPages = true` antes de resolver. El test tenía
+preloadedState sin `isLoadingPages: false` explícito y los tests eran
+síncronos — siempre veían el spinner "Cargando…".
+
+**Fix:**
+1. `isLoadingPages: false` en el `preloadedState`
+2. `apiService.get.mockResolvedValue({ data: PAGE })`
+3. Todos los tests convertidos a `async` con `await waitFor()`
+
+**Patrón recurrente documentado:**
+Este es el tercer test que sigue el mismo patrón (OrderDetailPage, OrderEditPage,
+AdminStaticPageEditorPage). Cualquier test de página que:
+- Use un thunk con `addCase` en el `useEffect`
+- Tenga assertions síncronas
+
+...debe usar `mockResolvedValue` + `waitFor`. Los tests que no lo hacen
+pasan con el bug presente y fallan cuando el addCase se agrega.
+
+---
+
+### HALLAZGO-F5-03 — fetchAdminPages y páginas CMS tenían 0 addCase antes de F5
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F5-03 |
+| Fecha | 2026-05-29 |
+| Fase | F5 |
+| Tipo | Hallazgo de scope — funcionalidad CMS bloqueada |
+| Estado | CORREGIDO como parte de F5 (scope ampliado) |
+
+**Descripción:**
+Los thunks de páginas CMS (`fetchAdminPages`, `fetchAdminPage`, `savePageDraft`,
+`publishPage`) tampoco tenían `addCase` aunque sí estaban definidos. Dado que:
+- `AdminStaticPagesPage` usa `s.admin?.staticPages` (actualizado por `fetchAdminPages`)
+- `AdminStaticPageEditorPage` usa `s.admin?.currentPage` (actualizado por `fetchAdminPage`)
+
+...agregar los `addCase` de CMS en el mismo commit de F5 era coherente y
+evitaba una fase adicional.
+
+---
+
+### RESUMEN EJECUTIVO FASE 5
+
+| Acción | Detalle |
+|--------|---------|
+| Claves agregadas al initialState | `siteSettings`, `isLoadingSettings`, `voucherChangelog`, `isLoadingAlerts` |
+| addCase insertados en extraReducers | 12 thunks × 3 casos = 36 addCase nuevos |
+| Thunks cubiertos | fetchInventoryDashboard, fetchStockAlerts, fetchSiteSettings, updateSiteSettings, fetchAdminVoucher, createVoucher, updateVoucher, deleteVoucher, fetchAdminPages, fetchAdminPage, savePageDraft, publishPage |
+| Test corregido | AdminStaticPageEditorPage.test.jsx |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |

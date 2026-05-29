@@ -144,9 +144,13 @@ const adminSlice = createSlice({
     isLoadingPages:     false,
     currentVoucher:     null,
     isLoadingVoucher:   false,
+    voucherChangelog:   [],
     inventoryDashboard: null,
     stockAlerts:        [],
     isLoadingInventory: false,
+    isLoadingAlerts:    false,
+    siteSettings:       null,
+    isLoadingSettings:  false,
   },
 
   reducers: {
@@ -321,6 +325,138 @@ const adminSlice = createSlice({
       .addCase(fetchAdminMetrics.fulfilled, (state, action) => {
         state.isLoadingMetrics = false;
         state.metrics          = action.payload ?? null;
+      })
+
+      // ── BUG-TH-03: fetchInventoryDashboard ───────────────────────────────
+      .addCase(fetchInventoryDashboard.pending,   (state) => {
+        state.isLoadingInventory = true;
+      })
+      .addCase(fetchInventoryDashboard.fulfilled, (state, action) => {
+        state.isLoadingInventory  = false;
+        state.inventoryDashboard  = action.payload ?? null;
+      })
+      .addCase(fetchInventoryDashboard.rejected,  (state) => {
+        state.isLoadingInventory  = false;
+      })
+
+      // ── BUG-TH-03: fetchStockAlerts ──────────────────────────────────────
+      .addCase(fetchStockAlerts.pending,   (state) => {
+        state.isLoadingAlerts = true;
+      })
+      .addCase(fetchStockAlerts.fulfilled, (state, action) => {
+        state.isLoadingAlerts = false;
+        state.stockAlerts     = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchStockAlerts.rejected,  (state) => {
+        state.isLoadingAlerts = false;
+      })
+
+      // ── BUG-SL-03: fetchSiteSettings + updateSiteSettings ────────────────
+      .addCase(fetchSiteSettings.pending,   (state) => {
+        state.isLoadingSettings = true;
+      })
+      .addCase(fetchSiteSettings.fulfilled, (state, action) => {
+        state.isLoadingSettings = false;
+        state.siteSettings      = action.payload ?? null;
+      })
+      .addCase(fetchSiteSettings.rejected,  (state) => {
+        state.isLoadingSettings = false;
+      })
+      .addCase(updateSiteSettings.pending,   (state) => {
+        state.isActioning = true;
+      })
+      .addCase(updateSiteSettings.fulfilled, (state, action) => {
+        state.isActioning  = false;
+        state.siteSettings = action.payload ?? state.siteSettings;
+        state.lastAction   = 'settings_updated';
+      })
+      .addCase(updateSiteSettings.rejected,  (state, action) => {
+        state.isActioning  = false;
+        state.actionError  = action.payload ?? null;
+      })
+
+      // ── BUG-SL-04: fetchAdminVoucher + CRUD ──────────────────────────────
+      .addCase(fetchAdminVoucher.pending,   (state) => {
+        state.isLoadingVoucher = true;
+      })
+      .addCase(fetchAdminVoucher.fulfilled, (state, action) => {
+        state.isLoadingVoucher = false;
+        state.currentVoucher   = action.payload ?? null;
+      })
+      .addCase(fetchAdminVoucher.rejected,  (state) => {
+        state.isLoadingVoucher = false;
+      })
+      .addCase(createVoucher.pending,   (state) => { state.isActioning = true; })
+      .addCase(createVoucher.fulfilled, (state, action) => {
+        state.isActioning    = false;
+        state.currentVoucher = action.payload ?? null;
+        state.lastAction     = 'created';
+      })
+      .addCase(createVoucher.rejected,  (state, action) => {
+        state.isActioning = false;
+        state.actionError = action.payload ?? null;
+      })
+      .addCase(updateVoucher.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateVoucher.fulfilled, (state, action) => {
+        state.isActioning    = false;
+        state.currentVoucher = action.payload ?? null;
+        state.lastAction     = 'updated';
+      })
+      .addCase(updateVoucher.rejected,  (state, action) => {
+        state.isActioning = false;
+        state.actionError = action.payload ?? null;
+      })
+      .addCase(deleteVoucher.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteVoucher.fulfilled, (state) => {
+        state.isActioning    = false;
+        state.currentVoucher = null;
+        state.lastAction     = 'deleted';
+      })
+      .addCase(deleteVoucher.rejected,  (state, action) => {
+        state.isActioning = false;
+        state.actionError = action.payload ?? null;
+      })
+
+      // ── fetchAdminPages + fetchAdminPage + savePageDraft + publishPage ────
+      .addCase(fetchAdminPages.pending,   (state) => {
+        state.isLoadingPages = true;
+      })
+      .addCase(fetchAdminPages.fulfilled, (state, action) => {
+        state.isLoadingPages = false;
+        state.staticPages    = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchAdminPages.rejected,  (state) => {
+        state.isLoadingPages = false;
+      })
+      .addCase(fetchAdminPage.pending,   (state) => {
+        state.isLoadingPages = true;
+      })
+      .addCase(fetchAdminPage.fulfilled, (state, action) => {
+        state.isLoadingPages = false;
+        state.currentPage    = action.payload ?? null;
+      })
+      .addCase(fetchAdminPage.rejected,  (state) => {
+        state.isLoadingPages = false;
+      })
+      .addCase(savePageDraft.pending,   (state) => { state.isActioning = true; })
+      .addCase(savePageDraft.fulfilled, (state, action) => {
+        state.isActioning = false;
+        state.currentPage = action.payload ?? state.currentPage;
+        state.lastAction  = 'draft_saved';
+      })
+      .addCase(savePageDraft.rejected,  (state, action) => {
+        state.isActioning = false;
+        state.actionError = action.payload ?? null;
+      })
+      .addCase(publishPage.pending,   (state) => { state.isActioning = true; })
+      .addCase(publishPage.fulfilled, (state, action) => {
+        state.isActioning = false;
+        state.currentPage = { ...state.currentPage, ...action.payload };
+        state.lastAction  = 'published';
+      })
+      .addCase(publishPage.rejected,  (state, action) => {
+        state.isActioning = false;
+        state.actionError = action.payload ?? null;
       })
       .addCase(fetchAdminMetrics.rejected, (state, action) => {
         state.isLoadingMetrics = false;
