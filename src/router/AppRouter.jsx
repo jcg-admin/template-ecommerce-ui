@@ -11,6 +11,7 @@ import AdminLayout      from '@layouts/AdminLayout';
 import ProtectedRoute   from '@components/shared/ProtectedRoute';
 import AdminRoute       from '@components/shared/ProtectedRoute/AdminRoute';
 import PageLoader       from '@components/shared/LazyLoad/PageLoader';
+import ScrollToTop      from '@components/shared/ScrollToTop/ScrollToTop';
 
 // Lazy pages — Storefront
 const HomePage        = lazy(() => import('@pages/home/HomePage'));
@@ -142,6 +143,7 @@ const NotFoundPage    = lazy(() => import('@pages/NotFoundPage'));
 export default function AppRouter() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<PageLoader />}>
         <Routes>
           {/* ─── Tienda pública ─── */}

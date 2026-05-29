@@ -45,6 +45,7 @@ export default function CatalogPage() {
   const mode = qParam ? 'search' : 'listing';
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
     if (qParam) {
       dispatch(searchProducts({ q: qParam }));
     } else {
