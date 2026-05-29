@@ -32,7 +32,7 @@ export default function AdminUsersPage() {
   const [status, setStatus] = useState('active');
   const [search, setSearch] = useState('');
   const users = useSelector((s) => s.admin?.users || []);
-  const isLoading = useSelector((s) => s.admin?.isLoadingUsers);
+  const isLoading = useSelector((s) => s.admin?.isLoading);
 
   useEffect(() => {
     dispatch(fetchAdminUsers({ role, status, search }));

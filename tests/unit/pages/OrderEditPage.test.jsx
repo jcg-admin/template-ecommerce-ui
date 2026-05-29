@@ -13,6 +13,7 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn() },
 }));
+import apiService from '@services/apiService';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useParams: () => ({ orderNumber: 'PY-0088' }),
@@ -58,38 +59,43 @@ const renderPage = () => render(
 );
 
 describe('OrderEditPage', () => {
-  beforeEach(() => mockNavigate.mockClear());
-
-  it('renderiza el formulario de edición del pedido', () => {
-    renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/PY-0088|pedido|editar|modificar/i);
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    apiService.get.mockResolvedValue({ data: ORDER });
   });
 
-  it('tiene formulario con campos de dirección', () => {
+  it('renderiza el formulario de edición del pedido', async () => {
     renderPage();
-    const form = document.querySelector('form');
-    expect(form).toBeInTheDocument();
-  });
-
-  it('muestra la dirección actual del pedido', () => {
-    renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/Insurgentes|CDMX|dirección/i);
-  });
-
-  it('tiene botón de guardar cambios', () => {
-    renderPage();
-    const btns = screen.getAllByRole('button');
-    const hasSave = btns.some(b => /guardar|actualizar|save|confirmar/i.test(b.textContent));
-    expect(hasSave || btns.length > 0).toBe(true);
-  });
-
-  it('tiene botón de cancelar / volver', () => {
-    renderPage();
-    const btns = screen.getAllByRole('button').concat(
-      screen.queryAllByRole('link').filter(l => /cancelar|volver|back/i.test(l.textContent))
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/PY-0088|pedido|editar|modificar/i)
     );
-    expect(btns.length).toBeGreaterThan(0);
+  });
+
+  it('tiene formulario con campos de dirección', async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(document.querySelector('form')).toBeInTheDocument()
+    );
+  });
+
+  it('muestra la dirección actual del pedido', async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/Insurgentes|CDMX|direcci/i)
+    );
+  });
+
+  it('tiene botón de guardar cambios', async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByRole('button').length).toBeGreaterThan(0)
+    );
+  });
+
+  it('tiene botón de cancelar / volver', async () => {
+    renderPage();
+    await waitFor(() =>
+      expect(screen.getAllByRole('button').length).toBeGreaterThan(0)
+    );
   });
 });

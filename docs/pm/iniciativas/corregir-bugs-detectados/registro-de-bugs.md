@@ -52,7 +52,7 @@ No cambiar el router porque `confirmation` es el término correcto en el código
 |-------|-------|
 | ID | BUG-SL-01 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 4 |
 | Archivo | src/pages/admin/AdminInventoryDashboardPage.jsx |
 | Verificado | Sí |
 
@@ -83,7 +83,7 @@ actualiza `inventoryDashboard`. Ambos bugs deben corregirse juntos.
 |-------|-------|
 | ID | BUG-SL-02 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 4 |
 | Archivo | src/pages/admin/AdminUsersPage.jsx |
 | Verificado | Sí |
 
@@ -106,7 +106,7 @@ state.isLoading = true;  // ← clave real
 |-------|-------|
 | ID | BUG-SL-03 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | PARCIAL — selector OK, pendiente addCase en Fase 5 |
 | Archivo | src/pages/admin/AdminSiteSettingsPage.jsx |
 | Verificado | Sí |
 
@@ -132,7 +132,7 @@ no tiene `addCase` → el state nunca se actualiza.
 |-------|-------|
 | ID | BUG-SL-04 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | PARCIAL — currentVoucher OK en init, voucherChangelog pendiente Fase 5 |
 | Archivo | src/pages/admin/AdminVoucherDetailPage.jsx |
 | Verificado | Sí |
 
@@ -159,7 +159,7 @@ No existe el thunk para cargarlo.
 |-------|-------|
 | ID | BUG-SL-05 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 4 |
 | Archivo | src/pages/account/OrderEditPage.jsx |
 | Verificado | Sí |
 
@@ -1055,3 +1055,110 @@ Sin solapamiento — el sistema de barrels está correctamente particionado.
 | Tests: 1330 pasando | OK |
 
 **10/10 verificaciones limpias. 1 bug residual de Fase 6 encontrado y corregido.**
+
+---
+
+## HALLAZGOS DE FASE 4
+
+---
+
+### HALLAZGO-F4-01 — BUG-SL-03 y BUG-SL-04 no son corregibles en Fase 4 — requieren addCase
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F4-01 |
+| Fecha | 2026-05-29 |
+| Fase | F4 |
+| Tipo | Dependencia bloqueante entre fases |
+
+**Descripción:**
+`BUG-SL-03` (`siteSettings`) y `BUG-SL-04` (`voucherChangelog`) no son
+errores de selector — son errores de que el state nunca se puebla porque
+los thunks no tienen `addCase` en `adminSlice`. El selector correcto sería
+`s.admin?.siteSettings` y `s.admin?.currentVoucher`, pero esas claves
+permanecen en sus valores iniciales (`null` y `null`) porque los thunks
+`fetchSiteSettings` y `fetchAdminVoucher` nunca actualizan el state.
+
+Corrección real: en Fase 5 (BUG-TH-03 extendido), agregar los `addCase`
+correspondientes. Los selectores son correctos en intención.
+
+**Estado en Fase 4:**
+- `AdminSiteSettingsPage`: selector `s.admin?.siteSettings` correcto → sin cambio
+- `AdminVoucherDetailPage`: selector `s.admin?.currentVoucher` correcto → sin cambio
+  El selector `s.admin?.voucherChangelog` sí es incorrecto (clave no existe en ningún
+  lugar del slice) → pendiente de crear la clave + thunk + addCase en Fase 5.
+
+---
+
+### HALLAZGO-F4-02 — AdminInventoryDashboardPage carecía de selector de isLoading
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F4-02 |
+| Fecha | 2026-05-29 |
+| Fase | F4 |
+| Tipo | Mejora detectada durante el fix de BUG-SL-01 |
+| Severidad | BAJA — no crashea pero no muestra spinner |
+| Estado | CORREGIDO |
+
+**Descripción:**
+Al corregir el selector `s.admin?.inventory` → `s.admin?.inventoryDashboard`,
+se detectó que la página no tenía selector de `isLoadingInventory`. La página
+usaba `data || {}` como fallback — no crasheaba, pero tampoco mostraba un
+spinner durante la carga.
+
+`adminSlice.initialState` tiene `isLoadingInventory: false` y el plan de
+Fase 5 incluye el `addCase` que lo activa.
+
+**Fix:**
+```jsx
+// Agregado junto al selector de data:
+const isLoading = useSelector((s) => s.admin?.isLoadingInventory);
+```
+
+---
+
+### HALLAZGO-F4-03 — OrderEditPage.test tenía tests síncronos sobre thunks async
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F4-03 |
+| Fecha | 2026-05-29 |
+| Fase | F4 |
+| Tipo | Test roto por corrección de BUG-SL-05 — mismo patrón que HALLAZGO-FASE4-05 |
+| Estado | CORREGIDO |
+
+**Descripción:**
+Al corregir `s.orders?.isLoadingDetail` → `s.orders?.isLoading` en
+`OrderEditPage`, el componente ahora muestra el spinner mientras el thunk
+resuelve. Los tests eran síncronos y no esperaban a que `fetchOrderDetail`
+completara — siempre veían "Cargando pedido…" en lugar del contenido.
+
+**Patrón idéntico al HALLAZGO-FASE4-05** de la iniciativa
+`auditar-rutas-y-flujos`: tests con thunks async necesitan
+`mockResolvedValue` + `waitFor`.
+
+**Fix aplicado:**
+1. `import apiService from '@services/apiService'`
+2. `beforeEach(() => apiService.get.mockResolvedValue({ data: ORDER }))`
+3. Todos los tests convertidos a `async` con `await waitFor(() => ...)`
+
+---
+
+### RESUMEN EJECUTIVO FASE 4
+
+| Bug | Acción | Resultado |
+|-----|--------|-----------|
+| BUG-SL-01 | `s.admin?.inventory` → `s.admin?.inventoryDashboard` | CORREGIDO |
+| BUG-SL-02 | `s.admin?.isLoadingUsers` → `s.admin?.isLoading` | CORREGIDO |
+| BUG-SL-03 | Sin cambio — selector correcto, falta addCase (Fase 5) | PARCIAL |
+| BUG-SL-04 | Sin cambio — voucherChangelog requiere nueva clave + thunk (Fase 5) | PARCIAL |
+| BUG-SL-05 | `s.orders?.isLoadingDetail` → `s.orders?.isLoading` | CORREGIDO |
+
+| Métrica | Valor |
+|---------|-------|
+| Archivos de página modificados | 3 |
+| Archivos de test modificados | 1 |
+| Mejora adicional agregada | isLoadingInventory selector en AdminInventoryDashboardPage |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |

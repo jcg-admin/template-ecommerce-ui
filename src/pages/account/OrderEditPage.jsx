@@ -30,7 +30,7 @@ export default function OrderEditPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const order = useSelector((s) => s.orders?.current);
-  const isLoading = useSelector((s) => s.orders?.isLoadingDetail);
+  const isLoading = useSelector((s) => s.orders?.isLoading);
 
   const [tab, setTab] = useState('address');
   const [address, setAddress] = useState({});

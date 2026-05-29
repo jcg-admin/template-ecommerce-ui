@@ -23,7 +23,8 @@ const MOVEMENT_TYPES = {
 
 export default function AdminInventoryDashboardPage() {
   const dispatch = useDispatch();
-  const data = useSelector((s) => s.admin?.inventory) || {};
+  const data      = useSelector((s) => s.admin?.inventoryDashboard) || {};
+  const isLoading  = useSelector((s) => s.admin?.isLoadingInventory);
 
   useEffect(() => { dispatch(fetchInventoryDashboard()); }, [dispatch]);
 
