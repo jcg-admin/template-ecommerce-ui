@@ -224,7 +224,7 @@ isLoadingSearchHistory: false,
 |------|------|--------|
 | F1 — Rutas rotas | BUG-RT-01, BUG-RT-03 | COMPLETADA |
 | F2 — Thunks equivocados | BUG-TH-01, BUG-TH-02 | COMPLETADA |
-| F3 — Import incorrecto | BUG-LB-01 | PENDIENTE |
+| F3 — Import incorrecto | BUG-LB-01 | COMPLETADA |
 | F4 — Selectores incorrectos | BUG-SL-01..05 | PENDIENTE |
 | F5 — addCase + state faltante | BUG-TH-03, BUG-SL-03, BUG-SL-04 | PENDIENTE |
 | F6 — Rutas /info/* | BUG-RT-02 | PENDIENTE |

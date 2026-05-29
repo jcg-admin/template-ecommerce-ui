@@ -13,7 +13,8 @@ import { Link } from 'react-router-dom';
 import { fetchAddresses }                                      from '@redux/slices/authSlice';
 import { createAddress, deleteAddress, setDefaultAddress }     from '@redux/slices/addressesSlice';
 import AccountSidebar from '@components/account/AccountSidebar';
-import { MetaTag, Button, Field, LoadingButton } from '@components/common/primitives';
+import { MetaTag, Button, Field }                from '@components/common/primitives';
+import { LoadingButton }                          from '@components/common';
 import styles from './AddressesPage.module.scss';
 
 const MAX_ADDRESSES = 5;

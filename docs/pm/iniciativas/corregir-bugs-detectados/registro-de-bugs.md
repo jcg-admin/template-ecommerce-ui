@@ -285,7 +285,7 @@ se actualiza — `inventoryDashboard` permanece `null` y `stockAlerts` permanece
 |-------|-------|
 | ID | BUG-LB-01 |
 | Severidad | MEDIA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 3 |
 | Archivo | src/pages/account/AddressesPage.jsx |
 | Verificado | Sí |
 
@@ -887,3 +887,73 @@ como deuda técnica para alinear en la integración con el backend real.
 | checkoutSlice URL sin /v1/ | Antipatrón — funciona en demo |
 
 **9 de 9 fixes de Fase 2 correctos. 1 bug adicional encontrado y corregido.**
+
+---
+
+## HALLAZGOS DE FASE 3
+
+---
+
+### HALLAZGO-F3-01 — 3 estilos de import de LoadingButton coexisten en el proyecto
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F3-01 |
+| Fecha | 2026-05-29 |
+| Fase | F3 |
+| Tipo | Inconsistencia — no es bug, es antipatrón |
+| Severidad | BAJA |
+| Estado | DOCUMENTADO |
+
+**Descripción:**
+La auditoría global encontró 3 estilos distintos de importar `LoadingButton`
+en el proyecto, de los cuales 2 funcionan y 1 era el bug:
+
+| Estilo | Ejemplo | Funciona | Páginas |
+|--------|---------|---------|---------|
+| Named desde barrel (preferido) | `import { LoadingButton } from '@components/common'` | Sí | CartPage, AddressesPage (tras fix) |
+| Default directo (funciona) | `import LoadingButton from '@components/common/LoadingButton/LoadingButton'` | Sí | LoginPage, RegisterPage, CheckoutPage |
+| Named desde primitives (bug) | `import { LoadingButton } from '@components/common/primitives'` | No | AddressesPage (corregido) |
+
+El estilo "default directo" funciona porque el archivo existe en esa ruta,
+pero no usa el barrel — si el componente se moviera o renombrara, habría
+que actualizar cada import por separado en lugar de solo el barrel.
+
+**Recomendación:** Unificar a `import { LoadingButton } from '@components/common'`
+en LoginPage, RegisterPage y CheckoutPage en una sesión de limpieza posterior.
+No es urgente — los 3 funcionan correctamente.
+
+---
+
+### HALLAZGO-F3-02 — Alert no tiene el mismo bug (auditoría preventiva)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F3-02 |
+| Fecha | 2026-05-29 |
+| Fase | F3 |
+| Tipo | Auditoría preventiva — resultado limpio |
+
+**Descripción:**
+Se auditó preventivamente si `Alert` (otro componente de `@components/common`
+que no está en `primitives`) estaba siendo importado desde el barrel incorrecto
+en alguna página. Resultado: ninguna página tiene este bug.
+
+`Alert` está correctamente exportado desde `@components/common`:
+```javascript
+export { default as Alert } from './Alert/Alert';
+```
+
+---
+
+### RESUMEN EJECUTIVO FASE 3
+
+| Métrica | Valor |
+|---------|-------|
+| Bug corregido | BUG-LB-01 |
+| Archivo modificado | account/AddressesPage.jsx (L16 separado en L16+L17) |
+| Páginas auditadas globalmente | 99 |
+| Páginas con el mismo bug | 0 (solo AddressesPage) |
+| Estilos de import de LoadingButton encontrados | 3 (2 válidos, 1 bug) |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |
