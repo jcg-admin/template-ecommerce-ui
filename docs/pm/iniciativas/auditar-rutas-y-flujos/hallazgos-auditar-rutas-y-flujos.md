@@ -71,3 +71,74 @@ Ver hallazgos en la iniciativa `cobertura-tests-completa`:
 - BUG-BROWSER-02: SearchBar texto invisible → CORREGIDO
 - BUG-BROWSER-03: RangeSlider sin thumb/tooltip → CORREGIDO
 - BUG-BROWSER-04: CatalogPage ignoraba ?category → CORREGIDO
+
+---
+
+## Hallazgos de la auditoría de calidad de vistas (2026-05-28)
+
+## HALLAZGO-SCSS-01 — 11 páginas importan SCSS Module que no existe en disco (CRÍTICO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta — crash en webpack al intentar hacer build con esas páginas
+- **Descripción**: Las siguientes páginas tienen `import styles from './NombrePage.module.scss'`
+  pero el archivo SCSS no existe en el sistema de archivos:
+  - AdminProductEditPage.module.scss
+  - AdminProductImportPage.module.scss
+  - AdminProductVariantsPage.module.scss
+  - AdminReportDashboardPage.module.scss
+  - AdminReportSalesPage.module.scss
+  - AdminReportTopSellersPage.module.scss
+  - AdminReportCustomersRfmPage.module.scss
+  - AdminShippingMethodsPage.module.scss
+  - AdminStaticPagesPage.module.scss
+  - AdminStockAlertsPage.module.scss
+  - AdminVariantTypesPage.module.scss
+- **Impacto**: El build actual con webpack no crashea solo porque esas páginas son
+  lazy-loaded y webpack no las compila hasta que el navegador las solicita.
+  En el browser, al navegar a esas rutas, se producirá un error de módulo no encontrado.
+- **Corrección requerida**: Crear los 11 archivos SCSS con los selectores que cada
+  página usa, o convertir los estilos a inline hasta que se diseñen los módulos.
+
+## HALLAZGO-UX-01 — Loading infinito cuando recurso no existe (MEDIO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media — el usuario ve un spinner infinito en lugar de un 404 útil
+- **Descripción**: ProductPage, OrderSuccessPage y OrderDetailPage usan el patrón:
+  ```jsx
+  if (isLoading || !product) return <div>Cargando...</div>;
+  ```
+  Cuando `isLoading` se vuelve `false` y `product` sigue siendo `null` (porque la API
+  devolvió 404), el componente queda mostrando el spinner indefinidamente.
+- **Corrección**:
+  ```jsx
+  if (isLoading) return <div>Cargando...</div>;
+  if (!product) return <Navigate to="/404" replace />;
+  ```
+
+## HALLAZGO-MSW-01 — Endpoints sin mock que causan errores silenciosos (MEDIO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media — funciones del UI que no responden en modo demo
+- **Descripción**: Los siguientes endpoints son llamados por páginas del UI pero no
+  tienen handler en los archivos MSW:
+  - DELETE /api/v1/auth/addresses/:id/ — eliminar dirección en AddressesPage
+  - PATCH /api/v1/auth/addresses/:id/ — editar dirección existente en AddressesPage
+  - GET /api/v1/admin/products/:id/ — cargar producto para AdminProductEditPage
+  - GET /api/v1/payments/gateways/ — listar gateways para PaymentSelectionPage
+  - GET /api/v1/admin/pages/ — listar páginas CMS para AdminStaticPagesPage
+  - GET /api/v1/admin/pages/:slug/ — cargar página CMS para AdminStaticPageEditorPage
+  - GET /api/v1/admin/inventory/dashboard/ — métricas para AdminInventoryDashboardPage
+  - GET /api/v1/admin/inventory/stock-alerts/ — alertas para AdminStockAlertsPage
+
+## HALLAZGO-ROUTER-05 — AdminConfigPage deshabilitada por rutas inexistentes (MEDIO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media
+- **Descripción**: AdminConfigPage renderiza sus 3 tarjetas de configuración con
+  `aria-disabled="true"` porque las rutas destino no existen en el router.
+  Al registrar las páginas huérfanas de configuración (AdminGatewaysPage,
+  AdminShippingMethodsPage, AdminSiteSettingsPage) en el router, estas tarjetas
+  deben habilitarse quitando el `aria-disabled`.
+
+## HALLAZGO-SLICE-CONFLICT-01 — AdminProductCreatePage importa productsSlice, no adminSlice (MEDIO)
+- **Fecha**: 2026-05-28
+- **Descripción**: `AdminProductCreatePage` importa `createProduct` de
+  `@redux/slices/productsSlice`, pero el thunk `createProduct` fue implementado
+  en `adminSlice` en la sesión anterior. Hay ambigüedad sobre qué slice es
+  la fuente de verdad para la creación de productos.
