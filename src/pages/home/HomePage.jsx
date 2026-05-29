@@ -118,7 +118,7 @@ export default function HomePage() {
             {ORISHAS.map((o) => (
               <Link
                 key={o.slug}
-                to={`/catalogo?orisha=${o.slug}`}
+                to={`/catalog?orishas=${o.slug}`}
                 className={styles.orishaCard}
               >
                 <div className={styles.orishaImg}>

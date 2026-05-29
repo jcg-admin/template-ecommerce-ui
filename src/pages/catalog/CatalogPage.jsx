@@ -13,7 +13,7 @@ import Chip        from '@components/common/Chip/Chip';
 import RangeSlider from '@components/common/RangeSlider/RangeSlider';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, Link } from 'react-router-dom';
 import {
   fetchProducts, searchProducts, clearSearch, setPage,
 } from '@redux/slices/catalogSlice';
@@ -36,9 +36,12 @@ export default function CatalogPage() {
   const currentPage = pagination?.page ?? 1;
 
 
-  const qParam       = searchParams.get('q')        || '';
+  const qParam        = searchParams.get('q')        || '';
   const categoryParam = searchParams.get('category') || '';
-  const [activeOrishas, setActiveOrishas]   = useState([]);
+  const orishasParam  = searchParams.get('orishas')  || '';
+  const [activeOrishas, setActiveOrishas]   = useState(
+    () => orishasParam ? orishasParam.split(',') : []
+  );
   const [activeTypes,   setActiveTypes]     = useState([]);
   const [sortOrder,     setSortOrder]       = useState('');
   const [availability,  setAvailability]    = useState([]);
@@ -97,7 +100,7 @@ export default function CatalogPage() {
       <header className={styles.hero}>
         <div className={styles.heroInner}>
           <nav className={styles.breadcrumb}>
-            <a href="/">Inicio</a><span>/</span>
+            <Link to="/">Inicio</Link><span>/</span>
             <span className={styles.bcCurrent}>{mode === 'search' ? 'Búsqueda' : 'Catálogo'}</span>
           </nav>
           <div className={styles.heroGrid}>

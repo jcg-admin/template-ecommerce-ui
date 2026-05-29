@@ -74,7 +74,7 @@ export default function SearchHistoryPage() {
               <ul className={styles.list}>
                 {items.map((it) => (
                   <li key={it.id} className={styles.row}>
-                    <Link to={`/catalogo?q=${encodeURIComponent(it.query)}`} className={styles.queryLink}>
+                    <Link to={`/search?q=${encodeURIComponent(it.query)}`} className={styles.queryLink}>
                       <span className={styles.queryIcon}>⌕</span>
                       <span className={styles.query}>{it.query}</span>
                       <span className={styles.results}>

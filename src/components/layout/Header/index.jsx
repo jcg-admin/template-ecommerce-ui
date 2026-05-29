@@ -20,7 +20,7 @@ import {
   selectCartItems,
   selectIsSearchOpen,
 } from '@redux/selectors';
-import { toggleSearch, openModal } from '@redux/slices/uiSlice';
+import { toggleSearch } from '@redux/slices/uiSlice';
 import useKeyboardShortcut from '@hooks/ui/useKeyboardShortcut';
 import { selectUser } from '@redux/selectors';
 import { logoutUser } from '@redux/slices/authSlice';

@@ -80,7 +80,7 @@ export const cartHandlers = [
         name: `Producto Mock #${body.product_id}`,
         price: 480,
         quantity: body.quantity ?? 1,
-        image: '/mock-images/product.jpg',
+        image_url: '/mock-images/product.jpg',
       });
     }
     return HttpResponse.json(buildCart());
