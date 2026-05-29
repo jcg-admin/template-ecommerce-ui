@@ -120,7 +120,7 @@ export const supportHandlers = [
     const results = status
       ? _tickets.filter(t => t.status === status)
       : _tickets;
-    return HttpResponse.json({ count: results.length, results, next: null, previous: null });
+    return HttpResponse.json({ count: _tickets.length, results, next: null, previous: null });
   }),
 
   http.patch('/api/v1/admin/support/tickets/:id/', async ({ params, request }) => {

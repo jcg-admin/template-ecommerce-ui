@@ -58,7 +58,6 @@ export default function CheckoutPage() {
         navigate(`/order/${order.order_number}/confirmation`);
       }
     } catch (err) {
-      console.error(err);
       setOrderError(err?.message || 'No se pudo procesar el pedido. Inténtalo de nuevo.');
       setSubmitting(false);
     }

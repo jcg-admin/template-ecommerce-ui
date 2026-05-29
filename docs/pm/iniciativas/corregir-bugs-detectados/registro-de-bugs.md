@@ -1839,3 +1839,73 @@ jest.mock('@components/shared/ConfirmModal/ConfirmModal', () => {
 | 6 tests con mock React.createElement | OK |
 | SupportTicketActions: confirmModal en ambas ramas | OK |
 | Tests: 1330 pasando, 0 fallos | OK |
+
+---
+
+## HALLAZGOS DE FASE 8 Y FASE 9
+
+---
+
+### RESUMEN EJECUTIVO FASE 8 — BUG-MSW-01
+
+**Diagnóstico real tras auditoría:**
+
+De los 6 handlers identificados en el plan original, solo 1 tenía el bug real:
+
+| Handler | count antes | count después | Impacto |
+|---------|-------------|--------------|---------|
+| admin/users | `_adminUsers.length` (total) | Sin cambio — ya correcto | ninguno |
+| admin/vouchers | `vouchers.length` (= 10, sin paginar) | Sin cambio — correcto | ninguno |
+| storefront/tickets | `_tickets.length` (total) | Sin cambio — correcto | ninguno |
+| **admin/support/tickets** | **`results.length` (filtrado)** | **`_tickets.length` (total)** | **CORREGIDO** |
+| storefront/returns | `state.items.length` (total, sin paginar) | Sin cambio — correcto | ninguno |
+| admin/returns | `state.items.length` (total, sin paginar) | Sin cambio — correcto | ninguno |
+
+**Fix aplicado:** `support.ts` — `count: results.length` → `count: _tickets.length` en el handler de `GET /api/v1/admin/support/tickets/`. El count ahora refleja el total de tickets del sistema, no el filtrado actual.
+
+**Impacto funcional del bug:** NINGUNO en el demo — ningún componente usa `count` para calcular `totalPages` en estos endpoints.
+
+---
+
+### RESUMEN EJECUTIVO FASE 9 — BUG-LOG-01
+
+**Fix:** `CheckoutPage.jsx` L61 — eliminada la línea `console.error(err)` del bloque `catch`.
+
+El error ya se expone al usuario vía `setOrderError(err?.message || '...')` y se muestra en el componente con un `<Alert>`. El `console.error` era una fuga de debug introducida en una fase anterior.
+
+**Auditoría global de console.error:** El único `console.error` restante en el proyecto está en `ErrorBoundary/index.jsx` dentro de `componentDidCatch` — **intencional y correcto** (estándar de React para logging de errores de renderizado).
+
+---
+
+### BUG-SL-06 — Evaluación
+
+| Campo | Valor |
+|-------|-------|
+| ID | BUG-SL-06 |
+| Estado | CERRADO — DESCARTADO (ya corregido en Fase 4) |
+
+**Descripción:**
+BUG-SL-06 fue registrado como un selector incorrecto en una página de admin.
+Al revisar para Fase 9, se encontró que el bug ya fue corregido durante la
+auditoría proactiva de Fase 4 (HALLAZGO-AUD-F4-01 a F4-04). No hay acción
+adicional requerida.
+
+---
+
+### RESUMEN FINAL DE LA INICIATIVA corregir-bugs-detectados
+
+| Fase | Bugs corregidos | Estado |
+|------|----------------|--------|
+| F1 | BUG-RT-01, BUG-RT-03 | COMPLETADA |
+| F2 | BUG-TH-01, BUG-TH-02 | COMPLETADA |
+| F3 | BUG-LB-01 | COMPLETADA |
+| F4 | BUG-SL-01, SL-02, SL-05 | COMPLETADA |
+| F5 | BUG-TH-03, BUG-SL-03, BUG-SL-04 | COMPLETADA |
+| F6 | BUG-RT-02 | COMPLETADA |
+| F7 | BUG-CONF-01 | COMPLETADA |
+| F8 | BUG-MSW-01 | COMPLETADA |
+| F9 | BUG-LOG-01 | COMPLETADA |
+
+**16 bugs originales resueltos.**
+**30+ hallazgos adicionales detectados y corregidos durante las auditorías.**
+**Tests: 1330 pasando, 0 fallos, 109 skipped.**
