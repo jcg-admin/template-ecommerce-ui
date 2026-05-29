@@ -39,7 +39,7 @@ export default function AdminInventoryDashboardPage() {
           <MetaTag tone="bronze">Operación · Inventario</MetaTag>
           <h1 className={styles.title}>Inventario</h1>
         </div>
-        <Link to="/admin/inventory/alertas">
+        <Link to="/admin/inventory/stock-alerts">
           <span className={styles.alertCta}>
             ⚠ {data.low_stock_count || 0} productos con stock bajo →
           </span>
@@ -59,7 +59,7 @@ export default function AdminInventoryDashboardPage() {
       <section className={styles.card}>
         <header className={styles.cardHeader}>
           <h2 className={styles.cardTitle}>Movimientos recientes</h2>
-          <Link to="/admin/inventory/alertas" className={styles.cardLink}>Ver alertas →</Link>
+          <Link to="/admin/inventory/stock-alerts" className={styles.cardLink}>Ver alertas →</Link>
         </header>
         <table className={styles.table}>
           <thead>

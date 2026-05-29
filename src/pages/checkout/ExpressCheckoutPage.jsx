@@ -35,7 +35,7 @@ export default function ExpressCheckoutPage() {
       if (result.redirect_url) {
         window.location.href = result.redirect_url;
       } else {
-        navigate(`/order/${result.order_number}/confirmacion`);
+        navigate(`/order/${result.order_number}/confirmation`);
       }
     } catch (err) {
       setSubmitting(false);

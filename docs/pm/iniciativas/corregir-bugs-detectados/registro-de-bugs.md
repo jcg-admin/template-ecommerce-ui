@@ -16,7 +16,7 @@ BUG-TH-04 eliminado como falso positivo tras verificación exhaustiva.
 |-------|-------|
 | ID | BUG-RT-01 |
 | Severidad | CRÍTICA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 1 |
 | Archivo(s) | CheckoutPage.jsx, ExpressCheckoutPage.jsx, PaymentReturnPage.jsx |
 | Verificado | Sí — lectura directa del código |
 
@@ -346,7 +346,7 @@ llevan al usuario a `/404`.
 |-------|-------|
 | ID | BUG-RT-03 |
 | Severidad | MEDIA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 1 |
 | Archivo | src/pages/admin/AdminInventoryDashboardPage.jsx |
 | Verificado | Sí |
 
@@ -513,3 +513,123 @@ vía `Alert` y se registra en el state `orderError`.
 | window.confirm | 1 bug, 12 ocurrencias |
 | MSW handlers — count field | 1 bug parcial |
 | Console.log/error | 1 fuga de debug |
+
+---
+
+## HALLAZGOS DE FASE 1
+
+---
+
+### HALLAZGO-F1-01 — 7 ocurrencias de "confirmacion" en el proyecto, solo 3 eran bugs de ruta
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F1-01 |
+| Fecha | 2026-05-29 |
+| Fase | F1 |
+| Tipo | Hallazgo de auditoría — falsos positivos potenciales evitados |
+
+**Descripción:**
+Antes de aplicar ningún reemplazo se buscaron TODAS las ocurrencias de
+`confirmacion` en el proyecto para evitar corregir texto legítimo.
+Se encontraron 7 ocurrencias:
+
+| Archivo | Línea | Contenido | Es bug? |
+|---------|-------|-----------|---------|
+| `checkout/CheckoutPage.jsx` | L57 | `navigate(.../confirmacion)` | **SÍ** |
+| `checkout/ExpressCheckoutPage.jsx` | L38 | `navigate(.../confirmacion)` | **SÍ** |
+| `checkout/PaymentReturnPage.jsx` | L37 | `navigate(.../confirmacion, ...)` | **SÍ** |
+| `admin/AdminNewsletterSubscribersPage.jsx` | L16 | `'Pendiente confirmacion'` (status label) | No |
+| `account/ChangePasswordPage.jsx` | L6 | `* confirmacion.` (comentario JSDoc) | No |
+| `checkout/OrderSuccessPage.jsx` | L4 | `* /pedido/:id/confirmacion` (comentario) | No |
+| `router/AppRouter.jsx` | L184 | `la confirmacion quedan publicas` (comentario) | No |
+
+**Corrección aplicada:** Solo las 3 líneas con `navigate()`. Los 4 textos
+legítimos no fueron tocados.
+
+**Lección:** Buscar todas las ocurrencias del string en el proyecto antes
+de hacer cualquier reemplazo. Un `str.replace()` global habría corrompido
+4 archivos adicionales.
+
+---
+
+### HALLAZGO-F1-02 — PaymentReturnPage.test.jsx hardcodeaba la ruta incorrecta
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F1-02 |
+| Fecha | 2026-05-29 |
+| Fase | F1 |
+| Tipo | Test roto por bug — enmascaraba el bug original |
+
+**Descripción:**
+Al correr los tests después de los fixes, `PaymentReturnPage.test.jsx`
+falló porque su assertion esperaba la ruta **incorrecta**:
+
+```javascript
+// tests/unit/pages/PaymentReturnPage.test.jsx L57 — ANTES (incorrecto)
+expect(mockNavigate).toHaveBeenCalledWith(
+  '/order/PY-0042/confirmacion',    // ← el test validaba el bug, no el comportamiento correcto
+  { replace: true }
+);
+
+// DESPUÉS (correcto)
+expect(mockNavigate).toHaveBeenCalledWith(
+  '/order/PY-0042/confirmation',
+  { replace: true }
+);
+```
+
+**Implicación:** El test estaba pasando con el bug presente porque verificaba
+el comportamiento incorrecto. Si el test hubiera usado la ruta correcta desde
+el principio, habría detectado el bug de `PaymentReturnPage` desde el commit
+que lo introdujo.
+
+**Corrección:** Actualizar la assertion del test a `/confirmation`.
+
+---
+
+### HALLAZGO-F1-03 — BUG-RT-03 tenía exactamente 2 ocurrencias, no 1
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F1-03 |
+| Fecha | 2026-05-29 |
+| Fase | F1 |
+| Tipo | Hallazgo de auditoría — alcance mayor al documentado |
+
+**Descripción:**
+El plan original documentaba BUG-RT-03 como "2 ocurrencias" y el registro
+lo confirmó. Ambas en `AdminInventoryDashboardPage.jsx`:
+
+```jsx
+// L42 — botón principal del header
+<Link to="/admin/inventory/alertas">
+  Ver stock en alerta →
+</Link>
+
+// L62 — link secundario en la tarjeta de KPIs
+<Link to="/admin/inventory/alertas" className={styles.cardLink}>
+  Ver alertas →
+</Link>
+```
+
+Ambas corregidas a `/admin/inventory/stock-alerts`.
+
+La ruta registrada en el router era `admin/inventory/stock-alerts`
+(sin `/` inicial, relativa — el router de React usa paths relativos).
+
+---
+
+### RESUMEN EJECUTIVO FASE 1
+
+| Métrica | Valor |
+|---------|-------|
+| Bugs corregidos | 2 (BUG-RT-01 y BUG-RT-03) |
+| Archivos de página modificados | 4 |
+| Archivos de test modificados | 1 (PaymentReturnPage.test.jsx) |
+| Ocurrencias de `confirmacion` evaluadas | 7 (3 corregidas, 4 ignoradas) |
+| Ocurrencias de `/alertas` corregidas | 2 |
+| Falsos positivos evitados | 4 (texto legítimo no tocado) |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |

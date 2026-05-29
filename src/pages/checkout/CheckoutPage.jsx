@@ -54,7 +54,7 @@ export default function CheckoutPage() {
       if (redirect_url) {
         window.location.href = redirect_url;
       } else {
-        navigate(`/order/${order.order_number}/confirmacion`);
+        navigate(`/order/${order.order_number}/confirmation`);
       }
     } catch (err) {
       console.error(err);

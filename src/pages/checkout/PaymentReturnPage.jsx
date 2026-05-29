@@ -34,7 +34,7 @@ export default function PaymentReturnPage() {
         if (cancelled) return;
         setStatus(res.status);
         if (res.status === 'APPROVED') {
-          navigate(`/order/${id}/confirmacion`, { replace: true });
+          navigate(`/order/${id}/confirmation`, { replace: true });
           return;
         }
         if (res.status === 'FAILED' || res.status === 'CANCELLED') {

@@ -54,7 +54,7 @@ describe('PaymentReturnPage', () => {
     renderPage();
     await act(async () => { jest.runAllTimers(); });
     expect(mockNavigate).toHaveBeenCalledWith(
-      '/order/PY-0042/confirmacion',
+      '/order/PY-0042/confirmation',
       { replace: true }
     );
   });
