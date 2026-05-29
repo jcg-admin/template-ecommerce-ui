@@ -76,6 +76,24 @@
   color: $vino-soft;
   letter-spacing: 0.06em;
 }
+.fieldInputWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.fieldHasToggle .fieldInput { padding-right: 44px; }
+.fieldPasswordToggle {
+  position: absolute;
+  right: $spacing-3;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-muted;
+  font-size: $font-size-sm;
+  padding: 0;
+  transition: color $transition-fast;
+  &:hover { color: $text-primary; }
+}
 .fieldHint {
   font-family: $font-family-mono;
   font-size: $font-size-xs;
@@ -141,6 +159,18 @@
 .btn_md {}
 .btn_lg { padding: $btn-padding-y-lg $btn-padding-x-lg; font-size: $btn-font-size-lg; }
 .btnBlock { width: 100%; }
+.btnLoading { position: relative; cursor: wait; }
+.btnSpinner {
+  width: 14px; height: 14px;
+  border: 2px solid rgba(255,255,255,0.3);
+  border-top-color: currentColor;
+  border-radius: 50%;
+  animation: btnSpin 0.7s linear infinite;
+  display: inline-block;
+  flex-shrink: 0;
+}
+@keyframes btnSpin { to { transform: rotate(360deg); } }
+.btnChildrenLoading { opacity: 0.5; }
 
 // ─────────────────────────────────────────────────────────────────────
 // SumRow

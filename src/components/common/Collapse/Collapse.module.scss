@@ -40,3 +40,26 @@
 }
 
 .accordion {}
+
+// Trigger programático (cuando no se usa <summary>)
+.trigger {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  background: $bg-surface;
+  border: none;
+  cursor: pointer;
+  color: $text-primary;
+  font-weight: $font-weight-medium;
+  text-align: left;
+  font-size: $font-size-base;
+}
+
+// Modo horizontal
+.horizontal {
+  overflow: hidden;
+}
+
+.content { overflow: hidden; }

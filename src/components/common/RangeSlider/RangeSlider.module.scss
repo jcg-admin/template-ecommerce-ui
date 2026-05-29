@@ -96,6 +96,11 @@
   writing-mode: vertical-lr;
 }
 
+.labelClickable {
+  cursor: pointer;
+  &:hover { color: $primary-color; }
+}
+
 .labels {
   display: flex;
   justify-content: space-between;

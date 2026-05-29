@@ -58,3 +58,107 @@
 }
 
 .checkbox { font-size: 1rem; }
+
+// selection — área de tags/texto seleccionado
+.selection {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-1;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+}
+
+// placeholder — texto cuando no hay selección
+.placeholder {
+  color: $text-muted;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// tag — chip de item seleccionado en modo "tags"
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px $spacing-2;
+  background: rgba($primary-color, 0.12);
+  color: $primary-color;
+  border-radius: $border-radius-full;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  max-width: 140px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+// tagRemove — botón × de cada tag
+.tagRemove {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $primary-color;
+  padding: 0;
+  font-size: 0.9rem;
+  line-height: 1;
+  opacity: 0.7;
+  flex-shrink: 0;
+  &:hover { opacity: 1; }
+}
+
+// indicator — flecha desplegable
+.indicator {
+  color: $text-muted;
+  font-size: 0.6rem;
+  flex-shrink: 0;
+  transition: transform $transition-base;
+}
+
+// cleaner — botón de limpiar todos
+.cleaner {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: $text-muted;
+  font-size: 0.875rem;
+  flex-shrink: 0;
+  padding: 0 $spacing-1;
+  transition: color $transition-base;
+  &:hover { color: $text-primary; }
+}
+
+// searchWrapper — wrapper del input de búsqueda dentro del panel
+.searchWrapper {
+  padding: $spacing-2;
+  border-bottom: 1px solid $border-color;
+}
+
+// noResults — mensaje cuando no hay resultados de búsqueda
+.noResults {
+  padding: $spacing-3;
+  text-align: center;
+  color: $text-muted;
+  font-size: $font-size-sm;
+}
+
+// optionCheckbox — checkbox dentro de cada opción
+.optionCheckbox {
+  flex-shrink: 0;
+  accent-color: $primary-color;
+  width: 14px;
+  height: 14px;
+  cursor: pointer;
+}
+
+// Estados de validación
+.invalid .trigger { border-color: $error-color; }
+.valid   .trigger { border-color: $success-color; }
+.invalid { }
+.valid   { }
+
+.disabled {
+  .trigger { opacity: 0.5; cursor: not-allowed; }
+  pointer-events: none;
+}

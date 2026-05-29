@@ -26,3 +26,25 @@
 
 .tabPanel       { padding-top: $spacing-4; }
 .tabPanelActive { display: block; }
+
+.tabDisabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.vertical {
+  flex-direction: row;
+  .tabList {
+    flex-direction: column;
+    border-bottom: none;
+    border-right: 2px solid $border-color;
+  }
+  .tab {
+    border-bottom: none;
+    border-right: 2px solid transparent;
+    margin-bottom: 0;
+    margin-right: -2px;
+    text-align: left;
+  }
+}

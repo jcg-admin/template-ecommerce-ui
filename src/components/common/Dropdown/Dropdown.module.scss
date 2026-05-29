@@ -46,3 +46,20 @@
   border: none;
   border-top: 1px solid $border-color;
 }
+
+// DropdownHeader
+.header {
+  padding: $spacing-1 $spacing-4 $spacing-2;
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  letter-spacing: $ls-eyebrow;
+  text-transform: uppercase;
+  color: $text-muted;
+  pointer-events: none;
+}
+
+// Wrapper del trigger para posicionamiento
+.triggerWrapper {
+  display: inline-flex;
+  position: relative;
+}
