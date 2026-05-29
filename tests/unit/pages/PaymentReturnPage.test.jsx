@@ -12,7 +12,7 @@ jest.mock('@services/apiService', () => ({
   apiService: { get: jest.fn() },
   default:    { get: jest.fn() },
 }));
-import { apiService } from '@services/apiService';
+import apiService from '@services/apiService';
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

@@ -250,7 +250,7 @@ module.exports = (env, argv) => {
         },
       }),
       new webpack.DefinePlugin(buildDefinedEnv(argv.mode)),
-      !isDev && new MiniCssExtractPlugin({ filename: '[name].[contenthash].css' }),
+      !isDev && new MiniCssExtractPlugin({ filename: '[name].[contenthash].css', ignoreOrder: true }),
       // DEMO_MODE: copiar mockServiceWorker.js y las imagenes del catalogo
       // a dist/ solo cuando DEMO_MODE=true. En builds de produccion real
       // este plugin no se activa y ninguno de estos assets aparece en dist/.
