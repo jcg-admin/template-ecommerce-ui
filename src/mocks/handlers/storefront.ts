@@ -179,4 +179,13 @@ export const storefrontHandlers = [
       message: 'Te has dado de baja de nuestra lista. Lo sentimos.',
     });
   }),
+
+  // ── Establecer dirección predeterminada (POST set-default) ──────────────
+  http.post('/api/v1/auth/addresses/:id/set-default/', ({ params }) => {
+    const id  = Number(params.id);
+    const idx = _addresses.findIndex((a) => a.id === id);
+    if (idx < 0) return HttpResponse.json({ detail: 'No encontrada' }, { status: 404 });
+    _addresses.forEach((a) => { a.is_default = (a.id === id); });
+    return HttpResponse.json(_addresses[idx]);
+  }),
 ];

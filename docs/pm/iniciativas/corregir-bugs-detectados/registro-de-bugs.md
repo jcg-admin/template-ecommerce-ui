@@ -791,3 +791,99 @@ import { initiatePayment } from '@redux/slices/paymentsSlice';
 - `createOrder` ahora funciona → el flujo completo de compra opera correctamente
 - `createAddress`, `deleteAddress`, `setDefaultAddress` ahora ejecutan sus requests API
 - `s.addresses?.isActioning` disponible para mejorar UX (fuera de scope de F2)
+
+---
+
+## HALLAZGOS DE LA AUDITORÍA DE FASE 2
+
+---
+
+### HALLAZGO-AUD-F2-01 — MSW faltaba handler POST /api/v1/auth/addresses/:id/set-default/
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F2-01 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 2 |
+| Tipo | Bug MSW nuevo — detectado al cruzar URLs del thunk vs handlers existentes |
+| Severidad | MEDIA — setDefaultAddress ejecutaría la API real pero fallaría en demo |
+| Estado | CORREGIDO en la misma auditoría |
+
+**Descripción:**
+Al auditar las URLs de API de `addressesSlice` contra los handlers MSW de
+`storefront.ts`, se encontró que `setDefaultAddress` usa
+`POST /api/v1/auth/addresses/:id/set-default/` pero dicho handler no existía.
+
+Los otros dos thunks de mutación tenían su handler:
+- `createAddress` → `POST /api/v1/auth/addresses/` → OK
+- `deleteAddress` → `DELETE /api/v1/auth/addresses/:id/` → OK
+- `setDefaultAddress` → `POST /api/v1/auth/addresses/:id/set-default/` → **FALTABA**
+
+**Consecuencia en el browser demo:**
+El usuario hacía clic en "Establecer como predeterminada" → MSW no interceptaba
+la petición → error de red → el estado de `isActioning` quedaba atascado en `true`
+→ el botón no respondía más.
+
+**Corrección:**
+```typescript
+// storefront.ts — agregado:
+http.post('/api/v1/auth/addresses/:id/set-default/', ({ params }) => {
+  const id  = Number(params.id);
+  const idx = _addresses.findIndex((a) => a.id === id);
+  if (idx < 0) return HttpResponse.json({ detail: 'No encontrada' }, { status: 404 });
+  _addresses.forEach((a) => { a.is_default = (a.id === id); });
+  return HttpResponse.json(_addresses[idx]);
+})
+```
+
+---
+
+### HALLAZGO-AUD-F2-02 — checkoutSlice usa /api/orders/ sin prefijo /v1/ (antipatrón)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F2-02 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 2 |
+| Tipo | Antipatrón de URL — no es un bug funcional |
+| Severidad | BAJA — el MSW tiene el handler con la URL correcta, funciona en demo |
+| Estado | DOCUMENTADO — corrección fuera del scope de Fase 2 |
+
+**Descripción:**
+`checkoutSlice` usa `POST /api/orders/` mientras que el resto del proyecto
+usa el prefijo `/api/v1/`. El MSW en `checkout.ts` también registra el handler
+en `/api/orders/`, por lo que en el demo funciona correctamente.
+
+```javascript
+// checkoutSlice.js
+const res = await apiService.post('/api/orders/', payload);  // sin /v1/
+
+// Consistente con el handler MSW:
+http.post('/api/orders/', ...)  // también sin /v1/
+```
+
+En producción, si el backend usa `/api/v1/orders/`, habrá un 404. Se registra
+como deuda técnica para alinear en la integración con el backend real.
+
+---
+
+### RESUMEN DE LA AUDITORÍA DE FASE 2
+
+| Verificación | Resultado |
+|-------------|-----------|
+| addressesReducer en store | OK |
+| createAddress/deleteAddress/setDefaultAddress → addressesSlice | OK |
+| addCase de los 3 thunks en addressesSlice | OK |
+| fetchAddresses → authSlice | OK |
+| createOrder → checkoutSlice | OK |
+| initiatePayment → paymentsSlice | OK |
+| MSW: POST /api/orders/ para createOrder | OK |
+| MSW: POST /api/v1/auth/addresses/ para createAddress | OK |
+| MSW: DELETE /api/v1/auth/addresses/:id/ para deleteAddress | OK |
+| MSW: PATCH /api/v1/auth/addresses/:id/ para updateAddress | OK |
+| MSW: POST /api/v1/auth/addresses/:id/set-default/ | FALTABA → CORREGIDO |
+| Sin residuos de imports incorrectos en otras páginas | OK |
+| fetchAddresses sin addCase en authSlice | Antipatrón — ya documentado F2-02 |
+| checkoutSlice URL sin /v1/ | Antipatrón — funciona en demo |
+
+**9 de 9 fixes de Fase 2 correctos. 1 bug adicional encontrado y corregido.**
