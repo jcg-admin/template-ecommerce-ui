@@ -148,3 +148,40 @@
   usuarios (setUserActiveStatus, resetUserPassword, makeUserAdmin),
   categorías (deleteCategory, moveCategoryNode).
 - **Estado**: adminSlice pasa de 30 a 72 thunks implementados.
+
+---
+
+## Hallazgos de integración en browser (detectados en prueba visual 2026-05-28)
+
+## BUG-BROWSER-01 — ProductPage selector incorrecto → siempre "Cargando…" (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta (página de producto inservible)
+- **Descripción**: `ProductPage` leía `s.catalog.current` e `s.catalog.isLoadingDetail`
+  pero `catalogSlice` guarda el producto en `state.currentProduct` y el flag en `state.isLoading`.
+  El selector nunca encontraba datos → el componente devolvía siempre el spinner.
+- **Corrección**: Cambiado a `s.catalog.currentProduct` y `s.catalog.isLoading`.
+
+## BUG-BROWSER-02 — SearchBar texto invisible (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta (búsqueda inutilizable)
+- **Descripción**: `.inputWrapper` tenía `background: $text-primary` (#F5F7EE, off-white).
+  El texto del input también es `$text-primary`. Resultado: texto blanco sobre fondo blanco → invisible.
+- **Corrección**: Background cambiado a `$bg-surface` (#161D04), el color de texto oscuro correcto
+  para el tema oscuro del proyecto.
+
+## BUG-BROWSER-03 — RangeSlider sin estilos de thumb/tooltip (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Media (el slider funciona pero no se ven los handles ni los tooltips)
+- **Descripción**: `RangeSlider.module.scss` tenía `.track` y `.trackFill` pero no tenía
+  `.thumbWrapper`, `.thumb`, `.tooltip`, `.labels` ni `.vertical`. El JSX los referenciaba
+  todos — resultaban en clases CSS `undefined` y sin estilos.
+- **Corrección**: Agregados todos los selectores faltantes.
+
+## BUG-BROWSER-04 — CatalogPage no leía ?category del URL (CORREGIDO)
+- **Fecha**: 2026-05-28
+- **Severidad**: Alta (navegación por categoría no filtraba productos)
+- **Descripción**: La nav de categorías genera URLs tipo `/catalog?category=akoses-medicinas`.
+  `CatalogPage` leía `searchParams.get('q')` pero no leía `searchParams.get('category')`,
+  por lo que el handler MSW recibía la petición sin el filtro de categoría.
+- **Corrección**: Agregado `categoryParam = searchParams.get('category')` y pasado al
+  `fetchProducts` como `{ category: categoryParam }`.

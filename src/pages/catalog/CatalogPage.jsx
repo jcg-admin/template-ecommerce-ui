@@ -34,7 +34,8 @@ export default function CatalogPage() {
     error, searchError, pagination = {},
   } = useSelector((s) => s.catalog || {});
 
-  const qParam    = searchParams.get('q') || '';
+  const qParam       = searchParams.get('q')        || '';
+  const categoryParam = searchParams.get('category') || '';
   const [activeOrishas, setActiveOrishas]   = useState([]);
   const [activeTypes,   setActiveTypes]     = useState([]);
   const [sortOrder,     setSortOrder]       = useState('');
@@ -48,6 +49,7 @@ export default function CatalogPage() {
       dispatch(searchProducts({ q: qParam }));
     } else {
       dispatch(fetchProducts({
+        category:     categoryParam || undefined,
         orishas:      activeOrishas.length > 0  ? activeOrishas : undefined,
         types:        activeTypes.length > 0    ? activeTypes   : undefined,
         ordering:     sortOrder || undefined,
@@ -56,7 +58,7 @@ export default function CatalogPage() {
         price_max:    priceMax < 10000          ? priceMax      : undefined,
       }));
     }
-  }, [dispatch, qParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax]);
+  }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {

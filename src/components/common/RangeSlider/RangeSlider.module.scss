@@ -42,3 +42,64 @@
   // En modo doble, ambos inputs se superponen — el que está más a la derecha gana
   &:last-of-type { z-index: 1; }
 }
+
+.thumbWrapper {
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 2;
+}
+
+.thumb {
+  width:  16px;
+  height: 16px;
+  border-radius: 50%;
+  background: $primary-color;
+  border: 2px solid $bg-surface;
+  box-shadow: 0 1px 4px rgba(0,0,0,.3);
+  cursor: pointer;
+  pointer-events: none;
+}
+
+.tooltip {
+  position: absolute;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: $text-primary;
+  color: $bg-dark;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-medium;
+  padding: 2px 6px;
+  border-radius: $border-radius-sm;
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.vertical {
+  flex-direction: row;
+  align-items: flex-start;
+
+  .track {
+    width: 4px;
+    height: 100%;
+    margin: 0 12px;
+  }
+
+  .thumbWrapper {
+    top: auto;
+    left: 50%;
+  }
+}
+
+.trackVertical {
+  writing-mode: vertical-lr;
+}
+
+.labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $spacing-1;
+  font-size: $font-size-xs;
+  color: $text-muted;
+}
