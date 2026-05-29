@@ -28,6 +28,7 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn(), delete: jest.fn() },
 }));
+import apiService from '@services/apiService';
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
@@ -86,7 +87,10 @@ const renderEdit = () => render(
 );
 
 describe('AdminProductDetailPage', () => {
-  beforeEach(() => mockNavigate.mockClear());
+  beforeEach(() => {
+    mockNavigate.mockClear();
+    apiService.get.mockResolvedValue({ data: PRODUCT });
+  });
 
   it('modo nuevo — muestra el formulario vacío', () => {
     renderNew();
@@ -94,18 +98,16 @@ describe('AdminProductDetailPage', () => {
     expect(document.body.textContent).toMatch(/nuevo|crear|producto/i);
   });
 
-  it('modo edición — carga el nombre del producto existente', () => {
+  it('modo edición — carga el nombre del producto existente', async () => {
     renderEdit();
-    // El producto se carga via useEffect pero el mock de slice no actualiza el store
-    // Verificar que el formulario renderiza correctamente (campos vacíos o con datos)
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/nombre|sku|precio|general/i);
-
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/nombre|sku|precio|general/i)
+    );
   });
 
-  it('los 4 tabs son visibles', () => {
+  it('los 4 tabs son visibles', async () => {
     renderEdit();
-    expect(screen.getByRole('button', { name: /general/i })).toBeInTheDocument();
+    await waitFor(() => screen.getByRole('button', { name: /general/i }));
     expect(screen.getByRole('button', { name: /imágenes/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /variantes/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /seo/i })).toBeInTheDocument();
@@ -119,12 +121,13 @@ describe('AdminProductDetailPage', () => {
     expect(slugInput).toBeInTheDocument();
   });
 
-  it('cambiar de tab muestra el contenido correspondiente', () => {
+  it('cambiar de tab muestra el contenido correspondiente', async () => {
     renderEdit();
+    await waitFor(() => screen.getByRole('button', { name: /seo/i }));
     fireEvent.click(screen.getByRole('button', { name: /seo/i }));
-    // La tab SEO tiene campos de meta_title y meta_description
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/seo|meta|title|descripci/i);
+    await waitFor(() =>
+      expect(document.body.textContent).toMatch(/seo|meta|title|descripci/i)
+    );
   });
 
   it('tiene botón de guardar / crear', () => {

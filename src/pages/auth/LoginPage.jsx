@@ -12,7 +12,7 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { login } from '@redux/slices/authSlice';
 import { Button, Field, MetaTag } from '@components/common/primitives';
 import Alert         from '@components/common/Alert/Alert';
-import LoadingButton from '@components/common/LoadingButton/LoadingButton';
+import { LoadingButton } from '@components/common';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './LoginPage.module.scss';
 

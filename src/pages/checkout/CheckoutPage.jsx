@@ -10,7 +10,7 @@
  *   GET /payments/installments/
  */
 
-import LoadingButton from '@components/common/LoadingButton/LoadingButton';
+import { LoadingButton } from '@components/common';
 import Alert         from '@components/common/Alert/Alert';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';

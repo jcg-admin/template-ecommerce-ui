@@ -10,7 +10,7 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams, Link } from 'react-router-dom';
-import { fetchAdminPage } from '@redux/slices/adminSlice';
+import { fetchPublicPage } from '@redux/slices/adminSlice';
 import { MetaTag } from '@components/common/primitives';
 import styles from './InfoPage.module.scss';
 
@@ -21,7 +21,7 @@ export default function InfoPage() {
   const isLoading   = useSelector((s) => s.admin?.isLoadingPages);
 
   useEffect(() => {
-    if (slug) dispatch(fetchAdminPage(slug));
+    if (slug) dispatch(fetchPublicPage(slug));
   }, [dispatch, slug]);
 
   if (isLoading) {

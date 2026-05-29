@@ -13,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
-  fetchAdminPage, savePageDraft, publishPage, restorePageVersion,
+  fetchAdminPage, fetchPageVersions, savePageDraft, publishPage, restorePageVersion,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
@@ -33,6 +33,7 @@ export default function AdminStaticPageEditorPage() {
   const [savedToast, setSavedToast] = useState('');
 
   useEffect(() => { dispatch(fetchAdminPage(slug)); }, [dispatch, slug]);
+  useEffect(() => { if (slug) dispatch(fetchPageVersions(slug)); }, [dispatch, slug]);
   useEffect(() => {
     if (page) setForm({
       title: page.title || '',

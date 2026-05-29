@@ -56,7 +56,10 @@ const renderPage = () => render(
 
 describe('AdminStaticPageEditorPage', () => {
   beforeEach(() => {
-    apiService.get.mockResolvedValue({ data: PAGE });
+    apiService.get.mockImplementation((url) => {
+      if (url.includes('/versions/')) return Promise.resolve({ data: { count: 0, results: [], next: null, previous: null } });
+      return Promise.resolve({ data: PAGE });
+    });
   });
 
   it('renderiza el editor de página', async () => {

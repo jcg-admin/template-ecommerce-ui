@@ -13,7 +13,7 @@ import { registerUser } from '@redux/slices/authSlice';
 import { usePasswordStrength } from '@hooks/domain/usePasswordStrength';
 import { Button, Field, MetaTag } from '@components/common/primitives';
 import Alert         from '@components/common/Alert/Alert';
-import LoadingButton from '@components/common/LoadingButton/LoadingButton';
+import { LoadingButton } from '@components/common';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from '../auth/LoginPage.module.scss';
 

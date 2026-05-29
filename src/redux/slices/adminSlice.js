@@ -126,6 +126,8 @@ const adminSlice = createSlice({
     // HALLAZGO-ADMIN-SLICE-01: claves agregadas 2026-05-28
     currentProduct:     null,
     isLoadingProduct:   false,
+    variants:           [],
+    isLoadingVariants:  false,
     products:           [],
     isLoadingProducts:  false,
     productImages:      [],
@@ -141,6 +143,7 @@ const adminSlice = createSlice({
     isLoadingShipping:  false,
     staticPages:        [],
     currentPage:        null,
+    pageVersions:       [],
     isLoadingPages:     false,
     currentVoucher:     null,
     isLoadingVoucher:   false,
@@ -438,6 +441,16 @@ const adminSlice = createSlice({
       .addCase(fetchAdminPage.rejected,  (state) => {
         state.isLoadingPages = false;
       })
+      .addCase(fetchPageVersions.pending,   (state) => {
+        state.isLoadingPages = true;
+      })
+      .addCase(fetchPageVersions.fulfilled, (state, action) => {
+        state.isLoadingPages = false;
+        state.pageVersions   = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchPageVersions.rejected,  (state) => {
+        state.isLoadingPages = false;
+      })
       .addCase(savePageDraft.pending,   (state) => { state.isActioning = true; })
       .addCase(savePageDraft.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -461,7 +474,213 @@ const adminSlice = createSlice({
       .addCase(fetchAdminMetrics.rejected, (state, action) => {
         state.isLoadingMetrics = false;
         state.metricsError     = action.payload ?? 'Error al cargar métricas';
-      });
+      })
+      // ── Grupo A: fetch de datos ───────────────────────────────────────────
+      .addCase(fetchAdminProduct.pending,   (state) => { state.isLoadingProduct = true; })
+      .addCase(fetchAdminProduct.fulfilled, (state, action) => {
+        state.isLoadingProduct = false;
+        state.currentProduct   = action.payload ?? null;
+      })
+      .addCase(fetchAdminProduct.rejected,  (state) => { state.isLoadingProduct = false; })
+      .addCase(fetchProductVariants.pending,   (state) => { state.isLoadingVariants = true; })
+      .addCase(fetchProductVariants.fulfilled, (state, action) => {
+        state.isLoadingVariants = false;
+        state.variants          = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchProductVariants.rejected,  (state) => { state.isLoadingVariants = false; })
+      .addCase(fetchVariantTypes.pending,   (state) => { state.isLoadingVariantTypes = true; })
+      .addCase(fetchVariantTypes.fulfilled, (state, action) => {
+        state.isLoadingVariantTypes = false;
+        state.variantTypes          = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchVariantTypes.rejected,  (state) => { state.isLoadingVariantTypes = false; })
+      .addCase(fetchGateways.pending,   (state) => { state.isLoadingGateways = true; })
+      .addCase(fetchGateways.fulfilled, (state, action) => {
+        state.isLoadingGateways = false;
+        state.gateways          = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchGateways.rejected,  (state) => { state.isLoadingGateways = false; })
+      .addCase(fetchShippingMethods.pending,   (state) => { state.isLoadingShipping = true; })
+      .addCase(fetchShippingMethods.fulfilled, (state, action) => {
+        state.isLoadingShipping = false;
+        state.shippingMethods   = action.payload?.results ?? action.payload ?? [];
+      })
+      .addCase(fetchShippingMethods.rejected,  (state) => { state.isLoadingShipping = false; })
+      .addCase(fetchImportStatus.pending,   (state) => { state.isActioning = true; })
+      .addCase(fetchImportStatus.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
+      })
+      .addCase(fetchImportStatus.rejected,  (state) => { state.isActioning = false; })
+      // ── Grupo B: mutaciones ───────────────────────────────────────────────
+      .addCase(createProduct.pending,   (state) => { state.isActioning = true; })
+      .addCase(createProduct.fulfilled, (state, action) => {
+        state.isActioning    = false; state.currentProduct = action.payload ?? null;
+        state.lastAction     = 'product_created';
+      })
+      .addCase(createProduct.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(updateProduct.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateProduct.fulfilled, (state, action) => {
+        state.isActioning    = false; state.currentProduct = action.payload ?? state.currentProduct;
+        state.lastAction     = 'product_updated';
+      })
+      .addCase(updateProduct.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(deleteProduct.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteProduct.fulfilled, (state) => { state.isActioning = false; state.currentProduct = null; state.lastAction = 'product_deleted'; })
+      .addCase(deleteProduct.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(toggleProductFeatured.pending,   (state) => { state.isActioning = true; })
+      .addCase(toggleProductFeatured.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (state.currentProduct && action.payload) state.currentProduct.is_featured = action.payload.is_featured;
+      })
+      .addCase(toggleProductFeatured.rejected,  (state) => { state.isActioning = false; })
+      .addCase(adjustProductStock.pending,   (state) => { state.isActioning = true; })
+      .addCase(adjustProductStock.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(adjustProductStock.rejected,  (state) => { state.isActioning = false; })
+      .addCase(adjustVariantStock.pending,   (state) => { state.isActioning = true; })
+      .addCase(adjustVariantStock.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(adjustVariantStock.rejected,  (state) => { state.isActioning = false; })
+      .addCase(duplicateVoucher.pending,   (state) => { state.isActioning = true; })
+      .addCase(duplicateVoucher.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'voucher_duplicated'; })
+      .addCase(duplicateVoucher.rejected,  (state) => { state.isActioning = false; })
+      .addCase(toggleVoucherActive.pending,   (state) => { state.isActioning = true; })
+      .addCase(toggleVoucherActive.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (state.currentVoucher && action.payload) state.currentVoucher.is_active = action.payload.is_active;
+      })
+      .addCase(toggleVoucherActive.rejected,  (state) => { state.isActioning = false; })
+      .addCase(createShippingMethod.pending,   (state) => { state.isActioning = true; })
+      .addCase(createShippingMethod.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.shippingMethods = [...state.shippingMethods, action.payload];
+      })
+      .addCase(createShippingMethod.rejected,  (state) => { state.isActioning = false; })
+      .addCase(updateShippingMethod.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateShippingMethod.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) { const i = state.shippingMethods.findIndex(m => m.id === action.payload.id); if (i >= 0) state.shippingMethods[i] = action.payload; }
+      })
+      .addCase(updateShippingMethod.rejected,  (state) => { state.isActioning = false; })
+      .addCase(deleteShippingMethod.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteShippingMethod.fulfilled, (state, action) => {
+        state.isActioning = false;
+        state.shippingMethods = state.shippingMethods.filter(m => m.id !== action.payload?.id);
+      })
+      .addCase(deleteShippingMethod.rejected,  (state) => { state.isActioning = false; })
+      .addCase(createVariantType.pending,   (state) => { state.isActioning = true; })
+      .addCase(createVariantType.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.variantTypes = [...state.variantTypes, action.payload];
+      })
+      .addCase(createVariantType.rejected,  (state) => { state.isActioning = false; })
+      .addCase(updateVariantType.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateVariantType.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) { const i = state.variantTypes.findIndex(t => t.id === action.payload.id); if (i >= 0) state.variantTypes[i] = action.payload; }
+      })
+      .addCase(updateVariantType.rejected,  (state) => { state.isActioning = false; })
+      .addCase(deleteVariantType.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteVariantType.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload?.typeId !== undefined) state.variantTypes = state.variantTypes.filter(t => t.id !== action.payload.typeId);
+      })
+      .addCase(deleteVariantType.rejected,  (state) => { state.isActioning = false; })
+      .addCase(createVariantOption.pending,   (state) => { state.isActioning = true; })
+      .addCase(createVariantOption.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(createVariantOption.rejected,  (state) => { state.isActioning = false; })
+      .addCase(updateVariantOption.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateVariantOption.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(updateVariantOption.rejected,  (state) => { state.isActioning = false; })
+      .addCase(deleteVariantOption.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteVariantOption.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(deleteVariantOption.rejected,  (state) => { state.isActioning = false; })
+      .addCase(deleteCategory.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteCategory.fulfilled, (state, action) => {
+        state.isActioning = false;
+        state.categoryTree = state.categoryTree.filter(c => c.id !== action.payload?.id);
+      })
+      .addCase(deleteCategory.rejected,  (state) => { state.isActioning = false; })
+      .addCase(moveCategoryNode.pending,   (state) => { state.isActioning = true; })
+      .addCase(moveCategoryNode.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(moveCategoryNode.rejected,  (state) => { state.isActioning = false; })
+      .addCase(setUserActiveStatus.pending,   (state) => { state.isActioning = true; })
+      .addCase(setUserActiveStatus.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) { const i = state.users.findIndex(u => u.id === action.payload.id); if (i >= 0) state.users[i] = action.payload; }
+      })
+      .addCase(setUserActiveStatus.rejected,  (state) => { state.isActioning = false; })
+      .addCase(resetUserPassword.pending,   (state) => { state.isActioning = true; })
+      .addCase(resetUserPassword.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(resetUserPassword.rejected,  (state) => { state.isActioning = false; })
+      .addCase(makeUserAdmin.pending,   (state) => { state.isActioning = true; })
+      .addCase(makeUserAdmin.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) { const i = state.users.findIndex(u => u.id === action.payload.id); if (i >= 0) state.users[i] = action.payload; }
+      })
+      .addCase(makeUserAdmin.rejected,  (state) => { state.isActioning = false; })
+      .addCase(adminCreateRefund.pending,   (state) => { state.isActioning = true; })
+      .addCase(adminCreateRefund.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'refund_created'; })
+      .addCase(adminCreateRefund.rejected,  (state) => { state.isActioning = false; })
+      .addCase(fetchPublicPage.pending,   (state) => { state.isLoadingPages = true; })
+      .addCase(fetchPublicPage.fulfilled, (state, action) => { state.isLoadingPages = false; state.currentPage = action.payload ?? null; })
+      .addCase(fetchPublicPage.rejected,  (state) => { state.isLoadingPages = false; })
+      .addCase(restorePageVersion.pending,   (state) => { state.isActioning = true; })
+      .addCase(restorePageVersion.fulfilled, (state, action) => {
+        state.isActioning = false; state.currentPage = action.payload ?? state.currentPage; state.lastAction = 'version_restored';
+      })
+      .addCase(restorePageVersion.rejected,  (state) => { state.isActioning = false; })
+      .addCase(createAdminPage.pending,   (state) => { state.isActioning = true; })
+      .addCase(createAdminPage.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.staticPages = [...state.staticPages, action.payload];
+      })
+      .addCase(createAdminPage.rejected,  (state) => { state.isActioning = false; })
+      .addCase(updateAdminPage.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateAdminPage.fulfilled, (state, action) => { state.isActioning = false; state.currentPage = action.payload ?? state.currentPage; })
+      .addCase(updateAdminPage.rejected,  (state) => { state.isActioning = false; })
+      .addCase(updateGateway.pending,   (state) => { state.isActioning = true; })
+      .addCase(updateGateway.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) { const i = state.gateways.findIndex(g => g.id === action.payload.id); if (i >= 0) state.gateways[i] = action.payload; }
+      })
+      .addCase(updateGateway.rejected,  (state) => { state.isActioning = false; })
+      .addCase(testGatewayConnection.pending,   (state) => { state.isActioning = true; })
+      .addCase(testGatewayConnection.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(testGatewayConnection.rejected,  (state) => { state.isActioning = false; })
+      .addCase(bulkUpdateVariants.pending,   (state) => { state.isActioning = true; })
+      .addCase(bulkUpdateVariants.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(bulkUpdateVariants.rejected,  (state) => { state.isActioning = false; })
+      .addCase(regenerateVariants.pending,   (state) => { state.isActioning = true; })
+      .addCase(regenerateVariants.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(regenerateVariants.rejected,  (state) => { state.isActioning = false; })
+      // ── Grupo C: upload/import ────────────────────────────────────────────
+      .addCase(uploadPriceCSV.pending,   (state) => { state.isActioning = true; })
+      .addCase(uploadPriceCSV.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
+      })
+      .addCase(uploadPriceCSV.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(confirmPriceSync.pending,   (state) => { state.isActioning = true; })
+      .addCase(confirmPriceSync.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'price_sync_confirmed'; })
+      .addCase(confirmPriceSync.rejected,  (state) => { state.isActioning = false; })
+      .addCase(uploadProductCSV.pending,   (state) => { state.isActioning = true; })
+      .addCase(uploadProductCSV.fulfilled, (state, action) => {
+        state.isActioning = false;
+        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
+      })
+      .addCase(uploadProductCSV.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(confirmProductImport.pending,   (state) => { state.isActioning = true; })
+      .addCase(confirmProductImport.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'product_import_confirmed'; })
+      .addCase(confirmProductImport.rejected,  (state) => { state.isActioning = false; })
+      .addCase(uploadProductImage.pending,   (state) => { state.isActioning = true; })
+      .addCase(uploadProductImage.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(uploadProductImage.rejected,  (state) => { state.isActioning = false; })
+      .addCase(deleteProductImage.pending,   (state) => { state.isActioning = true; })
+      .addCase(deleteProductImage.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(deleteProductImage.rejected,  (state) => { state.isActioning = false; })
+      .addCase(reorderProductImages.pending,   (state) => { state.isActioning = true; })
+      .addCase(reorderProductImages.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(reorderProductImages.rejected,  (state) => { state.isActioning = false; })
   },
 });
 
@@ -964,6 +1183,22 @@ export const fetchAdminPage = createAsyncThunk(
   'admin/fetchAdminPage',
   async (slug, { rejectWithValue }) => {
     try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const fetchPublicPage = createAsyncThunk(
+  'admin/fetchPublicPage',
+  async (slug, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const fetchPageVersions = createAsyncThunk(
+  'admin/fetchPageVersions',
+  async (slug, { rejectWithValue }) => {
+    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/versions/`)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );

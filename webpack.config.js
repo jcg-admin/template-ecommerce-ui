@@ -213,6 +213,12 @@ module.exports = (env, argv) => {
             priority: 12,
             reuseExistingChunk: true,
           },
+          motion: {
+            test: /[/\\]node_modules[/\\](framer-motion)[/\\]/,
+            name: 'motion-vendors',
+            priority: 13,
+            reuseExistingChunk: true,
+          },
           charts: {
             test: /[/\\]node_modules[/\\](recharts|d3)[/\\]/,
             name: 'charts-vendors',

@@ -389,6 +389,20 @@ export const adminHandlers = [
     return HttpResponse.json({ slug: params.slug, ...body, status: 'draft' });
   }),
 
+
+  // ── Versiones de una página CMS ─────────────────────────────────────────
+  http.get('/api/v1/admin/pages/:slug/versions/', ({ params }) => {
+    return HttpResponse.json({
+      count:    0,
+      results:  [],
+      next:     null,
+      previous: null,
+    });
+  }),
+
+  http.get('/api/v1/admin/pages/:slug/versions/', () =>
+    HttpResponse.json({ count: 0, results: [], next: null, previous: null })
+  ),
   http.post('/api/v1/admin/pages/:slug/publish/', ({ params }) =>
     HttpResponse.json({
       slug:               params.slug,
