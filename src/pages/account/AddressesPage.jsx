@@ -14,7 +14,7 @@ import {
   fetchAddresses, createAddress, deleteAddress, setDefaultAddress,
 } from '@redux/slices/authSlice';
 import AccountSidebar from '@components/account/AccountSidebar';
-import { MetaTag, Button, Field } from '@components/common/primitives';
+import { MetaTag, Button, Field, LoadingButton } from '@components/common/primitives';
 import styles from './AddressesPage.module.scss';
 
 const MAX_ADDRESSES = 5;
@@ -145,6 +145,7 @@ function EmptySlot() {
 }
 
 function AddressFormCard({ onSave, onCancel }) {
+  const [saving, setSaving] = useState(false);
   const [data, setData] = useState({
     alias: '', recipient_name: '', phone: '',
     street: '', colony: '', zip_code: '',
@@ -169,7 +170,9 @@ function AddressFormCard({ onSave, onCancel }) {
         <Field label="Estado" value={data.state} onChange={set('state')} required />
       </div>
       <div className={styles.formActions}>
-        <Button type="submit" variant="primary">Guardar dirección</Button>
+        <LoadingButton type="submit" variant="primary" loading={saving}>
+          Guardar dirección
+        </LoadingButton>
         <Button type="button" variant="ghost" onClick={onCancel}>Cancelar</Button>
       </div>
     </form>

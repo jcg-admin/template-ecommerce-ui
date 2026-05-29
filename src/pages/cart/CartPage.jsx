@@ -19,6 +19,7 @@ import {
 import {
   MetaTag, Price, Button, SumRow, EmptyState,
 } from '@components/common/primitives';
+import { LoadingButton } from '@components/common';
 import styles from './CartPage.module.scss';
 
 const FREE_SHIPPING_THRESHOLD = 1500;
@@ -27,7 +28,7 @@ export default function CartPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const cart = useSelector((s) => s.cart || {});
-  const { items = [], totals = {}, voucher = null, isLoading } = cart;
+  const { items = [], totals = {}, voucher = null, isLoading, isActioning } = cart;
 
   useEffect(() => {
     dispatch(fetchCart());
@@ -84,6 +85,7 @@ export default function CartPage() {
 
           <CartSummary
             itemCount={itemCount}
+            isActioning={isActioning}
             subtotal={subtotal}
             discount={discount}
             voucherCode={voucher?.code}
@@ -251,7 +253,7 @@ function translateVoucherError(code) {
 }
 
 // ─────────────────────────────────────────────────────────────────────
-function CartSummary({
+function CartSummary({ isActioning = false,
   itemCount, subtotal, discount, voucherCode, ivaIncl, total, onCheckout,
 }) {
   return (
@@ -282,9 +284,13 @@ function CartSummary({
           <Price amount={total} size="lg" />
         </div>
 
-        <Button variant="primary" block size="lg" onClick={onCheckout}>
+        <LoadingButton
+          variant="primary" block size="lg"
+          loading={isActioning}
+          onClick={onCheckout}
+        >
           Continuar al checkout →
-        </Button>
+        </LoadingButton>
         <Link to="/catalog" className={styles.summaryBack}>
           Seguir explorando
         </Link>

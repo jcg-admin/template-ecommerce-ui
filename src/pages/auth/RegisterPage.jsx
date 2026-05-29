@@ -10,6 +10,7 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '@redux/slices/authSlice';
+import { usePasswordStrength } from '@hooks/domain/usePasswordStrength';
 import { Button, Field, MetaTag } from '@components/common/primitives';
 import Alert         from '@components/common/Alert/Alert';
 import LoadingButton from '@components/common/LoadingButton/LoadingButton';
@@ -22,6 +23,7 @@ export default function RegisterPage() {
   const [form, setForm] = useState({
     first_name: '', last_name: '', email: '', username: '', password: '', terms: false,
   });
+  const { score: pwScore, label: pwLabel, color: pwColor } = usePasswordStrength(form.password);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -102,6 +104,27 @@ export default function RegisterPage() {
               required
               hint="· Mínimo 8 caracteres · No similar a tu usuario · No demasiado común"
             />
+            {form.password && (
+              <div style={{ marginTop: 4 }}>
+                <div style={{
+                  height: 3, borderRadius: 2, background: '#1f2808',
+                  overflow: 'hidden', marginBottom: 4,
+                }}>
+                  <div style={{
+                    height: '100%', width: `${pwScore * 25}%`,
+                    background: pwColor, transition: 'width 200ms ease, background 200ms ease',
+                  }} />
+                </div>
+                {pwLabel && (
+                  <span style={{
+                    fontFamily: 'var(--font-mono, monospace)',
+                    fontSize: 11, letterSpacing: '0.08em', color: pwColor,
+                  }}>
+                    {pwLabel}
+                  </span>
+                )}
+              </div>
+            )}
 
             <label className={styles.checkboxLabel} style={{ alignItems: 'flex-start', marginTop: 4 }}>
               <input

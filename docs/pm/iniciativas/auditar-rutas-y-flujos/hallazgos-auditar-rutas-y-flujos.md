@@ -848,3 +848,141 @@ son funcionalidad de la página pero no bloquean el flujo principal del demo.
 - `storefront.ts`: +2 (PATCH y DELETE addresses)
 - `admin.ts`: +14 (products/:id, gateways x3, shipping, pages x4, vouchers x4)
 - `inventory.ts`: +1 (alerts)
+
+
+---
+
+## HALLAZGOS FASE 6 — Mejoras UX
+
+---
+
+## HALLAZGO-FASE6-01 — AccountPage ya tenía los datos reales implementados (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE6-01 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo |
+| Estado | DOCUMENTADO — T6-05 cerrada sin cambios |
+
+**Descripción:**
+La tarea T6-05 planificaba "cargar resumen real de últimos pedidos e items en wishlist"
+en AccountPage. Al leer el código fuente se encontró que AccountPage ya tenía:
+
+```jsx
+const orders = useSelector((s) => s.orders?.list || []);
+useEffect(() => {
+  dispatch(fetchProfile());
+  dispatch(fetchOrders({ limit: 3 }));
+}, [dispatch]);
+```
+
+Y un renderizado completo de los últimos 3 pedidos con empty state y CTA al catálogo.
+La tarea estaba implementada desde antes de esta iniciativa.
+
+---
+
+## HALLAZGO-FASE6-02 — LoadingButton no está en el barrel de primitives (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE6-02 |
+| Fecha | 2026-05-28 |
+| Severidad | Media — import incorrecto causa "Element type is invalid: undefined" |
+| Estado | DOCUMENTADO — corrección aplicada en CartPage |
+
+**Descripción:**
+`LoadingButton` está exportado en `@components/common/index.js` como:
+```javascript
+export { default as LoadingButton } from './LoadingButton/LoadingButton';
+```
+
+No está en el barrel de `@components/common/primitives`, que es donde
+`CartPage` intentó importarlo. El error en tiempo de render es:
+```
+Error: Element type is invalid: expected a string or class/function but got: undefined
+```
+
+**Regla documentada:** `LoadingButton` se importa desde `@components/common`:
+```jsx
+import { LoadingButton } from '@components/common';
+```
+No desde `@components/common/primitives`.
+
+Otros componentes que sí están en primitives: `Button`, `Field`, `MetaTag`, `Price`,
+`SumRow`, `EmptyState`, `StepPanel`, `Tab`, `TabList`, `TabPanel`, `Price`.
+
+---
+
+## HALLAZGO-FASE6-03 — usePasswordStrength insertado dos veces por reemplazos en cadena (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE6-03 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — SyntaxError que rompe todos los tests de RegisterPage |
+| Estado | CORREGIDO |
+
+**Descripción:**
+Al intentar insertar `usePasswordStrength` después del `useState` de `form`,
+se realizaron dos inserciones separadas. La primera colocó el hook ANTES del useState
+(reference before initialization), la segunda lo insertó DENTRO del bloque del useState.
+El resultado fue código sintácticamente inválido.
+
+**Causa raíz:** Las operaciones de str_replace encadenadas modificaban el string
+que ya había sido modificado por la operación anterior, generando anclas incorrectas.
+
+**Corrección:** Reconstruir el bloque completo con la posición correcta del hook:
+```jsx
+const [form, setForm] = useState({ ... });  // primero el useState
+const { score, label, color } = usePasswordStrength(form.password);  // luego el hook
+```
+
+**Lección:** Cuando se insertan múltiples fragmentos en el mismo archivo, leer el
+archivo completo después de cada inserción antes de proceder con la siguiente.
+
+---
+
+## HALLAZGO-FASE6-04 — AddressesPage importa thunks de authSlice que deberían estar en addressesSlice (PENDIENTE)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE6-04 |
+| Fecha | 2026-05-28 |
+| Severidad | Media — bug funcional latente; thunks de directions no están en authSlice |
+| Estado | PENDIENTE — fuera del scope de F6 |
+
+**Descripción:**
+`AddressesPage` hace:
+```jsx
+import { fetchAddresses, createAddress, deleteAddress, setDefaultAddress }
+  from '@redux/slices/authSlice';
+```
+
+Pero `createAddress`, `deleteAddress`, `setDefaultAddress` NO están en `authSlice`.
+Están en `addressesSlice`. `authSlice` solo tiene `fetchAddresses`.
+
+Esto significa que en producción, cuando el usuario intenta crear o eliminar una
+dirección, `dispatch(createAddress(data))` no hace nada (la función es `undefined`).
+
+**Acción requerida:** Corregir el import en AddressesPage para usar `addressesSlice`.
+Se deja como pendiente en una iniciativa futura de limpieza de slices.
+
+---
+
+## RESUMEN EJECUTIVO FASE 6
+
+| Tarea | Estado | Resultado |
+|-------|--------|-----------|
+| T6-01 CartPage — LoadingButton | COMPLETADA | isActioning del cartSlice + LoadingButton |
+| T6-02 CheckoutPage — Alert de error | COMPLETADA | useState(orderError) + Alert dismissible |
+| T6-03 AddressesPage — LoadingButton | COMPLETADA | saving local en AddressFormCard |
+| T6-04 RegisterPage — usePasswordStrength | COMPLETADA | Barra de fortaleza bajo campo password |
+| T6-05 AccountPage — datos reales | CERRADA SIN CAMBIOS | Ya estaba implementada |
+
+| Métrica | Valor |
+|---------|-------|
+| Páginas modificadas | 4 (CartPage, CheckoutPage, AddressesPage, RegisterPage) |
+| Tests regresionados | 0 |
+| Bugs encontrados durante F6 | 2 (import erróneo, doble inserción) |
+| Tests finales | 1330 pasando, 0 fallos |

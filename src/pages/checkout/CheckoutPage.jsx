@@ -11,6 +11,7 @@
  */
 
 import LoadingButton from '@components/common/LoadingButton/LoadingButton';
+import Alert         from '@components/common/Alert/Alert';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
@@ -36,6 +37,7 @@ export default function CheckoutPage() {
   const [shipping, setShipping] = useState('std');
   const [payment, setPayment] = useState('mp');
   const [submitting, setSubmitting] = useState(false);
+  const [orderError, setOrderError] = useState('');
 
   useEffect(() => { if (isAuth) dispatch(fetchAddresses()); }, [dispatch, isAuth]);
 
@@ -56,12 +58,19 @@ export default function CheckoutPage() {
       }
     } catch (err) {
       console.error(err);
+      setOrderError(err?.message || 'No se pudo procesar el pedido. Inténtalo de nuevo.');
       setSubmitting(false);
     }
   };
 
   return (
     <main className={styles.page}>
+      {orderError && (
+        <Alert variant="danger" dismissible onClose={() => setOrderError('')}
+          className={styles.orderErrorAlert}>
+          {orderError}
+        </Alert>
+      )}
       {/* Mini header */}
       <header className={styles.checkoutHeader}>
         <div className={styles.checkoutHeaderInner}>
