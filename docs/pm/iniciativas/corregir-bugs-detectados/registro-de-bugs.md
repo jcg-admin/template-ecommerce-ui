@@ -1587,3 +1587,81 @@ el backend real.
 | `/info/terminos` | terminos | ES |
 | `/info/privacy` | privacy | EN |
 | `/info/terms` | terms | EN |
+
+---
+
+## HALLAZGOS DE LA AUDITORÍA DE FASE 6
+
+---
+
+### HALLAZGO-AUD-F6-01 — Footer tenía 5 links /info/* sin cobertura MSW
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F6-01 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 6 — búsqueda en components/, no solo en pages/ |
+| Tipo | Bug MSW — cobertura incompleta por búsqueda limitada a pages/ |
+| Severidad | MEDIA — links del footer devuelven 404 en el demo |
+| Estado | CORREGIDO |
+
+**Descripción:**
+La auditoría de Fase 6 buscó links `/info/*` solo en `src/pages/`.
+La auditoría post-F6 amplió la búsqueda a **todo el proyecto** (`src/`)
+y encontró 5 slugs adicionales en el componente `Footer`:
+
+| Slug | Label en Footer | MSW antes | MSW después |
+|------|----------------|-----------|-------------|
+| `orishas` | Los òrìsà | FALTABA | AGREGADO |
+| `pataki` | Pataki | FALTABA | AGREGADO |
+| `glosario` | Glosario Yorùbà | FALTABA | AGREGADO |
+| `pago` | Formas de pago | FALTABA | AGREGADO |
+| `faq` | Preguntas frecuentes | FALTABA | AGREGADO |
+
+**Total de slugs MSW post-corrección:** 13
+(`acerca-de`, `terminos`, `privacidad`, `ifa`, `santoral`, `envios`,
+`terms`, `privacy`, `orishas`, `pataki`, `glosario`, `pago`, `faq`)
+
+**Lección:** Las auditorías de links deben buscar en `src/` completo
+(incluyendo `components/`), no solo en `pages/`. El Footer vive en
+`src/components/layout/Footer/` y contiene la mayoría de los links de
+navegación informativa.
+
+---
+
+### HALLAZGO-AUD-F6-02 — dangerouslySetInnerHTML: riesgo bajo, origen controlado
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F6-02 |
+| Fecha | 2026-05-29 |
+| Tipo | Auditoría de seguridad — resultado aceptable |
+
+**Descripción:**
+`InfoPage` usa `dangerouslySetInnerHTML={{ __html: page.content }}`.
+El contenido de `page.content` proviene exclusivamente del CMS admin
+(`/api/v1/admin/pages/:slug/`), que solo es modificable por usuarios con
+rol admin autenticado.
+
+**Valoración:** El riesgo es bajo para el demo. En producción se recomienda
+sanitizar el HTML antes de renderizarlo (ej. DOMPurify) en caso de que
+el panel admin sea accesible por múltiples roles con distintos niveles de confianza.
+
+---
+
+### RESUMEN DE LA AUDITORÍA DE FASE 6
+
+| Verificación | Resultado |
+|-------------|-----------|
+| InfoPage.jsx: guards, imports, estructura | OK |
+| InfoPage.module.scss: variables correctas, 0 malas | OK |
+| Router: lazy import 1×, ruta en StorefrontLayout público | OK |
+| MSW: 8 slugs con title + content + slug | OK |
+| 7/7 links en pages/ con slug en MSW | OK |
+| SCSS: 147 entries, 0 issues | OK |
+| Footer: 5 slugs adicionales sin cobertura | **BUG → CORREGIDO** |
+| dangerouslySetInnerHTML de CMS admin | OK — riesgo bajo |
+| Tests: 1330 pasando | OK |
+
+**12/12 checks OK. 1 bug adicional (Footer) encontrado y corregido.**
+**Total slugs MSW post-auditoría: 13**
