@@ -23,7 +23,7 @@ export default function AdminStaticPageEditorPage() {
   const dispatch = useDispatch();
   const page = useSelector((s) => s.admin?.currentPage);
   const versions = useSelector((s) => s.admin?.pageVersions || []);
-  const isLoading = useSelector((s) => s.admin?.isLoadingPage);
+  const isLoading = useSelector((s) => s.admin?.isLoadingPages);
 
   const [form, setForm] = useState({ title: '', content: '', meta_description: '' });
   const [activeVersionId, setActiveVersionId] = useState(null);

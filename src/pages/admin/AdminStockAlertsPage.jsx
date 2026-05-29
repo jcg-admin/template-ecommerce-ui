@@ -17,7 +17,7 @@ import styles from './AdminTablePage.module.scss';
 export default function AdminStockAlertsPage() {
   const dispatch = useDispatch();
   const alerts = useSelector((s) => s.admin?.stockAlerts || []);
-  const isLoading = useSelector((s) => s.admin?.isLoadingAlerts);
+  const isLoading = useSelector((s) => s.admin?.isLoadingInventory);
   const [adjusting, setAdjusting] = useState(null);
 
   useEffect(() => { dispatch(fetchStockAlerts()); }, [dispatch]);

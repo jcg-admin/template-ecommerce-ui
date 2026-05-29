@@ -126,6 +126,8 @@ const adminSlice = createSlice({
     // HALLAZGO-ADMIN-SLICE-01: claves agregadas 2026-05-28
     currentProduct:     null,
     isLoadingProduct:   false,
+    products:           [],
+    isLoadingProducts:  false,
     productImages:      [],
     csvImport:          { status: 'idle', result: null, errors: [] },
     productVariants:    [],

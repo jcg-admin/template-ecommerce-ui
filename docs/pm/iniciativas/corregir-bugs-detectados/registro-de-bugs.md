@@ -1162,3 +1162,124 @@ completara — siempre veían "Cargando pedido…" en lugar del contenido.
 | Mejora adicional agregada | isLoadingInventory selector en AdminInventoryDashboardPage |
 | Tests regresionados | 0 |
 | Tests totales | 1330 pasando, 0 fallos |
+
+---
+
+## HALLAZGOS DE LA AUDITORÍA DE FASE 4
+
+---
+
+### HALLAZGO-AUD-F4-01 — AdminStockAlertsPage usa isLoadingAlerts (no existe en ningún slice)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F4-01 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría proactiva post-Fase 4 |
+| Severidad | MEDIA — spinner nunca visible mientras cargan las alertas |
+| Estado | CORREGIDO |
+
+**Descripción:**
+La auditoría proactiva cruzó todos los selectores `s.admin?.KEY` del proyecto
+contra el `initialState` de `adminSlice`. `isLoadingAlerts` no existe en
+`adminSlice` ni en ningún otro slice.
+
+La clave disponible más cercana es `isLoadingInventory`, que es la que
+controla `fetchInventoryDashboard` y, tras el fix de Fase 5, también
+controlará `fetchStockAlerts`.
+
+**Fix:** `s.admin?.isLoadingAlerts` → `s.admin?.isLoadingInventory`
+
+---
+
+### HALLAZGO-AUD-F4-02 — AdminStaticPageEditorPage usa isLoadingPage (typo — falta 's')
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F4-02 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría proactiva post-Fase 4 |
+| Severidad | MEDIA — spinner de carga de página CMS nunca visible |
+| Estado | CORREGIDO |
+
+**Descripción:**
+`AdminStaticPageEditorPage` usaba `s.admin?.isLoadingPage` (singular).
+`adminSlice.initialState` tiene `isLoadingPages` (plural).
+
+```jsx
+// ANTES (incorrecto)
+const isLoading = useSelector((s) => s.admin?.isLoadingPage);   // → undefined
+
+// DESPUÉS (correcto)
+const isLoading = useSelector((s) => s.admin?.isLoadingPages);  // → false/true
+```
+
+---
+
+### HALLAZGO-AUD-F4-03 — AdminStaticPageEditorPage usa pageVersions (no existe en adminSlice)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F4-03 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría proactiva post-Fase 4 |
+| Severidad | MEDIA — historial de versiones de página CMS siempre vacío |
+| Estado | PENDIENTE — requiere nuevo thunk + addCase (scope de Fase 5) |
+
+**Descripción:**
+```jsx
+const versions = useSelector((s) => s.admin?.pageVersions || []);
+```
+
+`pageVersions` no existe en `adminSlice.initialState` ni se setea en ningún
+reducer. La página muestra el selector de versiones vacío permanentemente.
+
+**Fix requerido en Fase 5:**
+1. Agregar `pageVersions: []` al `initialState`
+2. Crear thunk `fetchPageVersions(slug)` → `GET /api/v1/admin/pages/:slug/versions/`
+3. Agregar `addCase` + handler MSW
+
+---
+
+### HALLAZGO-AUD-F4-04 — AdminProductsPage usaba products e isLoadingProducts sin declarar en initialState
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F4-04 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría proactiva post-Fase 4 |
+| Severidad | BAJA — antipatrón, no causa crash porque sí tienen addCase |
+| Estado | CORREGIDO — declaradas en initialState |
+
+**Descripción:**
+`adminSlice` tenía `fetchAdminProducts` con `addCase` completo que seteaba
+`state.products` y `state.isLoadingProducts`, pero ambas claves no estaban
+declaradas en `initialState`. Redux Toolkit las creaba dinámicamente en el
+primer dispatch, lo que funciona pero es frágil y TypeScript no puede inferir
+los tipos.
+
+**Fix:** Agregar al `initialState` de `adminSlice`:
+```javascript
+products:           [],
+isLoadingProducts:  false,
+```
+
+---
+
+### RESUMEN DE LA AUDITORÍA DE FASE 4
+
+| Verificación | Resultado |
+|-------------|-----------|
+| SL-01: inventoryDashboard correcto, sin residuos | OK |
+| SL-01: isLoadingInventory selector agregado | OK |
+| SL-02: isLoading correcto, sin residuos de isLoadingUsers | OK |
+| SL-05: isLoading correcto, sin residuos de isLoadingDetail | OK |
+| SL-03/SL-04: selectores correctos en intención | OK — pendiente Fase 5 |
+| 0 residuos globales de los 3 selectores corregidos | OK |
+| isLoadingAlerts → isLoadingInventory (AdminStockAlertsPage) | **BUG → CORREGIDO** |
+| isLoadingPage → isLoadingPages (AdminStaticPageEditorPage) | **BUG → CORREGIDO** |
+| products + isLoadingProducts en initialState de adminSlice | **ANTIPATRÓN → CORREGIDO** |
+| pageVersions (AdminStaticPageEditorPage) | **BUG → PENDIENTE Fase 5** |
+| Tests: 1330 pasando | OK |
+
+**8 checks OK. 3 bugs adicionales corregidos. 1 pendiente para Fase 5.**
