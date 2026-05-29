@@ -1386,3 +1386,96 @@ evitaba una fase adicional.
 | Test corregido | AdminStaticPageEditorPage.test.jsx |
 | Tests regresionados | 0 |
 | Tests totales | 1330 pasando, 0 fallos |
+
+---
+
+## HALLAZGOS DE LA AUDITORÍA DE FASE 5
+
+---
+
+### HALLAZGO-AUD-F5-01 — Falsos negativos en la comparación de handlers MSW
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F5-01 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 5 |
+| Tipo | Falso negativo en el método de auditoría |
+| Severidad | Informativo |
+
+**Descripción:**
+La primera pasada de auditoría de handlers MSW reportó como faltantes:
+- `POST /api/v1/admin/vouchers/` → `createVoucher`
+- `POST /api/v1/admin/pages/:slug/publish/` → `publishPage`
+
+La verificación directa en `admin.ts` confirmó que ambos **sí existen**.
+El falso negativo se originó en cómo se construía el set de rutas MSW:
+el comparador usaba `f"{method.upper()} {path}"` pero algunos handlers en
+el archivo tenían comillas simples en lugar de comillas dobles, alterando
+el patrón de extracción.
+
+**Corrección del método de auditoría:** Verificación directa con
+`pattern in src` en lugar de depender del set construido por regex.
+
+---
+
+### HALLAZGO-AUD-F5-02 — updateOrderStatus/adminCancelOrder/createCategory/updateCategory tienen solo fulfilled (patrón intencional)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F5-02 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría post-Fase 5 |
+| Tipo | Falso positivo — patrón intencional |
+| Severidad | Informativo |
+
+**Descripción:**
+La auditoría de thunks pre-existentes detectó que 4 thunks (`updateOrderStatus`,
+`adminCancelOrder`, `createCategory`, `updateCategory`) tienen solo `.addCase(X.fulfilled)`
+sin `.pending` ni `.rejected`.
+
+Esto es **intencional**: son mutaciones que no tienen estado de carga propio —
+usan el `isActioning` genérico del slice que se setea mediante el thunk de carga
+previo (`fetchAdminOrder` para órdenes, `fetchAdminCategories` para categorías).
+El spinner no se activa en la mutación sino en la carga del recurso.
+
+**Conclusión:** No son bugs — no se corrigen.
+
+---
+
+### HALLAZGO-AUD-F5-03 — pageVersions sigue siendo el único selector sin initialState (pendiente conocido)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-AUD-F5-03 |
+| Fecha | 2026-05-29 |
+| Descubierto en | Auditoría proactiva post-Fase 5 |
+| Tipo | Confirmación de HALLAZGO-AUD-F4-03 |
+| Estado | PENDIENTE — requiere nuevo thunk |
+
+**Descripción:**
+La auditoría proactiva cruzó todos los `s.admin?.KEY` de las 99 páginas
+contra las 48 claves del `initialState` post-Fase 5.
+
+Resultado: **1 clave faltante** — `pageVersions` en `AdminStaticPageEditorPage`,
+ya documentada como `HALLAZGO-AUD-F4-03`. Todos los demás selectores usan
+claves declaradas en el `initialState`.
+
+---
+
+### RESUMEN DE LA AUDITORÍA DE FASE 5
+
+| Verificación | Resultado |
+|-------------|-----------|
+| 4 claves nuevas en initialState | OK |
+| 12 × 3 addCase (36 total) sin duplicados | OK |
+| Cada fulfilled actualiza la clave correcta | OK |
+| 6 pares selector ↔ addCase ↔ MSW coherentes | OK |
+| 15 thunks pre-existentes intactos | OK |
+| MSW handlers para mutaciones | OK (falsos negativos del método) |
+| voucherChangelog con guard || [] | OK — no crashea |
+| AdminStaticPageEditorPage.test | OK |
+| Tests: 1330 pasando | OK |
+| pageVersions sin initialState | PENDIENTE CONOCIDO |
+
+**10/10 verificaciones OK. 0 bugs nuevos. 1 pendiente preexistente confirmado.**
