@@ -14,6 +14,7 @@ jest.mock('@services/apiService', () => ({
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn() },
 }));
 
+
 import apiService from '@services/apiService';
 import ordersReducer from '@redux/slices/ordersSlice';
 import OrderDetailPage from './OrderDetailPage';
@@ -22,7 +23,20 @@ const makeClient = () =>
   new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 const wrap = (ui) => {
-  const store = configureStore({ reducer: { orders: ordersReducer, auth: authReducer }, preloadedState: { auth: { user: { first_name: 'Test' }, isAuthenticated: true } } });
+  const ORDER = {
+    order_number: 'PY-0088', status: 'PENDING', total: 1780,
+    created_at: '2026-05-28T10:00:00Z',
+    items: [{ id: 1, name: 'Eleke', quantity: 1, unit_price: 1780 }],
+    shipping_address: { street: 'Av. Insurgentes 1', city: 'CDMX', state: 'CDMX', zip: '03810' },
+    shipping_method_label: 'DHL', subtotal: 1780, tax: 0, discount: 0,
+  };
+  const store = configureStore({
+    reducer: { orders: ordersReducer, auth: authReducer },
+    preloadedState: {
+      auth: { user: { first_name: 'Test' }, isAuthenticated: true },
+      orders: { current: ORDER, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: 'PY-0088' },
+    },
+  });
   return (
     <Provider store={store}>
       <QueryClientProvider client={makeClient()}>

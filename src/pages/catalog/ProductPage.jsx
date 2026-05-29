@@ -28,8 +28,8 @@ export default function ProductPage() {
   const { slug } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const product = useSelector((s) => s.catalog?.current);
-  const isLoading = useSelector((s) => s.catalog?.isLoadingDetail);
+  const product   = useSelector((s) => s.catalog?.currentProduct);
+  const isLoading = useSelector((s) => s.catalog?.isLoading);
 
   const [variant, setVariant] = useState(null);
   const tabsNavRef = useRef(null);
@@ -41,8 +41,11 @@ export default function ProductPage() {
     if (product?.variants?.length > 0) setVariant(product.variants[0]);
   }, [product]);
 
-  if (isLoading || !product) {
+  if (isLoading) {
     return <div className={styles.loading}>Cargando…</div>;
+  }
+  if (!product) {
+    return <Navigate to="/404" replace />;
   }
 
   const images = product.images || [];

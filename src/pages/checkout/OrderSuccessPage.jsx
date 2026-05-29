@@ -10,7 +10,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import styles from './OrderSuccessPage.module.scss';
@@ -18,11 +18,13 @@ import styles from './OrderSuccessPage.module.scss';
 export default function OrderSuccessPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const order = useSelector((s) => s.orders?.current);
+  const order     = useSelector((s) => s.orders?.current);
+  const isLoading = useSelector((s) => s.orders?.isLoading);
 
   useEffect(() => { dispatch(fetchOrderDetail(id)); }, [dispatch, id]);
 
-  if (!order) return <div className={styles.loading}>Cargando…</div>;
+  if (isLoading) return <div className={styles.loading}>Cargando confirmación…</div>;
+  if (!order)    return <Navigate to="/" replace />;
 
   const firstName = order.user?.first_name || '';
 

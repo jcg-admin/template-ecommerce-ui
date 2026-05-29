@@ -526,3 +526,189 @@ por claridad de lectura.
 /admin/inventory/dashboard
 /admin/inventory/stock-alerts
 ```
+
+
+---
+
+## HALLAZGOS FASE 4 — Fix loading infinito
+
+---
+
+## HALLAZGO-FASE4-01 — BUG-BROWSER-01 nunca fue corregido en el código fuente (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE4-01 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — ProductPage mostraba spinner infinito para cualquier slug |
+| Estado | CORREGIDO en Fase 4 |
+
+**Descripción:**
+El commit `5b1a73d` (Fix BUG-BROWSER-01..04) documentó la corrección en el mensaje
+de commit, pero al auditar el archivo `ProductPage.jsx` en Fase 4 se encontró que
+los selectores incorrectos seguían presentes:
+
+```jsx
+// ANTES (incorrecto — nunca corregido):
+const product   = useSelector((s) => s.catalog?.current);
+const isLoading = useSelector((s) => s.catalog?.isLoadingDetail);
+
+// DESPUÉS (correcto — corregido en Fase 4):
+const product   = useSelector((s) => s.catalog?.currentProduct);
+const isLoading = useSelector((s) => s.catalog?.isLoading);
+```
+
+`catalogSlice.initialState` usa `currentProduct` (no `current`) e `isLoading`
+(no `isLoadingDetail`). Con los selectores incorrectos, `product` siempre era
+`undefined` e `isLoading` siempre `undefined` (falsy) → el guard
+`if (isLoading || !product)` siempre activaba el spinner.
+
+**Lección:** Verificar en el código fuente real que los commits de corrección
+realmente modificaron los archivos, no solo los documentaron.
+
+---
+
+## HALLAZGO-FASE4-02 — OrderDetailPage usaba isLoadingDetail inexistente (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE4-02 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — spinner infinito en detalle de pedido |
+| Estado | CORREGIDO |
+
+**Descripción:**
+`OrderDetailPage.jsx` tenía:
+```jsx
+const isLoading = useSelector((s) => s.orders?.isLoadingDetail);
+```
+
+`ordersSlice.initialState` solo tiene `isLoading` (no `isLoadingDetail`).
+El selector devolvía `undefined` (falsy) → el guard pasaba → pero `order` también
+podía ser `undefined` antes de que el thunk completara → Navigate a `/account/orders`.
+
+**Corrección:** `s.orders?.isLoadingDetail` → `s.orders?.isLoading`
+
+---
+
+## HALLAZGO-FASE4-03 — OrderSuccessPage sin isLoading selector (CORREGIDO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE4-03 |
+| Fecha | 2026-05-28 |
+| Severidad | Alta — race condition: si order=null antes de que el thunk resuelva, Navigate a / |
+| Estado | CORREGIDO |
+
+**Descripción:**
+`OrderSuccessPage.jsx` tenía solo:
+```jsx
+const order = useSelector((s) => s.orders?.current);
+// ...
+if (!order) return <div>Cargando…</div>;
+```
+
+El guard `if (!order)` servía como spinner Y como 404 simultáneamente. Si el thunk
+`fetchOrderDetail` fallaba o la orden no existía, el usuario veía "Cargando…"
+indefinidamente en lugar de ser redirigido.
+
+**Corrección:** Guard separado en dos bloques distintos:
+```jsx
+const isLoading = useSelector((s) => s.orders?.isLoading);
+// ...
+if (isLoading) return <div className={styles.loading}>Cargando confirmación…</div>;
+if (!order)    return <Navigate to="/" replace />;
+```
+
+---
+
+## HALLAZGO-FASE4-04 — Guards separados: semántica de isLoading vs recurso inexistente (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE4-04 |
+| Fecha | 2026-05-28 |
+| Severidad | Informativo — patrón a seguir en todas las páginas con recurso dinámico |
+| Estado | DOCUMENTADO |
+
+**Patrón correcto para páginas con recurso dinámico:**
+
+```jsx
+// INCORRECTO: un solo guard confunde "cargando" con "no encontrado"
+if (isLoading || !resource) return <div>Cargando…</div>;
+
+// CORRECTO: dos guards con semántica distinta
+if (isLoading) return <div className={styles.loading}>Cargando…</div>;
+if (!resource) return <Navigate to="/ruta-de-fallback" replace />;
+```
+
+**Diferencia semántica:**
+- `isLoading=true` → el recurso existe pero aún no llegó. Mostrar spinner.
+- `!resource && !isLoading` → el recurso no existe (404 de API) o el fetch falló.
+  Redirigir al fallback.
+
+**Rutas de fallback establecidas:**
+
+| Página | Recurso no encontrado → |
+|--------|------------------------|
+| ProductPage | `/404` |
+| OrderSuccessPage | `/` |
+| OrderDetailPage | `/account/orders` |
+
+---
+
+## HALLAZGO-FASE4-05 — Tests de pages con thunks async necesitan waitFor o preloadedState completo (DOCUMENTADO)
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-FASE4-05 |
+| Fecha | 2026-05-28 |
+| Severidad | Media — tests que omiten este patrón producen falsos negativos |
+| Estado | DOCUMENTADO — corrección aplicada en OrderSuccessPage.test y OrderDetailPage.test |
+
+**Descripción:**
+Los tests que renderizan páginas con `useEffect(() => dispatch(fetchX(id)))` enfrentan
+un problema de timing:
+
+1. El componente se renderiza con el `preloadedState` (isLoading: false, data: X)
+2. El `useEffect` dispara `dispatch(fetchX(id))`
+3. El thunk pasa a `.pending` → Redux actualiza `isLoading: true`
+4. El componente re-renderiza mostrando el spinner
+5. `apiService.get` es `jest.fn()` sin resolver → el thunk no completa
+6. El test hace sus assertions sobre el spinner en lugar del contenido
+
+**Soluciones por orden de preferencia:**
+
+```javascript
+// Opción A (PREFERIDA): mockResolvedValue + waitFor
+apiService.get.mockResolvedValue({ data: MOCK_DATA });
+// ...
+await waitFor(() => expect(screen.getByText(/expected/)).toBeInTheDocument());
+
+// Opción B: preloadedState con todos los campos del initialState
+// (sin isLoading ni last* que el thunk pueda sobrescribir antes de resolver)
+// Riesgo: el useEffect sigue disparando el thunk que pone isLoading=true
+
+// Opción C (evitar): mockear el thunk directamente
+// jest.mock('@redux/slices/xxxSlice', () => ({ fetchX: jest.fn(...) }))
+// Riesgo: el jest.mock del slice puede afectar al reducer y romper el preloadedState
+```
+
+**Corrección aplicada:**
+- `OrderSuccessPage.test`: `apiService.get.mockResolvedValue({ data: ORDER_MOCK })` + `waitFor`
+- `OrderDetailPage.test`: preloadedState completo con `orders.current = ORDER`
+  (el thunk resuelve rápido porque `apiService.get.mockResolvedValue` ya estaba en el test)
+
+---
+
+## RESUMEN EJECUTIVO FASE 4
+
+| Métrica | Valor |
+|---------|-------|
+| Páginas corregidas | 3 |
+| Selectores incorrectos corregidos | 3 (`catalog?.current`, `catalog?.isLoadingDetail`, `orders?.isLoadingDetail`) |
+| Navigate importados | 2 (OrderSuccessPage, OrderDetailPage) |
+| Guards separados (isLoading / !resource) | 3 páginas |
+| Tests corregidos | 2 |
+| Tests regresionados | 0 |
+| Total tests | 1330 pasando, 0 fallos |

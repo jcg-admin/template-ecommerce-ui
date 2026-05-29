@@ -10,7 +10,7 @@
 
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import styles from './OrderDetailPage.module.scss';
@@ -30,12 +30,15 @@ export default function OrderDetailPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const order = useSelector((s) => s.orders?.current);
-  const isLoading = useSelector((s) => s.orders?.isLoadingDetail);
+  const isLoading = useSelector((s) => s.orders?.isLoading);
 
   useEffect(() => { dispatch(fetchOrderDetail(id)); }, [dispatch, id]);
 
-  if (isLoading || !order) {
+  if (isLoading) {
     return <main className={styles.loading}>Cargando pedido…</main>;
+  }
+  if (!order) {
+    return <Navigate to="/account/orders" replace />;
   }
 
   const currentStatusIndex = STATUS_ORDER.indexOf(order.status);
