@@ -182,7 +182,7 @@ isLoading: false,  // ← clave real
 |-------|-------|
 | ID | BUG-TH-01 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 2 |
 | Archivo | src/pages/account/AddressesPage.jsx |
 | Verificado | Sí |
 
@@ -217,7 +217,7 @@ de `s.auth?.user?.addresses` a `s.addresses?.items`.
 |-------|-------|
 | ID | BUG-TH-02 |
 | Severidad | ALTA |
-| Estado | PENDIENTE |
+| Estado | CORREGIDO — Fase 2 |
 | Archivo | src/pages/checkout/CheckoutPage.jsx |
 | Verificado | Sí |
 
@@ -633,3 +633,161 @@ La ruta registrada en el router era `admin/inventory/stock-alerts`
 | Falsos positivos evitados | 4 (texto legítimo no tocado) |
 | Tests regresionados | 0 |
 | Tests totales | 1330 pasando, 0 fallos |
+
+---
+
+## HALLAZGOS DE FASE 2
+
+---
+
+### HALLAZGO-F2-01 — addressesSlice NO estaba registrado en el store
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F2-01 |
+| Fecha | 2026-05-29 |
+| Fase | F2 |
+| Tipo | Bug adicional descubierto durante la corrección de BUG-TH-01 |
+| Severidad | ALTA |
+
+**Descripción:**
+Al investigar BUG-TH-01 se encontró que `addressesSlice` no estaba
+registrado en `store.js`. El comentario en el encabezado del slice lo
+confirma: *"Las lecturas usan useAddresses (React Query)"*.
+
+Esto significa que incluso si AddressesPage hubiera importado
+`createAddress` correctamente desde `addressesSlice`, el thunk se habría
+ejecutado (el POST a la API sí llegaría) pero el state de Redux nunca
+se habría actualizado en `s.addresses?.items`.
+
+**Inventario del estado previo:**
+
+| Thunk | Importado desde | Existe ahí | Efecto |
+|-------|----------------|-----------|--------|
+| `fetchAddresses` | `authSlice` | SÍ | Fetch OK pero sin addCase → state no cambia |
+| `createAddress` | `authSlice` | NO | `undefined` → dispatch es no-op total |
+| `deleteAddress` | `authSlice` | NO | `undefined` → dispatch es no-op total |
+| `setDefaultAddress` | `authSlice` | NO | `undefined` → dispatch es no-op total |
+
+**Cómo se veían las addresses a pesar del bug:**
+`fetchProfile` (que sí tiene addCase en authSlice) devuelve el user completo
+incluyendo `user.addresses`. AddressesPage lee `s.auth?.user?.addresses`,
+que se llena con el perfil. Por eso las addresses aparecen — pero no se
+pueden modificar.
+
+**Fix aplicado:**
+1. Registrar `addressesReducer` en `store.js`
+2. Mantener `fetchAddresses` en authSlice (correcto — actualiza user)
+3. Mover `createAddress`, `deleteAddress`, `setDefaultAddress` a `addressesSlice`
+
+---
+
+### HALLAZGO-F2-02 — fetchAddresses en authSlice existe pero no tiene addCase
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F2-02 |
+| Fecha | 2026-05-29 |
+| Fase | F2 |
+| Tipo | Bug latente — no crítico porque fetchProfile cubre la misma información |
+| Severidad | BAJA |
+
+**Descripción:**
+`authSlice` exporta `fetchAddresses` como thunk pero no tiene `.addCase()`
+en `extraReducers`. Cuando se dispache, el request HTTP sí se ejecuta
+pero el state nunca se actualiza.
+
+En la práctica no es visible porque `fetchProfile` ya carga el user completo
+incluyendo `user.addresses`. AddressesPage llama ambos en `useEffect` —
+el primero que resuelva (fetchProfile) llena el selector.
+
+**Fix sugerido (fuera del scope de F2):**
+Agregar en authSlice:
+```javascript
+.addCase(fetchAddresses.fulfilled, (state, action) => {
+  if (state.user) {
+    state.user.addresses = action.payload?.results ?? action.payload ?? [];
+  }
+})
+```
+
+---
+
+### HALLAZGO-F2-03 — addressesSlice usa React Query para lecturas, no Redux
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F2-03 |
+| Fecha | 2026-05-29 |
+| Fase | F2 |
+| Tipo | Hallazgo arquitectónico — patrón mixto Redux + React Query |
+
+**Descripción:**
+El encabezado de `addressesSlice.js` declara explícitamente:
+*"Mutaciones (crear / actualizar / eliminar / set-default) en este slice.
+Las lecturas usan useAddresses (React Query)."*
+
+Esto explica por qué el slice no estaba en el store: las lecturas
+de addresses no pasan por Redux en absoluto, sino por React Query (`useAddresses`).
+Solo las mutaciones pasan por Redux.
+
+**Implicación para el selector en AddressesPage:**
+`s.auth?.user?.addresses` sigue siendo el selector correcto para mostrar
+las addresses en la UI. El slice de Redux solo gestiona el estado de las
+mutaciones (`isActioning`, `actionError`, `lastAction`).
+
+**Implicación del fix:**
+`s.addresses?.isActioning` ahora es accesible para mostrar un spinner
+durante crear/eliminar/setDefault — mejora de UX disponible sin más cambios.
+
+---
+
+### HALLAZGO-F2-04 — CheckoutPage tenía dos thunks mezclados de slices distintos en un solo import
+
+| Campo | Valor |
+|-------|-------|
+| ID | HALLAZGO-F2-04 |
+| Fecha | 2026-05-29 |
+| Fase | F2 |
+| Tipo | Bug verificado — causa directa de que el botón "Pagar" era no-op |
+| Severidad | CRÍTICA efectiva |
+
+**Descripción:**
+```jsx
+// ANTES — un solo import mezclando dos responsabilidades en el slice equivocado
+import { createOrder, initiatePayment } from '@redux/slices/paymentsSlice';
+//        ↑ no existe ahí              ↑ sí existe
+```
+
+`createOrder` es `undefined` cuando se importa de `paymentsSlice`.
+`dispatch(createOrder({...}))` equivale a `dispatch(undefined({...}))` —
+en Redux Toolkit esto lanza un TypeError en el thunkMiddleware que se captura
+silenciosamente. El `try/catch` del componente atrapa el error pero
+`orderError` no se mostraba antes de que se agregara el Alert en Fase 6.
+
+El flujo completo de compra (crear orden → iniciar pago → redirect) nunca
+se ejecutaba.
+
+**Fix:**
+```jsx
+// DESPUÉS — imports separados y semánticamente correctos
+import { createOrder }     from '@redux/slices/checkoutSlice';
+import { initiatePayment } from '@redux/slices/paymentsSlice';
+```
+
+---
+
+### RESUMEN EJECUTIVO FASE 2
+
+| Métrica | Valor |
+|---------|-------|
+| Bugs corregidos | 2 (BUG-TH-01 y BUG-TH-02) |
+| Archivos modificados | 3 (store.js, AddressesPage.jsx, CheckoutPage.jsx) |
+| Bugs adicionales descubiertos | 2 (addressesSlice sin registrar, fetchAddresses sin addCase) |
+| Tests regresionados | 0 |
+| Tests totales | 1330 pasando, 0 fallos |
+
+**Impacto real de los fixes:**
+- `createOrder` ahora funciona → el flujo completo de compra opera correctamente
+- `createAddress`, `deleteAddress`, `setDefaultAddress` ahora ejecutan sus requests API
+- `s.addresses?.isActioning` disponible para mejorar UX (fuera de scope de F2)

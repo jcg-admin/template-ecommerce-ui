@@ -35,7 +35,7 @@ Corregir los 16 bugs encontrados en la auditoría sistemática de las 99 página
 | Fase | Descripción | Estado |
 |------|-------------|--------|
 | F1 | BUG-RT-01 + BUG-RT-03 — rutas rotas (2 fixes) | COMPLETADA |
-| F2 | BUG-TH-01 + BUG-TH-02 — thunks en slice equivocado | PENDIENTE |
+| F2 | BUG-TH-01 + BUG-TH-02 — thunks en slice equivocado | COMPLETADA |
 | F3 | BUG-LB-01 — LoadingButton desde barrel incorrecto | PENDIENTE |
 | F4 | BUG-SL-01..06 — selectores incorrectos (6 páginas) | PENDIENTE |
 | F5 | BUG-TH-03 — addCase faltantes en adminSlice | PENDIENTE |

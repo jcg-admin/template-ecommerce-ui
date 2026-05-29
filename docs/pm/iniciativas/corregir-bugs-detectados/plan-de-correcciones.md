@@ -223,7 +223,7 @@ isLoadingSearchHistory: false,
 | Fase | Bugs | Estado |
 |------|------|--------|
 | F1 — Rutas rotas | BUG-RT-01, BUG-RT-03 | COMPLETADA |
-| F2 — Thunks equivocados | BUG-TH-01, BUG-TH-02 | PENDIENTE |
+| F2 — Thunks equivocados | BUG-TH-01, BUG-TH-02 | COMPLETADA |
 | F3 — Import incorrecto | BUG-LB-01 | PENDIENTE |
 | F4 — Selectores incorrectos | BUG-SL-01..05 | PENDIENTE |
 | F5 — addCase + state faltante | BUG-TH-03, BUG-SL-03, BUG-SL-04 | PENDIENTE |

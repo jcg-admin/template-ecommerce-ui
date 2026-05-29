@@ -10,9 +10,8 @@
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {
-  fetchAddresses, createAddress, deleteAddress, setDefaultAddress,
-} from '@redux/slices/authSlice';
+import { fetchAddresses }                                      from '@redux/slices/authSlice';
+import { createAddress, deleteAddress, setDefaultAddress }     from '@redux/slices/addressesSlice';
 import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, Field, LoadingButton } from '@components/common/primitives';
 import styles from './AddressesPage.module.scss';

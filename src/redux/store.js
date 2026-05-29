@@ -43,6 +43,7 @@ import settingsReducer          from './slices/settingsSlice';
 import backupsReducer           from './slices/backupsSlice';
 import logisticsReducer         from './slices/logisticsSlice';
 import reviewsReducer           from './slices/reviewsSlice';
+import addressesReducer         from './slices/addressesSlice';
 import searchHistoryReducer     from './slices/searchHistorySlice';
 import priceSyncReducer         from './slices/priceSyncSlice';
 
@@ -81,6 +82,7 @@ const store = configureStore({
     backups:          backupsReducer,
     logistics:        logisticsReducer,
     reviews:          reviewsReducer,
+    addresses:        addressesReducer,
     searchHistory:    searchHistoryReducer,
     priceSync:        priceSyncReducer,
   },
