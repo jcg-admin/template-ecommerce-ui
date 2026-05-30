@@ -81,7 +81,7 @@ export default function ProductPage() {
               <div className={styles.thumbs}>
                 {images.length > 0 ? images.map((img, i) => (
                   <button
-                    key={i}
+                    key={img.url ?? img.id ?? i}
                     type="button"
                     className={`${styles.thumb} ${i === activeImg ? styles.thumbActive : ''}`}
                     onClick={() => setActiveImg(i)}

@@ -68,7 +68,7 @@ export default function OrderSuccessPage() {
             <MetaTag tone="bronze">Resumen rápido</MetaTag>
             <div className={styles.recapItems}>
               {(order.items || []).slice(0, 3).map((it, i) => (
-                <div key={i} className={styles.recapImg}>
+                <div key={it.id ?? i} className={styles.recapImg}>
                   {it.image_url ? <img src={it.image_url} alt="" /> : null}
                 </div>
               ))}

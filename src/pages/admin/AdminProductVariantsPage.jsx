@@ -164,7 +164,7 @@ export default function AdminProductVariantsPage() {
                   <td>
                     <div className={styles.combo}>
                       {v.options?.map((o, i) => (
-                        <span key={i} className={styles.comboChip}>
+                        <span key={`${o.type_name}-${o.label}`} className={styles.comboChip}>
                           {o.type_name}: <strong>{o.label}</strong>
                         </span>
                       ))}

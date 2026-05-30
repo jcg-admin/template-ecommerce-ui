@@ -144,7 +144,7 @@ export default function AdminProductImportPage() {
               </thead>
               <tbody>
                 {preview.slice(0, 50).map((row, i) => (
-                  <tr key={i} className={row.errors?.length ? styles.rowError : ''}>
+                  <tr key={row.sku ?? i} className={row.errors?.length ? styles.rowError : ''}>
                     <td className={styles.mono}>{i + 1}</td>
                     <td className={styles.mono}>{row.sku}</td>
                     <td>{row.name}</td>

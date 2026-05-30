@@ -118,7 +118,7 @@ const RangeSlider = forwardRef(function RangeSlider({
         {/* Thumbs + inputs range */}
         {vals.map((v, idx) => (
           <div
-            key={idx}
+            key={`thumb-${idx}`}
             className={styles.thumbWrapper}
             style={vertical
               ? { bottom: `${pct(v)}%` }
@@ -137,7 +137,7 @@ const RangeSlider = forwardRef(function RangeSlider({
         {/* Inputs range invisibles — accesibles */}
         {vals.map((v, idx) => (
           <input
-            key={idx}
+            key={`range-${idx}`}
             type="range"
             id={`${id}-${idx}`}
             name={vals.length > 1 ? (name ? `${name}[${idx}]` : undefined) : name}
@@ -168,7 +168,7 @@ const RangeSlider = forwardRef(function RangeSlider({
               : undefined;
             return (
               <span
-                key={i}
+                key={`label-${i}`}
                 className={`${styles.label} ${clickableLabels ? styles.labelClickable : ''}`}
                 style={{ [vertical ? 'bottom' : 'left']: `${pos}%` }}
                 onClick={handleLabelClick}

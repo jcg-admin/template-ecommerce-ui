@@ -139,7 +139,7 @@ function ExpressCard({ eyebrow, title, lines, onChange }) {
         <MetaTag tone="bronze">{eyebrow}</MetaTag>
         <div className={styles.cardTitle}>{title}</div>
         <div className={styles.cardLines}>
-          {lines.filter(Boolean).map((l, i) => <div key={i}>{l}</div>)}
+          {lines.filter(Boolean).map((l, i) => <div key={`line-${i}`}>{l}</div>)}
         </div>
       </div>
       {onChange && (

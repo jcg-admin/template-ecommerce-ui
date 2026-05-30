@@ -262,7 +262,7 @@ function FilterGroup({ title, items, children }) {
   return (
     <div className={styles.filterGroup}>
       <h4 className={styles.filterTitle}>{title}</h4>
-      {items?.map((i) => <Check key={i} label={i} />)}
+      {items?.map((label) => <Check key={label} label={label} />)}
       {children}
     </div>
   );
@@ -324,11 +324,11 @@ function Pagination({ current, total, onPage }) {
       {pages.map((p, i) =>
         typeof p === 'number' ? (
           <button
-            key={i}
+            key={`page-${i}`}
             className={p === current ? styles.pageActive : ''}
             onClick={() => onPage(p)}
           >{p}</button>
-        ) : <span key={i} className={styles.pageEllipsis}>{p}</span>
+        ) : <span key={`ellipsis-${i}`} className={styles.pageEllipsis}>{p}</span>
       )}
       <button disabled={current === total} onClick={() => onPage(current + 1)}>Siguiente →</button>
     </div>

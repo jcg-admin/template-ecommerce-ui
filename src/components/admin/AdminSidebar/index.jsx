@@ -52,7 +52,7 @@ export default function AdminSidebar() {
       <nav className={styles.nav}>
         {ADMIN_NAV.map((item, i) =>
           item.section ? (
-            <p key={i} className={styles.navSection}>{item.section}</p>
+            <p key={item.section} className={styles.navSection}>{item.section}</p>
           ) : (
             <NavLink
               key={item.to}

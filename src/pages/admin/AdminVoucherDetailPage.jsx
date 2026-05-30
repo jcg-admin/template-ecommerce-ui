@@ -141,7 +141,7 @@ export default function AdminVoucherDetailPage() {
             ) : (
               <ul className={styles.changelogList}>
                 {changelog.map((entry, i) => (
-                  <li key={i} className={styles.changelogItem}>
+                  <li key={entry.id ?? `log-${i}`} className={styles.changelogItem}>
                     <div className={styles.changelogMeta}>
                       {new Date(entry.created_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })} · {entry.by_user}
                     </div>

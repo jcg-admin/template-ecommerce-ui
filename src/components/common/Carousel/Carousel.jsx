@@ -176,7 +176,7 @@ const Carousel = forwardRef(function Carousel({
         <div className={styles.indicators} role="tablist" aria-label="Indicadores del carrusel">
           {slides.map((_, i) => (
             <button
-              key={i}
+              key={`dot-${i}`}
               role="tab"
               aria-selected={i === current}
               aria-label={`Ir al slide ${i + 1}`}

@@ -170,7 +170,7 @@ export default function AdminOrderDetailPage() {
             <thead><tr><th>Producto</th><th>SKU</th><th>Cant.</th><th className={styles.right}>Precio unit.</th><th className={styles.right}>Subtotal</th></tr></thead>
             <tbody>
               {(order.items || []).map((it, i) => (
-                <tr key={i}>
+                <tr key={it.id ?? i}>
                   <td>
                     <div>{it.product_name}</div>
                     {it.variant_label && <div className={styles.muted}>{it.variant_label}</div>}
@@ -214,7 +214,7 @@ export default function AdminOrderDetailPage() {
               <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Historial</h2></header>
               <ul className={styles.logList}>
                 {order.status_logs.map((l, i) => (
-                  <li key={i}>
+                  <li key={`log-${i}`}>
                     <div className={styles.logStatus}>{l.status_label || l.status}</div>
                     <div className={styles.logMeta}>
                       {new Date(l.created_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}

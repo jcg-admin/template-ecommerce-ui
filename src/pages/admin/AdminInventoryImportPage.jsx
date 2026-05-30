@@ -104,7 +104,7 @@ export default function AdminInventoryImportPage() {
               </thead>
               <tbody>
                 {importReport.error_report.map((row, idx) => (
-                  <tr key={idx}>
+                  <tr key={`row-${row.line ?? idx}`}>
                     <td>{row.row ?? '—'}</td>
                     <td>{row.field ?? '—'}</td>
                     <td>{row.reason ?? '—'}</td>

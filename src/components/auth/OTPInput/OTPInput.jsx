@@ -170,7 +170,7 @@ const OTPInput = forwardRef(function OTPInput({
     >
       {chars.map((char, i) => (
         <input
-          key={i}
+          key={`otp-${i}`}
           ref={el => { inputsRef.current[i] = el; }}
           id={`${baseId}-${i}`}
           name={name ? `${name}[${i}]` : undefined}

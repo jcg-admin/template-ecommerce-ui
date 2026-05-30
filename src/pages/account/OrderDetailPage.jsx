@@ -135,7 +135,7 @@ function ItemsBlock({ items }) {
       <h2 className={styles.sectionTitle}>Piezas en este pedido</h2>
       <div className={styles.itemsList}>
         {items.map((it, i) => (
-          <div key={i} className={styles.itemRow}>
+          <div key={it.id ?? it.product_id ?? i} className={styles.itemRow}>
             <div className={styles.itemThumb}>
               {it.image_url ? <img src={it.image_url} alt={it.product_name} /> : null}
             </div>

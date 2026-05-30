@@ -63,106 +63,106 @@ color: var(--ec-text-muted);
 
 ### F2-T1 — AdminSidebar/index.jsx L55
 Secciones de nav son estáticas. `key={i}` → `key={item.section}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T2 — OTPInput/OTPInput.jsx L173
 Dígitos OTP: array de longitud fija, orden fijo. `key={i}` → `key={\`otp-\${i}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T3 — Autocomplete/Autocomplete.jsx L277
 Items de sugerencias. `key={i}` → `key={item.id ?? item.value ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T4 — Carousel/Carousel.jsx L179
 Slides. `key={i}` → `key={slide.id ?? \`slide-\${i}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T5 — DatePicker/Calendar.jsx L320
 Cabecera de días de la semana — orden fijo, estático. `key={i}` → `key={d.toISOString()}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T6 — MultiSelect/MultiSelect.jsx L251 (tags)
 Tags seleccionados. `key={i}` → `key={v}` (el valor es el identificador).
-- [ ] DONE
+- [x] DONE
 
 ### F2-T7 — MultiSelect/MultiSelect.jsx L271 (inputs hidden)
 Inputs hidden. `key={i}` → `key={\`hidden-\${v}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T8 — RangeSlider/RangeSlider.jsx L121 + L140
 Marks del slider. `key={idx}` → `key={\`mark-\${mark.value}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T9 — Stepper/Stepper.jsx L98
 Pasos del stepper. `key={i}` → `key={step.id ?? step.label ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T10 — Header/index.jsx L181
 Items del mini-cart. `key={i}` → `key={item.id}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T11 — AddressesPage.jsx L62
 Tarjetas de dirección. `key={i}` → `key={addr.id}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T12 — OrderDetailPage.jsx L138
 Líneas del pedido. `key={i}` → `key={item.id ?? item.product_id}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T13 — AdminDashboardPage.jsx L109
 Alertas de stock. `key={i}` → `key={a.product_id ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T14 — AdminInventoryImportPage.jsx L107
 Filas de errores. `key={idx}` → `key={\`row-\${row.line ?? idx}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T15 — AdminOrderDetailPage.jsx L173 + L217
 Items L173: `key={i}` → `key={item.id}`.
 Notas L217: `key={i}` → `key={\`note-\${i}\`}` (no tienen id).
-- [ ] DONE
+- [x] DONE
 
 ### F2-T16 — AdminPriceSyncPage.jsx L147
 Filas de preview. `key={i}` → `key={row.sku ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T17 — AdminProductImportPage.jsx L147
 Filas de import. `key={i}` → `key={row.id ?? row.sku ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T18 — AdminProductVariantsPage.jsx L167
 Chips de combinación. `key={i}` → `key={label}` (son strings únicos).
-- [ ] DONE
+- [x] DONE
 
 ### F2-T19 — AdminVoucherDetailPage.jsx L144
 Changelog. `key={i}` → `key={entry.id ?? \`log-\${i}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T20 — CatalogPage.jsx L265 + L327
 L265 filtros Check: `key={i}` → `key={i}` (el valor string `i` ES el key, variable mal nombrada).
 L327 Pagination: inspeccionar y corregir según contexto.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T21 — ProductPage.jsx L84
 Thumbnails. `key={i}` → `key={img.id ?? img.url ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T22 — ExpressCheckoutPage.jsx L142
 Líneas de dirección (strings). `key={i}` → `key={\`line-\${i}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T23 — OrderSuccessPage.jsx L71
 Imágenes recap. `key={i}` → `key={item.id ?? i}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T24 — PaymentFailedPage.jsx L84
 Historial de intentos. `key={i}` → `key={entry.id ?? \`attempt-\${i}\`}`.
-- [ ] DONE
+- [x] DONE
 
 ### F2-T25 — HomePage.jsx L98
 Skeletons: array de longitud fija generado con `Array.from`. `key={i}` aceptable.
 Marcar como INFO, no requiere cambio.
-- [ ] DONE (INFO — sin cambio)
+- [x] DONE (INFO — sin cambio)
 
 ---
 

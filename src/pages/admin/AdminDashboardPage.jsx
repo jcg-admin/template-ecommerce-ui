@@ -106,7 +106,7 @@ export default function AdminDashboardPage() {
           </header>
           <ul className={styles.alertList}>
             {(m.alerts || []).map((a, i) => (
-              <li key={i} className={`${styles.alert} ${styles[`alert_${a.severity || 'info'}`]}`}>
+              <li key={a.product_id ?? a.id ?? i} className={`${styles.alert} ${styles[`alert_${a.severity || 'info'}`]}`}>
                 <span className={styles.alertDot} />
                 <div>
                   <div className={styles.alertTitle}>{a.title}</div>

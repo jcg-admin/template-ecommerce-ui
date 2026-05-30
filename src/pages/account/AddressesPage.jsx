@@ -59,7 +59,7 @@ export default function AddressesPage() {
             <div className={styles.capacityBar}>
               {slots.map((_, i) => (
                 <div
-                  key={i}
+                  key={`slot-${i}`}
                   className={`${styles.capSlot} ${i < capacity ? styles.capSlotFilled : ''}`}
                 />
               ))}

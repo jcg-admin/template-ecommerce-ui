@@ -144,7 +144,7 @@ export default function AdminPriceSyncPage() {
                   const delta = d.new_price - d.old_price;
                   const pct = ((delta / d.old_price) * 100).toFixed(1);
                   return (
-                    <tr key={i}>
+                    <tr key={d.sku ?? i}>
                       <td className={styles.mono}>{d.sku}</td>
                       <td>{d.name}</td>
                       <td className={styles.mono}><Price amount={d.old_price} size="sm" /></td>

@@ -274,7 +274,7 @@ const Autocomplete = forwardRef(function Autocomplete({
           )}
           {!loading && matches.map((opt, i) => (
             <li
-              key={i}
+              key={getValue(opt) ?? i}
               id={`${listId}-${i}`}
               role="option"
               aria-selected={i === activeIdx}

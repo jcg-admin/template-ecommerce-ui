@@ -81,7 +81,7 @@ export default function PaymentFailedPage() {
           <MetaTag tone="bronze">Historial de intentos</MetaTag>
           <div className={styles.historyList}>
             {history.map((h, i) => (
-              <div key={i} className={styles.historyRow}>
+              <div key={h.id ?? `attempt-${i}`} className={styles.historyRow}>
                 <span className={styles.historyWhen}>
                   {new Date(h.created_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })}
                 </span>

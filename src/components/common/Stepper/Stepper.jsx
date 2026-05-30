@@ -95,7 +95,7 @@ const Stepper = forwardRef(function Stepper({
           const clickable = !linear || i <= active;
 
           return (
-            <div key={i} className={styles.stepWrapper}>
+            <div key={`step-${i}`} className={styles.stepWrapper}>
               <button
                 type="button"
                 role="tab"

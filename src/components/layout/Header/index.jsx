@@ -178,7 +178,7 @@ export default function Header() {
                 ) : (
                   <>
                     {cartItems.slice(0, 3).map((item, i) => (
-                      <div key={i} style={{ display: 'flex', gap: 12, marginBottom: 12,
+                      <div key={item.id ?? i} style={{ display: 'flex', gap: 12, marginBottom: 12,
                         padding: '10px 0', borderBottom: '1px solid #eee' }}>
                         {item.image_url && (
                           <img src={item.image_url} alt=""

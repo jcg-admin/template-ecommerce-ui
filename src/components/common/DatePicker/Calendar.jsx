@@ -317,7 +317,7 @@ const Calendar = forwardRef(function Calendar({
             <thead>
               <tr>
                 {weekdays.map((d, i) => (
-                  <th key={i} scope="col" abbr={d.toLocaleDateString(locale, { weekday: 'long' })}>
+                  <th key={d.toISOString()} scope="col" abbr={d.toLocaleDateString(locale, { weekday: 'long' })}>
                     {fmtWeekday(d)}
                   </th>
                 ))}

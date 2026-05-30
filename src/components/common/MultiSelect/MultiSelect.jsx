@@ -248,7 +248,7 @@ const MultiSelect = forwardRef(function MultiSelect({
               const selected_opt = isSelected(opt);
               return (
                 <div
-                  key={i}
+                  key={getValue(opt) ?? i}
                   role="option"
                   aria-selected={selected_opt}
                   className={`${styles.option} ${selected_opt ? styles.optionSelected : ''}`}
@@ -268,7 +268,7 @@ const MultiSelect = forwardRef(function MultiSelect({
 
       {/* Input oculto para formularios */}
       {name && sel.map((v, i) => (
-        <input key={i} type="hidden" name={name} value={v} />
+        <input key={`hidden-${v}`} type="hidden" name={name} value={v} />
       ))}
     </div>
   );
