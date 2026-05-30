@@ -14,7 +14,7 @@
   left: 0;
   right: 0;
   z-index: $z-modal;
-  background: var(--c-surface-1);
+  background: var(--ec-bg-page);
   padding: $spacing-4 $spacing-6;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
 }
@@ -30,21 +30,21 @@
 .input {
   flex: 1;
   padding: $spacing-3 $spacing-4;
-  border: 2px solid var(--c-border);
+  border: 2px solid var(--ec-border-color);
   border-radius: $border-radius-md;
   font-size: $font-size-base;
-  background: var(--c-surface-2);
-  color: var(--c-text-primary);
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-primary);
   outline: none;
 
   &:focus {
-    border-color: var(--c-accent);
+    border-color: var(--ec-accent);
   }
 }
 
 .btn {
   padding: $spacing-3 $spacing-5;
-  background: var(--c-accent);
+  background: var(--ec-accent);
   color: #fff;
   border: none;
   border-radius: $border-radius-md;
@@ -62,13 +62,13 @@
 .btnClose {
   padding: $spacing-2 $spacing-3;
   background: none;
-  border: 1px solid var(--c-border);
+  border: 1px solid var(--ec-border-color);
   border-radius: $border-radius-md;
-  color: var(--c-text-secondary);
+  color: var(--ec-text-secondary);
   cursor: pointer;
   font-size: $font-size-base;
 
   &:hover {
-    background: var(--c-surface-2);
+    background: var(--ec-bg-surface);
   }
 }

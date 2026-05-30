@@ -30,7 +30,7 @@ Mapeo de variables:
 
 **Verificar:** abrir el modal de búsqueda → fondo visible, input con borde, texto legible.
 
-- [ ] DONE
+- [x] DONE
 
 ### F1-T2 — ProductCard.module.scss: --text-muted → --ec-text-muted
 
@@ -45,7 +45,7 @@ color: var(--ec-text-muted);
 
 **Verificar:** cards del catálogo → texto secundario (precio, categoría) visible.
 
-- [ ] DONE
+- [x] DONE
 
 ---
 
