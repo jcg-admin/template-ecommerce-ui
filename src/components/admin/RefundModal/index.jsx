@@ -71,12 +71,12 @@ export default function RefundModal({ payment, orderNumber, onClose, onDone }) {
             <label className={styles.label}>Tipo de reembolso</label>
             <div className={styles.typeRow}>
               <label className={`${styles.typeCard} ${type === 'full' ? styles.typeCardActive : ''}`}>
-                <input type="radio" name="type" value="full" checked={type === 'full'} onChange={() => { setType('full'); setAmount(maxAmount); }} />
+                <input type="radio" name="type" value="full" aria-label="Reembolso total" checked={type === 'full'} onChange={() => { setType('full'); setAmount(maxAmount); }} />
                 <span className={styles.typeTitle}>Reembolso total</span>
                 <span className={styles.typeSub}>${maxAmount.toLocaleString('es-MX')} MXN</span>
               </label>
               <label className={`${styles.typeCard} ${type === 'partial' ? styles.typeCardActive : ''}`}>
-                <input type="radio" name="type" value="partial" checked={type === 'partial'} onChange={() => setType('partial')} />
+                <input type="radio" name="type" value="partial" aria-label="Reembolso parcial" checked={type === 'partial'} onChange={() => setType('partial')} />
                 <span className={styles.typeTitle}>Reembolso parcial</span>
                 <span className={styles.typeSub}>Especificar monto</span>
               </label>

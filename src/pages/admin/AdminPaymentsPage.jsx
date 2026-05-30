@@ -90,10 +90,10 @@ export default function AdminPaymentsPage() {
           </select>
         </label>
         <label>Desde
-          <input type="date" value={filters.from} onChange={setFilter('from')} />
+          <input type="date" value={filters.from} onChange={setFilter('from')} aria-label="Fecha desde" />
         </label>
         <label>Hasta
-          <input type="date" value={filters.to} onChange={setFilter('to')} />
+          <input type="date" value={filters.to} onChange={setFilter('to')} aria-label="Fecha hasta" />
         </label>
       </fieldset>
 

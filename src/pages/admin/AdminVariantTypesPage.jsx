@@ -233,8 +233,8 @@ function OptionInlineForm({ onCancel, onSave }) {
       onSubmit={(e) => { e.preventDefault(); if (label.trim()) onSave({ label, sub_label: subLabel }); }}
       className={styles.inlineForm}
     >
-      <input className={styles.inlineInput} placeholder="Etiqueta" value={label} onChange={(e) => setLabel(e.target.value)} autoFocus />
-      <input className={styles.inlineInput} placeholder="Sub-etiqueta (opcional)" value={subLabel} onChange={(e) => setSubLabel(e.target.value)} />
+      <input className={styles.inlineInput} placeholder="Etiqueta" value={label} onChange={(e) => setLabel(e.target.value)} aria-label="Etiqueta de variante" autoFocus />
+      <input className={styles.inlineInput} placeholder="Sub-etiqueta (opcional)" value={subLabel} aria-label="Sub-etiqueta de variante" onChange={(e) => setSubLabel(e.target.value)} />
       <button type="submit" className={styles.smallBtn} disabled={!label.trim()}>✓</button>
       <button type="button" onClick={onCancel} className={styles.smallBtn}>×</button>
       </form>

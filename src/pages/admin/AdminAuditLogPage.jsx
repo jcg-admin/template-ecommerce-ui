@@ -62,11 +62,11 @@ export default function AdminAuditLogPage() {
         </label>
         <label>
           Desde
-          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} />
+          <input type="date" value={from} onChange={(e) => setFrom(e.target.value)} aria-label="Fecha desde" />
         </label>
         <label>
           Hasta
-          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} />
+          <input type="date" value={to} onChange={(e) => setTo(e.target.value)} aria-label="Fecha hasta" />
         </label>
         <button type="submit">Filtrar</button>
       </form>

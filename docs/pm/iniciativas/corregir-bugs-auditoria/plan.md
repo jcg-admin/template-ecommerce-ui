@@ -175,52 +175,52 @@ Marcar como INFO, no requiere cambio.
 ### F3-T1 — RefundModal/index.jsx L74
 `<input type="radio" name="type" value="full" ...>`
 Agregar `aria-label="Reembolso completo"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T2 — RefundModal/index.jsx L79
 `<input type="radio" name="type" value="partial" ...>`
 Agregar `aria-label="Reembolso parcial"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T3 — ProfilePage.jsx L73
 `<input type="file" accept="image/..." onChange={handleAvatar} hidden>`
 Agregar `aria-label="Subir foto de perfil"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T4 — AdminAuditLogPage.jsx L65
 `<input type="date" value={from} ...>`
 Agregar `aria-label="Fecha desde"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T5 — AdminAuditLogPage.jsx L69
 `<input type="date" value={to} ...>`
 Agregar `aria-label="Fecha hasta"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T6 — AdminPaymentsPage.jsx L93
 `<input type="date" value={filters.from} ...>`
 Agregar `aria-label="Fecha desde"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T7 — AdminPaymentsPage.jsx L96
 `<input type="date" value={filters.to} ...>`
 Agregar `aria-label="Fecha hasta"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T8 — AdminProductDetailPage.jsx L231
 `<input type="file" multiple accept="image/*" onChange={handleUpload} hidden>`
 Agregar `aria-label="Subir imágenes del producto"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T9 — AdminVariantTypesPage.jsx L236
 `<input placeholder="Etiqueta" ...>`
 Agregar `aria-label="Etiqueta de variante"`.
-- [ ] DONE
+- [x] DONE
 
 ### F3-T10 — AdminVariantTypesPage.jsx L237
 `<input placeholder="Sub-etiqueta" ...>`
 Agregar `aria-label="Sub-etiqueta de variante"`.
-- [ ] DONE
+- [x] DONE
 
 ---
 

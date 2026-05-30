@@ -228,7 +228,7 @@ function ImageGallery({ images, onUpload, onDelete, onReorder }) {
         </div>
       ))}
       <label className={styles.galleryUpload}>
-        <input type="file" multiple accept="image/*" onChange={handleUpload} hidden />
+        <input type="file" multiple accept="image/*" onChange={handleUpload} hidden aria-label="Subir imágenes del producto" />
         <span>+ Subir</span>
       </label>
       </div>

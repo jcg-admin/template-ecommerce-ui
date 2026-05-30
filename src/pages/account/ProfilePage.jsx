@@ -70,7 +70,7 @@ export default function ProfilePage() {
                 <div className={styles.avatarDesc}>JPG o PNG, máximo 5 MB. La redimensionamos a 800×800.</div>
                 <label className={styles.avatarBtn}>
                   Subir nueva foto
-                  <input type="file" accept="image/jpeg,image/png" onChange={handleAvatar} hidden />
+                  <input type="file" accept="image/jpeg,image/png" onChange={handleAvatar} hidden aria-label="Subir foto de perfil" />
                 </label>
               </div>
             </div>
