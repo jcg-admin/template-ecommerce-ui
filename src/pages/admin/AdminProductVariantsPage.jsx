@@ -110,7 +110,7 @@ export default function AdminProductVariantsPage() {
           <span className={styles.bulkLabel}>
             {selected.size} variantes seleccionadas · aplicar a todas:
           </span>
-          <select value={bulkField} onChange={(e) => setBulkField(e.target.value)} className={styles.bulkSelect}>
+          <select aria-label="Campo a modificar en masa" value={bulkField} onChange={(e) => setBulkField(e.target.value)} className={styles.bulkSelect}>
             <option value="price_override">Precio override</option>
             <option value="stock">Stock</option>
           </select>

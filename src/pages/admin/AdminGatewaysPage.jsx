@@ -131,7 +131,7 @@ function GatewayEditModal({ gateway, onClose, onSave }) {
         <form onSubmit={(e) => { e.preventDefault(); onSave(data); }} className={styles.modalForm}>
           <div className={styles.modalRow}>
             <label className={styles.modalLabel}>Modo</label>
-            <select value={data.mode} onChange={(e) => setData({ ...data, mode: e.target.value })} className={styles.modalSelect}>
+            <select aria-label="Modo de operación del gateway" value={data.mode} onChange={(e) => setData({ ...data, mode: e.target.value })} className={styles.modalSelect}>
               <option value="sandbox">Sandbox (pruebas)</option>
               <option value="production">Producción</option>
             </select>
