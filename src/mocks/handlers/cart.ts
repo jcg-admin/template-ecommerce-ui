@@ -8,11 +8,8 @@
  *   DELETE /api/cart/items/:id/   eliminar item
  *   POST   /api/cart/voucher/     aplicar voucher
  *   DELETE /api/cart/voucher/     quitar voucher
- *   GET    /api/v1/wishlist/         lista de deseos
- *   POST   /api/v1/wishlist/         anadir a wishlist
- *   DELETE /api/v1/wishlist/:product_id/  quitar de wishlist
  *
- * El estado del carrito y de la wishlist viven en variables a nivel
+ * El estado del carrito vive en variables a nivel
  * de modulo. MSW v2 reusa el mismo modulo entre requests (igual que
  * el interceptor heredado), asi que la mutacion entre handlers es
  * consistente para una sesion de dev. En Jest, `server.resetHandlers()`
@@ -34,16 +31,6 @@ const cartState: CartState = {
   voucher: null,
 };
 
-interface WishlistItem {
-  id: number;
-  product_id: number;
-  product_name: string;
-  price: number;
-}
-
-let wishlist: WishlistItem[] = [
-  { id: 1, product_id: 1, product_name: 'Collar Oshun', price: 1250 },
-];
 
 const KNOWN_VOUCHERS: Record<string, Voucher> = {
   DEMO10: { code: 'DEMO10', type: 'PERCENT', value: 10 },
@@ -130,26 +117,4 @@ export const cartHandlers = [
     return HttpResponse.json(buildCart());
   }),
 
-  // Wishlist
-  http.get('/api/v1/wishlist/', () => HttpResponse.json(wishlist)),
-
-  http.post('/api/v1/wishlist/', async ({ request }) => {
-    const body = (await request.json().catch(() => null)) as
-      | { product_id?: number }
-      | null;
-    const item: WishlistItem = {
-      id: Date.now(),
-      product_id: body?.product_id ?? 0,
-      product_name: 'Producto Mock',
-      price: 480,
-    };
-    wishlist.push(item);
-    return HttpResponse.json(item, { status: 201 });
-  }),
-
-  http.delete('/api/v1/wishlist/:product_id/', ({ params }) => {
-    const pid = parseInt(String(params.product_id), 10);
-    wishlist = wishlist.filter((i) => i.product_id !== pid);
-    return new HttpResponse(null, { status: 204 });
-  }),
 ];

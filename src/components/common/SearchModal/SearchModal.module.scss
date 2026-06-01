@@ -15,8 +15,9 @@
   right: 0;
   z-index: $z-modal;
   background: var(--ec-bg-page);
-  padding: $spacing-4 $spacing-6;
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.18);
+  padding: $spacing-6 $spacing-6;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
+  border-bottom: 1px solid var(--ec-border-color);
 }
 
 .form {
@@ -31,7 +32,7 @@
   flex: 1;
   padding: $spacing-3 $spacing-4;
   border: 2px solid var(--ec-border-color);
-  border-radius: $border-radius-md;
+  border-radius: $border-radius-xl;
   font-size: $font-size-base;
   background: var(--ec-bg-surface);
   color: var(--ec-text-primary);
@@ -47,7 +48,7 @@
   background: var(--ec-accent);
   color: #fff;
   border: none;
-  border-radius: $border-radius-md;
+  border-radius: $border-radius-xl;
   font-size: $font-size-sm;
   font-weight: 600;
   cursor: pointer;
@@ -63,7 +64,7 @@
   padding: $spacing-2 $spacing-3;
   background: none;
   border: 1px solid var(--ec-border-color);
-  border-radius: $border-radius-md;
+  border-radius: $border-radius-xl;
   color: var(--ec-text-secondary);
   cursor: pointer;
   font-size: $font-size-base;

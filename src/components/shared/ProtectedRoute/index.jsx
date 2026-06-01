@@ -14,11 +14,11 @@ export default function ProtectedRoute() {
   const isLoading       = useSelector(selectAuthLoading);
   const location        = useLocation();
 
+  // Si ya autenticado, renderizar aunque haya un fetch en curso (ej. fetchProfile)
+  if (isAuthenticated) return <Outlet />;
+
+  // Sin sesión conocida: esperar si hay una operación de auth en curso
   if (isLoading) return <PageLoader />;
 
-  if (!isAuthenticated) {
-    return <Navigate to="/auth/login" state={{ from: location }} replace />;
-  }
-
-  return <Outlet />;
+  return <Navigate to="/auth/login" state={{ from: location }} replace />;
 }

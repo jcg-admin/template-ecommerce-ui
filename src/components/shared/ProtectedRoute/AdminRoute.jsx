@@ -19,9 +19,12 @@ export default function AdminRoute() {
   const isAdmin         = useSelector(selectIsAdmin);
   const isLoading       = useSelector(selectAuthLoading);
 
-  if (isLoading) return <PageLoader />;
-  if (!isAuthenticated) return <Navigate to="/auth/login" replace />;
-  if (!isAdmin) return <Navigate to="/" replace />;
+  // Si autenticado y con rol admin, renderizar directamente
+  if (isAuthenticated && isAdmin) return <Outlet />;
 
-  return <Outlet />;
+  // Sin datos definitivos: esperar si hay un fetch de auth en curso
+  if (isLoading) return <PageLoader />;
+
+  if (!isAuthenticated) return <Navigate to="/auth/login" replace />;
+  return <Navigate to="/" replace />;
 }

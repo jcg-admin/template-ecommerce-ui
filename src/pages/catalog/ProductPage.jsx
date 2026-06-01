@@ -13,6 +13,7 @@ import Popover    from '@components/common/Popover/Popover';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { selectIsInWishlist } from '@redux/selectors';
 import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
 import { fetchProduct } from '@redux/slices/catalogSlice';
 import { addCartItem } from '@redux/slices/cartSlice';
@@ -29,7 +30,8 @@ export default function ProductPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const product   = useSelector((s) => s.catalog?.currentProduct);
-  const isLoading = useSelector((s) => s.catalog?.isLoading);
+  const isLoading    = useSelector((s) => s.catalog?.isLoading);
+  const inWishlist   = useSelector((s) => selectIsInWishlist(s, product?.id));
 
   const [variant, setVariant] = useState(null);
   const tabsNavRef = useRef(null);
@@ -54,13 +56,17 @@ export default function ProductPage() {
   const isAvailable = stock > 0;
   const related = product.related_products || [];
 
-  const handleAddToCart = () => {
-    dispatch(addCartItem({
-      product_id: product.id,
-      variant_id: variant?.id,
-      quantity: qty,
-    }));
-    navigate('/cart');
+  const handleAddToCart = async () => {
+    try {
+      await dispatch(addCartItem({
+        product_id: product.id,
+        variant_id: variant?.id,
+        quantity: qty,
+      })).unwrap();
+      navigate('/cart');
+    } catch {
+      // El cartSlice ya despacha el error al store — no se necesita manejo adicional
+    }
   };
 
   return (
@@ -162,8 +168,8 @@ export default function ProductPage() {
                 <button
                   type="button"
                   className={styles.wishBtn}
-                  onClick={() => dispatch(toggleWishlist({ productId: product.id, variantId: variant?.id }))}
-                >♡</button>
+                  onClick={() => dispatch(toggleWishlist({ productId: product.id, inWishlist }))}
+                >{inWishlist ? '♥' : '♡'}</button>
               </div>
 
               {/* Availability */}
