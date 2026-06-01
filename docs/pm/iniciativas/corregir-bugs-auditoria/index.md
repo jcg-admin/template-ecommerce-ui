@@ -27,5 +27,5 @@ accesibilidad, SCSS y cobertura MSW del panel admin.
 | F2 | MEDIA | BUG-KEY-01 (28 ocurrencias) | COMPLETADA |
 | F3 | BAJA | BUG-ACC-01 (10 inputs) | COMPLETADA |
 | F4 | BAJA | BUG-SCSS-01 (16 ocurrencias) | COMPLETADA |
-| F5 | BAJA | BUG-MSW-01 (28 endpoints) | PENDIENTE |
+| F5 | BAJA | BUG-MSW-01 (25 endpoints) | COMPLETADA |
 | F6 | INFO | BUG-SCSS-02 (12 archivos) | PENDIENTE |

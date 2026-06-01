@@ -300,51 +300,51 @@ Todos los handlers van en `src/mocks/handlers/admin.ts`.
 Respuestas minimalistas que permiten completar el flujo sin datos reales.
 
 ### Grupo A — Categorías (F5-T01, F5-T12, F5-T14)
-- [ ] F5-T01 DELETE `/api/v1/admin/categories/:id/` → 204 No Content
-- [ ] F5-T12 PATCH `/api/v1/admin/categories/:id/` → devuelve categoría actualizada
-- [ ] F5-T14 POST `/api/v1/admin/categories/` → devuelve categoría nueva con id mockeado
+- [x] F5-T01 DELETE `/api/v1/admin/categories/:id/` → 204 No Content
+- [x] F5-T12 PATCH `/api/v1/admin/categories/:id/` → devuelve categoría actualizada
+- [x] F5-T14 POST `/api/v1/admin/categories/` → devuelve categoría nueva con id mockeado
 
 ### Grupo B — Pedidos admin (F5-T06, F5-T15)
-- [ ] F5-T06 GET `/api/v1/admin/orders/:id/` → devuelve pedido mock completo
-- [ ] F5-T15 POST `/api/v1/admin/orders/:id/refund/` → devuelve `{ status: 'refunded' }`
+- [x] F5-T06 GET `/api/v1/admin/orders/:id/` → devuelve pedido mock completo
+- [x] F5-T15 POST `/api/v1/admin/orders/:id/refund/` → devuelve `{ status: 'refunded' }`
 
 ### Grupo C — Productos (F5-T02, F5-T17, F5-T18, F5-T19)
-- [ ] F5-T02 DELETE `/api/v1/admin/products/:id/` → 204 No Content
-- [ ] F5-T17 POST `/api/v1/admin/products/` → devuelve producto nuevo con id mockeado
-- [ ] F5-T18 POST `/api/v1/admin/products/:id/adjust-stock/` → `{ stock: N }`
-- [ ] F5-T19 POST `/api/v1/admin/products/:id/images/` → `{ id: 99, url: '/mock-images/product.jpg' }`
+- [x] F5-T02 DELETE `/api/v1/admin/products/:id/` → 204 No Content
+- [x] F5-T17 POST `/api/v1/admin/products/` → devuelve producto nuevo con id mockeado
+- [x] F5-T18 POST `/api/v1/admin/products/:id/adjust-stock/` → `{ stock: N }`
+- [x] F5-T19 POST `/api/v1/admin/products/:id/images/` → `{ id: 99, url: '/mock-images/product.jpg' }`
 
 ### Grupo D — Imágenes de producto (F5-T03)
-- [ ] F5-T03 DELETE `/api/v1/admin/products/:id/images/:id/` → 204 No Content
+- [x] F5-T03 DELETE `/api/v1/admin/products/:id/images/:id/` → 204 No Content
 
 ### Grupo E — Variantes (F5-T04, F5-T08, F5-T09, F5-T23)
-- [ ] F5-T04 DELETE `/api/v1/admin/products/:id/variant-types/:id/` → 204 No Content
-- [ ] F5-T08 GET `/api/v1/admin/products/:id/variant-types/` → array de tipos mock
-- [ ] F5-T09 GET `/api/v1/admin/products/:id/variants/` → array de variantes mock
-- [ ] F5-T23 POST `/api/v1/admin/variants/:id/adjust-stock/` → `{ stock: N }`
+- [x] F5-T04 DELETE `/api/v1/admin/products/:id/variant-types/:id/` → 204 No Content
+- [x] F5-T08 GET `/api/v1/admin/products/:id/variant-types/` → array de tipos mock
+- [x] F5-T09 GET `/api/v1/admin/products/:id/variants/` → array de variantes mock
+- [x] F5-T23 POST `/api/v1/admin/variants/:id/adjust-stock/` → `{ stock: N }`
 
 ### Grupo F — Import de productos (F5-T10, F5-T11, F5-T20)
-- [ ] F5-T10 GET `/api/v1/admin/products/import/:id/` → estado del import mock
-- [ ] F5-T11 GET `/api/v1/admin/products/import/template/` → blob CSV vacío (200 + Content-Type)
-- [ ] F5-T20 POST `/api/v1/admin/products/import/` → `{ id: 1, status: 'processing' }`
+- [x] F5-T10 GET `/api/v1/admin/products/import/:id/` → estado del import mock
+- [x] F5-T11 GET `/api/v1/admin/products/import/template/` → blob CSV vacío (200 + Content-Type)
+- [x] F5-T20 POST `/api/v1/admin/products/import/` → `{ id: 1, status: 'processing' }`
 
 ### Grupo G — Price sync (F5-T07)
-- [ ] F5-T07 GET `/api/v1/admin/price-sync/template/` → blob CSV vacío
+- [x] F5-T07 GET `/api/v1/admin/price-sync/template/` → blob CSV vacío
 
 ### Grupo H — Shipping methods (F5-T05, F5-T13, F5-T21)
-- [ ] F5-T05 DELETE `/api/v1/admin/shipping-methods/:id/` → 204 No Content
-- [ ] F5-T13 PATCH `/api/v1/admin/shipping-methods/:id/` → método actualizado
-- [ ] F5-T21 POST `/api/v1/admin/shipping-methods/` → método nuevo con id mockeado
+- [x] F5-T05 DELETE `/api/v1/admin/shipping-methods/:id/` → 204 No Content
+- [x] F5-T13 PATCH `/api/v1/admin/shipping-methods/:id/` → método actualizado
+- [x] F5-T21 POST `/api/v1/admin/shipping-methods/` → método nuevo con id mockeado
 
 ### Grupo I — Usuarios (F5-T22)
-- [ ] F5-T22 POST `/api/v1/admin/users/:id/reset-password/` → `{ detail: 'Email enviado.' }`
+- [x] F5-T22 POST `/api/v1/admin/users/:id/reset-password/` → `{ detail: 'Email enviado.' }`
 
 ### Grupo J — Vouchers (F5-T24, F5-T25)
-- [ ] F5-T24 POST `/api/v1/admin/vouchers/:id/duplicate/` → voucher duplicado con nuevo id
-- [ ] F5-T25 POST `/api/v1/admin/vouchers/:id/toggle/` → `{ is_active: !prev }`
+- [x] F5-T24 POST `/api/v1/admin/vouchers/:id/duplicate/` → voucher duplicado con nuevo id
+- [x] F5-T25 POST `/api/v1/admin/vouchers/:id/toggle/` → `{ is_active: !prev }`
 
 ### Grupo K — Páginas estáticas (F5-T16)
-- [ ] F5-T16 POST `/api/v1/admin/pages/` → página nueva con id mockeado
+- [x] F5-T16 POST `/api/v1/admin/pages/` → página nueva con id mockeado
 
 ---
 

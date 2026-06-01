@@ -446,4 +446,232 @@ export const adminHandlers = [
   http.delete('/api/v1/admin/vouchers/:id/', () =>
     new HttpResponse(null, { status: 204 })
   ),
+  // ── Categorías — CRUD completo ─────────────────────────────────────────────
+  // F5-T01 DELETE /api/v1/admin/categories/:id/
+  http.delete('/api/v1/admin/categories/:id/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  // F5-T12 PATCH /api/v1/admin/categories/:id/
+  http.patch('/api/v1/admin/categories/:id/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json({ id: Number(params.id), ...body });
+  }),
+
+  // F5-T14 POST /api/v1/admin/categories/
+  http.post('/api/v1/admin/categories/', async ({ request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json(
+      { id: faker.number.int({ min: 100, max: 999 }), ...body },
+      { status: 201 }
+    );
+  }),
+
+  // ── Pedidos admin ───────────────────────────────────────────────────────────
+  // F5-T06 GET /api/v1/admin/orders/:id/
+  http.get('/api/v1/admin/orders/:id/', ({ params }) => {
+    const id = Number(params.id);
+    const base = _adminOrders.find((o) => o.id === id) ?? _adminOrders[0];
+    return HttpResponse.json({
+      ...base,
+      id,
+      status_logs: [
+        { id: 1, status: 'PENDING_PAYMENT', created_at: new Date(Date.now() - 86400000).toISOString(), note: '' },
+        { id: 2, status: base.status,       created_at: new Date().toISOString(),                      note: '' },
+      ],
+      items: (base as any).items ?? [],
+      refund_history: [],
+    });
+  }),
+
+  // F5-T15 POST /api/v1/admin/orders/:id/refund/
+  http.post('/api/v1/admin/orders/:id/refund/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json({
+      id: Number(params.id),
+      status: 'REFUNDED',
+      refund_amount: body.amount ?? 0,
+      refunded_at: new Date().toISOString(),
+    });
+  }),
+
+  // ── Productos admin — CRUD ──────────────────────────────────────────────────
+  // F5-T02 DELETE /api/v1/admin/products/:id/
+  http.delete('/api/v1/admin/products/:id/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  // F5-T17 POST /api/v1/admin/products/
+  http.post('/api/v1/admin/products/', async ({ request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json(
+      { id: faker.number.int({ min: 1000, max: 9999 }), ...body },
+      { status: 201 }
+    );
+  }),
+
+  // F5-T18 POST /api/v1/admin/products/:id/adjust-stock/
+  http.post('/api/v1/admin/products/:id/adjust-stock/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as { quantity?: number; reason?: string };
+    const newStock = faker.number.int({ min: 0, max: 200 });
+    return HttpResponse.json({
+      product_id: Number(params.id),
+      stock: newStock,
+      adjustment: body.quantity ?? 0,
+      reason: body.reason ?? '',
+      adjusted_at: new Date().toISOString(),
+    });
+  }),
+
+  // F5-T19 POST /api/v1/admin/products/:id/images/
+  http.post('/api/v1/admin/products/:id/images/', async () =>
+    HttpResponse.json(
+      { id: faker.number.int({ min: 100, max: 999 }), url: '/mock-images/product.jpg', is_main: false },
+      { status: 201 }
+    )
+  ),
+
+  // ── Imágenes de producto ───────────────────────────────────────────────────
+  // F5-T03 DELETE /api/v1/admin/products/:id/images/:imageId/
+  http.delete('/api/v1/admin/products/:id/images/:imageId/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  // ── Variantes ─────────────────────────────────────────────────────────────
+  // F5-T04 DELETE /api/v1/admin/products/:id/variant-types/:vtId/
+  http.delete('/api/v1/admin/products/:id/variant-types/:vtId/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  // F5-T08 GET /api/v1/admin/products/:id/variant-types/
+  http.get('/api/v1/admin/products/:id/variant-types/', ({ params }) =>
+    HttpResponse.json([
+      { id: 1, product_id: Number(params.id), type_name: 'Talla',  values: ['XS', 'S', 'M', 'L', 'XL'] },
+      { id: 2, product_id: Number(params.id), type_name: 'Color',  values: ['Rojo', 'Negro', 'Blanco'] },
+    ])
+  ),
+
+  // F5-T09 GET /api/v1/admin/products/:id/variants/
+  http.get('/api/v1/admin/products/:id/variants/', ({ params }) => {
+    const pid = Number(params.id);
+    return HttpResponse.json(
+      Array.from({ length: 6 }, (_, i) => ({
+        id:         i + 1,
+        product_id: pid,
+        sku:        `SKU-${pid}-${String(i + 1).padStart(3, '0')}`,
+        name:       `Variante ${i + 1}`,
+        price:      faker.number.int({ min: 100, max: 2000 }),
+        stock:      faker.number.int({ min: 0, max: 50 }),
+        is_active:  true,
+        combination: [{ type_name: 'Talla', label: ['XS','S','M','L','XL','XL'][i] }],
+      }))
+    );
+  }),
+
+  // F5-T23 POST /api/v1/admin/variants/:id/adjust-stock/
+  http.post('/api/v1/admin/variants/:id/adjust-stock/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as { quantity?: number; reason?: string };
+    return HttpResponse.json({
+      variant_id: Number(params.id),
+      stock:      faker.number.int({ min: 0, max: 100 }),
+      adjustment: body.quantity ?? 0,
+      reason:     body.reason ?? '',
+      adjusted_at: new Date().toISOString(),
+    });
+  }),
+
+  // ── Import de productos ────────────────────────────────────────────────────
+  // F5-T11 GET /api/v1/admin/products/import/template/
+  http.get('/api/v1/admin/products/import/template/', () =>
+    new HttpResponse(
+      'sku,name,price,stock,category\nEJEMPLO-001,Producto ejemplo,100,10,collares-y-pulseras\n',
+      { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="import-template.csv"' } }
+    )
+  ),
+
+  // F5-T10 GET /api/v1/admin/products/import/:jobId/
+  http.get('/api/v1/admin/products/import/:jobId/', ({ params }) =>
+    HttpResponse.json({
+      id:             Number(params.jobId),
+      status:         'completed',
+      total_rows:     50,
+      imported:       48,
+      errors:         2,
+      error_rows:     [
+        { line: 12, sku: 'SKU-ERR-01', message: 'SKU duplicado' },
+        { line: 27, sku: 'SKU-ERR-02', message: 'Precio inválido' },
+      ],
+      created_at:     new Date().toISOString(),
+    })
+  ),
+
+
+  // F5-T20 POST /api/v1/admin/products/import/
+  http.post('/api/v1/admin/products/import/', async () =>
+    HttpResponse.json(
+      { id: faker.number.int({ min: 1, max: 999 }), status: 'processing', queued_at: new Date().toISOString() },
+      { status: 202 }
+    )
+  ),
+
+  // ── Price sync ────────────────────────────────────────────────────────────
+  // F5-T07 GET /api/v1/admin/price-sync/template/
+  http.get('/api/v1/admin/price-sync/template/', () =>
+    new HttpResponse(
+      'sku,new_price\nEJEMPLO-001,150\nEJEMPLO-002,200\n',
+      { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="price-sync-template.csv"' } }
+    )
+  ),
+
+  // ── Métodos de envío ───────────────────────────────────────────────────────
+  // F5-T05 DELETE /api/v1/admin/shipping-methods/:id/
+  http.delete('/api/v1/admin/shipping-methods/:id/', () =>
+    new HttpResponse(null, { status: 204 })
+  ),
+
+  // F5-T13 PATCH /api/v1/admin/shipping-methods/:id/
+  http.patch('/api/v1/admin/shipping-methods/:id/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json({ id: Number(params.id), ...body });
+  }),
+
+  // F5-T21 POST /api/v1/admin/shipping-methods/
+  http.post('/api/v1/admin/shipping-methods/', async ({ request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json(
+      { id: faker.number.int({ min: 100, max: 999 }), ...body },
+      { status: 201 }
+    );
+  }),
+
+  // ── Usuarios admin ─────────────────────────────────────────────────────────
+  // F5-T22 POST /api/v1/admin/users/:id/reset-password/
+  http.post('/api/v1/admin/users/:id/reset-password/', () =>
+    HttpResponse.json({ detail: 'Email de restablecimiento enviado.' })
+  ),
+
+  // ── Vouchers ───────────────────────────────────────────────────────────────
+  // F5-T24 POST /api/v1/admin/vouchers/:id/duplicate/
+  http.post('/api/v1/admin/vouchers/:id/duplicate/', ({ params }) => {
+    const newId = faker.number.int({ min: 9000, max: 9999 });
+    const base  = { id: newId, code: `COPIA-${params.id}-${newId}`, is_active: false };
+    return HttpResponse.json(base, { status: 201 });
+  }),
+
+  // F5-T25 POST /api/v1/admin/vouchers/:id/toggle/
+  http.post('/api/v1/admin/vouchers/:id/toggle/', ({ params }) => {
+    // Alterna is_active — sin estado mutable, devolvemos true como default
+    return HttpResponse.json({ id: Number(params.id), is_active: true });
+  }),
+
+  // ── Páginas estáticas ──────────────────────────────────────────────────────
+  // F5-T16 POST /api/v1/admin/pages/
+  http.post('/api/v1/admin/pages/', async ({ request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    return HttpResponse.json(
+      { id: faker.number.int({ min: 100, max: 999 }), ...body },
+      { status: 201 }
+    );
+  }),
+
 ];
