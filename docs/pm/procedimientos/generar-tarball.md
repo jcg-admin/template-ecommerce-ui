@@ -148,6 +148,7 @@ El tarball queda en `/tmp/backups/` del bash_tool. Para trasladarlo a WSL2:
 | 2026-05-29 | template-ecommerce-ui-FULL-20260529-114542-source.tar.gz | 176M | 0bbc38714e5afd3b3db14a96dcbd5f7d | 0a70223 | 277 |
 | 2026-05-29 | template-ecommerce-ui-FULL-20260529-204848-source.tar.gz | 175M | f8ecd92390931ebee28827aefaa8b799 | ebd2d56 | 280 |
 | 2026-06-01 | template-ecommerce-ui-FULL-20260601-210725-source.tar.gz | 252M | e1e9f04f4a0b2418dabc543c8fb30b4c | 8fc70b1 | 294 |
+| 2026-06-01 | template-ecommerce-ui-FULL-20260601-222105-source.tar.gz | 252M | 598893b2d9cdcb303318dea2137eeff0 | f572673 | 296 |
 
 ---
 
