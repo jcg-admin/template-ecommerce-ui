@@ -211,11 +211,15 @@ $transition-colors:  background-color $transition-fast,
 // 12. Z-INDEX
 // ─────────────────────────────────────────────────────────────────────
 
+$z-dropdown:        1000;  // dropdowns y paneles flotantes
 $z-sticky:          1020;
 $z-fixed:           1030;
 $z-modal-backdrop:  1040;
 $z-modal:           1050;
 $z-toast:           1080;
+$z-carousel:          10;  // controles internos del carrusel
+$z-sidebar:          200;  // sidebar móvil desplegable
+$z-overlay:          199;  // backdrop del sidebar
 
 // ─────────────────────────────────────────────────────────────────────
 // 13. BREAKPOINTS

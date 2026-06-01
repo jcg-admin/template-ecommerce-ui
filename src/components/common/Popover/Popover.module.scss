@@ -9,7 +9,7 @@
   border-radius: $border-radius-md;
   box-shadow: $shadow-md;
   max-width: 280px;
-  z-index: 9999;
+  z-index: $z-modal;
   font-size: $font-size-sm;
   overflow: hidden;
 }

@@ -184,10 +184,10 @@ const Calendar = forwardRef(function Calendar({
   }));
 
   // ─── Navegación ──────────────────────────────────────────────────────────────
-  const prevMonth = () => setNavDate(d => { const n = new Date(d); n.setMonth(n.getMonth() - 1); return n; });
-  const nextMonth = () => setNavDate(d => { const n = new Date(d); n.setMonth(n.getMonth() + 1); return n; });
+  const prevMonth = () => setNavDate(d => { const n = new Date(d); n.setDate(1); n.setMonth(n.getMonth() - 1); return n; });
+  const nextMonth = () => setNavDate(d => { const n = new Date(d); n.setDate(1); n.setMonth(n.getMonth() + 1); return n; });
   const prevYear  = () => setNavDate(d => { const n = new Date(d); n.setFullYear(n.getFullYear() - 1); return n; });
-  const nextYear  = () => setNavDate(d => { const n = new Date(d); n.setFullYear(n.getFullYear() + 1); return n; });
+  const nextYear  = () => setNavDate(d => { const n = new Date(d); n.setDate(1); n.setFullYear(n.getFullYear() + 1); return n; });
 
   const goToMonthView = () => setView('months');
   const goToYearView  = () => setView('years');

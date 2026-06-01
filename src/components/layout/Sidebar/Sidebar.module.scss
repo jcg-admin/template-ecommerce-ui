@@ -12,7 +12,7 @@
   border-right: 1px solid $border-color;
   overflow-y: auto;
   overflow-x: hidden;
-  z-index: 200;
+  z-index: $z-sidebar;
   transition: width 250ms ease, transform 250ms ease;
   display: flex;
   flex-direction: column;
@@ -43,7 +43,7 @@
   position: fixed;
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
-  z-index: 199;
+  z-index: $z-overlay;
   cursor: pointer;
 
   @media (min-width: 769px) {

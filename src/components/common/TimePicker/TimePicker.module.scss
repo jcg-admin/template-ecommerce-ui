@@ -47,7 +47,7 @@
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
-  z-index: 9999;
+  z-index: $z-modal;
   background: $bg-elevated;
   border: 1px solid $border-color;
   border-radius: $border-radius-md;

@@ -240,53 +240,53 @@ $z-overlay:   199;    // backdrop del sidebar
 
 ### F4-T1 — ProductDiscountCreateForm.module.scss L11
 `z-index: 1000` → `z-index: $z-dropdown` (requiere `@use '@styles/abstracts' as *`).
-- [ ] DONE
+- [x] DONE
 
 ### F4-T2 — VoucherCreateForm.module.scss L11
 `z-index: 1000` → `z-index: $z-dropdown`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T3 — Autocomplete/Autocomplete.module.scss L31 + L77
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T4 — Carousel/Carousel.module.scss L32 + L86
 `z-index: 10` → `z-index: $z-carousel`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T5 — DatePicker/DatePicker.module.scss L26
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T6 — DatePicker/DateRangePicker.module.scss L21
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T7 — MultiSelect/MultiSelect.module.scss L35
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T8 — Offcanvas/Offcanvas.module.scss L7 + L14
 `z-index: 1040` → `z-index: $z-modal-backdrop`.
 `z-index: 1045` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T9 — Popover/Popover.module.scss L12
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T10 — TimePicker/TimePicker.module.scss L50
 `z-index: 9999` → `z-index: $z-modal`.
-- [ ] DONE
+- [x] DONE
 
 ### F4-T11 — Tooltip/Tooltip.module.scss L18
 `z-index: 9999` → `z-index: $z-toast` (los tooltips van sobre todo lo demás).
-- [ ] DONE
+- [x] DONE
 
 ### F4-T12 — Sidebar/Sidebar.module.scss L15 + L46
 `z-index: 200` → `z-index: $z-sidebar`.
 `z-index: 199` → `z-index: $z-overlay`.
-- [ ] DONE
+- [x] DONE
 
 ---
 

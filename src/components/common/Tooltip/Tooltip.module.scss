@@ -15,7 +15,7 @@
   max-width: 220px;
   line-height: 1.4;
   pointer-events: none;
-  z-index: 9999;
+  z-index: $z-toast;
   position: absolute;
   word-wrap: break-word;
   box-shadow: $shadow-sm;

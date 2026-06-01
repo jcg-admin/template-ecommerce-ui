@@ -24,7 +24,7 @@ describe('Calendar', () => {
     // El header refleja el mes siguiente
     const expectedMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1)
       .toLocaleDateString('default', { month: 'long' });
-    expect(screen.getByText(new RegExp(expectedMonth, 'i'))).toBeInTheDocument();
+    expect(screen.getAllByRole('button').some(b => new RegExp(expectedMonth, 'i').test(b.textContent))).toBe(true);
   });
 
   it('navega al mes anterior con el botón ‹', () => {
@@ -34,7 +34,7 @@ describe('Calendar', () => {
     fireEvent.click(prevBtn);
     const expectedMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1)
       .toLocaleDateString('default', { month: 'long' });
-    expect(screen.getByText(new RegExp(expectedMonth, 'i'))).toBeInTheDocument();
+    expect(screen.getAllByRole('button').some(b => new RegExp(expectedMonth, 'i').test(b.textContent))).toBe(true);
   });
 
   it('selectionType=day llama onDateChange al hacer click en un día', () => {
