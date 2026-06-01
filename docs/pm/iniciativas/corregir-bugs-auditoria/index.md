@@ -1,6 +1,6 @@
 # Iniciativa: corregir-bugs-auditoria
 
-**Estado:** EN CURSO
+**Estado:** COMPLETADA
 **Creada:** 2026-05-30
 **Origen:** Auditoría post-deploy — 8 capas (imports, React, Redux, MSW, SCSS, a11y, seguridad, rendimiento)
 **Rama:** main
@@ -28,4 +28,4 @@ accesibilidad, SCSS y cobertura MSW del panel admin.
 | F3 | BAJA | BUG-ACC-01 (10 inputs) | COMPLETADA |
 | F4 | BAJA | BUG-SCSS-01 (16 ocurrencias) | COMPLETADA |
 | F5 | BAJA | BUG-MSW-01 (25 endpoints) | COMPLETADA |
-| F6 | INFO | BUG-SCSS-02 (12 archivos) | PENDIENTE |
+| F6 | INFO | BUG-SCSS-02 (12 archivos) | COMPLETADA — falsos positivos |

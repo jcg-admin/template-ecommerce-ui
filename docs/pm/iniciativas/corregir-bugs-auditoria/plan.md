@@ -370,17 +370,19 @@ pero el componente es `index.jsx`. Documentar como falso positivo.
 `primitives/primitives.module.scss`.
 → Verificar si lo usa algún JSX. Si no → mover a `styles/components/_primitives.scss`.
 
-### F6-T1 — Verificar Tipo A (6 archivos)
-Confirmar que son falsos positivos — el componente usa `index.jsx`.
-- [ ] DONE
+### F6-T1 — Verificar Tipo A (7 archivos)
+Confirmados como falsos positivos — todos importados por index.jsx:
+AccountSidebar, AdminSidebar, RefundModal, StockAdjustModal, Footer, Header, AdminLayout.
+- [x] DONE — falsos positivos, sin cambios necesarios
 
 ### F6-T2 — Verificar Tipo B (5 archivos)
-Buscar importadores. Eliminar si no hay ninguno.
-- [ ] DONE
+Confirmados como SCSS compartido deliberado entre páginas similares:
+primitives, AdminBulkPage (2 imp), AdminReportPage (4 imp), AdminTablePage (7 imp), AuthSimplePage (3 imp).
+- [x] DONE — patrón arquitectural válido, sin cambios necesarios
 
 ### F6-T3 — Verificar Tipo C (1 archivo)
-`primitives.module.scss` — buscar importador o mover.
-- [ ] DONE
+`primitives.module.scss` — importado por primitives/index.jsx.
+- [x] DONE — falso positivo, sin cambios necesarios
 
 ---
 
