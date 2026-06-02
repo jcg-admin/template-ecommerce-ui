@@ -16,6 +16,7 @@
 import { useState } from 'react';
 import { useAdminCategories } from '@hooks/domain/useCategories';
 import RichTextEditor from '@components/common/RichTextEditor';
+import DualListBox from '@components/common/DualListBox';
 import styles from './AdminProductForm.module.scss';
 
 const DEFAULTS = {
@@ -26,6 +27,8 @@ const DEFAULTS = {
   base_price: '',
   stock: '',
   category_id: '',
+  // Categorías adicionales asignadas vía DualListBox (UC-ADM-LISTBOX).
+  category_ids: [],
   status: 'BORRADOR',
 };
 
@@ -43,6 +46,20 @@ export default function AdminProductForm({
 
   const { data: categoriesData } = useAdminCategories();
   const categories = categoriesData?.results ?? [];
+
+  // Ítems del DualListBox: derivados de las mismas categorías que ya carga el
+  // form vía useAdminCategories, mapeados a la forma { id, label } que espera
+  // el componente. selectedIds vive en fields.category_ids.
+  //
+  // El label lleva el prefijo "Categoría: " para que el nombre accesible de
+  // cada <option role="option"> del DualListBox no colisione con las <option>
+  // del <select> de "Categoria" (que usan el nombre desnudo). Sin este prefijo,
+  // consultas como getByRole('option', { name: 'Collares' }) encontrarían dos
+  // coincidencias (la del select y la del listbox).
+  const categoryItems = categories.map((c) => ({
+    id: c.id,
+    label: `Categoría: ${c.name}`,
+  }));
 
   const setField = (name, value) => {
     setFields((p) => ({ ...p, [name]: value }));
@@ -85,6 +102,7 @@ export default function AdminProductForm({
       base_price: Number(fields.base_price),
       stock: Number(fields.stock),
       category_id: Number(fields.category_id),
+      category_ids: (fields.category_ids ?? []).map(Number),
       status: fields.status,
     };
     if (fields.sku.trim()) payload.sku = fields.sku.trim();
@@ -219,6 +237,18 @@ export default function AdminProductForm({
           ))}
         </select>
         {errors.category_id && <p className={styles.fieldError}>{errors.category_id}</p>}
+      </div>
+
+      <div className={styles.field}>
+        <span className={styles.label}>Categorías del producto</span>
+        <DualListBox
+          items={categoryItems}
+          selectedIds={fields.category_ids ?? []}
+          onChange={(ids) => setField('category_ids', ids)}
+          availableLabel="Disponibles"
+          selectedLabel="Asignadas"
+          ariaLabel="Categorías del producto"
+        />
       </div>
 
       <div className={styles.field}>
