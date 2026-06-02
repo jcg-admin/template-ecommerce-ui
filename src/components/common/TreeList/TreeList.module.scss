@@ -1,0 +1,99 @@
+@use '@styles/abstracts' as *;
+
+.treegrid {
+  display: table;
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ec-text-primary);
+  font-size: $font-size-base;
+}
+
+.headerRow,
+.row {
+  display: table-row;
+}
+
+.headerCell {
+  display: table-cell;
+  padding: $spacing-2 $spacing-3;
+  text-align: left;
+  font-weight: $font-weight-semibold;
+  font-size: $font-size-sm;
+  color: var(--ec-text-muted);
+  border-bottom: 1px solid var(--ec-border-color, #{$border-color});
+}
+
+.row {
+  transition: background-color $transition-base;
+
+  &:hover {
+    background: var(--ec-bg-elevated);
+  }
+}
+
+.labelCell,
+.cell,
+.actionsCell {
+  display: table-cell;
+  padding: $spacing-2 $spacing-3;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--ec-border-color, #{$border-color});
+}
+
+.labelCell {
+  padding-left: calc(#{$spacing-3} + var(--ec-treelist-level, 0) * #{$spacing-4});
+  white-space: nowrap;
+}
+
+.actionsCell {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: $spacing-2;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ec-text-muted);
+  vertical-align: middle;
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+    border-radius: $border-radius-sm;
+  }
+}
+
+.toggleSpacer {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  margin-right: $spacing-2;
+  vertical-align: middle;
+}
+
+.toggleIcon {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 0.3rem solid transparent;
+  border-bottom: 0.3rem solid transparent;
+  border-left: 0.4rem solid currentColor;
+  transition: transform $transition-base;
+
+  [aria-expanded='true'] & {
+    transform: rotate(90deg);
+  }
+}
+
+.label {
+  font-weight: $font-weight-medium;
+  vertical-align: middle;
+}

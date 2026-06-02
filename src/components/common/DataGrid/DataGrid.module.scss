@@ -1,0 +1,123 @@
+@use '@styles/abstracts' as *;
+
+.dataGrid {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  color: var(--ec-text-primary);
+  font-size: $font-size-base;
+}
+
+.toolbar {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.search {
+  width: 100%;
+  max-width: 18rem;
+  padding: $spacing-2 $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-md;
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-primary);
+  font-size: $font-size-sm;
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.th {
+  padding: $spacing-2 $spacing-3;
+  border-bottom: 2px solid var(--ec-border-color);
+  color: var(--ec-text-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}
+
+.sortButton {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: 0;
+  border: none;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-weight: $font-weight-semibold;
+  cursor: pointer;
+
+  &:hover {
+    color: var(--ec-text-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+}
+
+.tr {
+  &:hover {
+    background: var(--ec-bg-sunken);
+  }
+}
+
+.td {
+  padding: $spacing-2 $spacing-3;
+  border-bottom: 1px solid var(--ec-border-color);
+}
+
+.empty {
+  padding: $spacing-6 $spacing-3;
+  color: var(--ec-text-muted);
+  text-align: center;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $spacing-3;
+}
+
+.pageButton {
+  padding: $spacing-2 $spacing-4;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-md;
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-primary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: background-color $transition-base, border-color $transition-base;
+
+  &:hover:not(:disabled) {
+    border-color: var(--ec-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.pageInfo {
+  color: var(--ec-text-muted);
+  font-size: $font-size-sm;
+  font-variant-numeric: tabular-nums;
+}
