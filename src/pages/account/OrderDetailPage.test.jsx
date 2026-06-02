@@ -17,6 +17,7 @@ jest.mock('@services/apiService', () => ({
 
 import apiService from '@services/apiService';
 import ordersReducer from '@redux/slices/ordersSlice';
+import logisticsReducer from '@redux/slices/logisticsSlice';
 import OrderDetailPage from './OrderDetailPage';
 
 const makeClient = () =>
@@ -31,7 +32,7 @@ const wrap = (ui) => {
     shipping_method_label: 'DHL', subtotal: 1780, tax: 0, discount: 0,
   };
   const store = configureStore({
-    reducer: { orders: ordersReducer, auth: authReducer },
+    reducer: { orders: ordersReducer, auth: authReducer, logistics: logisticsReducer },
     preloadedState: {
       auth: { user: { first_name: 'Test' }, isAuthenticated: true },
       orders: { current: ORDER, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: 'PY-0088' },
@@ -185,7 +186,7 @@ describe('OrderDetailPage — race redirect (BUG-ORDER-01)', () => {
 
   const wrapNoOrder = (ui) => {
     const store = configureStore({
-      reducer: { orders: ordersReducer, auth: authReducer },
+      reducer: { orders: ordersReducer, auth: authReducer, logistics: logisticsReducer },
       preloadedState: {
         auth: { user: { first_name: 'Test' }, isAuthenticated: true },
         orders: { current: null, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: null },
@@ -232,6 +233,29 @@ describe('OrderDetailPage — factura PDF (UC-ORD-PDF)', () => {
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
     expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+  });
+});
+
+// ─── UC-LOG-07 — reportar problema de envío ─────────────────────────────────
+describe('OrderDetailPage — reportar problema de envío (UC-LOG-07)', () => {
+  it('abre el modal y despacha reportShippingIssue con POST', async () => {
+    apiService.get.mockResolvedValue({ data: ORDER });
+    apiService.post.mockResolvedValue({ data: { id: 7, status: 'OPEN' } });
+    render(wrap(<OrderDetailPage />));
+    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+
+    fireEvent.click(screen.getByRole('button', { name: /Reportar problema de envío/i }));
+    fireEvent.change(screen.getByLabelText(/Describe el problema de envío/i), {
+      target: { value: 'No llegó nada' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Enviar reporte/i }));
+
+    await waitFor(() => {
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/orders/PY-2026-000001/shipping-issue/',
+        expect.objectContaining({ message: 'No llegó nada' }),
+      );
+    });
   });
 
   // UC-ORD-PDFGEN: generar la factura en el cliente (jsPDF) y verla en el visor.

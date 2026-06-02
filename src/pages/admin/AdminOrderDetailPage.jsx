@@ -15,6 +15,9 @@ import { Link, useParams } from 'react-router-dom';
 import {
   fetchAdminOrder, updateOrderStatus, adminCancelOrder,
 } from '@redux/slices/adminSlice';
+import {
+  createShipmentGuide, setTrackingNumber,
+} from '@redux/slices/logisticsSlice';
 import RefundModal from '@components/admin/RefundModal';
 import GanttChart from '@components/common/GanttChart';
 import { MetaTag, Price, Button } from '@components/common/primitives';
@@ -50,6 +53,11 @@ export default function AdminOrderDetailPage() {
   const [cancelReason, setCancelReason] = useState('');
   const [showRefund, setShowRefund] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
+  // UC-LOG-01 / UC-LOG-02 — envío
+  const [guideCourier, setGuideCourier] = useState('');
+  const [guideWeight, setGuideWeight] = useState('');
+  const [tracking, setTracking] = useState('');
+  const currentGuide = useSelector((s) => s.logistics?.currentGuide);
 
   useEffect(() => { dispatch(fetchAdminOrder(order_number)); }, [dispatch, order_number]);
 
@@ -82,6 +90,25 @@ export default function AdminOrderDetailPage() {
     if (!cancelReason.trim()) return;
     await dispatch(adminCancelOrder({ orderNumber: order_number, reason: cancelReason }));
     setShowCancel(false); setCancelReason('');
+  };
+
+  // UC-LOG-01 — crear guía de envío
+  const handleCreateGuide = async (e) => {
+    e.preventDefault();
+    await dispatch(createShipmentGuide({
+      orderNumber: order_number,
+      ...(guideCourier ? { courierId: Number(guideCourier) } : {}),
+      ...(guideWeight ? { weight_kg: Number(guideWeight) } : {}),
+    }));
+    setGuideCourier(''); setGuideWeight('');
+  };
+
+  // UC-LOG-02 — registrar número de rastreo
+  const handleSetTracking = async (e) => {
+    e.preventDefault();
+    if (!tracking.trim()) return;
+    await dispatch(setTrackingNumber({ orderNumber: order_number, tracking: tracking.trim() }));
+    setTracking('');
   };
 
   return (
@@ -178,6 +205,56 @@ export default function AdminOrderDetailPage() {
         <section className={styles.card}>
           <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Línea de tiempo de fulfillment</h2></header>
           <GanttChart tasks={fulfillmentTasks} />
+        </section>
+
+        {/* Envío — guía (UC-LOG-01) y rastreo (UC-LOG-02) */}
+        <section className={styles.card}>
+          <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Envío</h2></header>
+          {currentGuide?.guide_id && (
+            <p className={styles.muted} style={{ padding: '0 16px' }}>
+              Guía actual: <strong>{currentGuide.guide_id}</strong>
+              {currentGuide.tracking && <> · Rastreo: <strong>{currentGuide.tracking}</strong></>}
+            </p>
+          )}
+          <form onSubmit={handleCreateGuide} className={styles.transitionForm}>
+            <MetaTag tone="bronze">Crear guía de envío</MetaTag>
+            <div className={styles.transitionRow}>
+              <input
+                type="number"
+                aria-label="ID del courier"
+                placeholder="ID courier (opcional)"
+                value={guideCourier}
+                onChange={(e) => setGuideCourier(e.target.value)}
+                className={styles.input}
+              />
+              <input
+                type="number"
+                step="0.1"
+                aria-label="Peso en kg"
+                placeholder="Peso (kg)"
+                value={guideWeight}
+                onChange={(e) => setGuideWeight(e.target.value)}
+                className={styles.input}
+              />
+              <Button type="submit" variant="primary" size="sm">Crear guía</Button>
+            </div>
+          </form>
+          <form onSubmit={handleSetTracking} className={styles.transitionForm}>
+            <MetaTag tone="bronze">Registrar número de rastreo</MetaTag>
+            <div className={styles.transitionRow}>
+              <input
+                type="text"
+                aria-label="Número de rastreo"
+                placeholder="Número de rastreo"
+                value={tracking}
+                onChange={(e) => setTracking(e.target.value)}
+                className={styles.input}
+              />
+              <Button type="submit" variant="secondary" size="sm" disabled={!tracking.trim()}>
+                Guardar rastreo
+              </Button>
+            </div>
+          </form>
         </section>
 
         {/* Items */}

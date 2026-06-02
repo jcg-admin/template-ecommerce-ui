@@ -6,6 +6,7 @@ import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import adminReducer from '@redux/slices/adminSlice';
 import uiReducer   from '@redux/slices/uiSlice';
+import logisticsReducer from '@redux/slices/logisticsSlice';
 
 jest.mock('@services/apiService', () => ({
   __esModule: true,
@@ -21,7 +22,7 @@ import apiService from '@services/apiService';
 import AdminOrderDetailPage from './AdminOrderDetailPage';
 
 const makeStore = (state = {}) => configureStore({
-  reducer: { admin: adminReducer, ui: uiReducer },
+  reducer: { admin: adminReducer, ui: uiReducer, logistics: logisticsReducer },
   preloadedState: state,
 });
 const makeClient = () => new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -153,5 +154,42 @@ describe('AdminOrderDetailPage — fulfillment Gantt (UC-LOG-GANTT)', () => {
     const gantt = screen.getByRole('figure', { name: /Diagrama de Gantt/i });
     // Una barra (role=img) por cada etapa del STATUS_FLOW (6).
     expect(within(gantt).getAllByRole('img').length).toBe(6);
+  });
+});
+
+// ─── UC-LOG-01 / UC-LOG-02 — sección Envío ──────────────────────────────────
+describe('AdminOrderDetailPage — envío (UC-LOG-01 / UC-LOG-02)', () => {
+  it('crear guía dispara POST a /admin/orders/:n/guide/ (UC-LOG-01)', async () => {
+    apiService.get.mockResolvedValue({ data: ORDER });
+    apiService.post.mockResolvedValue({ data: { guide_id: 'G-1', order_number: 'PY-2026-000101' } });
+    renderWithOrder();
+    await screen.findByRole('heading', { name: 'PY-2026-000101' });
+
+    fireEvent.change(screen.getByLabelText(/ID del courier/i), { target: { value: '3' } });
+    fireEvent.click(screen.getByRole('button', { name: /Crear guía/i }));
+
+    await waitFor(() => {
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/admin/orders/PY-2026-000101/guide/',
+        expect.objectContaining({ courier_id: 3 }),
+      );
+    });
+  });
+
+  it('guardar rastreo dispara PATCH a /admin/orders/:n/tracking/ (UC-LOG-02)', async () => {
+    apiService.get.mockResolvedValue({ data: ORDER });
+    apiService.patch.mockResolvedValue({ data: { order_number: 'PY-2026-000101', tracking: 'TRK-9' } });
+    renderWithOrder();
+    await screen.findByRole('heading', { name: 'PY-2026-000101' });
+
+    fireEvent.change(screen.getByLabelText(/Número de rastreo/i), { target: { value: 'TRK-9' } });
+    fireEvent.click(screen.getByRole('button', { name: /Guardar rastreo/i }));
+
+    await waitFor(() => {
+      expect(apiService.patch).toHaveBeenCalledWith(
+        '/api/v1/admin/orders/PY-2026-000101/tracking/',
+        { tracking: 'TRK-9' },
+      );
+    });
   });
 });

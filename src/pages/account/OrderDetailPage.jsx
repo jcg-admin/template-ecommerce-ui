@@ -12,6 +12,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
+import { reportShippingIssue } from '@redux/slices/logisticsSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import PdfViewer from '@components/common/PdfViewer';
 import { invoicePdfUrl } from '@utils/generateInvoicePdf';
@@ -94,7 +95,7 @@ export default function OrderDetailPage() {
           <aside className={styles.sideCol}>
             <TotalsCard order={order} />
             <PaymentCard payment={order.payment} />
-            <SupportCard order={order} />
+            <SupportCard order={order} dispatch={dispatch} />
           </aside>
         </div>
       </div>
@@ -258,8 +259,22 @@ function PaymentCard({ payment }) {
   );
 }
 
-function SupportCard({ order }) {
+function SupportCard({ order, dispatch }) {
   const canRefund = order.status === 'DELIVERED' && !order.refund_requested;
+  // UC-LOG-07 — reportar problema de envío
+  const [showIssue, setShowIssue] = useState(false);
+  const [issueMsg, setIssueMsg] = useState('');
+  const [issueSent, setIssueSent] = useState(false);
+
+  const handleReport = async (e) => {
+    e.preventDefault();
+    if (!issueMsg.trim()) return;
+    await dispatch(reportShippingIssue({ orderNumber: order.order_number, message: issueMsg.trim() }));
+    setIssueSent(true);
+    setShowIssue(false);
+    setIssueMsg('');
+  };
+
   return (
     <div className={styles.sideCardOutline}>
       <MetaTag tone="bronze">¿Hay algo con tu pedido?</MetaTag>
@@ -268,10 +283,44 @@ function SupportCard({ order }) {
       </p>
       <div className={styles.supportActions}>
         <Button variant="secondary" block size="sm">Solicitar ayuda</Button>
+        <Button variant="secondary" block size="sm" onClick={() => setShowIssue(true)}>
+          Reportar problema de envío
+        </Button>
         {canRefund && (
           <Button variant="ghost" block size="sm">Solicitar reembolso</Button>
         )}
       </div>
+      {issueSent && (
+        <p className={styles.supportText}>Recibimos tu reporte. Te contactaremos pronto.</p>
+      )}
+
+      {showIssue && (
+        <div
+          style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.65)', zIndex: 1050, display: 'grid', placeItems: 'center', padding: 16 }}
+          onClick={() => setShowIssue(false)}
+        >
+          <div
+            style={{ background: 'var(--c-base-2, #161D04)', border: '1px solid rgba(245,247,238,0.14)', maxWidth: 520, width: '100%', padding: 28 }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h3 style={{ marginBottom: 14 }}>Reportar problema de envío</h3>
+            <form onSubmit={handleReport} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <textarea
+                aria-label="Describe el problema de envío"
+                placeholder="Describe qué pasó con tu envío"
+                value={issueMsg}
+                onChange={(e) => setIssueMsg(e.target.value)}
+                rows={4}
+                required
+              />
+              <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
+                <Button type="button" variant="ghost" onClick={() => setShowIssue(false)}>Cancelar</Button>
+                <Button type="submit" variant="primary" disabled={!issueMsg.trim()}>Enviar reporte</Button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
