@@ -1,6 +1,6 @@
 # Iniciativa: trazabilidad-ucs-catalogo
 
-**Estado:** EN EJECUCIÓN
+**Estado:** CERRADA
 **Creada:** 2026-06-02
 **Origen:** Solicitud usuario — tomar el catálogo de UCs de la documentación de
 e-commerce como referencia, mapear contra el template e implementar lo faltante.

@@ -9,6 +9,15 @@ las familias en paralelo (5 agentes) con evidencia de código.
 
 ## Resumen
 
+> **Actualización (cierre de iniciativa):** los 8 AUSENTE-UI fueron
+> implementados con TDD + MSW + test. El conteo final es **131 IMPLEMENTADO /
+> 23 BACKEND-OPS / 0 AUSENTE-UI**. Los 8 cerrados:
+> UC-AUTH-16 (`SecurityPage`+`deleteAccount`), UC-SRCH-02 (`SearchBar`+
+> `useSearchSuggestions`), UC-PRO-04 (`AdminVoucherDetailPage` uso),
+> UC-PRO-05 (`ReferralPage`+`referralSlice`), UC-LOG-01/02 (`AdminOrderDetailPage`
+> envío), UC-LOG-06 (`AdminCouriersPage`), UC-LOG-07 (`OrderDetailPage` incidencia).
+> Las tablas por familia abajo conservan la clasificación original (snapshot).
+
 | Estado | Total | Significado |
 |--------|-------|-------------|
 | IMPLEMENTADO | 123 | Existe en el UI (con evidencia: componente/página/slice/test) |
