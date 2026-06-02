@@ -8,12 +8,13 @@
  *   POST /payments/{n}/refund/
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import PdfViewer from '@components/common/PdfViewer';
+import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
 
 const TIMELINE_STEPS = [
@@ -87,7 +88,7 @@ export default function OrderDetailPage() {
             <Timeline order={order} currentIndex={currentStatusIndex} />
             <ItemsBlock items={order.items || []} />
             <AddressBlock address={order.shipping_address} />
-            <InvoiceBlock invoiceUrl={order.invoice_url} orderNumber={order.order_number} />
+            <InvoiceBlock order={order} />
           </div>
 
           <aside className={styles.sideCol}>
@@ -157,12 +158,35 @@ function ItemsBlock({ items }) {
   );
 }
 
-function InvoiceBlock({ invoiceUrl, orderNumber }) {
-  if (!invoiceUrl) return null;
+function InvoiceBlock({ order }) {
+  // UC-ORD-PDF: factura estatica (asset mock en DEMO via order.invoice_url).
+  // UC-ORD-PDFGEN: ademas se puede GENERAR la factura en el cliente desde los
+  // datos del pedido (jsPDF) y verla en el mismo visor.
+  const [pdfUrl, setPdfUrl] = useState(order.invoice_url || null);
+  const generatedRef = useRef(null);
+
+  const revoke = (url) => {
+    if (url && typeof URL.revokeObjectURL === 'function') URL.revokeObjectURL(url);
+  };
+
+  const handleGenerate = () => {
+    revoke(generatedRef.current);
+    const url = invoicePdfUrl(order);
+    generatedRef.current = url;
+    setPdfUrl(url);
+  };
+
+  useEffect(() => () => revoke(generatedRef.current), []);
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Factura</h2>
-      <PdfViewer url={invoiceUrl} title={`Factura ${orderNumber}`} height={480} />
+      <Button variant="secondary" size="sm" onClick={handleGenerate}>
+        Generar factura en PDF
+      </Button>
+      {pdfUrl && (
+        <PdfViewer url={pdfUrl} title={`Factura ${order.order_number}`} height={480} />
+      )}
     </section>
   );
 }

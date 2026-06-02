@@ -1,7 +1,7 @@
 /**
  * Tests — OrderDetailPage (UC-ORD-02 / UC-ORD-04 / UC-ORD-05 / UC-ORD-06)
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -232,5 +232,24 @@ describe('OrderDetailPage — factura PDF (UC-ORD-PDF)', () => {
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
     expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+  });
+
+  // UC-ORD-PDFGEN: generar la factura en el cliente (jsPDF) y verla en el visor.
+  it('genera la factura en cliente al pulsar "Generar factura en PDF"', async () => {
+    const original = URL.createObjectURL;
+    URL.createObjectURL = jest.fn(() => 'blob:generated-invoice');
+    try {
+      apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: undefined } });
+      render(wrap(<OrderDetailPage />));
+      await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+      // Sin invoice_url no hay visor todavia.
+      expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: /Generar factura en PDF/i }));
+      const frame = await screen.findByTitle(/Factura/i);
+      expect(frame).toHaveAttribute('src', 'blob:generated-invoice');
+      expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    } finally {
+      URL.createObjectURL = original;
+    }
   });
 });
