@@ -1,6 +1,6 @@
 # Iniciativa: unificar-sitesettings (DR-02)
 
-**Estado:** PLANEADA (sin ejecutar)
+**Estado:** CERRADA (2026-06-02T20:06:46)
 **Creada:** 2026-06-02
 **Origen:** Drift DR-02 documentado al cerrar `cablear-rutas-huerfanas`.
 

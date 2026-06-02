@@ -27,10 +27,10 @@ describe('AdminConfigPage (hub de configuracion)', () => {
         <AdminConfigPage />
       </MemoryRouter>,
     );
-    // UC-CFG-03 (SiteSettings) — pagina de config dedicada
+    // UC-CFG-03 (SiteSettings) — pagina canonica (DR-02: dedup hacia system-settings)
     expect(
       screen.getByRole('link', { name: /Ajustes del sitio/i }),
-    ).toHaveAttribute('href', '/admin/config/site');
+    ).toHaveAttribute('href', '/admin/system-settings');
     // UC-CFG-05 — datos de contacto
     expect(
       screen.getByRole('link', { name: /Mensajes de contacto/i }),

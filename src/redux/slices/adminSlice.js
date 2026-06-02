@@ -152,8 +152,6 @@ const adminSlice = createSlice({
     stockAlerts:        [],
     isLoadingInventory: false,
     isLoadingAlerts:    false,
-    siteSettings:       null,
-    isLoadingSettings:  false,
   },
 
   reducers: {
@@ -352,30 +350,6 @@ const adminSlice = createSlice({
       })
       .addCase(fetchStockAlerts.rejected,  (state) => {
         state.isLoadingAlerts = false;
-      })
-
-      // ── BUG-SL-03: fetchSiteSettings + updateSiteSettings ────────────────
-      .addCase(fetchSiteSettings.pending,   (state) => {
-        state.isLoadingSettings = true;
-      })
-      .addCase(fetchSiteSettings.fulfilled, (state, action) => {
-        state.isLoadingSettings = false;
-        state.siteSettings      = action.payload ?? null;
-      })
-      .addCase(fetchSiteSettings.rejected,  (state) => {
-        state.isLoadingSettings = false;
-      })
-      .addCase(updateSiteSettings.pending,   (state) => {
-        state.isActioning = true;
-      })
-      .addCase(updateSiteSettings.fulfilled, (state, action) => {
-        state.isActioning  = false;
-        state.siteSettings = action.payload ?? state.siteSettings;
-        state.lastAction   = 'settings_updated';
-      })
-      .addCase(updateSiteSettings.rejected,  (state, action) => {
-        state.isActioning  = false;
-        state.actionError  = action.payload ?? null;
       })
 
       // ── BUG-SL-04: fetchAdminVoucher + CRUD ──────────────────────────────
@@ -750,18 +724,6 @@ export const fetchInventoryDashboard = createAsyncThunk(
 export const fetchStockAlerts = createAsyncThunk(
   'admin/stockAlerts', async (_a, { rejectWithValue }) => {
     try { return (await apiService.get('/api/v1/admin/inventory/alerts/')).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-export const fetchSiteSettings = createAsyncThunk(
-  'admin/siteSettings', async (_a, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/settings/')).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-export const updateSiteSettings = createAsyncThunk(
-  'admin/updateSettings', async (data, { rejectWithValue }) => {
-    try { return (await apiService.patch('/api/v1/admin/settings/', data)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );

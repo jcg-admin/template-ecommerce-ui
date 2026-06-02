@@ -22,10 +22,14 @@ import styles from './AdminSystemSettingsPage.module.scss';
 
 const FIELDS = [
   { key: 'site_name',        label: 'Nombre del sitio',         type: 'text' },
+  { key: 'site_description',  label: 'Descripcion del sitio',    type: 'text' },
   { key: 'contact_email',    label: 'Email de contacto',        type: 'email' },
   { key: 'support_phone',    label: 'Telefono de soporte',      type: 'tel' },
   { key: 'tax_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
   { key: 'currency',         label: 'Moneda',                   type: 'text' },
+  { key: 'shipping_fee_default',    label: 'Costo de envio por defecto',  type: 'number' },
+  { key: 'free_shipping_threshold', label: 'Umbral de envio gratis',      type: 'number' },
+  { key: 'allow_guest_checkout',    label: 'Permitir checkout como invitado', type: 'checkbox' },
   { key: 'maintenance_mode', label: 'Modo mantenimiento',       type: 'checkbox' },
 ];
 

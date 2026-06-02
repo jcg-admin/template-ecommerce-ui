@@ -133,7 +133,6 @@ const AdminStaticPagesPage      = lazy(() => import('@pages/admin/AdminStaticPag
 const AdminStaticPageEditorPage = lazy(() => import('@pages/admin/AdminStaticPageEditorPage'));
 const AdminGatewaysPage         = lazy(() => import('@pages/admin/AdminGatewaysPage'));
 const AdminShippingMethodsPage  = lazy(() => import('@pages/admin/AdminShippingMethodsPage'));
-const AdminSiteSettingsPage     = lazy(() => import('@pages/admin/AdminSiteSettingsPage'));
 const AdminInventoryDashboardPage = lazy(() => import('@pages/admin/AdminInventoryDashboardPage'));
 const AdminStockAlertsPage      = lazy(() => import('@pages/admin/AdminStockAlertsPage'));
 // UC-CFG-01..05 — Hub de configuracion
@@ -336,7 +335,6 @@ export default function AppRouter() {
               {/* Configuración específica: gateways, envío, sitio */}
               <Route path="admin/config/gateways"                 element={<AdminGatewaysPage />} />
               <Route path="admin/config/shipping"                 element={<AdminShippingMethodsPage />} />
-              <Route path="admin/config/site"                     element={<AdminSiteSettingsPage />} />
               {/* UC-CFG-01..05 — Hub de configuracion */}
               <Route path="admin/config"                          element={<AdminConfigPage />} />
             </Route>

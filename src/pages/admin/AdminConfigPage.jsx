@@ -22,8 +22,8 @@ const ITEMS = [
   {
     uc:    'UC-CFG-03',
     title: 'Ajustes del sitio',
-    desc:  'SiteSettings: nombre, moneda, IVA, modo mantenimiento (4 tabs).',
-    to:    '/admin/config/site',
+    desc:  'SiteSettings: nombre, moneda, IVA, modo mantenimiento (UC-ADM-04).',
+    to:    '/admin/system-settings',
   },
   {
     uc:    'UC-CFG-01',

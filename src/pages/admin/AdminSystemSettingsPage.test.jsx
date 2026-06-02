@@ -68,4 +68,23 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
       );
     });
   });
+
+  // Campos del contrato MSW migrados desde AdminSiteSettingsPage (DR-02).
+  it('expone los campos de contrato site_description, envio y guest checkout', async () => {
+    apiService.get.mockResolvedValue({
+      data: {
+        ...SETTINGS,
+        site_description: 'Tienda ceremonial',
+        shipping_fee_default: 150,
+        free_shipping_threshold: 1500,
+        allow_guest_checkout: true,
+      },
+    });
+    render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(screen.getByLabelText(/Descripcion del sitio/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Costo de envio por defecto/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Umbral de envio gratis/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Permitir checkout como invitado/i)).toBeInTheDocument();
+  });
 });
