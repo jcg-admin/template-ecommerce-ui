@@ -7,3 +7,5 @@
 | 2026-06-02T07:08 | F1 — 4 componentes nativos en paralelo | ProductGallery (12), FileUpload (6), GanttChart (9), PdfViewer (6); un agente por componente |
 | 2026-06-02T07:10 | F2-T1 — ProductGallery integrado en ProductPage | Reemplaza galería manual; estado activeImg eliminado |
 | 2026-06-02T07:11 | Verificación | jest 1385 passed / 0 fallos; check-scss 153 clean; build:demo OK |
+| 2026-06-02T07:30 | Inventario reescrito | 41 paquetes mapeados; 18 UCs nuevos con punto de integración (evidencia) |
+| 2026-06-02T07:40 | Plan ampliado a 22 UCs | F5 Tier A, F6 Tier B, F7 Tier C, F8 E2E, F9 cierre; tareas atómicas en tareas-* |

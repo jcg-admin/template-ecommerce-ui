@@ -50,6 +50,8 @@ Datos observados del repo (neutrales, para contexto de la referencia):
   Las otras 3 integraciones quedan como tareas (ver plan); PdfViewer depende de
   decidir la fuente del PDF en DEMO_MODE.
 - Verificado: jest 1385 passed / 0 fallos; check-scss 153 clean; build:demo OK.
+- **Plan ampliado (F1-F9)** para cubrir los **22 UCs** (4 hechos + 18 nuevos)
+  con tareas atómicas, agrupadas por tier (A/B/C). Ejecución pendiente.
 
 ## Índice
 
