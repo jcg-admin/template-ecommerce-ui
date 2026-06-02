@@ -66,6 +66,24 @@ const CART_PAYLOAD = {
   voucher: null,
 };
 
+// Subtotal alto (>= umbral de envío gratis = 1500): 2000 * 1 = 2000
+const CART_PAYLOAD_FREESHIP = {
+  items: [
+    {
+      id: 21,
+      product_id: 1234,
+      variant_id: null,
+      product_name: 'Estatua Changó',
+      variant_label: null,
+      unit_price: 2000.00,
+      price: 2000.00,
+      quantity: 1,
+      stock: 3,
+    },
+  ],
+  voucher: null,
+};
+
 afterEach(() => jest.clearAllMocks());
 
 describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
@@ -87,6 +105,27 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     // Collar Yemaya: 199 * 2 = 398, Vela Ogun: 50 * 1 = 50
     const allText = document.body.textContent;
     expect(allText).toMatch(/398|199/); // precio del primer item
+  });
+
+  it('UC-CHT-FREESHIP — con subtotal bajo el umbral muestra "te faltan" y el progressbar', async () => {
+    apiService.get.mockResolvedValue({ data: CART_PAYLOAD }); // subtotal 448 < 1500
+    render(wrap(<CartPage />, makeStore()));
+
+    await screen.findByText(/Collar Yemaya/i);
+    // 1500 - 448 = 1052 restante
+    expect(screen.getByText(/Te faltan \$1,052 para envío gratis/i)).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.queryByText(/¡Tienes envío gratis!/i)).not.toBeInTheDocument();
+  });
+
+  it('UC-CHT-FREESHIP — con subtotal >= umbral muestra "envío gratis"', async () => {
+    apiService.get.mockResolvedValue({ data: CART_PAYLOAD_FREESHIP }); // subtotal 2000 >= 1500
+    render(wrap(<CartPage />, makeStore()));
+
+    await screen.findByText(/Estatua Changó/i);
+    expect(screen.getByText(/¡Tienes envío gratis!/i)).toBeInTheDocument();
+    expect(screen.getByRole('progressbar')).toBeInTheDocument();
+    expect(screen.queryByText(/Te faltan/i)).not.toBeInTheDocument();
   });
 
   it('UC-CART-03 — al hacer click en Eliminar, hace DELETE /api/cart/items/:id/', async () => {

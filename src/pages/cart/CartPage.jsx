@@ -20,6 +20,7 @@ import {
   MetaTag, Price, Button, SumRow, EmptyState,
 } from '@components/common/primitives';
 import { LoadingButton } from '@components/common';
+import ProgressBar from '@components/common/ProgressBar';
 import styles from './CartPage.module.scss';
 
 const FREE_SHIPPING_THRESHOLD = 1500;
@@ -101,26 +102,21 @@ export default function CartPage() {
 
 // ─────────────────────────────────────────────────────────────────────
 function FreeShippingBar({ subtotal, threshold }) {
-  const pct = Math.min(100, (subtotal / threshold) * 100);
+  const reached = subtotal >= threshold;
   const remaining = Math.max(0, threshold - subtotal);
+  const message = reached
+    ? '¡Tienes envío gratis!'
+    : `Te faltan $${remaining.toLocaleString('es-MX')} para envío gratis`;
 
   return (
-    <div className={`${styles.fsBar} ${pct >= 100 ? styles.fsBarComplete : ''}`}>
-      <div className={styles.fsBarHeader}>
-        <span>
-          {pct >= 100 ? (
-            <><span className={styles.fsBarCheck}>✓</span> <strong>Tu pedido califica para envío gratis</strong></>
-          ) : (
-            <>
-              Te faltan <strong>${remaining.toLocaleString('es-MX')}</strong> para envío gratis
-            </>
-          )}
-        </span>
-        <span className={styles.fsBarPct}>{Math.round(pct)}%</span>
-      </div>
-      <div className={styles.fsBarTrack}>
-        <div className={styles.fsBarFill} style={{ width: `${pct}%` }} />
-      </div>
+    <div className={`${styles.fsBar} ${reached ? styles.fsBarComplete : ''}`}>
+      <ProgressBar
+        value={subtotal}
+        max={threshold}
+        label={message}
+        showValue
+        ariaLabel="Progreso hacia el envío gratis"
+      />
     </div>
   );
 }
