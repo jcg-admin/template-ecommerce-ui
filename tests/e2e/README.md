@@ -40,7 +40,7 @@ tests/e2e/
   serve-dist.mjs    Servidor estático de dist/ con fallback SPA + mime del SW
   lib/browser.mjs   launchBrowser(): resuelve el Chromium del entorno
   run.mjs           Runner: descubre checks/, los corre, reporta, screenshots
-  checks/           Un módulo por ítem del checklist (NN-id.mjs)
+  checks/           Un módulo por ítem del checklist (nombre descriptivo, p.ej. product-faq.mjs)
   screenshots/      Salida visual (gitignored)
   README.md         Este archivo
 ```
