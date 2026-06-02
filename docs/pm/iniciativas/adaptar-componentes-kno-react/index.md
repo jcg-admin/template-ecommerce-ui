@@ -1,6 +1,6 @@
 # Iniciativa: adaptar-componentes-kno-react
 
-**Estado:** EN ANÁLISIS
+**Estado:** EN EJECUCIÓN
 **Creada:** 2026-06-02
 **Origen:** Solicitud usuario — estudiar el repo `NestorMonroy/-progress` (paquetes
 `kno-*`) para adaptar de manera **nativa** componentes como ScrollView,
@@ -41,16 +41,23 @@ Datos observados del repo (neutrales, para contexto de la referencia):
 
 ## Estado actual
 
-- Repo clonado y auditado: 70 paquetes `kno-*` (41 `kno-react-*`).
-- Premise Gate ejecutado (nivel 0c por red flags: licencia + infra compartida).
-- Inventario y mapeo al dominio ecommerce documentados en
-  `analisis-inventario-y-mapeo.md`.
-- Pendiente: que el usuario priorice qué componentes adaptar primero y confirme
-  el reencuadre nativo, para planear las fases y los UCs.
+- Repo clonado y auditado: 70 paquetes `kno-*` (41 `kno-react-*`); inventario y
+  mapeo en `analisis-inventario-y-mapeo.md`.
+- **F1 HECHA** — 4 componentes nativos propios construidos con tests (un agente
+  por componente, en paralelo): `ProductGallery`, `FileUpload`, `GanttChart`,
+  `PdfViewer` bajo `src/components/common/`.
+- **F2 EN CURSO** — `ProductGallery` integrado en `ProductPage` (UC-CAT-GAL).
+  Las otras 3 integraciones quedan como tareas (ver plan); PdfViewer depende de
+  decidir la fuente del PDF en DEMO_MODE.
+- Verificado: jest 1385 passed / 0 fallos; check-scss 153 clean; build:demo OK.
 
 ## Índice
 
 | Archivo | Descripción |
 |---------|-------------|
 | `alcance-adaptar-componentes-kno-react.md` | Premisa verificada, qué cubre, criterio, fuera de alcance |
-| `analisis-inventario-y-mapeo.md` | 41 paquetes `kno-react-*` mapeados al dominio ecommerce y a lo que el template ya tiene |
+| `analisis-inventario-y-mapeo.md` | 41 paquetes `kno-react-*` mapeados al dominio ecommerce |
+| `ucs-componentes-nativos.md` | Los 4 UCs (UC-CAT-GAL, UC-ADM-IMG, UC-LOG-GANTT, UC-ORD-PDF) |
+| `plan-componentes-nativos.md` | Fases (F1 componentes, F2 integraciones, F3 E2E) |
+| `tareas-componentes-nativos.md` | Lista plana de tareas |
+| `progreso-componentes-nativos.md` | Log de progreso |
