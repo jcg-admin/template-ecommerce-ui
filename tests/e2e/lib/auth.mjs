@@ -25,3 +25,20 @@ export const loginAsBuyer = (page, base) =>
 
 export const loginAsAdmin = (page, base) =>
   login(page, base, 'admin@e-comerce.example.com', 'Admin1234!');
+
+/**
+ * Navegación CLIENT-SIDE (sin recarga) dentro de la SPA via History API.
+ *
+ * Un `page.goto()` recarga la página y reinicia el estado de MSW (la sesión
+ * `_activeSession` vive en un módulo), por lo que tras un login admin la
+ * navegación con goto pierde la sesión y AdminRoute redirige a /auth/login.
+ * pushState + popstate dispara la navegación de React Router sin recargar,
+ * conservando la sesión y el estado de Redux/MSW.
+ */
+export async function navigateInApp(page, path) {
+  await page.evaluate((p) => {
+    window.history.pushState({}, '', p);
+    window.dispatchEvent(new PopStateEvent('popstate'));
+  }, path);
+  await page.waitForTimeout(2500); // dejar que el router renderice + MSW responda
+}
