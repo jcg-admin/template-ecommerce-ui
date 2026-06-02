@@ -62,3 +62,27 @@ y el backend.**
 
 DISCOVER completo. **BLOQUEADO**: requiere (a) decisión A/B/C del ejecutor y
 (b) backend real para confirmar. No se ejecuta refactor en esta pasada.
+
+## RESOLUCIÓN (2026-06-02) — backend real obtenido vía `git submodule update --init api`
+
+Tras poblar el submódulo `api` (clonado de `github.com/jcg-admin/e-comerce-api`,
+`git checkout -f develop` → 476 .py), se verificó el contrato REAL:
+
+`practicayoruba/apps/inventory/urls.py` (montado en `api/v1/admin/`,
+`config/urls.py:40`), docstring **"Admin URLs — apps.inventory (Sprint 10 + UI
+contract 2026-05)"**:
+- `GET /api/v1/admin/inventory/`
+- `GET /api/v1/admin/inventory/alerts/` + `alerts/<pk>/resolve/`
+- `POST /api/v1/admin/inventory/variants/<variant_pk>/adjust/`
+- `GET /api/v1/admin/inventory/variants/<variant_pk>/movements/`
+- `POST /api/v1/admin/inventory/import/`  (no `imports/`)
+- `POST /api/v1/admin/inventory/<product_pk>/adjust/`
+
+**El UI coincide EXACTAMENTE con el backend real (granularidad por variante,
+`movements`, `alerts`, prefijo `/admin/`, `import/`).** El drift estaba en
+`rest-api-conventions.rst:505-518` (tabla **incompleta**, solo lista la vista
+por-producto). 
+
+**Veredicto:** H-09 **NO es drift del UI**. Acción: 0 cambios en el UI;
+registrar el gap en `e-comerce-docs` (completar la tabla de conventions con las
+ops admin de inventario por variante). Sub-iniciativa **CERRADA — UI correcto**.

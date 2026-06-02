@@ -1,6 +1,6 @@
 # Iniciativa: alinear-contrato-inventario
 
-**Estado:** EN ANÁLISIS (bloqueada — decisión de modelo + backend ausente)
+**Estado:** CERRADA (UI correcto; gap de docs en e-comerce-docs) — 2026-06-02
 **Creada:** 2026-06-02
 **Origen:** Deep audit de `cablear-rutas-huerfanas` (H-09) — drift de endpoints
 del módulo de inventario, archivo NO tocado por las iniciativas recientes.
