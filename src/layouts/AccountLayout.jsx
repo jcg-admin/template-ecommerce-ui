@@ -21,6 +21,8 @@ const NAV_ITEMS = [
   { to: '/account/notifications/preferences',    label: 'Notificaciones' },
   { to: '/account/profile',                      label: 'Mi perfil' },
   { to: '/account/change-password',              label: 'Cambiar contrasena' },
+  { to: '/account/referral',                     label: 'Referidos' },
+  { to: '/account/search-history',               label: 'Historial de busqueda' },
 ];
 
 export default function AccountLayout() {

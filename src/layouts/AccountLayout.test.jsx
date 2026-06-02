@@ -57,6 +57,8 @@ describe('AccountLayout — sidebar del comprador', () => {
     ['Notificaciones',      '/account/notifications/preferences'],
     ['Mi perfil',           '/account/profile'],
     ['Cambiar contrasena',  '/account/change-password'],
+    ['Referidos',           '/account/referral'],
+    ['Historial de busqueda', '/account/search-history'],
   ])('expone el link "%s" hacia %s', (label, href) => {
     renderLayout();
     const nav  = screen.getByRole('navigation', { name: /menu de cuenta/i });

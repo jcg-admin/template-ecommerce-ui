@@ -7,13 +7,31 @@ en ninguno son huérfanas de navegación.
 
 ## Huérfanas reales (22) — destino propuesto
 
-### Cuenta → AccountSidebar (4)
-| Ruta | Página | Acción |
-|------|--------|--------|
-| account/referral | ReferralPage (UC-PRO-05) | entrada "Referidos" en AccountSidebar |
-| account/change-password | ChangePasswordPage | enlace desde SecurityPage o AccountSidebar |
-| account/search-history | (historial de búsqueda) | entrada en AccountSidebar |
-| account/notifications/preferences | (preferencias notif.) | entrada en AccountSidebar |
+### Cuenta → AccountLayout (2 reales, no 4)
+
+> **Corrección de Premise Gate (F1, 2026-06-02T18:50:10).** El grep
+> original solo inspeccionó `AccountSidebar/index.jsx` y `AdminSidebar`,
+> y omitió la nav **a nivel de layout** `src/layouts/AccountLayout.jsx`
+> (`NAV_ITEMS`), que es la nav canónica con test (`AccountLayout.test.jsx`)
+> montada en el router (`<Route element={<AccountLayout/>}>`). Verificado:
+> `grep -nE "change-password|notifications" src/layouts/AccountLayout.jsx`
+> → líneas 21 y 23. Por tanto **`change-password` y
+> `notifications/preferences` NO eran huérfanas** (ya enlazadas en
+> AccountLayout). Huérfanas reales: solo `referral` y `search-history`.
+
+| Ruta | Página | Acción | Estado |
+|------|--------|--------|--------|
+| account/referral | ReferralPage (UC-PRO-05) | entrada "Referidos" en AccountLayout | HUÉRFANA — cableada F1 |
+| account/search-history | SearchHistoryPage | entrada "Historial de busqueda" en AccountLayout | HUÉRFANA — cableada F1 |
+| account/change-password | ChangePasswordPage | ya en AccountLayout.jsx:23 | NO huérfana |
+| account/notifications/preferences | NotificationPreferencesPage | ya en AccountLayout.jsx:21 | NO huérfana |
+
+> **Drift detectado (fuera de alcance de esta iniciativa):** existen DOS
+> navs de cuenta que se renderizan simultáneamente — `AccountLayout`
+> (layout, canónica, testeada) y `AccountSidebar` (componente embebido en
+> cada página: ProfilePage, OrdersPage, etc.). Listas de enlaces distintas.
+> Se cableó en AccountLayout (la canónica). La deduplicación de ambas navs
+> requiere iniciativa separada (`unificar-navs-cuenta`).
 
 ### Admin nivel superior → AdminSidebar (12)
 | Ruta | Acción |

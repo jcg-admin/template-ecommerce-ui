@@ -4,11 +4,14 @@
 navegación. Verificación por fase: jest + check-scss + build:demo. Antes de
 cablear una sub-página, confirmar que no haya ya un enlace dinámico.
 
-## FASE 1 — AccountSidebar (4 rutas)
-- F1-T1 `AccountSidebar/index.jsx`: entradas para account/referral,
-  account/change-password, account/search-history,
-  account/notifications/preferences.
-- F1-T2 test de AccountSidebar: las 4 entradas presentes y con `to` correcto.
+## FASE 1 — AccountLayout (2 rutas reales) — HECHA
+> Premise Gate corrigió el alcance: la nav canónica es `AccountLayout.jsx`
+> (no `AccountSidebar`), y `change-password`/`notifications/preferences` ya
+> estaban cableadas allí. Huérfanas reales: solo `referral`, `search-history`.
+- F1-T1 `layouts/AccountLayout.jsx`: entradas para account/referral y
+  account/search-history en `NAV_ITEMS`.
+- F1-T2 `AccountLayout.test.jsx`: filas it.each para las 2 nuevas entradas
+  (TDD: rojo → verde, 10/10).
 
 ## FASE 2 — AdminSidebar (12 rutas, agrupadas)
 - F2-T1 `AdminSidebar/index.jsx`: entradas/grupos para couriers, permissions,
