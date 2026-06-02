@@ -133,6 +133,73 @@ describe('AdminUsersPage — búsqueda', () => {
 });
 
 // =============================================================================
+// UC-ADM-GRID — el listado se renderiza con el componente DataGrid
+describe('AdminUsersPage — DataGrid (UC-ADM-GRID)', () => {
+  const GRID_USERS = [
+    { id: 1, username: 'zeta', first_name: 'Zoe', last_name: 'Zamora',
+      email: 'zoe@test.mx',  is_active: true,  is_staff: false, email_verified: true,
+      order_count: 3, last_login: '2026-01-01T00:00:00Z' },
+    { id: 2, username: 'alfa', first_name: 'Ana', last_name: 'Alvarez',
+      email: 'ana@test.mx',  is_active: true,  is_staff: false, email_verified: true,
+      order_count: 7, last_login: '2026-02-01T00:00:00Z' },
+  ];
+
+  it('renderiza el grid accesible con las filas de usuarios', async () => {
+    apiService.get.mockResolvedValue(pageOf(GRID_USERS));
+    render(wrap(<AdminUsersPage />, makeStore()));
+
+    const grid = await screen.findByRole('table', { name: /Listado de usuarios/i });
+    expect(grid).toBeInTheDocument();
+    await waitFor(() => {
+      expect(grid.textContent).toContain('zoe@test.mx');
+      expect(grid.textContent).toContain('ana@test.mx');
+    }, { timeout: 5000 });
+  });
+
+  it('ordena por una columna al pulsar su cabecera', async () => {
+    apiService.get.mockResolvedValue(pageOf(GRID_USERS));
+    render(wrap(<AdminUsersPage />, makeStore()));
+    await screen.findByRole('table', { name: /Listado de usuarios/i });
+
+    // Orden inicial (orden de inserción): Zoe (zeta) antes que Ana (alfa).
+    const emailBefore = () =>
+      [...document.querySelectorAll('tbody tr')]
+        .map((tr) => tr.textContent)
+        .filter((t) => t.includes('@test.mx'));
+
+    await waitFor(() => expect(emailBefore().length).toBe(2), { timeout: 5000 });
+    const initial = emailBefore();
+    expect(initial[0]).toContain('zoe@test.mx');
+
+    // Ordenar ascendente por Correo -> ana@ debe quedar primero.
+    fireEvent.click(screen.getByRole('button', { name: /Correo/i }));
+    await waitFor(() => {
+      const rows = emailBefore();
+      expect(rows[0]).toContain('ana@test.mx');
+      expect(rows[1]).toContain('zoe@test.mx');
+    }, { timeout: 5000 });
+  });
+
+  it('filtra las filas al escribir en la búsqueda del grid', async () => {
+    apiService.get.mockResolvedValue(pageOf(GRID_USERS));
+    render(wrap(<AdminUsersPage />, makeStore()));
+    await screen.findByRole('table', { name: /Listado de usuarios/i });
+
+    await waitFor(
+      () => expect(document.body.textContent).toContain('ana@test.mx'),
+      { timeout: 5000 },
+    );
+
+    fireEvent.change(screen.getByRole('searchbox'), { target: { value: 'zoe@test.mx' } });
+
+    await waitFor(() => {
+      expect(document.body.textContent).toContain('zoe@test.mx');
+      expect(document.body.textContent).not.toContain('ana@test.mx');
+    }, { timeout: 5000 });
+  });
+});
+
+// =============================================================================
 describe('AdminUsersPage — crear admin (UC-AUTH-15)', () => {
   it('muestra el botón para crear nuevo administrador', async () => {
     apiService.get.mockResolvedValue(pageOf(USERS));
