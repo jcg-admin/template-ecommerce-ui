@@ -152,11 +152,48 @@ Detectado al escribir F6-T3.
 
 ---
 
+## FASE 8 — Validación E2E en browser real (esta iniciativa)
+
+**Impacto:** Convertir el checklist manual de WSL2 en una corrida
+reproducible que valide los flujos con service worker MSW, CSS y scroll
+reales — lo que jsdom no cubre.
+
+### F8-T1 — Harness `tests/e2e/`
+- `serve-dist.mjs` (servidor estático con fallback SPA), `lib/browser.mjs`
+  (resuelve el Chromium del entorno), `run.mjs` (runner + screenshots),
+  `checks/01..06` (un módulo por ítem del checklist), `README.md`.
+- `package.json`: devDep `playwright` + script `test:e2e`. Screenshots
+  gitignored.
+- Resultado: 5 pass + 1 warn / 0 fail. El warn (persistencia de wishlist tras
+  reload) es limitación de MSW en memoria, no un bug.
+- [x] DONE
+
+---
+
+## FASE 9 — Fix de bugs solo visibles en browser (esta iniciativa)
+
+**Impacto:** El toggle de wishlist en la grilla no reflejaba el estado.
+Detectado por F8 (no por unit tests).
+
+### F9-T1 — BUG-CARD-02: padres pasan inWishlist
+- `CatalogPage.jsx` y `SearchResultsPage.jsx` pasan
+  `inWishlist={items.some((i) => i.product_id === p.id)}` a cada `ProductCard`.
+- Test `CatalogPage.test.jsx` "wishlist en las cards (BUG-CARD-02)".
+- [x] DONE — verde
+
+### F9-T2 — BUG-WISHLIST-05: toggleWishlist con productId
+- `wishlistSlice.js`: `toggleWishlist` invoca `addToWishlist({ productId })`
+  (antes `{ product_id: productId }` → `productId` undefined).
+- Test `wishlistSlice.test.js` "(no en lista) agrega con productId correcto".
+- [x] DONE — verde
+
+---
+
 ## Criterios de cierre de la iniciativa
 
 - [x] `node scripts/check-scss.mjs` → 149 entries clean
-- [x] `npm test` → 0 fallos (1349 passed, 109 skipped)
-- [x] `DEMO_MODE=true npm run build:demo` sin errores (exit 0)
-- [x] Todas las tareas de F6/F7 marcadas DONE
+- [x] `npm test` → 0 fallos (1352 passed, 109 skipped)
+- [x] `DEMO_MODE=true npm run build:demo` sin errores
+- [x] `npm run test:e2e` → 5 pass + 1 warn (demo) / 0 fail
+- [x] Todas las tareas de F6..F9 marcadas DONE
 - [ ] Commit final + push a la rama
-- [ ] Validación visual en browser (checklist) — fuera del alcance de CI

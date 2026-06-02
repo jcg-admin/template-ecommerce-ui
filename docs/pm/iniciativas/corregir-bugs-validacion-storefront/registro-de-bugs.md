@@ -209,4 +209,48 @@ reforzado; sombra más profunda; `border-bottom` accent; animaciones de
 entrada `fadeIn` (backdrop) y `slideDown` (panel).
 **Commits:** `f572673` (radios/sombra) + `26dd600` (animaciones).
 **Tests:** NO testeable como unit — jsdom no evalúa animaciones ni estilos
-CSS computados. Validación visual en browser (ver checklist).
+CSS computados. Validado en browser real (`tests/e2e/checks/04-search-modal.mjs`):
+el modal abre con bordes redondeados; la animación queda como evidencia en
+`tests/e2e/screenshots/search-modal.png`.
+
+---
+
+## BUG-CARD-02 — la grilla del catálogo/búsqueda no reflejaba la wishlist
+
+**Severidad:** MEDIA
+**Archivos:** `src/pages/catalog/CatalogPage.jsx`, `src/pages/catalog/SearchResultsPage.jsx`
+**Síntoma:** En el catálogo y en resultados de búsqueda, el ♡ de las cards
+nunca pasaba a ♥ aunque el producto estuviera (o se agregara) a la wishlist.
+**Causa:** BUG-CARD-01 hizo que `ProductCard` despache `toggleWishlist` con
+`inWishlist`, pero los padres renderizaban `<ProductCard product={p} />` **sin**
+pasar la prop `inWishlist` (default `false`). El componente nunca recibía el
+estado real. El unit test de `ProductCard` no lo cazó porque probaba el
+componente CON la prop ya pasada.
+**Fix:** Cada página selecciona `s.wishlist.items` y pasa
+`inWishlist={items.some((i) => i.product_id === p.id)}` a cada card.
+**Detección:** Validación E2E en browser (`tests/e2e/checks/02-wishlist.mjs`).
+**Estado:** FIXED en esta iniciativa.
+**Tests:** `CatalogPage.test.jsx` — describe "wishlist en las cards
+(BUG-CARD-02)": con un producto en `wishlist.items` la card muestra "Quitar de
+deseos". + cobertura E2E.
+
+---
+
+## BUG-WISHLIST-05 — toggleWishlist agregaba con product_id undefined
+
+**Severidad:** ALTA
+**Archivo:** `src/redux/slices/wishlistSlice.js`
+**Síntoma:** Agregar a favoritos no reflejaba el estado: el item guardado tenía
+`product_id: undefined`, así que ninguna card lo matcheaba.
+**Causa:** El thunk `toggleWishlist` (rama agregar) invocaba
+`addToWishlist({ product_id: productId })`, pero `addToWishlist` destructura
+`{ productId }` (camelCase) → `productId` llegaba `undefined` → el POST mandaba
+`product_id: undefined`. Segundo desajuste snake_case vs camelCase tras
+BUG-CART-04.
+**Fix:** `dispatch(addToWishlist({ productId }))`.
+**Detección:** Triaje del FAIL de wishlist en la validación E2E (la causa que el
+check reportaba —los padres sin `inWishlist`— era real pero parcial: faltaba
+este segundo desajuste para que el store recibiera el product_id correcto).
+**Estado:** FIXED en esta iniciativa.
+**Tests:** `wishlistSlice.test.js` — "toggleWishlist (no en lista) agrega con
+productId correcto (BUG-WISHLIST-05)" + cobertura E2E (toggle ♡→♥ refleja).
