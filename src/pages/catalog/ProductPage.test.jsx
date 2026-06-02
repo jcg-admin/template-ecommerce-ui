@@ -226,7 +226,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
 
     await screen.findByRole('status');
     expect(apiService.post).toHaveBeenCalledWith(
-      '/api/cart/items/',
+      '/api/v1/cart/items/',
       expect.objectContaining({
         product_id: PRODUCT.id,
         variant_id: 1,
@@ -354,7 +354,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
 
       await screen.findByRole('status');
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/cart/items/',
+        '/api/v1/cart/items/',
         expect.objectContaining({
           product_id: PRODUCT.id,
           variant_id: 12,
@@ -372,7 +372,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
 //   BUG-CART-03: el thunk addCartItem se despachaba con payload snake_case
 //                (product_id / variant_id) cuando espera camelCase
 //                (productId / variantId). El thunk es quien traduce a
-//                snake_case antes del POST a /api/cart/items/.
+//                snake_case antes del POST a /api/v1/cart/items/.
 //   BUG-CART-04: tras agregar, no se navegaba a /cart (race condition).
 //                El fix hace `await dispatch(...).unwrap()` y luego
 //                `navigate('/cart')`.
@@ -413,7 +413,7 @@ describe('ProductPage — Agregar a la bolsa (BUG-CART-03 / BUG-CART-04)', () =>
 
     await waitFor(() =>
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/cart/items/',
+        '/api/v1/cart/items/',
         // El thunk traduce camelCase -> snake_case antes del POST; si el
         // dispatch usara claras erroneas (product_id en vez de productId),
         // product_id llegaria undefined y este assert fallaria.

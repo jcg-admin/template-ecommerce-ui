@@ -87,11 +87,11 @@ const CART_PAYLOAD_FREESHIP = {
 afterEach(() => jest.clearAllMocks());
 
 describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
-  it('al montar, hace GET a /api/cart/ y muestra los items', async () => {
+  it('al montar, hace GET a /api/v1/cart/ y muestra los items', async () => {
     apiService.get.mockResolvedValue({ data: CART_PAYLOAD });
     render(wrap(<CartPage />, makeStore()));
 
-    expect(apiService.get).toHaveBeenCalledWith('/api/cart/');
+    expect(apiService.get).toHaveBeenCalledWith('/api/v1/cart/');
     expect(await screen.findByText(/Collar Yemaya/)).toBeInTheDocument();
     expect(screen.getByText(/Vela Ogun/)).toBeInTheDocument();
   });
@@ -128,7 +128,7 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     expect(screen.queryByText(/Te faltan/i)).not.toBeInTheDocument();
   });
 
-  it('UC-CART-03 — al hacer click en Eliminar, hace DELETE /api/cart/items/:id/', async () => {
+  it('UC-CART-03 — al hacer click en Eliminar, hace DELETE /api/v1/cart/items/:id/', async () => {
     apiService.get.mockResolvedValue({ data: CART_PAYLOAD });
     apiService.delete.mockResolvedValue({ data: { ok: true } });
     render(wrap(<CartPage />, makeStore()));
@@ -137,7 +137,7 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     fireEvent.click(removeBtns[0]);
 
     await waitFor(() => {
-      expect(apiService.delete).toHaveBeenCalledWith('/api/cart/items/11/');
+      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/cart/items/11/');
     });
   });
 
@@ -150,7 +150,7 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     ).toBeInTheDocument();
   });
 
-  it('UC-CART-04 — aplica un cupon via POST /api/cart/voucher/', async () => {
+  it('UC-CART-04 — aplica un cupon via POST /api/v1/cart/voucher/', async () => {
     apiService.get.mockResolvedValue({ data: CART_PAYLOAD });
     apiService.post.mockResolvedValue({
       data: {
@@ -167,7 +167,7 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/cart/voucher/',
+        '/api/v1/cart/voucher/',
         { code: 'DEMO10' },
       );
     });
@@ -212,14 +212,14 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
     );
 
     await waitFor(() => {
-      expect(apiService.post).toHaveBeenCalledWith('/api/cart/save/', {});
+      expect(apiService.post).toHaveBeenCalledWith('/api/v1/cart/save/', {});
     });
     expect(
       await screen.findByText(/Carrito guardado/i),
     ).toBeInTheDocument();
   });
 
-  it.skip('al cambiar la cantidad, hace PATCH /api/cart/items/:id/ -- PENDIENTE: CartItem.id undefined con CSS Modules mock, requiere refactor del test', async () => {
+  it.skip('al cambiar la cantidad, hace PATCH /api/v1/cart/items/:id/ -- PENDIENTE: CartItem.id undefined con CSS Modules mock, requiere refactor del test', async () => {
     // Usar preloadedState para que el store ya tenga items sin depender del mock GET
     const preloaded = {
       cart: {
@@ -242,7 +242,7 @@ describe('CartPage (UC-CART-02 / UC-CART-03 / UC-CART-04 / UC-CART-05)', () => {
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/cart/items/11/',
+        '/api/v1/cart/items/11/',
         { quantity: 3 },
       );
     });

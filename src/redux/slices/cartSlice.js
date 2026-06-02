@@ -24,12 +24,12 @@ import { serializeApiError } from '@utils/serializeApiError';
 import { withValidation, CommonValidators } from '@decorators/withValidation';
 
 // ─── Endpoints ────────────────────────────────────────────────────────
-const CART_URL          = '/api/cart/';
-const CART_ITEMS_URL    = '/api/cart/items/';
-const CART_ITEM_URL     = (id) => `/api/cart/items/${id}/`;
-const CART_VOUCHER_URL  = '/api/cart/voucher/';
-const CART_SAVE_URL     = '/api/cart/save/';
-const CART_SYNC_URL     = '/api/cart/sync/';
+const CART_URL          = '/api/v1/cart/';
+const CART_ITEMS_URL    = '/api/v1/cart/items/';
+const CART_ITEM_URL     = (id) => `/api/v1/cart/items/${id}/`;
+const CART_VOUCHER_URL  = '/api/v1/cart/voucher/';
+const CART_SAVE_URL     = '/api/v1/cart/save/';
+const CART_MERGE_URL    = '/api/v1/cart/merge/';
 
 // ─── Thunks ───────────────────────────────────────────────────────────
 
@@ -129,9 +129,9 @@ export const saveCartForLater = createAsyncThunk(
 /** UC-CART-06 — sincronizar (fusionar) carrito anonimo al autenticar. */
 export const syncCartOnLogin = createAsyncThunk(
   'cart/sync',
-  async (_, { rejectWithValue }) => {
+  async (cartToken, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(CART_SYNC_URL, {});
+      const res = await apiService.post(CART_MERGE_URL, { cart_token: cartToken });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));

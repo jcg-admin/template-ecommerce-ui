@@ -22,14 +22,14 @@ const makeStore = () =>
 afterEach(() => jest.clearAllMocks());
 
 describe('cartSlice (UC-CART-01)', () => {
-  it('addToCart: hace POST /api/cart/items/ con product_id, variant_id, quantity', async () => {
+  it('addToCart: hace POST /api/v1/cart/items/ con product_id, variant_id, quantity', async () => {
     apiService.post.mockResolvedValue({ data: { items: [], voucher: null } });
     const store = makeStore();
 
     await store.dispatch(addToCart({ productId: 4321, variantId: 87, quantity: 2 }));
 
     expect(apiService.post).toHaveBeenCalledWith(
-      '/api/cart/items/',
+      '/api/v1/cart/items/',
       { product_id: 4321, variant_id: 87, quantity: 2 },
     );
   });
@@ -68,7 +68,7 @@ describe('cartSlice (UC-CART-01)', () => {
     expect(state.isActioning).toBe(false);
   });
 
-  it('UC-CART-06 — syncCartOnLogin: hace POST /api/cart/sync/ y carga items fusionados', async () => {
+  it('UC-CART-06 — syncCartOnLogin: hace POST /api/v1/cart/merge/ y carga items fusionados', async () => {
     apiService.post.mockResolvedValue({
       data: {
         items: [
@@ -79,9 +79,9 @@ describe('cartSlice (UC-CART-01)', () => {
       },
     });
     const store = makeStore();
-    await store.dispatch(syncCartOnLogin());
+    await store.dispatch(syncCartOnLogin('tok-123'));
 
-    expect(apiService.post).toHaveBeenCalledWith('/api/cart/sync/', {});
+    expect(apiService.post).toHaveBeenCalledWith('/api/v1/cart/merge/', { cart_token: 'tok-123' });
     const state = store.getState().cart;
     expect(state.items).toHaveLength(2);
     expect(state.lastAction).toBe('synced');
@@ -95,7 +95,7 @@ describe('cartSlice (UC-CART-01)', () => {
       status: 500,
     });
     const store = makeStore();
-    await store.dispatch(syncCartOnLogin());
+    await store.dispatch(syncCartOnLogin('tok-123'));
     const state = store.getState().cart;
     expect(state.actionError).toMatchObject({
       message: 'Error al fusionar',

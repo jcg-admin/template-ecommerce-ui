@@ -2,12 +2,12 @@
  * Handlers MSW del dominio cart.
  *
  * Endpoints cubiertos:
- *   GET    /api/cart/             carrito actual
- *   POST   /api/cart/items/       anadir item
- *   PATCH  /api/cart/items/:id/   actualizar cantidad
- *   DELETE /api/cart/items/:id/   eliminar item
- *   POST   /api/cart/voucher/     aplicar voucher
- *   DELETE /api/cart/voucher/     quitar voucher
+ *   GET    /api/v1/cart/             carrito actual
+ *   POST   /api/v1/cart/items/       anadir item
+ *   PATCH  /api/v1/cart/items/:id/   actualizar cantidad
+ *   DELETE /api/v1/cart/items/:id/   eliminar item
+ *   POST   /api/v1/cart/voucher/     aplicar voucher
+ *   DELETE /api/v1/cart/voucher/     quitar voucher
  *
  * El estado del carrito vive en variables a nivel
  * de modulo. MSW v2 reusa el mismo modulo entre requests (igual que
@@ -43,10 +43,10 @@ function buildCart() {
 
 export const cartHandlers = [
   // Cart base
-  http.get('/api/cart/', () => HttpResponse.json(buildCart())),
+  http.get('/api/v1/cart/', () => HttpResponse.json(buildCart())),
 
   // Cart items
-  http.post('/api/cart/items/', async ({ request }) => {
+  http.post('/api/v1/cart/items/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
       | { product_id?: number; variant_id?: number; quantity?: number }
       | null;
@@ -73,7 +73,7 @@ export const cartHandlers = [
     return HttpResponse.json(buildCart());
   }),
 
-  http.patch('/api/cart/items/:id/', async ({ params, request }) => {
+  http.patch('/api/v1/cart/items/:id/', async ({ params, request }) => {
     const id = parseInt(String(params.id), 10);
     const item = cartState.items.find((i) => i.id === id);
     if (!item) {
@@ -89,14 +89,14 @@ export const cartHandlers = [
     return HttpResponse.json(buildCart());
   }),
 
-  http.delete('/api/cart/items/:id/', ({ params }) => {
+  http.delete('/api/v1/cart/items/:id/', ({ params }) => {
     const id = parseInt(String(params.id), 10);
     cartState.items = cartState.items.filter((i) => i.id !== id);
     return HttpResponse.json(buildCart());
   }),
 
   // Voucher
-  http.post('/api/cart/voucher/', async ({ request }) => {
+  http.post('/api/v1/cart/voucher/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
       | { code?: string }
       | null;
@@ -112,7 +112,7 @@ export const cartHandlers = [
     return HttpResponse.json(buildCart());
   }),
 
-  http.delete('/api/cart/voucher/', () => {
+  http.delete('/api/v1/cart/voucher/', () => {
     cartState.voucher = null;
     return HttpResponse.json(buildCart());
   }),
