@@ -86,4 +86,17 @@ describe('AdminRoute (UC-AUTH-01b, decision T-103)', () => {
     expect(screen.queryByTestId('login')).not.toBeInTheDocument();
     expect(screen.queryByTestId('inicio')).not.toBeInTheDocument();
   });
+
+  // Regresion BUG-ACCOUNT-01: mismo patron que ProtectedRoute. Tras el
+  // login, fetchProfile.pending ponia isLoading=true otra vez -> el admin
+  // autenticado quedaba en PageLoader. El fix concede acceso si ya esta
+  // autenticado y con rol admin aunque haya un fetch de auth en curso.
+  it('concede acceso aunque isLoading sea true si ya esta autenticado y es admin (BUG-ACCOUNT-01)', () => {
+    renderRoutes({
+      isAuthenticated: true,
+      isLoading: true,
+      user: { id: 2, email: 'admin@e-comerce.example.com', is_staff: true, is_admin: true },
+    });
+    expect(screen.getByTestId('panel-admin')).toBeInTheDocument();
+  });
 });

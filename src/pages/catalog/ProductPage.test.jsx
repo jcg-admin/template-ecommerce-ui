@@ -1,7 +1,7 @@
 /**
  * Tests — ProductPage (UC-CAT-02)
  */
-import { render, screen } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider }       from 'react-redux';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -362,5 +362,93 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
         }),
       );
     });
+  });
+});
+
+// ─── BUG-CART-03 / BUG-CART-04 — regresion "Agregar a la bolsa" ──────────
+//
+// El fix (commits c0493c9 y 26dd600) corrige dos defectos del CTA de la
+// ficha de producto:
+//   BUG-CART-03: el thunk addCartItem se despachaba con payload snake_case
+//                (product_id / variant_id) cuando espera camelCase
+//                (productId / variantId). El thunk es quien traduce a
+//                snake_case antes del POST a /api/cart/items/.
+//   BUG-CART-04: tras agregar, no se navegaba a /cart (race condition).
+//                El fix hace `await dispatch(...).unwrap()` y luego
+//                `navigate('/cart')`.
+//
+// NOTA sobre el texto del boton: el source usa 'Agregar a la bolsa' cuando
+// hay stock (NO 'Agregar al carrito', que es el texto que asumian los
+// it.skip legacy). Por eso este describe NO reusa el `wrap` global (que
+// solo monta la ruta /catalog/:slug): define su propio wrapper con una
+// ruta /cart con un elemento sentinel para verificar la navegacion.
+describe('ProductPage — Agregar a la bolsa (BUG-CART-03 / BUG-CART-04)', () => {
+  const CART_SENTINEL = 'cart-page-sentinel';
+
+  const wrapWithCart = (slug, store, client = makeClient()) => (
+    <Provider store={store}>
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={[`/catalog/${slug}`]}>
+          <Routes>
+            <Route path="/catalog/:slug" element={<ProductPage />} />
+            <Route path="/cart" element={<div data-testid={CART_SENTINEL}>CART</div>} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>
+    </Provider>
+  );
+
+  beforeEach(() => {
+    // fetchProduct (GET /api/v1/catalogue/:slug/) alimenta currentProduct,
+    // dejando isLoading=false y el boton "Agregar a la bolsa" habilitado.
+    apiService.get.mockResolvedValue({ data: PRODUCT });
+  });
+
+  it('despacha addCartItem con payload camelCase al endpoint del carrito', async () => {
+    apiService.post.mockResolvedValue({ data: { items: [], voucher: null } });
+    render(wrapWithCart('collar-oshun-dorado', makeStore()));
+
+    const btn = await screen.findByRole('button', { name: /Agregar a la bolsa/i });
+    fireEvent.click(btn);
+
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/cart/items/',
+        // El thunk traduce camelCase -> snake_case antes del POST; si el
+        // dispatch usara claras erroneas (product_id en vez de productId),
+        // product_id llegaria undefined y este assert fallaria.
+        expect.objectContaining({
+          product_id: PRODUCT.id,
+          variant_id: undefined,
+          quantity: 1,
+        }),
+      ),
+    );
+  });
+
+  it('navega a /cart tras agregar exitosamente (BUG-CART-04)', async () => {
+    apiService.post.mockResolvedValue({ data: { items: [], voucher: null } });
+    render(wrapWithCart('collar-oshun-dorado', makeStore()));
+
+    const btn = await screen.findByRole('button', { name: /Agregar a la bolsa/i });
+    fireEvent.click(btn);
+
+    // El sentinel de /cart solo aparece si navigate('/cart') se ejecuta
+    // tras el await del dispatch. Si se elimina navigate('/cart'), este
+    // findByTestId expira y el test falla.
+    expect(await screen.findByTestId(CART_SENTINEL)).toBeInTheDocument();
+  });
+
+  it('NO navega a /cart si el POST al carrito falla', async () => {
+    apiService.post.mockRejectedValue(new Error('500'));
+    render(wrapWithCart('collar-oshun-dorado', makeStore()));
+
+    const btn = await screen.findByRole('button', { name: /Agregar a la bolsa/i });
+    fireEvent.click(btn);
+
+    // Damos tiempo a que el dispatch se resuelva (rechazado) y verificamos
+    // que seguimos en la ficha (no se monto el sentinel de /cart).
+    await waitFor(() => expect(apiService.post).toHaveBeenCalled());
+    expect(screen.queryByTestId(CART_SENTINEL)).not.toBeInTheDocument();
   });
 });

@@ -55,6 +55,40 @@ const pageOf = (results = []) => ({
   data: { results, count: results.length, next: null, previous: null, active_filters: {} },
 });
 
+// Variante con count explícito: permite forzar totalPages > 1 (count > pageSize=20)
+// para que el componente Pagination se renderice y poder simular cambio de página.
+const pageWithCount = (results = [], count = 0) => ({
+  data: { results, count, next: null, previous: null, active_filters: {} },
+});
+
+// makeStoreWithProducts: helper referenciado por los it.skip preexistentes pero
+// nunca definido en el archivo. Lo añadimos para los tests de scroll. Precarga
+// productos en el slice catalog. OJO (issue conocido documentado en los skips):
+// al montar, fetchProducts.pending vacía products; por eso los tests de scroll
+// NO confían solo en preloadedState — mockean apiService.get y esperan con
+// waitFor a que fetchProducts.fulfilled repueble products en el DOM.
+const makeStoreWithProducts = (products = PRODUCTS) =>
+  configureStore({
+    reducer: { catalog: catalogReducer, auth: authReducer, wishlist: wishlistReducer },
+    preloadedState: {
+      auth: { user: null, isAuthenticated: false },
+      wishlist: { items: [] },
+      catalog: {
+        products,
+        currentProduct: null,
+        searchResults: [],
+        searchQuery: '',
+        activeFilters: {},
+        pagination: { count: products.length, page: 1, pageSize: 20, totalPages: 0, next: null, previous: null },
+        filters: { category: null, priceMin: null, priceMax: null, inStock: false, ordering: '-created_at' },
+        isLoading: false,
+        isSearching: false,
+        error: null,
+        searchError: null,
+      },
+    },
+  });
+
 /**
  * Las llamadas de CatalogFilters a /api/v1/categories/ (UC-CAT-08)
  * comparten la misma instancia mockeada de apiService.get. Para que
@@ -264,5 +298,71 @@ describe('CatalogPage — filtros (UC-CAT-04 + UC-CAT-05)', () => {
       expect(catalogueCall?.[1]?.params?.price_min).toBe('100');
       expect(catalogueCall?.[1]?.params?.price_max).toBe('500');
     });
+  });
+});
+
+// =============================================================================
+// BUG-SCROLL-02 — regresión (fix en commit b268ca4)
+//
+// Bug original: window.scrollTo({top:0,behavior:'instant'}) vivía en el mismo
+// useEffect que el dispatch de fetchProducts, por lo que el scroll ocurría
+// ANTES de que los productos nuevos se renderizaran. El fix mueve el scroll a
+// un useEffect SEPARADO con deps [products, currentPage] y un prevPageRef, de
+// modo que el scroll se ejecute cuando los productos ya están en el DOM o
+// cuando cambia la página.
+//
+// LIMITACIÓN jsdom: no hay scroll real. Solo verificamos que window.scrollTo
+// se invoca con los argumentos esperados — no el efecto visual.
+// =============================================================================
+describe('CatalogPage — scroll al inicio (BUG-SCROLL-02)', () => {
+  let scrollSpy;
+  beforeEach(() => {
+    scrollSpy = jest.spyOn(window, 'scrollTo').mockImplementation(() => {});
+  });
+  afterEach(() => {
+    scrollSpy.mockRestore();
+  });
+
+  // Núcleo del fix: cuando los productos ya están presentes en el DOM
+  // (fetchProducts.fulfilled repuebla el store), el useEffect de scroll
+  // debe haber invocado window.scrollTo con {top:0, behavior:'instant'}.
+  // Este test FALLA si se elimina el useEffect de scroll del componente.
+  it('llama a window.scrollTo cuando los productos están en el DOM', async () => {
+    // No confiamos en preloadedState (fetchProducts.pending lo vacía al montar):
+    // mockeamos la API y esperamos a que los productos aparezcan en el DOM.
+    apiService.get.mockResolvedValue(pageOf(PRODUCTS));
+    render(wrap(<CatalogPage />, makeStore()));
+
+    // Esperar a que el render de productos haya ocurrido realmente.
+    expect(await screen.findByText('Collar Oshun')).toBeInTheDocument();
+
+    await waitFor(() => {
+      expect(window.scrollTo).toHaveBeenCalledWith({ top: 0, behavior: 'instant' });
+    });
+  });
+
+  // Cambio de página: con totalPages > 1 (count > pageSize) se renderiza
+  // el componente Pagination. Al hacer click en otra página se dispara
+  // setPage → cambia currentPage → el useEffect de scroll vuelve a correr
+  // (por prevPageRef.current !== currentPage). Verificamos que scrollTo
+  // se invoca de nuevo tras el cambio de página.
+  it('vuelve a llamar a window.scrollTo al cambiar de página', async () => {
+    // count=40 con pageSize=20 → totalPages=2 → se muestra la paginación.
+    apiService.get.mockResolvedValue(pageWithCount(PRODUCTS, 40));
+    render(wrap(<CatalogPage />, makeStore()));
+
+    await screen.findByText('Collar Oshun');
+    // Esperar a que aparezca el control de paginación (botón "Siguiente").
+    const nextBtn = await screen.findByRole('button', { name: /Siguiente/i });
+
+    await waitFor(() => expect(window.scrollTo).toHaveBeenCalled());
+    const callsBefore = scrollSpy.mock.calls.length;
+
+    fireEvent.click(nextBtn); // setPage(2) → currentPage cambia
+
+    await waitFor(() => {
+      expect(scrollSpy.mock.calls.length).toBeGreaterThan(callsBefore);
+    });
+    expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 0, behavior: 'instant' });
   });
 });
