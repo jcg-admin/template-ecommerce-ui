@@ -1,6 +1,6 @@
 # Iniciativa: cerrar-gaps-ucs-auditoria
 
-**Estado:** EN EJECUCIÓN
+**Estado:** CERRADA (2026-06-02T21:39:45)
 **Creada:** 2026-06-02
 **Origen:** 4 gaps funcionales MEDIA de la auditoría de UCs (`trazabilidad-ucs-catalogo/auditoria-ucs-2026-06-02.md` + `analisis-profundo-gaps-2026-06-02.md`).
 
