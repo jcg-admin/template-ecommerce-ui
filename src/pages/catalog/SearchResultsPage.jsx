@@ -32,7 +32,7 @@ export default function SearchResultsPage() {
   const q = normalizeQuery(rawQ);
   const queryValid = isQueryValid(q);
 
-  const { data, isLoading, isError } = useSearch(
+  const { data, isLoading, isError, refetch } = useSearch(
     {
       q,
       category:  categoryParam || undefined,
@@ -110,7 +110,7 @@ export default function SearchResultsPage() {
                 <p>Sin resultados para <strong>«{q}»</strong>.</p>
                 <button
                   type="button"
-                  onClick={() => setSearchParams(new URLSearchParams(searchParams))}
+                  onClick={() => refetch()}
                   className={styles.retryBtn}
                 >
                   Reintentar búsqueda
