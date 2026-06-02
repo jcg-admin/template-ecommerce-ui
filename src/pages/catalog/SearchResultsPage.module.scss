@@ -34,3 +34,19 @@
 .suggestions { text-align: left; max-width: 420px; margin: 16px auto; }
 .suggestions li { margin: 6px 0; }
 @keyframes spin { to { transform: rotate(360deg); } }
+
+.retryBtn {
+  margin-top: $spacing-3;
+  padding: $spacing-2 $spacing-4;
+  background: var(--ec-accent);
+  color: #fff;
+  border: none;
+  border-radius: $border-radius-xl;
+  font-size: $font-size-sm;
+  font-weight: 600;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+}

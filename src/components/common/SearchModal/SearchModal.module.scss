@@ -3,9 +3,20 @@
 .backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.45);
   z-index: $z-modal-backdrop;
   cursor: pointer;
+  animation: fadeIn 0.2s ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideDown {
+  from { transform: translateY(-100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 .panel {
@@ -15,9 +26,10 @@
   right: 0;
   z-index: $z-modal;
   background: var(--ec-bg-page);
-  padding: $spacing-6 $spacing-6;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.28);
-  border-bottom: 1px solid var(--ec-border-color);
+  padding: $spacing-6;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.22);
+  border-bottom: 2px solid var(--ec-accent);
+  animation: slideDown 0.2s ease-out;
 }
 
 .form {
@@ -30,16 +42,19 @@
 
 .input {
   flex: 1;
-  padding: $spacing-3 $spacing-4;
+  padding: $spacing-3 $spacing-5;
+  min-height: 48px;
   border: 2px solid var(--ec-border-color);
   border-radius: $border-radius-xl;
-  font-size: $font-size-base;
+  font-size: $font-size-md;
   background: var(--ec-bg-surface);
   color: var(--ec-text-primary);
   outline: none;
+  transition: border-color 0.15s ease;
 
   &:focus {
     border-color: var(--ec-accent);
+    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
   }
 }
 

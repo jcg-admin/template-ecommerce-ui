@@ -107,7 +107,14 @@ export default function SearchResultsPage() {
 
             {isError && !isLoading && (
               <div className={styles.error} role="alert">
-                No se pudo completar la busqueda. Intenta de nuevo.
+                <p>Sin resultados para <strong>«{q}»</strong>.</p>
+                <button
+                  type="button"
+                  onClick={() => setSearchParams(new URLSearchParams(searchParams))}
+                  className={styles.retryBtn}
+                >
+                  Reintentar búsqueda
+                </button>
               </div>
             )}
 
