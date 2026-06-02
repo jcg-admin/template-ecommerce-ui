@@ -123,8 +123,10 @@ fetch previo) → primer render: `!isLoading && !product` → `Navigate /404`.
 **Fix:** Condición de loading robusta `if (isLoading || (!product && slug))`
 + cleanup `clearCurrentProduct` al desmontar.
 **Commit:** `82d77ed`
-**Tests:** sin test de regresión dedicado en esta iniciativa (ver "Fuera de
-alcance" en index.md).
+**Tests:** `ProductPage.test.jsx` — describe "race /404 (BUG-PRODUCT-01)":
+con `currentProduct=null` + `isLoading=false` + slug presente y un GET que
+nunca resuelve, muestra "Cargando…" y NO monta el sentinel `/404`. Verificado
+red→green (revertir el fix hace fallar el test).
 
 ---
 
@@ -136,7 +138,10 @@ alcance" en index.md).
 **Causa:** Mismo patrón que BUG-PRODUCT-01: `!isLoading && !order`.
 **Fix:** `if (isLoading || (!order && id))`.
 **Commit:** `03ed5b5`
-**Tests:** sin test de regresión dedicado en esta iniciativa.
+**Tests:** `OrderDetailPage.test.jsx` — describe "race redirect (BUG-ORDER-01)":
+con `current=null` + `isLoading=false` + id presente y un GET que nunca
+resuelve, muestra "Cargando pedido…" y NO redirige a `/account/orders`.
+Verificado red→green.
 
 ---
 

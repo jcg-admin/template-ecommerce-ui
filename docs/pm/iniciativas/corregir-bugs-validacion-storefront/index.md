@@ -26,11 +26,12 @@ Los fixes F1-F5 ya están en la rama (commits `f572673` → `26dd600`). Esta
 iniciativa los documenta retroactivamente y añade:
 
 - **F6** — tests de regresión que blindan los fixes y convierten el
-  checklist de validación manual en cobertura automatizada (17 tests nuevos).
+  checklist de validación manual en cobertura automatizada (19 tests nuevos),
+  cada uno verificado red→green.
 - **F7** — fix de **BUG-SEARCH-04**, un bug nuevo detectado al escribir los
   tests: el botón "Reintentar búsqueda" no re-fetcheaba (queryKey idéntica).
 
-Suite: 1347 passed / 0 fallos. SCSS: 149 entries clean. Build demo: OK.
+Suite: 1349 passed / 0 fallos. SCSS: 149 entries clean. Build demo: OK.
 
 ## Índice
 
@@ -49,8 +50,8 @@ Suite: 1347 passed / 0 fallos. SCSS: 149 entries clean. Build demo: OK.
 | BUG-WISHLIST-01 | CRÍTICA | f572673 | indirecto (ProductCard) |
 | BUG-WISHLIST-02 | ALTA | c0493c9 | indirecto |
 | BUG-WISHLIST-03 | ALTA | c0493c9 | wishlistSlice + ProductCard |
-| BUG-PRODUCT-01 | ALTA | 82d77ed | — (inspección) |
-| BUG-ORDER-01 | MEDIA | 03ed5b5 | — (inspección) |
+| BUG-PRODUCT-01 | ALTA | 82d77ed | ProductPage |
+| BUG-ORDER-01 | MEDIA | 03ed5b5 | OrderDetailPage |
 | BUG-CARD-01 | MEDIA | 03ed5b5 | ProductCard |
 | BUG-SEARCH-03 | MEDIA | 26dd600 | SearchResultsPage |
 | BUG-SEARCH-04 | MEDIA | (esta iniciativa) | SearchResultsPage |
@@ -62,9 +63,11 @@ Suite: 1347 passed / 0 fallos. SCSS: 149 entries clean. Build demo: OK.
 - **Validación visual en browser** (animaciones de SearchModal, scroll real,
   persistencia del ♥ tras recargar): no reproducible en jsdom/CI; queda en el
   checklist manual de WSL2.
-- **Tests de regresión de BUG-PRODUCT-01 / BUG-ORDER-01**: el fix de race
-  condition se verificó por inspección; un test fiable requiere simular el
-  solapamiento de renders entre slugs, frágil en jsdom. Se difiere.
+
+Nota: BUG-PRODUCT-01 / BUG-ORDER-01 sí quedaron cubiertos (F6-T6/T7). No se
+simula el timing de la race, sino el *estado* que produce (`product`/`order`
+null + `isLoading` false), que distingue de forma determinista el código con
+bug del corregido.
 
 ## Checklist de validación en browser (WSL2)
 

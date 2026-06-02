@@ -112,10 +112,29 @@ helper `makeStoreWithProducts` que estaba referenciado pero ausente.)
 visible (fallaría con el orden de chequeo viejo).
 - [x] DONE — verde
 
+### F6-T6 — ProductPage.test.jsx (BUG-PRODUCT-01)
+1 test: reproduce el estado de la race (`currentProduct=null` +
+`isLoading=false` + slug, GET que nunca resuelve) → muestra "Cargando…" y
+NO monta el sentinel `/404`. No simula el timing: reproduce el estado que
+la race produce. Verificado red→green (revertir el fix hace fallar el test).
+- [x] DONE — verde
+
+### F6-T7 — OrderDetailPage.test.jsx (BUG-ORDER-01)
+1 test, mismo patrón: `current=null` + `isLoading=false` + id, GET que nunca
+resuelve → "Cargando pedido…" sin redirigir a `/account/orders`. Verificado
+red→green.
+- [x] DONE — verde
+
 ### Pendientes NO unitarios
-- BUG-SEARCH-02 (animaciones SearchModal): validación visual en browser.
-- BUG-PRODUCT-01 / BUG-ORDER-01: fix verificado por inspección; sin test de
-  regresión dedicado en este lote (ver "Fuera de alcance").
+- BUG-SEARCH-02 (animaciones SearchModal): validación visual en browser
+  (jsdom no evalúa CSS animations).
+
+### Nota metodológica — verificación red→green
+Los fixes ya existían, así que no es TDD literal (test antes que código).
+Para cada test de regresión se aplicó el ciclo red→green: revertir el fix en
+el fuente, confirmar que el test FALLA (red), restaurar con `git checkout`,
+confirmar que PASA (green). Esto demuestra que el test atrapa la regresión y
+no es un test trivialmente verde.
 
 ---
 
@@ -136,7 +155,7 @@ Detectado al escribir F6-T3.
 ## Criterios de cierre de la iniciativa
 
 - [x] `node scripts/check-scss.mjs` → 149 entries clean
-- [x] `npm test` → 0 fallos (1347 passed, 109 skipped)
+- [x] `npm test` → 0 fallos (1349 passed, 109 skipped)
 - [x] `DEMO_MODE=true npm run build:demo` sin errores (exit 0)
 - [x] Todas las tareas de F6/F7 marcadas DONE
 - [ ] Commit final + push a la rama
