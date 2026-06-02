@@ -116,6 +116,31 @@ describe('AdminLogisticsPage (UC-LOG-08)', () => {
     });
   });
 
+  it('muestra el mapa de cobertura de envio con sus zonas', async () => {
+    apiService.get.mockResolvedValue({ data: PANEL });
+    render(wrap());
+
+    expect(
+      await screen.findByRole('heading', { name: /Cobertura de envio/i }),
+    ).toBeInTheDocument();
+
+    // El mapa SVG expone role="img" con la etiqueta accesible.
+    expect(
+      screen.getByRole('img', { name: 'Cobertura de envio' }),
+    ).toBeInTheDocument();
+
+    // Cada zona se renderiza como role="img" con su estado de cobertura.
+    expect(
+      screen.getByRole('img', { name: /Ciudad de Mexico: cubierta/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('img', { name: /Yucatan: no cubierta/i }),
+    ).toBeInTheDocument();
+
+    // 6 zonas + el propio SVG = 7 elementos con role="img".
+    expect(screen.getAllByRole('img').length).toBe(7);
+  });
+
   it('muestra mensaje cuando ambos grupos estan vacios', async () => {
     apiService.get.mockResolvedValue({ data: { group_a: [], group_b: [] } });
     render(wrap());

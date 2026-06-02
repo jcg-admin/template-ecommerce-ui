@@ -22,6 +22,7 @@ import { useLogistics, LOGISTICS_KEY } from '@hooks/domain/useLogistics';
 import {
   confirmDelivery, clearLogisticsActionState,
 } from '@redux/slices/logisticsSlice';
+import CoverageMap from '@components/common/CoverageMap';
 import styles from './AdminLogisticsPage.module.scss';
 
 function formatDate(iso) {
@@ -29,6 +30,25 @@ function formatDate(iso) {
   try { return new Date(iso).toLocaleString('es-MX'); }
   catch { return iso; }
 }
+
+/**
+ * Zonas de cobertura de envio.
+ *
+ * Fuente: conjunto representativo definido localmente. El payload de
+ * logistica (GET /api/v1/logistics/ via useLogistics) NO expone datos de
+ * zonas/regiones —solo group_a/group_b—, por lo que no hay una fuente de
+ * cobertura en el backend. Hasta que el contrato la incluya, se modela un
+ * subconjunto de regiones de Mexico con un flag `covered` representativo
+ * (zonas metropolitanas cubiertas; zonas mas remotas sin cobertura).
+ */
+const COVERAGE_ZONES = [
+  { id: 'cdmx',      name: 'Ciudad de Mexico', covered: true },
+  { id: 'jalisco',   name: 'Jalisco',          covered: true },
+  { id: 'nuevoleon', name: 'Nuevo Leon',       covered: true },
+  { id: 'puebla',    name: 'Puebla',           covered: true },
+  { id: 'yucatan',   name: 'Yucatan',          covered: false },
+  { id: 'chiapas',   name: 'Chiapas',          covered: false },
+];
 
 export default function AdminLogisticsPage() {
   const dispatch    = useDispatch();
@@ -56,6 +76,17 @@ export default function AdminLogisticsPage() {
           guias, registrar rastreos y confirmar entregas.
         </p>
       </header>
+
+      <section className={styles.coverage} aria-labelledby="coverage-title">
+        <h2 id="coverage-title">Cobertura de envio</h2>
+        <p className={styles.meta}>
+          Regiones con cobertura de envio activa (conjunto representativo).
+        </p>
+        <CoverageMap
+          zones={COVERAGE_ZONES}
+          ariaLabel="Cobertura de envio"
+        />
+      </section>
 
       {actionError && (
         <p role="alert" className={styles.apiError}>
