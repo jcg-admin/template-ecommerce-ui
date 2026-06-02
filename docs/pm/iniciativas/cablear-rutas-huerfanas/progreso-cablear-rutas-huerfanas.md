@@ -66,5 +66,15 @@ Premise Gate por sub-ruta (grep de enlace dinámico previo):
 Rojo: 4 failed. Verde: 3 suites, 17 passed / 10 skipped. check-scss: 170
 entries clean.
 
-## Pendiente
-- F4 verificación full (jest completo + check-scss + build:demo) + cierre.
+## 2026-06-02T19:00:32 — F4 verificación y cierre
+
+Gates (citas verbatim de tool output):
+- `npx jest --ci` → `Test Suites: 2 skipped, 272 passed, 272 of 274 total` /
+  `Tests: 109 skipped, 1694 passed, 1803 total` / `EXIT=0`. Sin regresiones.
+- `node scripts/check-scss.mjs` → `170 SCSS entries compiled clean`.
+- `DEMO_MODE=true npm run build:demo` → `webpack 5.106.2 compiled with 2
+  warnings` (asset/entrypoint size, pre-existentes) / `EXIT=0`.
+
+19/19 huérfanas reales cableadas. Iniciativa CERRADA. Ver
+`decisiones-cablear-rutas-huerfanas.md` para la matriz y los drifts diferidos
+(DR-01 doble nav cuenta, DR-02 doble SiteSettings).

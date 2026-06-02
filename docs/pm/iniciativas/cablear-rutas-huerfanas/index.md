@@ -1,6 +1,6 @@
 # Iniciativa: cablear-rutas-huerfanas
 
-**Estado:** EN ANÁLISIS
+**Estado:** CERRADA (2026-06-02T19:00:32)
 **Creada:** 2026-06-02
 **Origen:** Solicitud usuario — auditar rutas/UCs huérfanas y conectarlas.
 
@@ -11,19 +11,24 @@ tecleando la URL). Es código muerto desde la UX. Complementa
 `auditar-rutas-y-flujos` (esa registró páginas sin ruta; esta conecta rutas sin
 enlace a la navegación).
 
-## Estado actual
+## Resultado
 
-Premise Gate 0b → **CONFIRMAR**. 22 huérfanas reales clasificadas por destino:
-4 → AccountSidebar, 12 → AdminSidebar, 6 → enlace desde página padre. Detalle y
-evidencia en `analisis-rutas-huerfanas.md`.
+Premise Gate por grupo corrigió el alcance: de 22 supuestas, **3 ya estaban
+enlazadas** (change-password, notifications/preferences,
+variants/:variantId/price), quedando **19 huérfanas reales**, todas cableadas:
+2 → AccountLayout (F1), 12 → AdminSidebar (F2), 5 → enlace desde página padre
+(F3). Verificación F4: jest 1694/0, check-scss clean, build:demo EXIT=0.
+Matriz completa y decisiones en `decisiones-cablear-rutas-huerfanas.md`.
 
 ## Índice
 
 | Archivo | Descripción |
 |---------|-------------|
 | `alcance-*.md` | Premisa verificada, qué cubre, fuera de alcance |
-| `analisis-rutas-huerfanas.md` | Las 22 huérfanas + clasificación + no-huérfanas |
-| `plan-*.md` | Fases para cablear cada grupo |
+| `analisis-rutas-huerfanas.md` | Las huérfanas + clasificación + correcciones de gate |
+| `plan-*.md` | Fases F1-F4 (estado HECHA) |
+| `progreso-*.md` | Log de ejecución por fase |
+| `decisiones-*.md` | Matriz final, decisiones D-01..03, drifts, gates F4 |
 
 ## Relación con otras iniciativas
 
