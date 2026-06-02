@@ -16,6 +16,7 @@ import {
   fetchAdminPage, fetchPageVersions, savePageDraft, publishPage, restorePageVersion,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import RichTextEditor from '@components/common/RichTextEditor';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminStaticPageEditorPage.module.scss';
 
@@ -112,12 +113,11 @@ export default function AdminStaticPageEditorPage() {
           <Field label="Meta descripción (SEO)" value={form.meta_description} onChange={(e) => setForm({ ...form, meta_description: e.target.value })} textarea hint="Máximo 160 caracteres" />
 
           <label className={styles.contentLabel}>Contenido (HTML)</label>
-          <textarea
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-            className={styles.contentArea}
-            spellCheck={false}
-            placeholder="<p>Escribe el contenido aquí. Acepta HTML básico (p, h2, h3, ul, li, strong, em, a).</p>"
+          <RichTextEditor
+            value={form.content ?? ''}
+            onChange={(html) => setForm({ ...form, content: html })}
+            ariaLabel="Contenido de la página"
+            placeholder="Escribe el contenido aquí. Acepta texto enriquecido (negrita, cursiva, listas, enlaces)."
           />
 
           <div className={styles.previewBox}>

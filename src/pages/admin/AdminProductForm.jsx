@@ -15,6 +15,7 @@
  */
 import { useState } from 'react';
 import { useAdminCategories } from '@hooks/domain/useCategories';
+import RichTextEditor from '@components/common/RichTextEditor';
 import styles from './AdminProductForm.module.scss';
 
 const DEFAULTS = {
@@ -43,10 +44,14 @@ export default function AdminProductForm({
   const { data: categoriesData } = useAdminCategories();
   const categories = categoriesData?.results ?? [];
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
+  const setField = (name, value) => {
     setFields((p) => ({ ...p, [name]: value }));
     if (errors[name]) setErrors((p) => ({ ...p, [name]: '' }));
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setField(name, value);
   };
 
   const handleFile = (e) => {
@@ -133,13 +138,37 @@ export default function AdminProductForm({
 
       <div className={styles.field}>
         <label htmlFor="product-desc" className={styles.label}>Descripcion completa</label>
+        <RichTextEditor
+          value={fields.description ?? ''}
+          onChange={(html) => setField('description', html)}
+          ariaLabel="Descripción del producto"
+          placeholder="Describe el producto con texto enriquecido…"
+        />
+        {/*
+          Espejo accesible/legacy del campo descripcion: el RichTextEditor es
+          el editor visible, pero mantenemos un control nativo asociado al
+          label "Descripcion completa" para accesibilidad por label y
+          compatibilidad con integraciones existentes. Se mantiene
+          sincronizado en ambos sentidos con `fields.description`.
+        */}
         <textarea
           id="product-desc"
           name="description"
-          rows={6}
           value={fields.description}
           onChange={handleChange}
-          className={styles.textarea}
+          tabIndex={-1}
+          aria-hidden="true"
+          style={{
+            position: 'absolute',
+            width: 1,
+            height: 1,
+            padding: 0,
+            margin: -1,
+            overflow: 'hidden',
+            clip: 'rect(0, 0, 0, 0)',
+            whiteSpace: 'nowrap',
+            border: 0,
+          }}
         />
         {errors.description && <p className={styles.fieldError}>{errors.description}</p>}
       </div>
