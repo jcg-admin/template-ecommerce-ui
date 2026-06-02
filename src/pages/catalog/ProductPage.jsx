@@ -12,6 +12,7 @@
 import Popover    from '@components/common/Popover/Popover';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
 import ProductGallery from '@components/common/ProductGallery';
+import Accordion from '@components/common/Accordion';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsInWishlist } from '@redux/selectors';
@@ -63,6 +64,39 @@ export default function ProductPage() {
   const stock = variant?.stock ?? product.stock;
   const isAvailable = stock > 0;
   const related = product.related_products || [];
+
+  // UC-CAT-FAQ (F6): Preguntas frecuentes de la ficha.
+  // Si el producto trae preguntas/respuestas desde el backend
+  // (faqs o questions), se mapean a items del Accordion. En caso
+  // contrario se usa un set de FAQ estáticas razonables (envío,
+  // devoluciones, autenticidad) para no introducir infraestructura nueva.
+  const productFaqs = product.faqs || product.questions || [];
+  const faqItems = productFaqs.length > 0
+    ? productFaqs.map((q, i) => ({
+        id: q.id ?? i,
+        title: q.question ?? q.title,
+        content: q.answer ?? q.content,
+      }))
+    : [
+        {
+          id: 'envio',
+          title: '¿Cuánto tarda el envío?',
+          content: 'Enviamos a todo México en 2–4 días hábiles vía DHL. '
+            + 'Recibirás un número de guía para rastrear tu pedido.',
+        },
+        {
+          id: 'devoluciones',
+          title: '¿Puedo devolver esta pieza?',
+          content: 'Aceptamos devoluciones dentro de los 30 días posteriores '
+            + 'a la compra, siempre que el producto conserve su empaque sellado.',
+        },
+        {
+          id: 'autenticidad',
+          title: '¿Cómo garantizan la autenticidad?',
+          content: 'Cada pieza es elaborada de forma artesanal siguiendo la '
+            + 'tradición Yorùbà e incluye certificado de autenticidad.',
+        },
+      ];
 
   const handleAddToCart = async () => {
     try {
@@ -257,6 +291,19 @@ export default function ProductPage() {
           </ScrollSpy>
         </div>
       </section>
+
+      {/* UC-CAT-FAQ (F6): Preguntas frecuentes */}
+      {faqItems.length > 0 && (
+        <section className={styles.faq} id="product-faq">
+          <div className={styles.faqInner}>
+            <header className={styles.faqHeader}>
+              <MetaTag tone="bronze">Antes de comprar</MetaTag>
+              <h2 className={styles.faqTitle}>Preguntas frecuentes</h2>
+            </header>
+            <Accordion items={faqItems} ariaLabel="Preguntas frecuentes" />
+          </div>
+        </section>
+      )}
 
       {/* Related */}
       {related.length > 0 && (

@@ -3,8 +3,9 @@
  * UC-CAT-01 / UC-CAT-03 / UC-CAT-03-EXT
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { Provider }    from 'react-redux';
-import { MemoryRouter } from 'react-router-dom';
+import { MemoryRouter, useLocation } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -397,5 +398,80 @@ describe('CatalogPage — wishlist en las cards (BUG-CARD-02)', () => {
     ).toBeInTheDocument();
     expect(screen.getAllByRole('button', { name: /Quitar de deseos/i })).toHaveLength(1);
     expect(screen.getByRole('button', { name: /Añadir a deseos/i })).toBeInTheDocument();
+  });
+});
+
+// ─── UC-CAT-LIST (F6) — ViewToggle grid/list en el catálogo ─────────────────
+//
+// El catálogo integra <ViewToggle> en la barra superior y persiste la vista
+// en la URL como ?view=grid|list (grid es el default, por lo que no aparece
+// en la URL). Cuando view=list, la grilla recibe la clase de layout en lista.
+describe('CatalogPage — ViewToggle (UC-CAT-LIST)', () => {
+  // Sonda que expone el querystring actual del router para verificar el sync URL.
+  function LocationProbe() {
+    const { search } = useLocation();
+    return <output data-testid="loc-search">{search}</output>;
+  }
+
+  it('renderiza el ViewToggle en la barra superior (grid por defecto)', async () => {
+    apiService.get.mockResolvedValue(pageOf(PRODUCTS));
+    render(wrap(<CatalogPage />, makeStore()));
+    await screen.findByText('Collar Oshun');
+
+    const group = screen.getByRole('group', { name: 'Vista del catálogo' });
+    expect(group).toBeInTheDocument();
+    // Sin ?view en la URL → grid es el botón activo.
+    expect(
+      screen.getByRole('button', { name: 'Vista de cuadrícula' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+    expect(
+      screen.getByRole('button', { name: 'Vista de lista' }),
+    ).toHaveAttribute('aria-pressed', 'false');
+  });
+
+  it('cambiar a "lista" actualiza la URL a ?view=list', async () => {
+    apiService.get.mockResolvedValue(pageOf(PRODUCTS));
+    const user = userEvent.setup();
+    render(
+      <Provider store={makeStore()}>
+        <QueryClientProvider client={makeClient()}>
+          <MemoryRouter>
+            <CatalogPage />
+            <LocationProbe />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </Provider>,
+    );
+    await screen.findByText('Collar Oshun');
+
+    // Antes del click no hay view en la URL.
+    expect(screen.getByTestId('loc-search').textContent).not.toContain('view=list');
+
+    await user.click(screen.getByRole('button', { name: 'Vista de lista' }));
+
+    await waitFor(() =>
+      expect(screen.getByTestId('loc-search').textContent).toContain('view=list'),
+    );
+    // El botón de lista queda marcado como activo tras el cambio.
+    expect(
+      screen.getByRole('button', { name: 'Vista de lista' }),
+    ).toHaveAttribute('aria-pressed', 'true');
+  });
+
+  it('con ?view=list al montar, la vista de lista queda activa', async () => {
+    apiService.get.mockResolvedValue(pageOf(PRODUCTS));
+    render(
+      <Provider store={makeStore()}>
+        <QueryClientProvider client={makeClient()}>
+          <MemoryRouter initialEntries={['/catalog?view=list']}>
+            <CatalogPage />
+          </MemoryRouter>
+        </QueryClientProvider>
+      </Provider>,
+    );
+    await screen.findByText('Collar Oshun');
+    expect(
+      screen.getByRole('button', { name: 'Vista de lista' }),
+    ).toHaveAttribute('aria-pressed', 'true');
   });
 });

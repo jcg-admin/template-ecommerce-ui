@@ -291,6 +291,18 @@
 }
 .specValue { color: $text-primary; }
 
+// ─── FAQ (UC-CAT-FAQ) ───
+.faq { padding: $spacing-16 0; border-top: 1px solid $border-color; }
+.faqInner { max-width: $content-max-width; margin: 0 auto; padding: 0 $content-padding-desktop; @media (max-width: $bp-md) { padding: 0 $content-padding-mobile; } }
+.faqHeader { margin-bottom: $spacing-10; }
+.faqTitle {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  font-weight: $font-weight-normal;
+  color: $text-primary;
+  margin-top: $spacing-3;
+}
+
 // ─── Related ───
 .related { padding: $spacing-16 0; }
 .relatedInner { max-width: $content-max-width; margin: 0 auto; padding: 0 $content-padding-desktop; @media (max-width: $bp-md) { padding: 0 $content-padding-mobile; } }

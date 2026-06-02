@@ -18,6 +18,7 @@ import {
   fetchProducts, searchProducts, clearSearch, setPage,
 } from '@redux/slices/catalogSlice';
 import SearchBar from '@components/catalog/SearchBar';
+import ViewToggle from '@components/common/ViewToggle';
 import ProductCard from '@components/catalog/ProductCard';
 import { MetaTag, Button, EmptyState } from '@components/common/primitives';
 import styles from './CatalogPage.module.scss';
@@ -40,6 +41,7 @@ export default function CatalogPage() {
   const qParam        = searchParams.get('q')        || '';
   const categoryParam = searchParams.get('category') || '';
   const orishasParam  = searchParams.get('orishas')  || '';
+  const view          = searchParams.get('view') === 'list' ? 'list' : 'grid';
   const [activeOrishas, setActiveOrishas]   = useState(
     () => orishasParam ? orishasParam.split(',') : []
   );
@@ -93,6 +95,15 @@ export default function CatalogPage() {
     }
     prevPageRef.current = currentPage;
   }, [products, currentPage]);
+
+  const handleViewChange = useCallback((next) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (next === 'list') params.set('view', 'list');
+      else params.delete('view'); // grid es el default → no ensucia la URL
+      return params;
+    });
+  }, [setSearchParams]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {
@@ -156,7 +167,12 @@ export default function CatalogPage() {
         />
 
           <section className={styles.results}>
-            <Toolbar count={displayItems.length} total={pagination.count} />
+            <Toolbar
+              count={displayItems.length}
+              total={pagination.count}
+              view={view}
+              onViewChange={handleViewChange}
+            />
 
             {loading && (
               <div className={styles.loading} aria-live="polite">
@@ -182,7 +198,7 @@ export default function CatalogPage() {
             )}
 
             {!loading && displayItems.length > 0 && (
-              <div className={styles.grid}>
+              <div className={`${styles.grid} ${view === 'list' ? styles.gridList : ''}`}>
                 {displayItems.map((p) => (
                   <ProductCard
                     key={p.id}
@@ -306,13 +322,14 @@ function PriceSlider() {
   );
 }
 
-function Toolbar({ count, total, sortOrder, onSort }) {
+function Toolbar({ count, total, sortOrder, onSort, view = 'grid', onViewChange }) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.toolbarCount}>
         Mostrando <strong>{count}</strong> de {total || count} piezas
       </div>
       <div className={styles.toolbarRight}>
+        <ViewToggle value={view} onChange={onViewChange} ariaLabel="Vista del catálogo" />
         <label className={styles.sort}>
           <span>Ordenar:</span>
           <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>

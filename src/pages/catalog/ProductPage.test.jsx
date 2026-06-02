@@ -453,6 +453,49 @@ describe('ProductPage — Agregar a la bolsa (BUG-CART-03 / BUG-CART-04)', () =>
   });
 });
 
+// ─── UC-CAT-FAQ (F6) — seccion Preguntas frecuentes con Accordion ───────────
+//
+// ProductPage integra el componente Accordion (@components/common/Accordion)
+// en una seccion "Preguntas frecuentes". Sin datos de FAQ en el producto se
+// usan FAQ estaticas (envio, devoluciones, autenticidad). Reusa el patron de
+// los tests que SI pasan: GET resuelve con PRODUCT, dejando isLoading=false y
+// la ficha (y por tanto la seccion FAQ) renderizada.
+describe('ProductPage — Preguntas frecuentes (UC-CAT-FAQ)', () => {
+  beforeEach(() => {
+    apiService.get.mockResolvedValue({ data: PRODUCT });
+  });
+
+  it('renderiza la seccion FAQ con el Accordion (ariaLabel y cabeceras)', async () => {
+    render(wrap('collar-oshun-dorado', makeStore()));
+
+    expect(
+      await screen.findByRole('heading', { name: /Preguntas frecuentes/i }),
+    ).toBeInTheDocument();
+    // El Accordion expone un grupo con aria-label="Preguntas frecuentes".
+    expect(screen.getByRole('group', { name: 'Preguntas frecuentes' }))
+      .toBeInTheDocument();
+    // Cabecera-boton de al menos una FAQ estatica.
+    expect(
+      screen.getByRole('button', { name: /¿Cuánto tarda el envío\?/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('expandir un panel FAQ muestra su respuesta', async () => {
+    render(wrap('collar-oshun-dorado', makeStore()));
+
+    const btn = await screen.findByRole('button', {
+      name: /¿Cuánto tarda el envío\?/i,
+    });
+    // Cerrado por defecto: la respuesta no esta en el DOM.
+    expect(screen.queryByText(/2–4 días hábiles/i)).not.toBeInTheDocument();
+
+    fireEvent.click(btn);
+
+    expect(btn).toHaveAttribute('aria-expanded', 'true');
+    expect(screen.getByText(/2–4 días hábiles/i)).toBeInTheDocument();
+  });
+});
+
 // ─── BUG-PRODUCT-01 — regresion /404 prematuro por race condition ───────────
 //
 // Al navegar del catalogo a una ficha, ProductPage montaba con
