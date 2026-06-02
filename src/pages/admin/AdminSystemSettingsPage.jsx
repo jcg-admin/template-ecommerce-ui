@@ -27,7 +27,7 @@ const FIELDS = [
   { key: 'support_email',    label: 'Email de soporte',         type: 'email' },
   { key: 'phone',            label: 'Telefono de soporte',      type: 'tel' },
   { key: 'address',          label: 'Direccion del negocio',    type: 'text' },
-  { key: 'tax_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
+  { key: 'iva_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
   { key: 'currency',         label: 'Moneda',                   type: 'text' },
   { key: 'shipping_fee_default',    label: 'Costo de envio por defecto',  type: 'number' },
   { key: 'free_shipping_threshold', label: 'Umbral de envio gratis',      type: 'number' },

@@ -23,7 +23,7 @@ const SETTINGS = {
   support_email: 'hola@example.com',
   phone: '+52 55 0000 0000',
   address: 'Av. Reforma 123',
-  tax_rate: 16,
+  iva_rate: 16,
   currency: 'MXN',
   maintenance_mode: false,
   social_links: { facebook: 'https://facebook.com/demo', instagram: '', youtube: '' },

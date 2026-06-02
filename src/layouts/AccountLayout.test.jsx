@@ -58,6 +58,7 @@ describe('AccountLayout — sidebar del comprador', () => {
     ['Notificaciones',      '/account/notifications/preferences'],
     ['Mi perfil',           '/account/profile'],
     ['Cambiar contrasena',  '/account/change-password'],
+    ['Seguridad',           '/account/security'],
     ['Referidos',           '/account/referral'],
     ['Historial de busqueda', '/account/search-history'],
   ])('expone el link "%s" hacia %s', (label, href) => {

@@ -186,7 +186,7 @@ export const adminHandlers = [
       site_name: 'Práctica Yorùbà',
       site_description: 'Tienda de objetos ceremoniales',
       currency: 'MXN',
-      tax_rate: 0.16,
+      iva_rate: 0.16,
       shipping_fee_default: 150,
       free_shipping_threshold: 1500,
       maintenance_mode: false,
