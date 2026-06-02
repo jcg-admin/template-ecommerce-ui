@@ -67,9 +67,9 @@ export default function ProductPage() {
   const handleAddToCart = async () => {
     try {
       await dispatch(addCartItem({
-        product_id: product.id,
-        variant_id: variant?.id,
-        quantity: qty,
+        productId: product.id,
+        variantId: variant?.id,
+        quantity:  qty,
       })).unwrap();
       navigate('/cart');
     } catch {

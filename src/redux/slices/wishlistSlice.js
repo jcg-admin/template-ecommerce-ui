@@ -185,9 +185,15 @@ export default wishlistSlice.reducer;
  * Agregado en T-203 de la iniciativa adaptar-sistema-diseno-yoruba.
  */
 export const toggleWishlist = ({ productId, inWishlist }) =>
-  inWishlist
-    ? removeFromWishlist(productId)
-    : addToWishlist({ product_id: productId });
+  (dispatch, getState) => {
+    if (inWishlist) {
+      const items  = getState().wishlist?.items ?? [];
+      const item   = items.find((i) => i.product_id === productId);
+      const itemId = item?.id ?? productId;
+      return dispatch(removeFromWishlist(itemId));
+    }
+    return dispatch(addToWishlist({ product_id: productId }));
+  };
 
 // Aliases para compatibilidad con sistema de diseno Yoruba (H-F5-01).
 export const removeWishlistItem = removeFromWishlist;
