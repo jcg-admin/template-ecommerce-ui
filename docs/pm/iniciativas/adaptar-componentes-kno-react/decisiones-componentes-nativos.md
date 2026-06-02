@@ -5,8 +5,9 @@
 - **D-1 Implementación nativa, no importación.** Se adaptaron 22 componentes
   inspirados en el catálogo de referencia (`kno-react-*`, modelado sobre
   KendoReact) como **código propio** en el stack del template (React + hooks +
-  SCSS del sistema). No se importa ni empaqueta `@progress/kno-*`. Cero
-  dependencias nuevas en `dependencies`.
+  SCSS del sistema). No se importa ni empaqueta `@progress/kno-*`. **Única
+  dependencia nueva**: `jspdf` (para UC-ORD-PDFGEN, aprobada explícitamente por
+  el usuario); el resto de los 22 componentes es código propio sin deps.
 - **D-2 TDD estricto vía agentes en paralelo.** Cada componente se construyó
   con el ciclo test→red→green→refactor, un agente por componente, en lotes
   paralelos por tier. Cada integración se hizo con su test (una tarea atómica
@@ -17,8 +18,11 @@
   - **UC-ORD-PDF** → **asset PDF mock estático** en DEMO (`public/mock/
     factura-demo.pdf`, PDF válido generado por script sin libs, copiado a
     `dist/mock`).
-  - **UC-ORD-PDFGEN** (generar factura en cliente) → **DIFERIDA**: requiere
-    `jspdf`/`pdf-lib`. Por defecto queda el asset mock (UC-ORD-PDF).
+  - **UC-ORD-PDFGEN** (generar factura en cliente) → **HECHA**: el usuario
+    aprobó añadir `jspdf` (4.2.1) como dependencia. `utils/generateInvoicePdf`
+    produce el Blob PDF desde el pedido y `OrderDetailPage` lo muestra en
+    PdfViewer (junto al asset mock de UC-ORD-PDF). Es la única dependencia
+    nueva de toda la iniciativa.
   - **UC-LOG-MAP** → **SVG estático** de zonas (sin tiles/servicios externos).
   - **UC-SUP-CHAT** → hilo **local** con autorespuesta simulada (sin backend).
 - **D-4 E2E con el Chromium del entorno.** Harness Playwright (`tests/e2e/`)
@@ -79,7 +83,8 @@
 - [x] `node scripts/check-scss.mjs` → clean (169).
 - [x] `DEMO_MODE=true npm run build:demo` → OK.
 - [x] E2E storefront → 0 fail (8 pass, 2 warn justificados).
-- [ ] **UC-ORD-PDFGEN diferido** — requiere lib de PDF (decisión D-3).
+- [x] **UC-ORD-PDFGEN HECHO** — `jspdf` aprobado como dependencia; factura
+  generada en cliente desde el pedido y mostrada en PdfViewer (3 + 1 tests).
 - [ ] **E2E del panel admin diferido** — cada integración admin tiene cobertura
   unitaria completa; un E2E con login admin + navegación profunda sería frágil
   (flakiness = deuda). Se documenta como deferral consciente, no como gap de

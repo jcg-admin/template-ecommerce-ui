@@ -38,7 +38,7 @@ Lista plana de tareas atómicas. Detalle en `plan-componentes-nativos.md`.
 | UC-ADM-PIVOT | PivotTable → AdminReportSalesPage | Hecha |
 | UC-ADM-SHEET | DataSheet → AdminPriceSyncPage | Hecha |
 | UC-ADM-LISTBOX | DualListBox → AdminProductForm | Hecha |
-| UC-ORD-PDFGEN | (generación PDF en cliente) | Diferida (requiere lib; decisión) |
+| UC-ORD-PDFGEN | generateInvoicePdf (jsPDF) → OrderDetailPage | Hecha (lib jspdf aprobada) |
 
 ## F8 — E2E (browser real)
 

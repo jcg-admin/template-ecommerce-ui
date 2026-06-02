@@ -19,3 +19,5 @@
 | 2026-06-02T08:55 | F7 Tier C integrado | CoverageMap (Logistics), Gauge (Dashboard), DataSheet (PriceSync), PivotTable (ReportSales), ChatWidget (Contact), DualListBox (ProductForm); commits 17b34b6..5e21aa0 |
 | 2026-06-02T09:00 | Hito: 22 integraciones hechas | suite 1626 passed / 0 fallos; check-scss 169 clean; build:demo OK |
 | 2026-06-02T09:05 | F8 — E2E suite verde | checks 01-06 en Chromium real: 5 pass, 1 warn (wishlist reload MSW), 0 fail, con todas las integraciones en el bundle |
+| 2026-06-02T09:30 | UC-ORD-PDFGEN (diferido → hecho) | jspdf aprobado; generateInvoicePdf + OrderDetailPage genera factura en cliente; +4 tests; commit b273814 |
+| 2026-06-02T09:35 | E2E admin: harness + agentes | runner con filtro por nombre + lib/auth (login admin/buyer); 13 checks admin/storefront en 4 agentes (puertos 4610-4613) |
