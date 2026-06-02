@@ -9,6 +9,7 @@ import {
   clearContactActionState,
 } from '@redux/slices/contactSlice';
 import ChatWidget from '@components/common/ChatWidget';
+import { usePublicSettings } from '@hooks/domain/usePublicSettings';
 import styles from './ContactPage.module.scss';
 
 const INITIAL_CHAT = [
@@ -121,6 +122,8 @@ export default function ContactPage() {
         </p>
       </header>
 
+      <ContactInfo />
+
       <form onSubmit={handleSubmit} noValidate className={styles.form}>
         <div className={styles.field}>
           <label htmlFor="contact-name">Nombre</label>
@@ -189,5 +192,32 @@ export default function ContactPage() {
 
       {chatSection}
     </section>
+  );
+}
+
+// UC-CFG-05 — datos de contacto del negocio, visibles de inmediato (POST-02).
+function ContactInfo() {
+  const settings = usePublicSettings({});
+  const social = settings.social_links || {};
+  const socialEntries = Object.entries(social).filter(([, url]) => url);
+  if (!settings.support_email && !settings.phone && !settings.address) return null;
+
+  return (
+    <aside className={styles.contactInfo} aria-label="Datos de contacto">
+      {settings.support_email && (
+        <p>Email: <a href={`mailto:${settings.support_email}`}>{settings.support_email}</a></p>
+      )}
+      {settings.phone && <p>Teléfono: {settings.phone}</p>}
+      {settings.address && <p>Dirección: {settings.address}</p>}
+      {socialEntries.length > 0 && (
+        <p>
+          {socialEntries.map(([platform, url]) => (
+            <a key={platform} href={url} target="_blank" rel="noopener noreferrer" style={{ marginRight: 12 }}>
+              {platform}
+            </a>
+          ))}
+        </p>
+      )}
+    </aside>
   );
 }

@@ -188,6 +188,16 @@ export const adminHandlers = [
       free_shipping_threshold: 1500,
       maintenance_mode: false,
       allow_guest_checkout: true,
+      // UC-CFG-05 — datos de contacto
+      support_email: 'hola@practicayoruba.com',
+      phone: '+52 55 1111 2222',
+      address: 'Av. Reforma 123, Col. Centro, CDMX, 06600',
+      support_hours: 'Lunes a viernes · 10:00 — 19:00',
+      social_links: {
+        facebook:  'https://facebook.com/practicayoruba',
+        instagram: 'https://instagram.com/practicayoruba',
+        youtube:   'https://youtube.com/@practicayoruba',
+      },
     })
   ),
 
@@ -195,6 +205,21 @@ export const adminHandlers = [
     const body = await request.json();
     return HttpResponse.json(body);
   }),
+
+  // UC-CFG-05 — lectura publica de datos de contacto (footer + contacto)
+  http.get('/api/v1/settings/public/', () =>
+    HttpResponse.json({
+      support_email: 'hola@practicayoruba.com',
+      phone: '+52 55 1111 2222',
+      address: 'Av. Reforma 123, Col. Centro, CDMX, 06600',
+      support_hours: 'Lunes a viernes · 10:00 — 19:00',
+      social_links: {
+        facebook:  'https://facebook.com/practicayoruba',
+        instagram: 'https://instagram.com/practicayoruba',
+        youtube:   'https://youtube.com/@practicayoruba',
+      },
+    })
+  ),
 
   // ── Descuentos de producto ──────────────────────────────────────────
   http.get('/api/v1/admin/product-discounts/', () => {

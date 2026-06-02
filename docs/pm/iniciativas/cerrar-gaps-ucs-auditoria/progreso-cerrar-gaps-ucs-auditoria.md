@@ -33,3 +33,23 @@
   ranking por -usos, ROI calculado).
 - `.filter`/`.empty` añadidos a `AdminTablePage.module.scss`.
 - TDD verde: slice 2 + page 4 = 6 passed; check-scss 168 clean.
+
+## F4 — UC-CFG-05 datos de contacto (admin + mock + footer) — HECHA
+- `usePublicSettings` (nuevo, sin React Query — robusto a mocks): GET
+  `/api/v1/settings/public/` con fallback.
+- MSW: `GET /settings/public/` + campos de contacto/redes añadidos al GET admin.
+- `AdminSystemSettingsPage`: FIELDS alineados al sub-contrato UC-CFG-05
+  (`support_email`, `phone`, `address`) + sección "Redes sociales"
+  (`social_links{facebook,instagram,youtube}`) con handler anidado.
+- `Footer`: consume usePublicSettings → email/horario/teléfono dinámicos +
+  enlaces de redes (fallback = valores por defecto, sin regresión).
+- `ContactPage`: bloque `ContactInfo` (email/teléfono/dirección/redes).
+- Tests: Footer.test.jsx (nuevo), AdminSystemSettingsPage (UC-CFG-05),
+  ContactPage sin romper; `vouchersSlice.test.js` INITIAL_STATE actualizado.
+- Hallazgo evitado: el hook usa `await` para no romper los muchos tests que
+  renderizan Footer con `apiService.get` mockeado devolviendo undefined.
+
+## F5 — Verificación
+- `npx jest --ci` → 1702 passed, 0 failed, 107 skipped (274/276 suites) / EXIT=0.
+- `node scripts/check-scss.mjs` → 168 clean.
+- `DEMO_MODE=true npm run build:demo` → compiled, EXIT=0.

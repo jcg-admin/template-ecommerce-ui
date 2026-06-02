@@ -23,8 +23,10 @@ import styles from './AdminSystemSettingsPage.module.scss';
 const FIELDS = [
   { key: 'site_name',        label: 'Nombre del sitio',         type: 'text' },
   { key: 'site_description',  label: 'Descripcion del sitio',    type: 'text' },
-  { key: 'contact_email',    label: 'Email de contacto',        type: 'email' },
-  { key: 'support_phone',    label: 'Telefono de soporte',      type: 'tel' },
+  // UC-CFG-05 — datos de contacto (sub-contrato de SiteSettings)
+  { key: 'support_email',    label: 'Email de soporte',         type: 'email' },
+  { key: 'phone',            label: 'Telefono de soporte',      type: 'tel' },
+  { key: 'address',          label: 'Direccion del negocio',    type: 'text' },
   { key: 'tax_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
   { key: 'currency',         label: 'Moneda',                   type: 'text' },
   { key: 'shipping_fee_default',    label: 'Costo de envio por defecto',  type: 'number' },
@@ -53,6 +55,12 @@ export default function AdminSystemSettingsPage() {
             : type === 'number'   ? (value === '' ? '' : Number(value))
             : value,
     }));
+  };
+
+  // UC-CFG-05 — redes sociales (social_links es un dict anidado)
+  const handleSocial = (platform) => (e) => {
+    const { value } = e.target;
+    setForm((p) => ({ ...p, social_links: { ...(p.social_links || {}), [platform]: value } }));
   };
 
   const handleSubmit = async (e) => {
@@ -101,6 +109,25 @@ export default function AdminSystemSettingsPage() {
             )}
           </div>
         ))}
+
+        {/* UC-CFG-05 — redes sociales */}
+        <fieldset className={styles.field}>
+          <legend>Redes sociales</legend>
+          {['facebook', 'instagram', 'youtube'].map((platform) => (
+            <div key={platform} className={styles.field}>
+              <label htmlFor={`set-social-${platform}`}>
+                {platform.charAt(0).toUpperCase() + platform.slice(1)}
+              </label>
+              <input
+                id={`set-social-${platform}`}
+                name={`social_${platform}`}
+                type="url"
+                value={form.social_links?.[platform] ?? ''}
+                onChange={handleSocial(platform)}
+              />
+            </div>
+          ))}
+        </fieldset>
 
         {actionError && (
           <p role="alert" className={styles.apiError}>

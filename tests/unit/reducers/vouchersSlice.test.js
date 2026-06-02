@@ -23,6 +23,9 @@ const INITIAL_STATE = {
   usage: null,
   isLoadingUsage: false,
   usageError: null,
+  report: [],
+  isLoadingReport: false,
+  reportError: null,
 };
 
 const VOUCHER_A = {

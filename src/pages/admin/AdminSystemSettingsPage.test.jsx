@@ -20,11 +20,13 @@ import AdminSystemSettingsPage from './AdminSystemSettingsPage';
 
 const SETTINGS = {
   site_name: 'ecommerce-ui',
-  contact_email: 'hola@example.com',
-  support_phone: '+52 55 0000 0000',
+  support_email: 'hola@example.com',
+  phone: '+52 55 0000 0000',
+  address: 'Av. Reforma 123',
   tax_rate: 16,
   currency: 'MXN',
   maintenance_mode: false,
+  social_links: { facebook: 'https://facebook.com/demo', instagram: '', youtube: '' },
 };
 
 const wrap = () => {
@@ -50,6 +52,17 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     ).toBeInTheDocument();
     expect(await screen.findByDisplayValue('ecommerce-ui')).toBeInTheDocument();
     expect(screen.getByDisplayValue('hola@example.com')).toBeInTheDocument();
+  });
+
+  // UC-CFG-05 — datos de contacto + redes sociales
+  it('expone los campos de contacto y redes (UC-CFG-05)', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
+    render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(screen.getByLabelText(/Email de soporte/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Direccion del negocio/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Facebook$/i)).toHaveValue('https://facebook.com/demo');
+    expect(screen.getByLabelText(/^Instagram$/i)).toBeInTheDocument();
   });
 
   it('envia PATCH /api/v1/admin/settings/ con los cambios', async () => {

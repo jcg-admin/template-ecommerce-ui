@@ -7,7 +7,17 @@
 
 import { Link } from 'react-router-dom';
 import logoUrl from '@assets/practica-yoruba-logo.png';
+import { usePublicSettings } from '@hooks/domain/usePublicSettings';
 import styles from './Footer.module.scss';
+
+// UC-CFG-05 — datos de contacto del footer (fallback = valores por defecto).
+const CONTACT_FALLBACK = {
+  support_email: 'hola@practicayoruba.com',
+  support_hours: 'Lunes a viernes · 10:00 — 19:00',
+  social_links: {},
+};
+
+const SOCIAL_LABELS = { facebook: 'Facebook', instagram: 'Instagram', youtube: 'YouTube' };
 
 const COLUMNS = [
   {
@@ -54,6 +64,10 @@ const COLUMNS = [
 ];
 
 export default function Footer() {
+  const settings = usePublicSettings(CONTACT_FALLBACK);
+  const social = settings.social_links || {};
+  const socialEntries = Object.entries(social).filter(([, url]) => url);
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -77,9 +91,19 @@ export default function Footer() {
           </p>
           <address className={styles.brandMeta}>
             <div>Atención en línea</div>
-            <div>Lunes a viernes · 10:00 — 19:00</div>
-            <div>hola@practicayoruba.com</div>
+            <div>{settings.support_hours}</div>
+            <div>{settings.support_email}</div>
+            {settings.phone && <div>{settings.phone}</div>}
           </address>
+          {socialEntries.length > 0 && (
+            <nav className={styles.social} aria-label="Redes sociales">
+              {socialEntries.map(([platform, url]) => (
+                <a key={platform} href={url} target="_blank" rel="noopener noreferrer">
+                  {SOCIAL_LABELS[platform] || platform}
+                </a>
+              ))}
+            </nav>
+          )}
         </div>
 
         {/* Columnas */}
