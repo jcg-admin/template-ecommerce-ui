@@ -68,7 +68,6 @@ export default function CatalogPage() {
   }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax, currentPage]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'instant' });
     if (qParam) {
       dispatch(searchProducts({ q: qParam }));
     } else {
@@ -84,6 +83,15 @@ export default function CatalogPage() {
       }));
     }
   }, [dispatch, qParam, categoryParam, activeOrishas, activeTypes, sortOrder, availability, priceMin, priceMax, currentPage]);
+
+  // Scroll al inicio cuando los productos nuevos ya están en el DOM
+  const prevPageRef = useRef(currentPage);
+  useEffect(() => {
+    if (prevPageRef.current !== currentPage || products.length > 0) {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+    prevPageRef.current = currentPage;
+  }, [products, currentPage]);
 
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {
