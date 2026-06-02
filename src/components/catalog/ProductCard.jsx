@@ -52,7 +52,7 @@ export default function ProductCard({ product, inWishlist = false }) {
   const handleWishlist = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    dispatch(toggleWishlist({ productId: id }));
+    dispatch(toggleWishlist({ productId: id, inWishlist }));
   };
 
   return (

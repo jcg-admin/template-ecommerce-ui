@@ -34,7 +34,7 @@ export default function OrderDetailPage() {
 
   useEffect(() => { dispatch(fetchOrderDetail(id)); }, [dispatch, id]);
 
-  if (isLoading) {
+  if (isLoading || (!order && id)) {
     return <main className={styles.loading}>Cargando pedido…</main>;
   }
   if (!order) {
