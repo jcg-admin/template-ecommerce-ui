@@ -41,3 +41,13 @@
 - `npx jest --ci` → 1703 passed / 0 failed / 107 skipped (274/276 suites) / EXIT=0.
 - `node scripts/check-scss.mjs` → 168 clean.
 - `DEMO_MODE=true npm run build:demo` → compiled, EXIT=0.
+
+## Opt-in ejecutados (2026-06-02T22:19:57) — a petición del ejecutor
+- **H-08 (Modal):** `jest.setup.js:128-137` YA tiene el polyfill de `<dialog>`
+  (premisa inicial errónea). `OrderDetailPage` sub-modal UC-LOG-07 → `Modal`
+  adaptado (`size="sm" centered`). UC-LOG-07 verde.
+- **H-04 (DatePicker):** filtros de fecha de `AdminVoucherReportPage` →
+  `DatePicker` adaptado + helper `toISO(Date)` para mantener el param canónico
+  string `created_after/created_before`. 4/4 verde.
+- Verificación: jest completo 1703 passed / 0 failed; check-scss 168 clean;
+  build:demo EXIT=0.

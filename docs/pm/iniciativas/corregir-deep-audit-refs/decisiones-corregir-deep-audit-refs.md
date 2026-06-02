@@ -19,12 +19,13 @@ registrados.
 - **D-03 (H-09)** — El drift de endpoints de inventario (`/admin/inventory/*` vs
   canónico `/inventory/*`) se deriva a **`alinear-contrato-inventario`** (módulo
   ajeno a las recientes; requiere backend real, hoy no disponible).
-- **D-04 (H-04, NO-APLICA)** — No se migra a `DatePicker`: emite `Date`, no el
-  string ISO que el query param canónico exige; el `<input type=date>` nativo es
-  accesible y correcto. Cambio net-negativo.
-- **D-05 (H-08, NO-APLICA)** — No se migra el sub-modal UC-LOG-07 a `Modal`:
-  requiere polyfill de `<dialog>` ausente en el suite; es código pre-existente
-  fuera del alcance; riesgo > valor (BAJA). Diferido como opt-in.
+- **D-04 (H-04) — REVISADA → HECHA (2026-06-02T22:19:57):** a petición del
+  ejecutor se migró a `DatePicker` adaptado, con conversión `Date`→ISO
+  (`toISO()`) para conservar el query param canónico `created_after/before`.
+  `AdminVoucherReportPage` 4/4 verde.
+- **D-05 (H-08) — REVISADA → HECHA:** el polyfill de `<dialog>` **sí existe** en
+  `jest.setup.js:128-137` (mi premisa inicial era errónea). Se migró el sub-modal
+  UC-LOG-07 de `OrderDetailPage` a `Modal` adaptado. UC-LOG-07 verde (9/11).
 - **D-06 (H-10/H-11)** — Gaps del catálogo `e-comerce-docs` (endpoint público
   para POST-02; `DeactivateAccountPage` doc↔código): registrados como hallazgos
   para el repo de docs, no se fabrica código en el UI.

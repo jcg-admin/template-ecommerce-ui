@@ -15,7 +15,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchVoucherReport } from '@redux/slices/vouchersSlice';
 import { MetaTag, Button } from '@components/common/primitives';
 import DataGrid from '@components/common/DataGrid';
+import DatePicker from '@components/common/DatePicker/DatePicker';
 import styles from './AdminTablePage.module.scss';
+
+// DatePicker emite un Date en onChange; el query param canónico
+// (created_after/created_before) es string ISO 'YYYY-MM-DD'.
+const toISO = (d) => (d instanceof Date && !Number.isNaN(d) ? d.toISOString().slice(0, 10) : '');
 
 const STATUS = [
   { id: '',         label: 'Todos' },
@@ -96,11 +101,19 @@ export default function AdminVoucherReportPage() {
         </label>
         <label className={styles.filter}>
           <span>Desde</span>
-          <input type="date" value={createdAfter} onChange={(e) => setCreatedAfter(e.target.value)} />
+          <DatePicker
+            value={createdAfter || null}
+            onChange={(d) => setCreatedAfter(toISO(d))}
+            placeholder="Desde"
+          />
         </label>
         <label className={styles.filter}>
           <span>Hasta</span>
-          <input type="date" value={createdBefore} onChange={(e) => setCreatedBefore(e.target.value)} />
+          <DatePicker
+            value={createdBefore || null}
+            onChange={(d) => setCreatedBefore(toISO(d))}
+            placeholder="Hasta"
+          />
         </label>
       </div>
 
