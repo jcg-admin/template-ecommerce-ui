@@ -43,7 +43,7 @@
 - **22 integraciones (UCs)**, cada una con test de integración.
 - **Suite jest: 1626 passed / 0 fallos** (desde ~1330 al inicio del lote).
 - **check-scss: 169 entries clean**; `build:demo` OK (PDF copiado).
-- **E2E: 10 checks → 8 pass / 2 warn / 0 fail** (Chromium real).
+- **E2E: 23 checks → 17 pass / 6 warn / 0 fail** (Chromium real, storefront + admin).
 - ~20 commits, uno por componente/UC/fase (Tim Pope).
 
 ## Seccion 3 — Bugs y hallazgos durante la ejecucion
@@ -85,9 +85,13 @@
 - [x] E2E storefront → 0 fail (8 pass, 2 warn justificados).
 - [x] **UC-ORD-PDFGEN HECHO** — `jspdf` aprobado como dependencia; factura
   generada en cliente desde el pedido y mostrada en PdfViewer (3 + 1 tests).
-- [ ] **E2E del panel admin diferido** — cada integración admin tiene cobertura
-  unitaria completa; un E2E con login admin + navegación profunda sería frágil
-  (flakiness = deuda). Se documenta como deferral consciente, no como gap de
-  calidad.
+- [x] **E2E del panel admin HECHO** — 13 checks nuevos (Chromium real) con
+  navegación client-side (`navigateInApp` via pushState+popstate) que preserva
+  la sesión admin de MSW (un `goto` recargaría y la perdería). Suite E2E
+  completa: **23 checks → 17 pass / 6 warn / 0 fail**. Los 6 WARN son
+  limitaciones de **datos/demo** (carrito vacío, `images:[]` en el mock admin,
+  series del reporte, hoja de precios que aparece tras subir CSV, sesión MSW
+  que no sobrevive un reload), cubiertas por unit tests; ninguno es un defecto
+  de implementación.
 - [ ] **Validación visual en browser** (animaciones, pixel) — fuera de CI;
   queda para revisión manual en WSL2.

@@ -21,3 +21,5 @@
 | 2026-06-02T09:05 | F8 — E2E suite verde | checks 01-06 en Chromium real: 5 pass, 1 warn (wishlist reload MSW), 0 fail, con todas las integraciones en el bundle |
 | 2026-06-02T09:30 | UC-ORD-PDFGEN (diferido → hecho) | jspdf aprobado; generateInvoicePdf + OrderDetailPage genera factura en cliente; +4 tests; commit b273814 |
 | 2026-06-02T09:35 | E2E admin: harness + agentes | runner con filtro por nombre + lib/auth (login admin/buyer); 13 checks admin/storefront en 4 agentes (puertos 4610-4613) |
+| 2026-06-02T10:00 | E2E admin HECHO | navigateInApp (nav client-side preserva sesion admin); 13 checks; suite 23 -> 17 pass/6 warn/0 fail; commit 9645ae3 |
+| 2026-06-02T10:05 | Cierre F9 | docs + decisiones + tareas al dia; sin diferidos (UC-ORD-PDFGEN y E2E admin hechos) |

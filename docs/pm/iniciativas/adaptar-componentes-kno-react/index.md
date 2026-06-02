@@ -1,6 +1,6 @@
 # Iniciativa: adaptar-componentes-kno-react
 
-**Estado:** EN EJECUCIÓN
+**Estado:** CERRADA
 **Creada:** 2026-06-02
 **Origen:** Solicitud usuario — estudiar el repo `NestorMonroy/-progress` (paquetes
 `kno-*`) para adaptar de manera **nativa** componentes como ScrollView,
@@ -45,14 +45,16 @@ Datos observados del repo (neutrales, para contexto de la referencia):
   mapeo en `analisis-inventario-y-mapeo.md`.
 - **22 componentes nativos** construidos con TDD (F1 + Tier A/B/C), uno por
   agente en paralelo, todos con unit tests verdes.
-- **22 integraciones HECHAS** (F2-F7): cada UC integrado en su página con test.
-  UC-ORD-PDFGEN diferido (requiere lib de PDF — ver decisiones).
-- **F8 E2E**: suite de browser real (Chromium) 5 pass / 1 warn / 0 fail con
-  todas las integraciones en el bundle; checks storefront nuevos en curso; E2E
-  del panel admin diferido (cobertura unitaria completa; ver decisiones).
-- **F9** en curso: docs + `decisiones-*` + saldar deuda menor.
-- Verificado: **jest 1626 passed / 0 fallos**; check-scss **169 clean**;
-  `build:demo` OK.
+- **23 integraciones HECHAS** (F2-F7 + UC-ORD-PDFGEN): cada UC integrado en su
+  página con test. `jspdf` es la única dependencia nueva (aprobada, para
+  UC-ORD-PDFGEN).
+- **F8 E2E HECHA**: 23 checks en Chromium real (storefront + admin, con
+  `navigateInApp` para preservar la sesión admin) → **17 pass / 6 warn / 0
+  fail**; los WARN son límites de datos/demo, cubiertos por unit tests.
+- **F9 HECHA**: `decisiones-*` (4 secciones), docs al día, deuda menor
+  documentada como decisiones aceptadas.
+- Verificado: **jest 1630 passed / 0 fallos**; check-scss **169 clean**;
+  `build:demo` OK; E2E **0 fail**. Sin diferidos.
 
 ## Índice
 

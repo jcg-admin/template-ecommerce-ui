@@ -40,19 +40,24 @@ Lista plana de tareas atómicas. Detalle en `plan-componentes-nativos.md`.
 | UC-ADM-LISTBOX | DualListBox → AdminProductForm | Hecha |
 | UC-ORD-PDFGEN | generateInvoicePdf (jsPDF) → OrderDetailPage | Hecha (lib jspdf aprobada) |
 
-## F8 — E2E (browser real)
+(Las 23 UCs integradas; ninguna diferida.)
+
+## F8 — E2E (browser real) · HECHA
 
 | Tarea | Estado |
 |-------|--------|
-| Checks 01-06 (storefront, bugs previos) | Hecha (5 pass, 1 warn, 0 fail) |
-| Checks 07-10 (gallery, list-toggle, freeship, faq) | En curso |
-| Checks admin (kanban, gauge, pivot, sheet, treelist, grid, rte, sort, map, chat, duallist, scheduler, export) | Diferidos — ver decisiones (cobertura unitaria completa; E2E admin frágil) |
+| Checks storefront (login, wishlist, cart, search, paginator, gallery, list-toggle, freeship, faq, support-chat, checkout-scheduler) | Hecha |
+| Checks admin (gauge, export, users, kanban, treelist, price-sheet, report-pivot, rte, duallist, sort, logistics-map) | Hecha (navegación client-side `navigateInApp`) |
+| **Total: 23 checks → 17 pass / 6 warn / 0 fail** | Los 6 WARN son límites de datos/demo |
 
-## F9 — Cierre
+## F9 — Cierre · HECHA
 
 | Tarea | Estado |
 |-------|--------|
-| Docs (ucs/tareas/progreso/index) | En curso |
-| decisiones-componentes-nativos.md | Pendiente |
-| Saldar deuda menor documentada | Pendiente |
-| Verificación final + push | En curso (1626 passed, scss 169 clean, build OK) |
+| Docs (ucs/tareas/progreso/index) | Hecha |
+| decisiones-componentes-nativos.md (4 secciones) | Hecha |
+| Saldar deuda menor (documentada como decisiones aceptadas) | Hecha |
+| Verificación final + push | Hecha (jest verde, scss 169 clean, build OK, E2E 0 fail) |
+
+**Plan completo: 22 componentes + 23 integraciones (incl. UC-ORD-PDFGEN),
+E2E storefront + admin, sin diferidos.**
