@@ -45,9 +45,14 @@ export default function AdminInventoryPage() {
         <h1 id="admin-inventory-title" className={styles.title}>
           Inventario
         </h1>
-        <Link to="/admin/inventory/import" className={styles.importLink}>
-          Importar CSV
-        </Link>
+        <div className={styles.headerActions}>
+          <Link to="/admin/inventory/dashboard" className={styles.importLink}>
+            Dashboard
+          </Link>
+          <Link to="/admin/inventory/import" className={styles.importLink}>
+            Importar CSV
+          </Link>
+        </div>
       </header>
 
       <div className={styles.summary} aria-label="Resumen de inventario">

@@ -113,6 +113,13 @@ describe('AdminInventoryPage (UC-INV-01)', () => {
     expect(movLinks[0]).toHaveAttribute('href', '/admin/inventory/10/movements');
   });
 
+  it('enlaza al dashboard de inventario (F3)', async () => {
+    apiService.get.mockResolvedValue({ data: RESPONSE });
+    render(wrap(<AdminInventoryPage />, makeStore()));
+    const link = await screen.findByRole('link', { name: /Dashboard/i });
+    expect(link).toHaveAttribute('href', '/admin/inventory/dashboard');
+  });
+
   it('muestra estado vacio si no hay variantes', async () => {
     apiService.get.mockResolvedValue({ data: { results: [], summary: null } });
     render(wrap(<AdminInventoryPage />, makeStore()));

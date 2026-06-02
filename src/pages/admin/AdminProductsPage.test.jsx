@@ -112,6 +112,20 @@ describe('AdminProductsPage (D-011 listado)', () => {
   });
 });
 
+describe('AdminProductsPage — acciones de cabecera (F3)', () => {
+  it('enlaza Importar CSV a la pagina de importacion', async () => {
+    render(wrap(<AdminProductsPage />, makeStoreWithProducts()));
+    const link = await screen.findByRole('link', { name: /Importar CSV/i });
+    expect(link).toHaveAttribute('href', '/admin/products/import');
+  });
+
+  it('enlaza + Nuevo producto a /admin/products/new', async () => {
+    render(wrap(<AdminProductsPage />, makeStoreWithProducts()));
+    const link = await screen.findByRole('link', { name: /Nuevo producto/i });
+    expect(link).toHaveAttribute('href', '/admin/products/new');
+  });
+});
+
 describe('AdminProductsPage — busqueda', () => {
   it.skip('pasa search en los params al cambiar el input — PENDIENTE: estructura de filtros/labels cambiada en diseño Yoruba', async () => {
     render(wrap(<AdminProductsPage />, makeStoreWithProducts()));

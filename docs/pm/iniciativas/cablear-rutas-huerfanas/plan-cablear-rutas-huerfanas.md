@@ -22,14 +22,15 @@ cablear una sub-página, confirmar que no haya ya un enlace dinámico.
   AdminSidebar directamente (fuente única, sin redux) en lugar de
   `AdminLayout.navigation.test.jsx`, que sigue verde sin cambios.
 
-## FASE 3 — Enlaces desde página padre (6 sub-rutas)
-- F3-T1 AdminProductsPage → botón "Importar" (admin/products/import).
-- F3-T2 AdminInventoryPage → enlace a inventory/dashboard.
-- F3-T3 matriz de variantes → enlace a variants/:id/price.
-- F3-T4 AdminConfigPage → tabs gateways/shipping/site (si no existen ya).
-- F3-T5 tests de los enlaces nuevos.
-- Antes de cada uno: grep para confirmar que el enlace no exista ya (descartar
-  si el grep inicial fue falso positivo).
+## FASE 3 — Enlaces desde página padre (5 sub-rutas reales) — HECHA
+- F3-T1 AdminProductsPage → "Importar CSV" como Link (admin/products/import)
+  + fix bug `/nuevo`→`/new`.
+- F3-T2 AdminInventoryPage → enlace "Dashboard" (inventory/dashboard).
+- F3-T3 ~~matriz de variantes → variants/:id/price~~ **DESCARTADA**: ya
+  cableada en `AdminVariantsPage.jsx:168`.
+- F3-T4 AdminConfigPage → repunte de 3 tarjetas a config/{gateways,shipping,site}.
+- F3-T5 tests de los enlaces nuevos (4 asserts nuevos + 3 actualizados).
+- Verificado por grep que ninguno tuviera enlace dinámico previo (salvo T3).
 
 ## FASE 4 — Verificación y cierre
 - jest 0 fallos; check-scss clean; build:demo OK.

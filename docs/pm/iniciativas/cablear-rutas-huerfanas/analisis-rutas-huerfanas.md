@@ -49,18 +49,35 @@ en ninguno son huérfanas de navegación.
 | admin/questions/moderation | entrada (grupo Contenido/Soporte) |
 | admin/reviews/moderation | entrada (grupo Contenido/Soporte) |
 
-### Sub-páginas → enlace desde la página padre (6)
-| Ruta | Padre / disposición |
-|------|---------------------|
-| admin/products/import | botón "Importar" en AdminProductsPage |
-| admin/inventory/dashboard | enlace desde AdminInventoryPage |
-| admin/variants/:variantId/price | enlace desde la matriz de variantes |
-| admin/config/gateways | tab dentro de AdminConfigPage |
-| admin/config/shipping | tab dentro de AdminConfigPage |
-| admin/config/site | tab dentro de AdminConfigPage |
+### Sub-páginas → enlace desde la página padre (5 reales, no 6)
 
-> Nota: para las sub-páginas conviene verificar en implementación si ya hay un
-> enlace dinámico no detectado por el grep; si lo hay, se descartan.
+> **Verificación F3 (2026-06-02).** Antes de cablear cada sub-página se
+> confirmó por grep que no hubiera enlace dinámico existente.
+
+| Ruta | Padre / disposición | Estado |
+|------|---------------------|--------|
+| admin/products/import | "Importar CSV" en AdminProductsPage era `<Button>` muerto → ahora `<Link>` | HUÉRFANA — cableada F3 |
+| admin/inventory/dashboard | enlace "Dashboard" en cabecera de AdminInventoryPage | HUÉRFANA — cableada F3 |
+| admin/config/gateways | tarjeta "Pasarelas de pago" del hub AdminConfigPage | HUÉRFANA — cableada F3 |
+| admin/config/shipping | tarjeta "Metodos y costos de envio" del hub | HUÉRFANA — cableada F3 |
+| admin/config/site | tarjeta "Ajustes del sitio" del hub | HUÉRFANA — cableada F3 |
+| admin/variants/:variantId/price | `AdminVariantsPage.jsx:168` ya tiene `<Link to={`/admin/variants/${variant.id}/price`}>` | **NO huérfana** — descartada |
+
+> **Repunte del hub de config (decisión RUP).** Las tarjetas CFG-01/02/03
+> apuntaban a páginas operativas (`/admin/payments`, `/admin/logistics`,
+> `/admin/system-settings`) en vez de a sus páginas de dominio dedicadas
+> (`AdminGatewaysPage`, `AdminShippingMethodsPage`, `AdminSiteSettingsPage`),
+> que quedaban huérfanas. Se repuntaron al `/admin/config/*` dedicado; las
+> páginas operativas siguen accesibles desde el AdminSidebar (Pagos,
+> Logística, Sistema), así que no se pierde alcance.
+
+> **Bug colateral corregido:** `AdminProductsPage.jsx:43` enlazaba a
+> `/admin/products/nuevo` pero la ruta es `admin/products/new` (404).
+> Corregido en el mismo cambio (drift, principio-rector Cláusula 2).
+
+> **Drift pendiente (fuera de alcance):** existen DOS implementaciones de
+> SiteSettings — `/admin/system-settings` (UC-ADM-04) y `/admin/config/site`
+> (AdminSiteSettingsPage). Unificación → iniciativa separada.
 
 ## NO son huérfanas
 

@@ -46,6 +46,25 @@ cuenta. Las 12 rutas verificadas en el router
 
 Sin SCSS nuevo: las entradas reusan `styles.navSection` y `styles.link`.
 
+## 2026-06-02 — F3 enlaces desde página padre (5 reales)
+
+Premise Gate por sub-ruta (grep de enlace dinámico previo):
+- `admin/variants/:variantId/price` → **ya cableada** en
+  `AdminVariantsPage.jsx:168` (matriz de variantes). Descartada.
+- Las otras 5 confirmadas huérfanas (solo URLs de API en el grep).
+
+**Cambios (TDD):**
+- `AdminProductsPage.jsx`: "Importar CSV" pasó de `<Button>` muerto a
+  `<Link to="/admin/products/import">`; corregido bug `/products/nuevo` →
+  `/products/new`. +2 asserts en `AdminProductsPage.test.jsx`.
+- `AdminInventoryPage.jsx`: +`<Link to="/admin/inventory/dashboard">` en
+  cabecera (grupo `.headerActions` nuevo en el .scss). +1 assert.
+- `AdminConfigPage.jsx`: repunte de 3 tarjetas CFG-01/02/03 a
+  `/admin/config/{gateways,shipping,site}` (dominio dedicado). 3 asserts
+  actualizados en `AdminConfigPage.test.jsx`.
+
+Rojo: 4 failed. Verde: 3 suites, 17 passed / 10 skipped. check-scss: 170
+entries clean.
+
 ## Pendiente
-- F3 enlaces desde página padre (6 sub-rutas) — verificar enlace dinámico antes.
-- F4 verificación (jest + check-scss + build:demo) + cierre.
+- F4 verificación full (jest completo + check-scss + build:demo) + cierre.
