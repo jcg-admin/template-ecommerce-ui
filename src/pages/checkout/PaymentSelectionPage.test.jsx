@@ -58,8 +58,8 @@ describe('PaymentSelectionPage', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/payments/mercadopago/checkout',
-        { order_id: 'ORD-001' }
+        '/api/v1/payments/initiate/',
+        { order_number: 'ORD-001', gateway: 'MERCADOPAGO' }
       );
     });
     await waitFor(() => {
@@ -77,8 +77,8 @@ describe('PaymentSelectionPage', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/payments/mercadopago/checkout',
-        { order_id: 'ORD-001', installments: 6 }
+        '/api/v1/payments/initiate/',
+        { order_number: 'ORD-001', gateway: 'MERCADOPAGO', installments: 6 }
       );
     });
   });
@@ -92,8 +92,8 @@ describe('PaymentSelectionPage', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/payments/paypal/checkout',
-        { order_id: 'ORD-001' }
+        '/api/v1/payments/initiate/',
+        { order_number: 'ORD-001', gateway: 'PAYPAL' }
       );
     });
     await waitFor(() => {

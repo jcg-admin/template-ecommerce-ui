@@ -42,7 +42,7 @@ export default function ExpressCheckoutPage() {
     }
   };
 
-  if (!eligibility?.eligible) {
+  if (!eligibility?.express_available) {
     return (
       <main className={styles.page}>
         <div className={styles.notEligible}>
