@@ -30,9 +30,17 @@ const SHOTS_DIR = join(HERE, 'screenshots');
 const PORT = Number(process.env.PORT) || 4599;
 const BASE = `http://127.0.0.1:${PORT}`;
 
+// Filtros opcionales por nombre (argv): `node run.mjs gauge map` corre solo los
+// checks cuyo archivo o id contenga alguno de esos terminos. Util para iterar
+// un check en aislamiento (combinado con PORT=46xx para no colisionar).
+const FILTERS = process.argv.slice(2).map((s) => s.toLowerCase());
+
 async function loadChecks() {
   if (!existsSync(CHECKS_DIR)) return [];
-  const files = readdirSync(CHECKS_DIR).filter((f) => f.endsWith('.mjs')).sort();
+  let files = readdirSync(CHECKS_DIR).filter((f) => f.endsWith('.mjs')).sort();
+  if (FILTERS.length) {
+    files = files.filter((f) => FILTERS.some((q) => f.toLowerCase().includes(q)));
+  }
   const mods = [];
   for (const f of files) {
     const mod = (await import(pathToFileURL(join(CHECKS_DIR, f)).href)).default;
