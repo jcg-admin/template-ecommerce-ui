@@ -3,8 +3,8 @@
  *
  * Formulario de configuracion del sistema (settings_app).
  *
- *   GET   /api/v1/config/settings/
- *   PATCH /api/v1/config/settings/
+ *   GET   /api/v1/admin/settings/
+ *   PATCH /api/v1/admin/settings/
  *
  * Los campos expuestos son ortogonales: el admin edita lo que necesita
  * y se envia solo el delta via PATCH.
@@ -21,19 +21,21 @@ import {
 import { Button } from '@components/common/primitives';
 import styles from './AdminSystemSettingsPage.module.scss';
 
+// Campos alineados al AdminSiteSettingsSerializer real
+// (api: apps/settings_app/serializers.py). UC-ADM-04 / UC-CFG-03 / UC-CFG-05.
 const FIELDS = [
-  { key: 'site_name',        label: 'Nombre del sitio',         type: 'text' },
-  { key: 'site_description',  label: 'Descripcion del sitio',    type: 'text' },
+  { key: 'site_name',               label: 'Nombre del sitio',          type: 'text' },
+  { key: 'currency',                label: 'Moneda',                    type: 'text' },
+  { key: 'iva_rate',                label: 'Tasa de IVA (%)',           type: 'number' },
+  { key: 'free_shipping_threshold', label: 'Umbral de envio gratis',    type: 'number' },
+  { key: 'min_stock_threshold',     label: 'Umbral de stock minimo',    type: 'number' },
+  { key: 'payment_timeout_minutes', label: 'Timeout de pago (min)',     type: 'number' },
+  { key: 'order_timeout_minutes',   label: 'Timeout de orden (min)',    type: 'number' },
+  { key: 'max_return_days',         label: 'Dias maximos de devolucion', type: 'number' },
   // UC-CFG-05 — datos de contacto (sub-contrato de SiteSettings)
-  { key: 'support_email',    label: 'Email de soporte',         type: 'email' },
-  { key: 'phone',            label: 'Telefono de soporte',      type: 'tel' },
-  { key: 'address',          label: 'Direccion del negocio',    type: 'text' },
-  { key: 'iva_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
-  { key: 'currency',         label: 'Moneda',                   type: 'text' },
-  { key: 'shipping_fee_default',    label: 'Costo de envio por defecto',  type: 'number' },
-  { key: 'free_shipping_threshold', label: 'Umbral de envio gratis',      type: 'number' },
-  { key: 'allow_guest_checkout',    label: 'Permitir checkout como invitado', type: 'checkbox' },
-  { key: 'maintenance_mode', label: 'Modo mantenimiento',       type: 'checkbox' },
+  { key: 'support_email',           label: 'Email de soporte',          type: 'email' },
+  { key: 'phone',                   label: 'Telefono de soporte',       type: 'tel' },
+  { key: 'address',                 label: 'Direccion del negocio',     type: 'text' },
 ];
 
 export default function AdminSystemSettingsPage() {

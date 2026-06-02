@@ -1,8 +1,9 @@
 /**
  * Tests — AdminSystemSettingsPage (UC-ADM-04)
  *
- *   GET   /api/v1/config/settings/
- *   PATCH /api/v1/config/settings/
+ *   GET   /api/v1/admin/settings/
+ *   PATCH /api/v1/admin/settings/
+ * (campos alineados al AdminSiteSettingsSerializer real)
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -25,7 +26,11 @@ const SETTINGS = {
   address: 'Av. Reforma 123',
   iva_rate: 16,
   currency: 'MXN',
-  maintenance_mode: false,
+  free_shipping_threshold: 1500,
+  min_stock_threshold: 5,
+  payment_timeout_minutes: 30,
+  order_timeout_minutes: 60,
+  max_return_days: 30,
   social_links: { facebook: 'https://facebook.com/demo', instagram: '', youtube: '' },
 };
 
@@ -65,7 +70,7 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     expect(screen.getByLabelText(/^Instagram$/i)).toBeInTheDocument();
   });
 
-  it('envia PATCH /api/v1/config/settings/ con los cambios', async () => {
+  it('envia PATCH /api/v1/admin/settings/ con los cambios', async () => {
     apiService.get.mockResolvedValue({ data: SETTINGS });
     apiService.patch.mockResolvedValue({ data: SETTINGS });
 
@@ -76,28 +81,21 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/v1/config/settings/',
+        '/api/v1/admin/settings/',
         expect.objectContaining({ site_name: 'ecommerce-ui MX' }),
       );
     });
   });
 
-  // Campos del contrato MSW migrados desde AdminSiteSettingsPage (DR-02).
-  it('expone los campos de contrato site_description, envio y guest checkout', async () => {
-    apiService.get.mockResolvedValue({
-      data: {
-        ...SETTINGS,
-        site_description: 'Tienda ceremonial',
-        shipping_fee_default: 150,
-        free_shipping_threshold: 1500,
-        allow_guest_checkout: true,
-      },
-    });
+  // Campos reales del AdminSiteSettingsSerializer (alineados al backend).
+  it('expone los campos reales del serializer (iva, timeouts, stock, devolucion)', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
     render(wrap());
     await screen.findByDisplayValue('ecommerce-ui');
-    expect(screen.getByLabelText(/Descripcion del sitio/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Costo de envio por defecto/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Tasa de IVA/i)).toBeInTheDocument();
     expect(screen.getByLabelText(/Umbral de envio gratis/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Permitir checkout como invitado/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Umbral de stock minimo/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Timeout de pago/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Dias maximos de devolucion/i)).toBeInTheDocument();
   });
 });

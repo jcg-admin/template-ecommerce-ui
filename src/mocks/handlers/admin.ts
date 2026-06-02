@@ -181,33 +181,59 @@ export const adminHandlers = [
   // Endpoint canónico singleton: GET/PATCH /api/v1/config/settings/
   // (rest-api-conventions.rst:92). Sirve tanto al admin como al storefront
   // (footer + contacto) en modo demo.
-  http.get('/api/v1/config/settings/', () =>
+  // Endpoints reales (backend Django): admin edita en /api/v1/admin/settings/
+  // (AdminSiteSettingsView) y el storefront lee el subconjunto público en
+  // /api/v1/config/settings/ (SiteSettingsView). Campos alineados al
+  // AdminSiteSettingsSerializer real (apps/settings_app/serializers.py).
+  http.get('/api/v1/admin/settings/', () =>
     HttpResponse.json({
+      id: 1,
       site_name: 'Práctica Yorùbà',
-      site_description: 'Tienda de objetos ceremoniales',
       currency: 'MXN',
       iva_rate: 0.16,
-      shipping_fee_default: 150,
+      payment_timeout_minutes: 30,
+      order_timeout_minutes: 60,
+      max_return_days: 30,
+      min_stock_threshold: 5,
       free_shipping_threshold: 1500,
-      maintenance_mode: false,
-      allow_guest_checkout: true,
       // UC-CFG-05 — datos de contacto
       support_email: 'hola@practicayoruba.com',
       phone: '+52 55 1111 2222',
       address: 'Av. Reforma 123, Col. Centro, CDMX, 06600',
-      support_hours: 'Lunes a viernes · 10:00 — 19:00',
       social_links: {
         facebook:  'https://facebook.com/practicayoruba',
         instagram: 'https://instagram.com/practicayoruba',
         youtube:   'https://youtube.com/@practicayoruba',
       },
+      updated_at: '2026-06-02T00:00:00Z',
     })
   ),
 
-  http.patch('/api/v1/config/settings/', async ({ request }) => {
+  http.patch('/api/v1/admin/settings/', async ({ request }) => {
     const body = await request.json();
     return HttpResponse.json(body);
   }),
+
+  // UC-CFG-05 — lectura pública (footer + contacto). Subconjunto público real
+  // (SiteSettingsSerializer excluye site_name/currency/order_timeout/max_return).
+  http.get('/api/v1/config/settings/', () =>
+    HttpResponse.json({
+      id: 1,
+      iva_rate: 0.16,
+      payment_timeout_minutes: 30,
+      min_stock_threshold: 5,
+      free_shipping_threshold: 1500,
+      support_email: 'hola@practicayoruba.com',
+      phone: '+52 55 1111 2222',
+      address: 'Av. Reforma 123, Col. Centro, CDMX, 06600',
+      social_links: {
+        facebook:  'https://facebook.com/practicayoruba',
+        instagram: 'https://instagram.com/practicayoruba',
+        youtube:   'https://youtube.com/@practicayoruba',
+      },
+      updated_at: '2026-06-02T00:00:00Z',
+    })
+  ),
 
   // ── Descuentos de producto ──────────────────────────────────────────
   http.get('/api/v1/admin/product-discounts/', () => {
