@@ -1,4 +1,4 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -140,5 +140,18 @@ describe('AdminOrderDetailPage (UC-ORD-08 cancelacion admin)', () => {
     await screen.findByRole('heading', { name: 'PY-2026-000101' });
     // El modal de cancelación NO debe estar visible (showCancel=false por defecto)
     expect(document.querySelector('[class*=modal]')).not.toBeInTheDocument();
+  });
+});
+
+// ─── UC-LOG-GANTT — línea de tiempo de fulfillment ──────────────────────────
+describe('AdminOrderDetailPage — fulfillment Gantt (UC-LOG-GANTT)', () => {
+  it('renderiza la línea de tiempo con una barra por etapa del flujo', async () => {
+    apiService.get.mockResolvedValue({ data: ORDER });
+    renderWithOrder();
+    await screen.findByRole('heading', { name: 'PY-2026-000101' });
+    expect(screen.getByText(/Línea de tiempo de fulfillment/i)).toBeInTheDocument();
+    const gantt = screen.getByRole('figure', { name: /Diagrama de Gantt/i });
+    // Una barra (role=img) por cada etapa del STATUS_FLOW (6).
+    expect(within(gantt).getAllByRole('img').length).toBe(6);
   });
 });

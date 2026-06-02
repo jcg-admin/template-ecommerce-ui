@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
+import PdfViewer from '@components/common/PdfViewer';
 import styles from './OrderDetailPage.module.scss';
 
 const TIMELINE_STEPS = [
@@ -86,6 +87,7 @@ export default function OrderDetailPage() {
             <Timeline order={order} currentIndex={currentStatusIndex} />
             <ItemsBlock items={order.items || []} />
             <AddressBlock address={order.shipping_address} />
+            <InvoiceBlock invoiceUrl={order.invoice_url} orderNumber={order.order_number} />
           </div>
 
           <aside className={styles.sideCol}>
@@ -151,6 +153,16 @@ function ItemsBlock({ items }) {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+function InvoiceBlock({ invoiceUrl, orderNumber }) {
+  if (!invoiceUrl) return null;
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>Factura</h2>
+      <PdfViewer url={invoiceUrl} title={`Factura ${orderNumber}`} height={480} />
     </section>
   );
 }

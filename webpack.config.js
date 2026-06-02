@@ -272,6 +272,10 @@ module.exports = (env, argv) => {
             from: path.resolve(__dirname, 'public/catalog/images'),
             to:   path.resolve(__dirname, 'dist/catalog/images'),
           },
+          {
+            from: path.resolve(__dirname, 'public/mock'),
+            to:   path.resolve(__dirname, 'dist/mock'),
+          },
         ],
       }),
       analyze && new BundleAnalyzerPlugin({

@@ -182,6 +182,22 @@ export interface Order {
   /** ISO-8601. */
   created_at: string;
   items?: CartItem[];
+  /** URL de la factura del pedido en PDF (UC-ORD-PDF). */
+  invoice_url?: string;
+  /** Etapas datadas de fulfillment para la linea de tiempo (UC-LOG-GANTT). */
+  fulfillment_stages?: FulfillmentStage[];
+}
+
+/** Etapa de fulfillment con fechas, consumida por GanttChart (UC-LOG-GANTT). */
+export interface FulfillmentStage {
+  id: string;
+  name: string;
+  /** ISO-8601. */
+  start: string;
+  /** ISO-8601. */
+  end: string;
+  /** 0-100. */
+  progress?: number;
 }
 
 // ──────────────────────────────────────────────────────────────────────

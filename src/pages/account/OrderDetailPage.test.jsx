@@ -215,3 +215,22 @@ describe('OrderDetailPage — race redirect (BUG-ORDER-01)', () => {
     expect(screen.queryByTestId(ORDERS_SENTINEL)).not.toBeInTheDocument();
   });
 });
+
+// ─── UC-ORD-PDF — visor de factura embebido (PdfViewer) ─────────────────────
+describe('OrderDetailPage — factura PDF (UC-ORD-PDF)', () => {
+  it('muestra el visor de factura cuando el pedido trae invoice_url', async () => {
+    apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: '/mock/factura-demo.pdf' } });
+    render(wrap(<OrderDetailPage />));
+    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+    const frame = await screen.findByTitle(/Factura/i);
+    expect(frame).toBeInTheDocument();
+    expect(frame).toHaveAttribute('src', '/mock/factura-demo.pdf');
+  });
+
+  it('no muestra el visor cuando el pedido no trae invoice_url', async () => {
+    apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: undefined } });
+    render(wrap(<OrderDetailPage />));
+    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+    expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+  });
+});

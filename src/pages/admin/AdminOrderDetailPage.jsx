@@ -16,6 +16,7 @@ import {
   fetchAdminOrder, updateOrderStatus, adminCancelOrder,
 } from '@redux/slices/adminSlice';
 import RefundModal from '@components/admin/RefundModal';
+import GanttChart from '@components/common/GanttChart';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import styles from './AdminOrderDetailPage.module.scss';
 
@@ -56,6 +57,18 @@ export default function AdminOrderDetailPage() {
 
   const validNext = NEXT_STATES[order.status] || [];
   const currentIdx = STATUS_FLOW.findIndex(s => s.id === order.status);
+
+  // Etapas datadas para el Gantt de fulfillment (UC-LOG-GANTT). Se derivan del
+  // STATUS_FLOW y la fecha de creacion; el progreso refleja el estado actual.
+  const ganttBase = order.created_at ? new Date(order.created_at).getTime() : Date.now();
+  const DAY_MS = 86_400_000;
+  const fulfillmentTasks = STATUS_FLOW.map((s, i) => ({
+    id: s.id,
+    name: s.label,
+    start: new Date(ganttBase + i * DAY_MS).toISOString(),
+    end: new Date(ganttBase + (i + 1) * DAY_MS).toISOString(),
+    progress: i < currentIdx ? 100 : i === currentIdx ? 50 : 0,
+  }));
 
   const handleAdvance = async (e) => {
     e.preventDefault();
@@ -159,6 +172,12 @@ export default function AdminOrderDetailPage() {
               </div>
             </form>
           )}
+        </section>
+
+        {/* Linea de tiempo de fulfillment (UC-LOG-GANTT) */}
+        <section className={styles.card}>
+          <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Línea de tiempo de fulfillment</h2></header>
+          <GanttChart tasks={fulfillmentTasks} />
         </section>
 
         {/* Items */}
