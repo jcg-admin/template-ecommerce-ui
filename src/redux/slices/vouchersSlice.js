@@ -69,6 +69,19 @@ export const fetchVoucherUsage = createAsyncThunk(
   }
 );
 
+// UC-PRO-04: reporte agregado de uso de vouchers (ranking + ROI).
+export const fetchVoucherReport = createAsyncThunk(
+  'vouchers/fetchReport',
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get(`${ADMIN_VOUCHERS_URL}report/`, { params });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(serializeApiError(err));
+    }
+  }
+);
+
 // =============================================================================
 // Slice
 // =============================================================================
@@ -86,6 +99,10 @@ const vouchersSlice = createSlice({
     usage:        null,    // { total_uses, total_discount, redemptions[] }
     isLoadingUsage: false,
     usageError:   null,
+    // UC-PRO-04: reporte agregado (lista de vouchers con metricas + ROI)
+    report:         [],
+    isLoadingReport: false,
+    reportError:    null,
   },
 
   reducers: {
@@ -160,6 +177,22 @@ const vouchersSlice = createSlice({
       .addCase(fetchVoucherUsage.rejected, (state, action) => {
         state.isLoadingUsage = false;
         state.usageError     = action.payload;
+      });
+
+    // fetchVoucherReport (UC-PRO-04 agregado)
+    builder
+      .addCase(fetchVoucherReport.pending, (state) => {
+        state.isLoadingReport = true;
+        state.reportError     = null;
+      })
+      .addCase(fetchVoucherReport.fulfilled, (state, action) => {
+        const results = action.payload?.results ?? action.payload ?? [];
+        state.report          = Array.isArray(results) ? results : [];
+        state.isLoadingReport = false;
+      })
+      .addCase(fetchVoucherReport.rejected, (state, action) => {
+        state.isLoadingReport = false;
+        state.reportError     = action.payload;
       });
   },
 });

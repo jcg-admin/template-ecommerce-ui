@@ -96,6 +96,7 @@ const AdminVariantsPage              = lazy(() => import('@pages/admin/AdminVari
 const AdminVariantPricePage          = lazy(() => import('@pages/admin/AdminVariantPricePage'));
 const AdminNotificationComposePage   = lazy(() => import('@pages/admin/AdminNotificationComposePage'));
 const AdminProductDiscountsPage      = lazy(() => import('@pages/admin/AdminProductDiscountsPage'));
+const AdminVoucherReportPage         = lazy(() => import('@pages/admin/AdminVoucherReportPage'));
 const AdminReportSalesPage           = lazy(() => import('@pages/admin/AdminReportSalesPage'));
 const AdminReportTopSellersPage      = lazy(() => import('@pages/admin/AdminReportTopSellersPage'));
 const AdminReportCustomersRfmPage    = lazy(() => import('@pages/admin/AdminReportCustomersRfmPage'));
@@ -282,6 +283,8 @@ export default function AppRouter() {
               <Route path="admin/users"       element={<AdminUsersPage />} />
               <Route path="admin/users/:pk"   element={<AdminUserDetailPage />} />
               <Route path="admin/vouchers"    element={<AdminVouchersPage />} />
+              {/* UC-PRO-04 — reporte agregado (ruta estatica antes del :id) */}
+              <Route path="admin/vouchers/report" element={<AdminVoucherReportPage />} />
               {/* Detalle y creación de voucher — cubre /admin/vouchers/nuevo y /admin/vouchers/:id */}
               <Route path="admin/vouchers/:id"  element={<AdminVoucherDetailPage />} />
               <Route path="admin/support"     element={<AdminSupportPage />} />

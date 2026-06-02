@@ -432,6 +432,30 @@ export const adminHandlers = [
     });
   }),
 
+  // UC-PRO-04 — Reporte AGREGADO de uso de vouchers (ranking + ROI)
+  http.get('/api/v1/admin/vouchers/report/', ({ request }) => {
+    const status = new URL(request.url).searchParams.get('status');
+    const codes = ['WELCOME10', 'ENVIOGRATIS', 'YORUBA20', 'PRIMERA', 'VIP15', 'BLACKFRIDAY'];
+    let rows = codes.map((code, i) => {
+      const current_uses   = faker.number.int({ min: 0, max: 120 });
+      const total_discount = faker.number.int({ min: 0, max: 8000 });
+      const revenue        = faker.number.int({ min: total_discount, max: total_discount + 30000 });
+      const orders_count   = current_uses;
+      const roi            = total_discount > 0 ? Number((revenue / total_discount).toFixed(2)) : 0;
+      return {
+        code,
+        type: i % 2 === 0 ? 'PERCENT' : 'FIXED',
+        is_active: i % 3 !== 0,
+        current_uses, total_discount, orders_count, revenue, roi,
+        created_at: faker.date.recent({ days: 60 }).toISOString().slice(0, 10),
+      };
+    });
+    if (status === 'active')   rows = rows.filter((r) => r.is_active);
+    if (status === 'inactive') rows = rows.filter((r) => !r.is_active);
+    rows.sort((a, b) => b.current_uses - a.current_uses); // ranking por -usos
+    return HttpResponse.json({ results: rows });
+  }),
+
   // UC-PRO-04 — Reporte de uso del voucher (métricas + últimos canjes)
   http.get('/api/v1/admin/vouchers/:id/usage/', ({ params }) => {
     const id          = Number(params.id);

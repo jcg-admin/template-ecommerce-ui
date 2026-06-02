@@ -20,3 +20,16 @@
   (incorrecto → 400, AC-02); limpia sesión en éxito.
 - Tests alineados (TDD): `SecurityPage.test.jsx` (colocado) + `authSlice.
   deleteAccount.test.js` al nuevo contrato. Verde: 11 passed / 3 suites.
+
+## F3 — UC-PRO-04 reporte agregado de vouchers — HECHA
+- `vouchersSlice`: thunk `fetchVoucherReport(params)` → `GET /admin/vouchers/report/`
+  + estado `report/isLoadingReport/reportError` + reducers.
+- `AdminVoucherReportPage.jsx` (nueva): tabla agregada (código, tipo, usos,
+  descuento, órdenes, ingresos, ROI) ordenada por -usos; filtros estado + rango
+  fechas; botón Exportar CSV (Blob+createObjectURL); estado vacío → crear voucher.
+- Ruta `admin/vouchers/report` (estática, antes de `:id`) + lazy import.
+- AdminSidebar: entrada "Reporte de vouchers".
+- MSW `admin.ts`: handler `GET /admin/vouchers/report/` (filtra por estado,
+  ranking por -usos, ROI calculado).
+- `.filter`/`.empty` añadidos a `AdminTablePage.module.scss`.
+- TDD verde: slice 2 + page 4 = 6 passed; check-scss 168 clean.

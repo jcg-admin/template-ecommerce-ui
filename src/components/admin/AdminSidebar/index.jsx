@@ -27,6 +27,7 @@ const ADMIN_NAV = [
   { to: '/admin/payments',     label: 'Pagos' },
   { to: '/admin/returns',      label: 'Devoluciones' },
   { to: '/admin/vouchers',     label: 'Vouchers' },
+  { to: '/admin/vouchers/report', label: 'Reporte de vouchers' },
   { section: 'Clientes' },
   { to: '/admin/users',        label: 'Usuarios' },
   { to: '/admin/support',      label: 'Soporte' },
