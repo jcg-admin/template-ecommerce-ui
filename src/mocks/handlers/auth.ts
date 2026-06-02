@@ -134,6 +134,8 @@ export const authHandlers = [
     faker.seed();
     return HttpResponse.json({ ...base, ...patch });
   }),
+  // UC-AUTH-16 — dar de baja la cuenta: limpia la sesion activa.
+  http.delete('/api/v1/auth/account/', () => { _activeSession = null; return new HttpResponse(null, { status: 204 }); }),
   http.post('/api/v1/auth/change-password/', () => HttpResponse.json({ detail: 'Contrasena actualizada.' })),
   http.post('/api/v1/auth/verify-email/',    () => HttpResponse.json({ detail: 'Email verificado.' })),
   http.post('/api/v1/auth/password-reset/',  () => HttpResponse.json({ detail: 'Si el email existe, se enviara un enlace.' })),

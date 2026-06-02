@@ -10,9 +10,10 @@
 
 import { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import { changePassword, logoutAllSessions } from '@redux/slices/authSlice';
+import { Link, useNavigate } from 'react-router-dom';
+import { changePassword, logoutAllSessions, deleteAccount } from '@redux/slices/authSlice';
 import AccountSidebar from '@components/account/AccountSidebar';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import styles from './SecurityPage.module.scss';
 
@@ -24,8 +25,12 @@ const MOCK_SESSIONS = [
 
 export default function SecurityPage() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [pwd, setPwd] = useState({ current: '', next: '', confirm: '' });
   const [err, setErr] = useState('');
+  // UC-AUTH-16 — dar de baja la cuenta
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [deleting, setDeleting] = useState(false);
 
   const handleChangePwd = async (e) => {
     e.preventDefault();
@@ -39,6 +44,20 @@ export default function SecurityPage() {
       setPwd({ current: '', next: '', confirm: '' });
     } catch (e) {
       setErr('No se pudo cambiar la contraseña. Verifica tu contraseña actual.');
+    }
+  };
+
+  // UC-AUTH-16 — confirma la baja, despacha el thunk y navega al login.
+  const handleDeleteAccount = async () => {
+    setDeleting(true);
+    try {
+      await dispatch(deleteAccount()).unwrap();
+      setConfirmDelete(false);
+      navigate('/auth/login');
+    } catch {
+      // El error queda en el slice; cerramos el modal.
+    } finally {
+      setDeleting(false);
     }
   };
 
@@ -98,13 +117,24 @@ export default function SecurityPage() {
                 Si eliminas tu cuenta, no podrás recuperarla. Tu historial de pedidos se
                 conserva por obligación fiscal pero quedará disociado de tu persona.
               </p>
-              <button type="button" className={styles.deleteBtn}>
+              <button type="button" className={styles.deleteBtn} onClick={() => setConfirmDelete(true)}>
                 Solicitar eliminación →
               </button>
             </Card>
           </section>
         </div>
       </div>
+
+      <ConfirmModal
+        open={confirmDelete}
+        message="¿Seguro que quieres eliminar tu cuenta? Esta acción no se puede deshacer."
+        confirmLabel="Eliminar cuenta"
+        cancelLabel="Cancelar"
+        variant="danger"
+        loading={deleting}
+        onConfirm={handleDeleteAccount}
+        onClose={() => setConfirmDelete(false)}
+      />
     </main>
   );
 }

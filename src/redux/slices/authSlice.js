@@ -150,6 +150,20 @@ export const resendVerificationEmail = createAsyncThunk(
   }
 );
 
+// UC-AUTH-16 — Dar de baja la cuenta.
+/** Elimina (da de baja) la cuenta del comprador autenticado. */
+export const deleteAccount = createAsyncThunk(
+  'auth/deleteAccount',
+  async (_, { rejectWithValue }) => {
+    try {
+      await apiService.delete('/api/v1/auth/account/');
+      return null;
+    } catch (error) {
+      return rejectWithValue(error.message);
+    }
+  }
+);
+
 // ─── Slice ────────────────────────────────────────────────────────────
 
 const authSlice = createSlice({
@@ -256,6 +270,25 @@ const authSlice = createSlice({
         state.isLoading = false;
       })
       .addCase(changePassword.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      });
+
+    // deleteAccount (UC-AUTH-16) — dar de baja la cuenta
+    builder
+      .addCase(deleteAccount.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteAccount.fulfilled, (state) => {
+        // Baja exitosa: limpiar la sesion igual que en logout.
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
+        // La baja fallo: preservar la sesion y exponer el error.
         state.isLoading = false;
         state.error = action.payload;
       });
