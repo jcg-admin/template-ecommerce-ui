@@ -47,7 +47,12 @@ afterEach(() => jest.clearAllMocks());
 
 
 const CATEGORIES = [
-  { id: 1, name: 'Collares', slug: 'collares', product_count: 12, is_active: true, children: [] },
+  {
+    id: 1, name: 'Collares', slug: 'collares', product_count: 12, is_active: true,
+    children: [
+      { id: 11, name: 'Collares de mazo', slug: 'collares-mazo', product_count: 4, is_active: true, children: [] },
+    ],
+  },
   { id: 2, name: 'Elekes', slug: 'elekes', product_count: 8, is_active: true, children: [] },
 ];
 
@@ -127,5 +132,54 @@ describe('AdminCategoriesPage (UC-CAT-06)', () => {
     wrap();
     expect(await screen.findByText('Collares')).toBeInTheDocument();
     expect(screen.getByText('Elekes')).toBeInTheDocument();
+  });
+
+  // UC-ADM-TREELIST (F6): integracion del TreeList tabular
+  it('renderiza las categorias en un TreeList (treegrid) con columnas', async () => {
+    apiService.get.mockResolvedValue({ data: { results: CATEGORIES, count: 2 } });
+    wrap();
+    await screen.findByText('Collares');
+
+    // El contenedor del arbol expone role=treegrid con su aria-label
+    const grid = screen.getByRole('treegrid', { name: 'Categorías' });
+    expect(grid).toBeInTheDocument();
+
+    // Cabeceras de columna (slug, productos)
+    expect(screen.getByRole('columnheader', { name: /Slug/i })).toBeInTheDocument();
+    expect(screen.getByRole('columnheader', { name: /Productos/i })).toBeInTheDocument();
+
+    // Datos derivados por categoria (slug y product_count formateado)
+    expect(screen.getByText('collares')).toBeInTheDocument();
+    expect(screen.getByText('12 productos')).toBeInTheDocument();
+  });
+
+  it('muestra la jerarquia: la subcategoria hija aparece expandida por defecto', async () => {
+    apiService.get.mockResolvedValue({ data: { results: CATEGORIES, count: 2 } });
+    wrap();
+    // defaultExpandedIds incluye todos los nodos -> la hija es visible
+    expect(await screen.findByText('Collares de mazo')).toBeInTheDocument();
+  });
+
+  it('una accion del TreeList dispara su handler (eliminar -> ConfirmModal -> DELETE)', async () => {
+    apiService.get.mockResolvedValue({ data: { results: CATEGORIES, count: 2 } });
+    apiService.delete.mockResolvedValue({ data: { id: 1 } });
+    wrap();
+    await screen.findByText('Collares');
+
+    // Cada fila del treegrid expone sus acciones; tomamos el primer "Eliminar"
+    const deleteBtns = screen.getAllByRole('button', { name: /Eliminar/i });
+    fireEvent.click(deleteBtns[0]);
+
+    // El handler abre el ConfirmModal (mock) con el mensaje de la categoria
+    expect(await screen.findByTestId('confirm-modal')).toBeInTheDocument();
+    expect(screen.getByText(/¿Eliminar "Collares"\?/)).toBeInTheDocument();
+
+    // Confirmar dispara el thunk deleteCategory -> DELETE al endpoint
+    fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
+    await waitFor(() => {
+      expect(apiService.delete).toHaveBeenCalledWith(
+        expect.stringContaining('/api/v1/admin/categories/1/'),
+      );
+    });
   });
 });
