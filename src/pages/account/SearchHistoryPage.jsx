@@ -14,7 +14,6 @@ import { Link } from 'react-router-dom';
 import {
   fetchSearchHistory, deleteSearchTerm, clearSearchHistory,
 } from '@redux/slices/catalogSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, EmptyState } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './SearchHistoryPage.module.scss';
@@ -37,7 +36,6 @@ export default function SearchHistoryPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>

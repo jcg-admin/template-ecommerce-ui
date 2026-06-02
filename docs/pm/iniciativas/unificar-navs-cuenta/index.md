@@ -1,6 +1,6 @@
 # Iniciativa: unificar-navs-cuenta (DR-01)
 
-**Estado:** PLANEADA (sin ejecutar)
+**Estado:** CERRADA (2026-06-02T20:00:41)
 **Creada:** 2026-06-02
 **Origen:** Drift DR-01 documentado al cerrar `cablear-rutas-huerfanas`.
 

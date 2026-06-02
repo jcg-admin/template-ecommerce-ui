@@ -9,7 +9,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProfile } from '@redux/slices/authSlice';
 import { fetchOrders } from '@redux/slices/ordersSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, Price } from '@components/common/primitives';
 import styles from './AccountPage.module.scss';
 
@@ -48,7 +47,6 @@ export default function AccountPage() {
         </header>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             {completeness < 100 && (

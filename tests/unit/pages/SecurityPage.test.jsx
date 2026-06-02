@@ -12,10 +12,6 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn(), put: jest.fn() },
 }));
-jest.mock('../../../src/components/account/AccountSidebar', () => ({
-  __esModule: true,
-  default: () => <nav data-testid="account-sidebar" />,
-}));
 import apiService  from '@services/apiService';
 import SecurityPage from '../../../src/pages/account/SecurityPage';
 
@@ -73,10 +69,5 @@ describe('SecurityPage', () => {
     fireEvent.change(confirm, { target: { value: 'Oshun2026!' } });
     fireEvent.click(screen.getByRole('button', { name: /cambiar contraseña/i }));
     await waitFor(() => expect(apiService.post).toHaveBeenCalled());
-  });
-
-  it('el AccountSidebar se renderiza', () => {
-    renderPage();
-    expect(screen.getByTestId('account-sidebar')).toBeInTheDocument();
   });
 });

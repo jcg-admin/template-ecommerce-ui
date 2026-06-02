@@ -47,7 +47,7 @@
 
 .layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 1fr;
   gap: $spacing-12;
   margin-top: $spacing-10;
   @media (max-width: $bp-md) { grid-template-columns: 1fr; gap: $spacing-6; }

@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProfile, updateProfile, uploadAvatar } from '@redux/slices/authSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import FileUpload from '@components/common/FileUpload';
 import styles from './ProfilePage.module.scss';
@@ -50,7 +49,6 @@ export default function ProfilePage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>

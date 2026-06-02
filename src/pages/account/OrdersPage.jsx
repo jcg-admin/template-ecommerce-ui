@@ -10,7 +10,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchOrders } from '@redux/slices/ordersSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Price, Button, EmptyState } from '@components/common/primitives';
 import styles from './OrdersPage.module.scss';
 
@@ -48,7 +47,6 @@ export default function OrdersPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>

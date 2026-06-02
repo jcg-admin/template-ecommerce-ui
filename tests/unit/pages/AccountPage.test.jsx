@@ -85,7 +85,7 @@ describe('AccountPage', () => {
 
   it.skip('muestra los links de navegacion de la cuenta — PENDIENTE: fetchProfile.rejected limpia user; requiere mock de thunk', async () => {
     renderPage();
-    // La navegación la muestra AccountSidebar
+    // La navegación la muestra AccountLayout (nav canónica)
     await waitFor(() => {
       const html = document.body.innerHTML;
       expect(html).toContain('Datos personales');

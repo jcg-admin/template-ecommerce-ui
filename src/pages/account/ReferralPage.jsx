@@ -13,7 +13,6 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchReferral } from '@redux/slices/referralSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button } from '@components/common/primitives';
 import styles from './ReferralPage.module.scss';
 
@@ -67,7 +66,6 @@ export default function ReferralPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>

@@ -52,6 +52,7 @@ describe('AccountLayout — sidebar del comprador', () => {
     ['Resumen',             '/account'],
     ['Mis pedidos',         '/account/orders'],
     ['Mis favoritos',       '/account/wishlist'],
+    ['Mis direcciones',     '/account/addresses'],
     ['Mis devoluciones',    '/account/returns'],
     ['Soporte',             '/support/tickets'],
     ['Notificaciones',      '/account/notifications/preferences'],

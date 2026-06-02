@@ -12,7 +12,6 @@ import { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { changePassword, logoutAllSessions, deleteAccount } from '@redux/slices/authSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import styles from './SecurityPage.module.scss';
@@ -71,7 +70,6 @@ export default function SecurityPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>
