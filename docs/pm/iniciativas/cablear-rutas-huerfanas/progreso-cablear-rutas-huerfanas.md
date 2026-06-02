@@ -26,7 +26,26 @@ renderizan a la vez — `AccountLayout` (layout, canónica) y `AccountSidebar`
 (embebida en cada página). Deduplicación → iniciativa separada
 `unificar-navs-cuenta`. Se cableó en la canónica.
 
+## 2026-06-02 — F2 AdminSidebar (12 rutas admin)
+
+`AdminSidebar/index.jsx` es la **fuente única** de la nav admin (BUG-S03 ya
+deduplicó AdminLayout↔AdminSidebar en T-202), así que no hay drift como en
+cuenta. Las 12 rutas verificadas en el router
+(`grep -nE 'path="admin/(couriers|…|reviews/moderation)"' AppRouter.jsx`
+→ 12 hits, líneas 267-326).
+
+**Cambios (TDD):**
+- `AdminSidebar/AdminSidebar.test.jsx` (nuevo): `it.each` con las 12 rutas y
+  su `to`. Rojo: 12 failed / 12.
+- `AdminSidebar/index.jsx`: +12 entradas a `ADMIN_NAV`, agrupadas —
+  Catálogo (+Descuentos), Ventas (+Panel de pedidos), nueva sección
+  Comunicación (notif. compose, newsletter compose/subscribers, questions
+  answer/moderation, reviews moderation), Operaciones (+Sincronizar precios,
+  +Mensajeros), Configuración (+Permisos, +Respaldos). Verde: AdminSidebar
+  12/12 + AdminLayout.navigation 2/2 = 14/14.
+
+Sin SCSS nuevo: las entradas reusan `styles.navSection` y `styles.link`.
+
 ## Pendiente
-- F2 AdminSidebar (12 rutas admin) + test de nav admin.
 - F3 enlaces desde página padre (6 sub-rutas) — verificar enlace dinámico antes.
 - F4 verificación (jest + check-scss + build:demo) + cierre.

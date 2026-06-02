@@ -13,12 +13,14 @@ cablear una sub-página, confirmar que no haya ya un enlace dinámico.
 - F1-T2 `AccountLayout.test.jsx`: filas it.each para las 2 nuevas entradas
   (TDD: rojo → verde, 10/10).
 
-## FASE 2 — AdminSidebar (12 rutas, agrupadas)
-- F2-T1 `AdminSidebar/index.jsx`: entradas/grupos para couriers, permissions,
+## FASE 2 — AdminSidebar (12 rutas, agrupadas) — HECHA
+- F2-T1 `AdminSidebar/index.jsx`: 12 entradas agrupadas (couriers, permissions,
   backups, orders-dashboard, price-sync, product-discounts,
   notifications/compose, newsletter/subscribers, newsletter/compose,
-  questions/answer, questions/moderation, reviews/moderation.
-- F2-T2 actualizar `AdminLayout.navigation.test.jsx` (cubre la nav admin).
+  questions/answer, questions/moderation, reviews/moderation).
+- F2-T2 `AdminSidebar/AdminSidebar.test.jsx` (nuevo): it.each 12/12. Se testea
+  AdminSidebar directamente (fuente única, sin redux) en lugar de
+  `AdminLayout.navigation.test.jsx`, que sigue verde sin cambios.
 
 ## FASE 3 — Enlaces desde página padre (6 sub-rutas)
 - F3-T1 AdminProductsPage → botón "Importar" (admin/products/import).
