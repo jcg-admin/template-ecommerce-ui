@@ -1,0 +1,44 @@
+@use '@styles/abstracts' as *;
+
+.pivot {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ec-text-primary);
+  font-size: $font-size-sm;
+  text-align: right;
+}
+
+.corner,
+.colHead,
+.totalHead,
+.rowHead {
+  padding: $spacing-2 $spacing-3;
+  border-bottom: 2px solid var(--ec-border-color);
+  background: var(--ec-bg-surface);
+  font-weight: $font-weight-semibold;
+}
+
+.corner,
+.rowHead {
+  text-align: left;
+}
+
+.cell,
+.rowTotal,
+.colTotal,
+.grandTotal {
+  padding: $spacing-2 $spacing-3;
+  border-bottom: 1px solid var(--ec-border-color);
+}
+
+.rowTotal,
+.colTotal,
+.grandTotal,
+.totalHead {
+  font-weight: $font-weight-semibold;
+  background: var(--ec-bg-sunken);
+}
+
+.grandTotal {
+  font-weight: $font-weight-bold;
+}

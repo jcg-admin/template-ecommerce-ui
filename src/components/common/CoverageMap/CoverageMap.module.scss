@@ -1,0 +1,85 @@
+// CoverageMap — mapa de cobertura de envío como SVG estático (UC-LOG-MAP)
+@use '@styles/abstracts' as *;
+
+.root {
+  display: inline-flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  padding: $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-lg;
+  background: var(--ec-bg-surface);
+}
+
+.map {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.covered {
+  fill: var(--ec-success);
+  stroke: var(--ec-success);
+  cursor: pointer;
+  transition: opacity $transition-base;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+}
+
+.uncovered {
+  fill: var(--ec-bg-sunken);
+  stroke: var(--ec-border-color);
+  cursor: pointer;
+  transition: opacity $transition-base;
+
+  &:hover {
+    opacity: 0.85;
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+}
+
+.legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $spacing-4;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: $font-size-sm;
+  color: var(--ec-text-secondary);
+}
+
+.legendItem {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 1px solid transparent;
+  border-radius: $border-radius-sm;
+
+  &.covered {
+    background: var(--ec-success);
+    border-color: var(--ec-success);
+  }
+
+  &.uncovered {
+    background: var(--ec-bg-sunken);
+    border-color: var(--ec-border-color);
+  }
+}
