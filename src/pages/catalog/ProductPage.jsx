@@ -38,12 +38,20 @@ export default function ProductPage() {
   const [qty, setQty] = useState(1);
   const [activeImg, setActiveImg] = useState(0);
 
-  useEffect(() => { dispatch(fetchProduct(slug)); }, [dispatch, slug]);
+  useEffect(() => {
+    dispatch(fetchProduct(slug));
+    // Limpiar al desmontar para evitar que currentProduct del slug
+    // anterior sea visible brevemente en la siguiente navegación
+    return () => dispatch({ type: 'catalog/clearCurrentProduct' });
+  }, [dispatch, slug]);
   useEffect(() => {
     if (product?.variants?.length > 0) setVariant(product.variants[0]);
   }, [product]);
 
-  if (isLoading) {
+  // Mostrar loading si: el fetch está en curso O si el producto
+  // del store no corresponde al slug actual (race condition entre
+  // renders consecutivos de ProductPage con slugs diferentes)
+  if (isLoading || (!product && slug)) {
     return <div className={styles.loading}>Cargando…</div>;
   }
   if (!product) {
