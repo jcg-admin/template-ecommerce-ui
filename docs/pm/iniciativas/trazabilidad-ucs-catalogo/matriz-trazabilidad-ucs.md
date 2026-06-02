@@ -9,9 +9,20 @@ las familias en paralelo (5 agentes) con evidencia de código.
 
 ## Resumen
 
+> **Auditoría 2026-06-02 (`auditoria-ucs-2026-06-02.md`):** 5 agentes en
+> paralelo verificaron las 154 filas contra el catálogo canónico y el código a
+> HEAD `c3e8b98`. Resultado: ~150 correctas, **0 artefactos faltantes**, y **4
+> gaps funcionales MEDIA** (UC marcado IMPLEMENTADO con aceptación parcial):
+> **UC-AUTH-16** (sin reautenticación con password), **UC-PRO-04** (falta
+> reporte agregado), **UC-ORD-04** (botón cancelar cliente sin cablear),
+> **UC-CFG-05** (campos de redes perdidos en DR-02). Candidatos a
+> `cerrar-gaps-ucs-auditoria`. El resto de discrepancias eran drift documental
+> (citas de test con ruta vieja — los tests existen colocados en `src/`).
+>
 > **Actualización (cierre de iniciativa):** los 8 AUSENTE-UI fueron
 > implementados con TDD + MSW + test. El conteo final es **131 IMPLEMENTADO /
-> 23 BACKEND-OPS / 0 AUSENTE-UI**. Los 8 cerrados:
+> 23 BACKEND-OPS / 0 AUSENTE-UI** (con 4 de esos 131 en estado **PARCIAL** según
+> la auditoría). Los 8 cerrados:
 > UC-AUTH-16 (`SecurityPage`+`deleteAccount`), UC-SRCH-02 (`SearchBar`+
 > `useSearchSuggestions`), UC-PRO-04 (`AdminVoucherDetailPage` uso),
 > UC-PRO-05 (`ReferralPage`+`referralSlice`), UC-LOG-01/02 (`AdminOrderDetailPage`
@@ -47,7 +58,7 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-AUTH-13 | suspender usuario | IMPLEMENTADO | `suspendUser` en `src/redux/slices/adminUsersSlice.js`/`adminSlice.js`; acción desde `AdminUserDetailPage.jsx`. |
 | UC-AUTH-14 | reactivar usuario | IMPLEMENTADO | `reactivateUser` en `adminUsersSlice.js`/`adminSlice.js`; `AdminUserDetailPage.jsx`. |
 | UC-AUTH-15 | crear usuario admin | IMPLEMENTADO | `createUser` en `src/redux/slices/adminSlice.js`; flujo en `AdminUsersPage.jsx`; test `AdminUsersPage.test.jsx`. |
-| UC-AUTH-16 | dar de baja cuenta | AUSENTE-UI | `src/pages/account/SecurityPage.jsx` muestra una tarjeta "Eliminar cuenta" con botón "Solicitar eliminación" pero sin `onClick`/thunk; no existe acción `deleteAccount`/`deactivateAccount` en `authSlice.js`. Faltaría: cablear el botón a un thunk de baja + confirmación. |
+| UC-AUTH-16 | dar de baja cuenta | PARCIAL | Implementado: `SecurityPage.jsx:118` → ConfirmModal → `deleteAccount` (`authSlice.js:155`). **Gap (auditoría 2026-06-02):** usa `DELETE /api/v1/auth/account/` sin password; el UC exige reautenticación `POST .../deactivate/` con `{password}` (AC-02) y la UI no la pide. |
 | UC-CART-01 | agregar producto | IMPLEMENTADO | `addToCart` en `src/redux/slices/cartSlice.js`; usado en `src/pages/cart/CartPage.jsx`; tests `cartSlice.test.js`. |
 | UC-CART-02 | ver carrito | IMPLEMENTADO | `src/pages/cart/CartPage.jsx` + `fetchCart` en `cartSlice.js`; test `CartPage.test.jsx`. |
 | UC-CART-03 | eliminar item | IMPLEMENTADO | `removeCartItem` en `cartSlice.js`; cubierto en `CartPage.test.jsx`. |
@@ -86,7 +97,7 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-PRO-01 | Crear voucher (admin) | IMPLEMENTADO | `src/components/admin/VoucherCreateForm.jsx` (`createVoucher`), `src/pages/admin/AdminVoucherDetailPage.jsx`. |
 | UC-PRO-02 | Editar voucher (admin) | IMPLEMENTADO | `src/pages/admin/AdminVoucherDetailPage.jsx` (`updateVoucher` / PATCH). |
 | UC-PRO-03 | Desactivar voucher (admin) | IMPLEMENTADO | `src/pages/admin/AdminVoucherDetailPage.jsx` (toggle `is_active` + `deleteVoucher`). |
-| UC-PRO-04 | Reporte de uso de vouchers | AUSENTE-UI | Sólo se muestran contadores inline (`current_uses / max_uses`) en `AdminVouchersPage.jsx` / `AdminVoucherDetailPage.jsx`. No existe vista de métricas (usos totales, descuento otorgado, impacto en ventas); ningún `AdminReport*` referencia vouchers. |
+| UC-PRO-04 | Reporte de uso de vouchers | PARCIAL | Implementado per-voucher: `AdminVoucherDetailPage.jsx:186` (`total_uses`, `total_discount`, tabla) → `/admin/vouchers/<id>/usage/`. **Gap (auditoría 2026-06-02):** el UC pide reporte **agregado** (`/admin/vouchers/report/`, ranking, ROI, export CSV) — ausente. |
 | UC-PRO-05 | Código referral | AUSENTE-UI | Sin coincidencias de `referral`/`referido` en lógica de promociones; los únicos matches son no relacionados (PdfViewer, securityConfig, páginas de orden). No hay UI ni hook de referidos. |
 | UC-QST-01 | Hacer pregunta | IMPLEMENTADO | `src/pages/catalog/ProductQuestionAskPage.jsx`, `src/hooks/domain/useProductQuestions.js`, ruta `catalog/:productId/ask`. |
 | UC-QST-02 | Ver preguntas | IMPLEMENTADO | `src/pages/catalog/ProductQuestionsListPage.jsx`, `useProductQuestions`, ruta `catalog/:productId/questions`. |
@@ -109,7 +120,7 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-ORD-01-EXT | Checkout express | IMPLEMENTADO | `src/pages/checkout/ExpressCheckoutPage.jsx` + `fetchExpressEligibility`/`submitExpress` en `src/redux/slices/paymentsSlice.js` |
 | UC-ORD-02 | Ver detalle orden | IMPLEMENTADO | `src/pages/account/OrderDetailPage.jsx`; thunk `fetchOrderDetail` en `ordersSlice.js` |
 | UC-ORD-03 | Listar órdenes | IMPLEMENTADO | `src/pages/account/OrdersPage.jsx` (dispatch `fetchOrders`); `src/hooks/domain/useOrders.js` |
-| UC-ORD-04 | Cancelar orden (cliente) | IMPLEMENTADO | Thunk `cancelOrder` (UC-ORD-04) + reducers en `ordersSlice.js`, con tests `tests/unit/reducers/ordersSlice.cancel.test.js`. Nota: capa redux/estado implementada; botón de cancelación del cliente no cableado en `OrderDetailPage.jsx`. UI "Solicitar reembolso" presente en página de detalle |
+| UC-ORD-04 | Cancelar orden (cliente) | PARCIAL | Thunk `cancelOrder` (UC-ORD-04) + reducers en `ordersSlice.js`, con tests `tests/unit/reducers/ordersSlice.cancel.test.js`. **Gap (auditoría 2026-06-02):** `OrderDetailPage.jsx` NO importa/dispara `cancelOrder` (grep → 0); el botón "Solicitar reembolso" no cubre la cancelación del UC. Capa redux lista, UI sin cablear. |
 | UC-ORD-05 | Editar dirección orden | IMPLEMENTADO | `src/pages/account/OrderEditPage.jsx` (tab address, `updateOrderAddress`); thunk `updateAddress` en `ordersSlice.js` |
 | UC-ORD-06 | Cambiar método envío | IMPLEMENTADO | `src/pages/account/OrderEditPage.jsx` (`updateOrderShipping`, SHIPPING_OPTIONS); thunk `updateShipping` en `ordersSlice.js` |
 | UC-ORD-07 | Procesar orden (admin) | IMPLEMENTADO | `src/pages/admin/AdminOrderDetailPage.jsx` + thunk `adminTransition` (UC-ORD-07) en `ordersSlice.js`; `useOrders.js` |
@@ -161,9 +172,9 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-NOT-07 | Notificación manual (admin) | IMPLEMENTADO | `pages/admin/AdminNotificationComposePage.jsx` (`sendManualNotification`, audiencia EMAIL/ORDER/PRODUCT); ruta `admin/notifications/compose`. |
 | UC-CFG-01 | Configurar gateways de pago | IMPLEMENTADO | `pages/admin/AdminGatewaysPage.jsx` (CRUD MercadoPago/PayPal, test conexion); ruta `admin/config/gateways`. |
 | UC-CFG-02 | Configurar métodos y costos de envío | IMPLEMENTADO | `pages/admin/AdminShippingMethodsPage.jsx` (CRUD metodos de envio); ruta `admin/config/shipping`. |
-| UC-CFG-03 | Configurar SiteSettings / IVA | IMPLEMENTADO | `pages/admin/AdminSiteSettingsPage.jsx` (singleton, tabs, IVA via `adminSlice.updateSiteSettings`); ruta `admin/config/site`. |
+| UC-CFG-03 | Configurar SiteSettings / IVA | IMPLEMENTADO | `pages/admin/AdminSystemSettingsPage.jsx` (FIELDS: `tax_rate`, `currency`, `maintenance_mode`…) via `settingsSlice.updateSettings`; ruta `admin/system-settings`. **Actualizado 2026-06-02 (DR-02):** antes citaba `AdminSiteSettingsPage`/`admin/config/site`, eliminados al consolidar el singleton. |
 | UC-CFG-04 | Gestionar contenido estático | IMPLEMENTADO | `pages/admin/AdminStaticPagesPage.jsx` + `AdminStaticPageEditorPage.jsx` (about/terms/faq...); rutas `admin/pages` y `admin/pages/:slug`. |
-| UC-CFG-05 | Gestionar datos de contacto | IMPLEMENTADO | `pages/admin/AdminSiteSettingsPage.jsx` edita `support_email`, `support_phone`, `facebook_url`, `instagram_url` (datos de contacto/redes). |
+| UC-CFG-05 | Gestionar datos de contacto | PARCIAL | `pages/admin/AdminSystemSettingsPage.jsx` edita `contact_email` + `support_phone`. **Gap (DR-02):** se perdieron `support_email`/`facebook_url`/`instagram_url`/`support_hours` al borrar `AdminSiteSettingsPage` (no estaban en el contrato MSW). Ver `auditoria-ucs-2026-06-02.md`. |
 | UC-SUPP-01 | Crear ticket | IMPLEMENTADO | `pages/account/SupportTicketCreatePage.jsx`; ruta `account/support/...`. |
 | UC-SUPP-02 | Ver ticket (comprador y admin) | IMPLEMENTADO | `pages/account/SupportTicketDetailPage.jsx` (comprador) y `pages/admin/AdminSupportPage.jsx` (bandeja admin). |
 | UC-SUPP-03 | Responder ticket | IMPLEMENTADO | `components/support/SupportTicketReplyForm.jsx` (`replySupportTicket`, modo admin/comprador). |
