@@ -18,6 +18,7 @@ import {
 import {
   updateSettings, clearSettingsActionState,
 } from '@redux/slices/settingsSlice';
+import { Button } from '@components/common/primitives';
 import styles from './AdminSystemSettingsPage.module.scss';
 
 const FIELDS = [
@@ -141,9 +142,9 @@ export default function AdminSystemSettingsPage() {
         )}
 
         <div className={styles.actions}>
-          <button type="submit" disabled={isActioning}>
+          <Button type="submit" loading={isActioning}>
             Guardar cambios
-          </button>
+          </Button>
         </div>
       </form>
     </section>

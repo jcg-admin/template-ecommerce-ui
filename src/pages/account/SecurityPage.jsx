@@ -123,14 +123,13 @@ export default function SecurityPage() {
                 value={deletePwd}
                 onChange={(e) => setDeletePwd(e.target.value)}
               />
-              <button
-                type="button"
-                className={styles.deleteBtn}
+              <Button
+                variant="vino"
                 disabled={!deletePwd}
                 onClick={() => setConfirmDelete(true)}
               >
                 Solicitar eliminación →
-              </button>
+              </Button>
             </Card>
           </section>
         </div>

@@ -14,3 +14,30 @@
   mock lo sirve abierto; backend real lo gobernaría `public_read_enabled`.
 - **H-11:** UC-AUTH-16 §7.2 nombra `DeactivateAccountPage.jsx`, pero la baja vive
   inline en `SecurityPage`. Drift doc↔código (cosmético).
+
+## F2 — Doc + sub-iniciativa + registros — HECHA
+- F2-T01: `analisis-rutas-huerfanas.md` reconciliado (config/site eliminado en
+  DR-02, repuntado a /admin/system-settings; endpoint canónico /config/settings/).
+- F2-T02: sub-iniciativa `alinear-contrato-inventario` scaffold + en índice (H-09).
+- F2-T03: H-10/H-11 registrados arriba.
+
+## F3 — Reuso de componentes adaptados — HECHA (3/5; 2 NO-APLICA)
+- F3-T01 (H-05): SecurityPage "Solicitar eliminación" `<button>` → `Button variant="vino"`.
+- F3-T02 (H-06): AdminSystemSettingsPage submit → `Button loading={isActioning}`
+  (+ import primitives).
+- F3-T04 (H-07): AccountPage `completenessBar` crudo → `ProgressBar` adaptado.
+- **F3-T03 (H-04) NO-APLICA:** el `DatePicker` adaptado emite un `Date` en
+  `onChange` (`DatePicker.jsx:39-42`), no el string ISO `YYYY-MM-DD` que el
+  parámetro canónico (`created_after/created_before`) requiere. El `<input
+  type=date>` nativo entrega exactamente ese formato y es accesible (el propio
+  deep audit lo calificó funcional/accesible). Cambiarlo distorsionaría el
+  contrato del query param por valor BAJO. Se conserva el input nativo.
+- **F3-T05 (H-08) NO-APLICA:** convertir el overlay inline de UC-LOG-07 a `Modal`
+  exige el polyfill `HTMLDialogElement.showModal` (ausente del setup global; solo
+  en `Modal.test`). Es código **pre-existente** fuera del alcance de los gaps;
+  forzarlo arriesga el test UC-LOG-07 por un ítem BAJA. Diferido como opt-in.
+
+## F4 — Verificación
+- `npx jest --ci` → 1703 passed / 0 failed / 107 skipped (274/276 suites) / EXIT=0.
+- `node scripts/check-scss.mjs` → 168 clean.
+- `DEMO_MODE=true npm run build:demo` → compiled, EXIT=0.
