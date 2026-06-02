@@ -1,54 +1,58 @@
 # Tareas — componentes nativos (adaptar-componentes-kno-react)
 
-Lista plana de tareas atómicas (una por archivo). Detalle en
-`plan-componentes-nativos.md`. (C)=componente+test, (D)=datos/mock,
-(I)=integración, (T)=test de integración.
+Lista plana de tareas atómicas. Detalle en `plan-componentes-nativos.md`.
+(C)=componente+test, (D)=datos/mock, (I)=integración, (T)=test de integración.
 
-| ID | Descripción | UC | Estado |
-|----|-------------|----|--------|
-| F1-T1 | Componente ProductGallery + test | UC-CAT-GAL | Hecha |
-| F1-T2 | Componente FileUpload + test | UC-ADM-IMG/AVATAR | Hecha |
-| F1-T3 | Componente GanttChart + test | UC-LOG-GANTT | Hecha |
-| F1-T4 | Componente PdfViewer + test | UC-ORD-PDF | Hecha |
-| F1-T5 | Integrar ProductGallery en ProductPage | UC-CAT-GAL | Hecha |
-| F2-T1 | FileUpload en AdminProductDetailPage | UC-ADM-IMG | Pendiente |
-| F2-T2 | FileUpload en ProfilePage (avatar) | UC-ACC-AVATAR | Pendiente |
-| F2-T3 | Test AdminProductDetailPage upload (crear, no existía) | UC-ADM-IMG | Pendiente |
-| F2-T4 | Test ProfilePage avatar (crear, no existía) | UC-ACC-AVATAR | Pendiente |
-| F3-T1 | Asset public/mock/factura-demo.pdf | UC-ORD-PDF | Hecha |
-| F3-T2 | webpack copia public/mock a dist/mock | UC-ORD-PDF | Hecha |
-| F3-T3 | order mock invoice_url (+ tipo Order) | UC-ORD-PDF | Hecha |
-| F3-T4 | PdfViewer en OrderDetailPage | UC-ORD-PDF | Hecha |
-| F3-T5 | Test OrderDetailPage visor factura | UC-ORD-PDF | Hecha |
-| F4-T1 | order mock fulfillment_stages (+ tipo) | UC-LOG-GANTT | Hecha |
-| F4-T2 | GanttChart en AdminOrderDetailPage | UC-LOG-GANTT | Hecha |
-| F4-T3 | Test AdminOrderDetailPage gantt | UC-LOG-GANTT | Hecha |
-| F5-T1 | (C) SortableList + test | UC-ADM-SORT | Hecha |
-| F5-T2 | (I) SortableList en AdminProductDetailPage | UC-ADM-SORT | Pendiente |
-| F5-T3 | (T) reorderProductImages | UC-ADM-SORT | Pendiente |
-| F5-T4 | (C) RichTextEditor + test | UC-ADM-RTE | Hecha |
-| F5-T5 | (I) RTE en AdminProductForm | UC-ADM-RTE | Pendiente |
-| F5-T6 | (I) RTE en AdminStaticPageEditorPage | UC-ADM-RTE | Pendiente |
-| F5-T7 | (T) tests RTE en ambas páginas | UC-ADM-RTE | Pendiente |
-| F5-T8 | (C) utils/exportSheet (CSV) + test | UC-ADM-XLSX | Hecha |
-| F5-T9 | (I) Export en AdminOrdersPage | UC-ADM-XLSX | Pendiente |
-| F5-T10 | (I) Export en AdminReportPage | UC-ADM-XLSX | Pendiente |
-| F5-T11 | (T) tests export | UC-ADM-XLSX | Pendiente |
-| F5-T12 | (C) KanbanBoard + test | UC-ADM-KANBAN | Hecha |
-| F5-T13 | (I) Kanban en AdminOrdersDashboardPage | UC-ADM-KANBAN | Pendiente |
-| F5-T14 | (T) mover tarjeta cambia estado | UC-ADM-KANBAN | Pendiente |
-| F5-T15 | (C) TreeView + test | UC-CAT-TREE | Hecha |
-| F5-T16 | (D) jerarquía categorías en mock | UC-CAT-TREE | Pendiente |
-| F5-T17 | (I) TreeView en CatalogFilters | UC-CAT-TREE | Pendiente |
-| F5-T18 | (T) seleccionar nodo actualiza ?category | UC-CAT-TREE | Pendiente |
-| F6-T1..T19 | Tier B: 6 UCs (componente+integración+test) | varios | Pendiente |
-| F7-T1..T21 | Tier C: 7 UCs (componente+integración+test) | varios | Pendiente |
-| F8-T1..T21 | Checks E2E (07–27), uno por integración | todos | Pendiente |
-| F9-T1..T6 | Verificación final + docs + commits/push + decisiones | — | Pendiente |
+## Componentes (todos con TDD red→green)
 
-## Resumen de avance
+| Tier | Componentes | Estado |
+|------|-------------|--------|
+| F1 | ProductGallery, FileUpload, GanttChart, PdfViewer | Hecha |
+| Tier A | SortableList, RichTextEditor, exportSheet, KanbanBoard, TreeView | Hecha |
+| Tier B | ViewToggle, ProgressBar, DeliveryScheduler, Accordion, DataGrid, TreeList | Hecha |
+| Tier C | Gauge, CoverageMap, ChatWidget, DataSheet, PivotTable, DualListBox | Hecha |
 
-- **Componentes nativos (C):** 9 de ~25 hechos — F1 (4) + Tier A (5), todos con TDD.
-- **Integraciones:** ProductGallery (F1-T5), PdfViewer (F3), GanttChart (F4) hechas.
-- **Suite:** 1447 passed / 0 fallos. check-scss 157 clean. build:demo OK.
-- **Siguiente:** F2 (FileUpload), luego integrar Tier A (F5-I/T), Tier B (F6), Tier C (F7).
+## Integraciones (22 UCs)
+
+| UC | Componente → Página | Estado |
+|----|----------------------|--------|
+| UC-CAT-GAL | ProductGallery → ProductPage | Hecha |
+| UC-ADM-IMG | FileUpload → AdminProductDetailPage | Hecha |
+| UC-ACC-AVATAR | FileUpload → ProfilePage | Hecha |
+| UC-LOG-GANTT | GanttChart → AdminOrderDetailPage | Hecha |
+| UC-ORD-PDF | PdfViewer → OrderDetailPage (+ asset PDF mock) | Hecha |
+| UC-ADM-SORT | SortableList → AdminProductDetailPage | Hecha |
+| UC-ADM-RTE | RichTextEditor → AdminProductForm + AdminStaticPageEditorPage | Hecha |
+| UC-ADM-XLSX | exportSheet → AdminOrdersPage + AdminReportSalesPage | Hecha |
+| UC-ADM-KANBAN | KanbanBoard → AdminOrdersDashboardPage | Hecha |
+| UC-CAT-TREE | TreeView → CatalogFilters | Hecha |
+| UC-CAT-LIST | ViewToggle → CatalogPage | Hecha |
+| UC-CHT-FREESHIP | ProgressBar → CartPage | Hecha |
+| UC-CHT-SCHED | DeliveryScheduler → CheckoutPage | Hecha |
+| UC-CAT-FAQ | Accordion → ProductPage | Hecha |
+| UC-ADM-GRID | DataGrid → AdminUsersPage | Hecha |
+| UC-ADM-TREELIST | TreeList → AdminCategoriesPage | Hecha |
+| UC-ADM-GAUGE | Gauge → AdminDashboardPage | Hecha |
+| UC-LOG-MAP | CoverageMap → AdminLogisticsPage | Hecha |
+| UC-SUP-CHAT | ChatWidget → ContactPage | Hecha |
+| UC-ADM-PIVOT | PivotTable → AdminReportSalesPage | Hecha |
+| UC-ADM-SHEET | DataSheet → AdminPriceSyncPage | Hecha |
+| UC-ADM-LISTBOX | DualListBox → AdminProductForm | Hecha |
+| UC-ORD-PDFGEN | (generación PDF en cliente) | Diferida (requiere lib; decisión) |
+
+## F8 — E2E (browser real)
+
+| Tarea | Estado |
+|-------|--------|
+| Checks 01-06 (storefront, bugs previos) | Hecha (5 pass, 1 warn, 0 fail) |
+| Checks 07-10 (gallery, list-toggle, freeship, faq) | En curso |
+| Checks admin (kanban, gauge, pivot, sheet, treelist, grid, rte, sort, map, chat, duallist, scheduler, export) | Diferidos — ver decisiones (cobertura unitaria completa; E2E admin frágil) |
+
+## F9 — Cierre
+
+| Tarea | Estado |
+|-------|--------|
+| Docs (ucs/tareas/progreso/index) | En curso |
+| decisiones-componentes-nativos.md | Pendiente |
+| Saldar deuda menor documentada | Pendiente |
+| Verificación final + push | En curso (1626 passed, scss 169 clean, build OK) |

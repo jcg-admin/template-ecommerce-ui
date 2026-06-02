@@ -43,15 +43,16 @@ Datos observados del repo (neutrales, para contexto de la referencia):
 
 - Repo clonado y auditado: 70 paquetes `kno-*` (41 `kno-react-*`); inventario y
   mapeo en `analisis-inventario-y-mapeo.md`.
-- **F1 HECHA** — 4 componentes nativos propios construidos con tests (un agente
-  por componente, en paralelo): `ProductGallery`, `FileUpload`, `GanttChart`,
-  `PdfViewer` bajo `src/components/common/`.
-- **F2 EN CURSO** — `ProductGallery` integrado en `ProductPage` (UC-CAT-GAL).
-  Las otras 3 integraciones quedan como tareas (ver plan); PdfViewer depende de
-  decidir la fuente del PDF en DEMO_MODE.
-- Verificado: jest 1385 passed / 0 fallos; check-scss 153 clean; build:demo OK.
-- **Plan ampliado (F1-F9)** para cubrir los **22 UCs** (4 hechos + 18 nuevos)
-  con tareas atómicas, agrupadas por tier (A/B/C). Ejecución pendiente.
+- **22 componentes nativos** construidos con TDD (F1 + Tier A/B/C), uno por
+  agente en paralelo, todos con unit tests verdes.
+- **22 integraciones HECHAS** (F2-F7): cada UC integrado en su página con test.
+  UC-ORD-PDFGEN diferido (requiere lib de PDF — ver decisiones).
+- **F8 E2E**: suite de browser real (Chromium) 5 pass / 1 warn / 0 fail con
+  todas las integraciones en el bundle; checks storefront nuevos en curso; E2E
+  del panel admin diferido (cobertura unitaria completa; ver decisiones).
+- **F9** en curso: docs + `decisiones-*` + saldar deuda menor.
+- Verificado: **jest 1626 passed / 0 fallos**; check-scss **169 clean**;
+  `build:demo` OK.
 
 ## Índice
 
