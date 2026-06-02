@@ -1,0 +1,106 @@
+@use '@styles/abstracts' as *;
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+
+  &:focus-visible { outline: 2px solid $primary-color; outline-offset: 2px; }
+}
+
+// main — contenedor de la imagen principal grande
+.main {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-lg;
+  background: $bg-elevated;
+}
+
+.mainImage {
+  display: block;
+  width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+// control — botones prev/next sobre la imagen principal
+.control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background: rgba($bg-elevated, 0.9);
+  border: 1px solid $border-color;
+  border-radius: $border-radius-full;
+  width: 40px;
+  height: 40px;
+  font-size: 1.2rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: $z-carousel;
+  color: $text-primary;
+  transition: background $transition-base;
+
+  &:hover { background: $bg-elevated; }
+  &:focus-visible { outline: 2px solid $primary-color; }
+}
+
+.controlPrev { left: $spacing-3; }
+.controlNext { right: $spacing-3; }
+
+// thumbs — tira horizontal de miniaturas
+.thumbs {
+  display: flex;
+  gap: $spacing-2;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  overflow-x: auto;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar { display: none; }
+}
+
+.thumbItem {
+  flex: 0 0 auto;
+}
+
+.thumb {
+  display: block;
+  padding: 0;
+  border: 2px solid transparent;
+  border-radius: $border-radius-md;
+  background: $bg-elevated;
+  cursor: pointer;
+  overflow: hidden;
+  transition: border-color $transition-base;
+
+  &:hover { border-color: $border-color; }
+  &:focus-visible { outline: 2px solid $primary-color; outline-offset: 2px; }
+
+  &.thumbActive { border-color: $primary-color; }
+}
+
+.thumbImage {
+  display: block;
+  width: 64px;
+  height: 64px;
+  object-fit: cover;
+}
+
+// placeholder — estado vacío accesible
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 200px;
+  border: 1px dashed $border-color;
+  border-radius: $border-radius-lg;
+  background: $bg-elevated;
+  color: $text-primary;
+  font-size: $font-size-sm;
+}

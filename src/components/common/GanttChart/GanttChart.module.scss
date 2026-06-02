@@ -1,0 +1,116 @@
+@use '@styles/abstracts' as *;
+
+$gantt-label-width: 160px;
+
+.gantt {
+  width: 100%;
+  font-size: $font-size-sm;
+  color: var(--ec-text-primary);
+}
+
+.empty {
+  margin: 0;
+  padding: $spacing-4;
+  text-align: center;
+  color: var(--ec-text-muted);
+  font-size: $font-size-sm;
+}
+
+// Eje temporal superior
+.axis {
+  display: flex;
+  align-items: flex-end;
+  margin-bottom: $spacing-2;
+}
+
+.axisSpacer {
+  flex: 0 0 $gantt-label-width;
+}
+
+.axisTrack {
+  position: relative;
+  flex: 1;
+  height: 18px;
+}
+
+.axisTick {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-size: $font-size-xs;
+  color: var(--ec-text-muted);
+  white-space: nowrap;
+
+  &:first-child { transform: translateX(0); }
+  &:last-child { transform: translateX(-100%); }
+}
+
+.todayMarker {
+  position: absolute;
+  top: 0;
+  bottom: -2px;
+  width: 2px;
+  background: var(--ec-accent);
+  transform: translateX(-50%);
+}
+
+// Filas de tareas
+.rows {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  padding: $spacing-1 0;
+}
+
+.label {
+  flex: 0 0 $gantt-label-width;
+  padding-right: $spacing-3;
+  font-size: $font-size-sm;
+  color: var(--ec-text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.track {
+  position: relative;
+  flex: 1;
+  height: 22px;
+  background: var(--ec-bg-sunken);
+  border-radius: $border-radius-md;
+}
+
+.todayLine {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background: var(--ec-accent);
+  opacity: 0.5;
+  transform: translateX(-50%);
+}
+
+.bar {
+  position: absolute;
+  top: 3px;
+  bottom: 3px;
+  min-width: 2px;
+  border-radius: $border-radius-sm;
+  background: var(--ec-primary);
+  overflow: hidden;
+  transition: var(--ec-transition-base);
+}
+
+.progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  background: var(--ec-success);
+  border-radius: $border-radius-sm 0 0 $border-radius-sm;
+}

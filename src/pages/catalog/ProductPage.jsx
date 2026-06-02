@@ -11,6 +11,7 @@
 
 import Popover    from '@components/common/Popover/Popover';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
+import ProductGallery from '@components/common/ProductGallery';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsInWishlist } from '@redux/selectors';
@@ -36,7 +37,6 @@ export default function ProductPage() {
   const [variant, setVariant] = useState(null);
   const tabsNavRef = useRef(null);
   const [qty, setQty] = useState(1);
-  const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
     dispatch(fetchProduct(slug));
@@ -90,25 +90,15 @@ export default function ProductPage() {
           </nav>
 
           <div className={styles.layout}>
-            {/* Gallery */}
+            {/* Galería (UC-CAT-GAL — componente nativo ProductGallery) */}
             <div className={styles.gallery}>
-              <div className={styles.thumbs}>
-                {images.length > 0 ? images.map((img, i) => (
-                  <button
-                    key={img.url ?? img.id ?? i}
-                    type="button"
-                    className={`${styles.thumb} ${i === activeImg ? styles.thumbActive : ''}`}
-                    onClick={() => setActiveImg(i)}
-                  >
-                    <img src={img.url} alt="" />
-                  </button>
-                )) : <div className={styles.thumbPlaceholder} />}
-              </div>
-              <div className={styles.mainImg}>
-                {images[activeImg]
-                  ? <img src={images[activeImg].url} alt={product.name} />
-                  : <div className={styles.imgPlaceholder}>{product.name}</div>}
-              </div>
+              <ProductGallery
+                images={images.map((img, i) => ({
+                  id: img.id ?? i,
+                  url: img.url,
+                  alt: product.name,
+                }))}
+              />
             </div>
 
             {/* Info */}
