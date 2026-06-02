@@ -33,6 +33,7 @@ export default function CatalogPage() {
     searchQuery, isLoading, isSearching,
     error, searchError, pagination = {},
   } = useSelector((s) => s.catalog || {});
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
   const currentPage = pagination?.page ?? 1;
 
 
@@ -182,7 +183,13 @@ export default function CatalogPage() {
 
             {!loading && displayItems.length > 0 && (
               <div className={styles.grid}>
-                {displayItems.map((p) => <ProductCard key={p.id} product={p} />)}
+                {displayItems.map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    inWishlist={wishlistItems.some((i) => i.product_id === p.id)}
+                  />
+                ))}
               </div>
             )}
 

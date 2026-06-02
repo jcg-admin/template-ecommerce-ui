@@ -366,3 +366,36 @@ describe('CatalogPage — scroll al inicio (BUG-SCROLL-02)', () => {
     expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 0, behavior: 'instant' });
   });
 });
+
+// ─── BUG-CARD-02 — la grilla no reflejaba el estado de la wishlist ──────────
+//
+// BUG-CARD-01 hizo que ProductCard despache toggleWishlist con `inWishlist`,
+// pero CatalogPage (y SearchResultsPage) renderizaban <ProductCard product={p} />
+// SIN pasar la prop inWishlist (default false), asi que el ♡ de las cards nunca
+// reflejaba el estado aunque el servidor aceptara el cambio. Detectado en la
+// validacion E2E en browser (tests/e2e/checks/02-wishlist.mjs). El unit test de
+// ProductCard no lo cazaba porque probaba el componente CON la prop ya pasada.
+describe('CatalogPage — wishlist en las cards (BUG-CARD-02)', () => {
+  it('pasa inWishlist a cada ProductCard segun el estado de la wishlist', async () => {
+    apiService.get.mockResolvedValue(pageOf(PRODUCTS));
+    const store = configureStore({
+      reducer: { catalog: catalogReducer, auth: authReducer, wishlist: wishlistReducer },
+      preloadedState: {
+        auth: { user: { id: 1 }, isAuthenticated: true },
+        // El producto 1 esta en la wishlist; el 2 no.
+        wishlist: { items: [{ id: 99, product_id: 1 }] },
+      },
+    });
+    render(wrap(<CatalogPage />, store));
+    await screen.findByText('Collar Oshun');
+
+    // Con el fix: la card del producto 1 muestra "Quitar de deseos" y la del 2
+    // "Añadir a deseos". Sin el fix ambas serian "Añadir a deseos" y este
+    // findByRole expiraria.
+    expect(
+      await screen.findByRole('button', { name: /Quitar de deseos/i }),
+    ).toBeInTheDocument();
+    expect(screen.getAllByRole('button', { name: /Quitar de deseos/i })).toHaveLength(1);
+    expect(screen.getByRole('button', { name: /Añadir a deseos/i })).toBeInTheDocument();
+  });
+});

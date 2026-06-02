@@ -192,7 +192,7 @@ export const toggleWishlist = ({ productId, inWishlist }) =>
       const itemId = item?.id ?? productId;
       return dispatch(removeFromWishlist(itemId));
     }
-    return dispatch(addToWishlist({ product_id: productId }));
+    return dispatch(addToWishlist({ productId }));
   };
 
 // Aliases para compatibilidad con sistema de diseno Yoruba (H-F5-01).
