@@ -27,9 +27,10 @@ export default function SecurityPage() {
   const navigate = useNavigate();
   const [pwd, setPwd] = useState({ current: '', next: '', confirm: '' });
   const [err, setErr] = useState('');
-  // UC-AUTH-16 — dar de baja la cuenta
+  // UC-AUTH-16 — dar de baja la cuenta (requiere reautenticacion con password)
   const [confirmDelete, setConfirmDelete] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const [deletePwd, setDeletePwd] = useState('');
 
   const handleChangePwd = async (e) => {
     e.preventDefault();
@@ -50,7 +51,7 @@ export default function SecurityPage() {
   const handleDeleteAccount = async () => {
     setDeleting(true);
     try {
-      await dispatch(deleteAccount()).unwrap();
+      await dispatch(deleteAccount({ password: deletePwd })).unwrap();
       setConfirmDelete(false);
       navigate('/auth/login');
     } catch {
@@ -112,10 +113,22 @@ export default function SecurityPage() {
             {/* Delete account */}
             <Card title="Eliminar cuenta" tone="vino">
               <p className={styles.cardLead}>
-                Si eliminas tu cuenta, no podrás recuperarla. Tu historial de pedidos se
-                conserva por obligación fiscal pero quedará disociado de tu persona.
+                Si das de baja tu cuenta, no podrás iniciar sesión hasta reactivarla.
+                Tu historial de pedidos se conserva por obligación fiscal. Por
+                seguridad, confirma tu contraseña actual.
               </p>
-              <button type="button" className={styles.deleteBtn} onClick={() => setConfirmDelete(true)}>
+              <Field
+                label="Confirma tu contraseña"
+                type="password"
+                value={deletePwd}
+                onChange={(e) => setDeletePwd(e.target.value)}
+              />
+              <button
+                type="button"
+                className={styles.deleteBtn}
+                disabled={!deletePwd}
+                onClick={() => setConfirmDelete(true)}
+              >
                 Solicitar eliminación →
               </button>
             </Card>

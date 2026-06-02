@@ -29,19 +29,22 @@ describe('authSlice — deleteAccount (UC-AUTH-16)', () => {
     jest.clearAllMocks();
   });
 
-  it('llama a apiService.delete con el endpoint de la cuenta', async () => {
-    apiService.delete.mockResolvedValueOnce({ status: 204, data: null });
+  it('llama a POST /auth/me/deactivate/ con la contrasena (UC-AUTH-16)', async () => {
+    apiService.post.mockResolvedValueOnce({ data: { detail: 'ok' } });
     const store = loggedInStore();
-    await store.dispatch(deleteAccount());
-    expect(apiService.delete).toHaveBeenCalledWith('/api/v1/auth/account/');
+    await store.dispatch(deleteAccount({ password: 'Test1234!' }));
+    expect(apiService.post).toHaveBeenCalledWith(
+      '/api/v1/auth/me/deactivate/',
+      { password: 'Test1234!' },
+    );
   });
 
   it('fulfilled limpia la sesion (como logout)', async () => {
-    apiService.delete.mockResolvedValueOnce({ status: 204, data: null });
+    apiService.post.mockResolvedValueOnce({ data: { detail: 'ok' } });
     const store = loggedInStore();
     expect(store.getState().slice.isAuthenticated).toBe(true);
 
-    await store.dispatch(deleteAccount());
+    await store.dispatch(deleteAccount({ password: 'Test1234!' }));
 
     const state = store.getState().slice;
     expect(state.isAuthenticated).toBe(false);
@@ -57,10 +60,10 @@ describe('authSlice — deleteAccount (UC-AUTH-16)', () => {
   });
 
   it('rejected preserva el error y no limpia el usuario', async () => {
-    apiService.delete.mockRejectedValueOnce(new Error('No se pudo eliminar'));
+    apiService.post.mockRejectedValueOnce(new Error('No se pudo eliminar'));
     const store = loggedInStore();
 
-    await store.dispatch(deleteAccount());
+    await store.dispatch(deleteAccount({ password: 'wrong' }));
 
     const state = store.getState().slice;
     expect(state.isLoading).toBe(false);

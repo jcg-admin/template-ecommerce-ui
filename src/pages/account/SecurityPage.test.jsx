@@ -1,7 +1,7 @@
 /**
  * Tests — SecurityPage (UC-AUTH-16)
  * El boton "Eliminar cuenta" abre un ConfirmModal y al confirmar
- * despacha deleteAccount (DELETE /api/v1/auth/account/) y navega al login.
+ * despacha deleteAccount (POST /api/v1/auth/me/deactivate/ con password) y navega al login.
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -49,22 +49,31 @@ const renderPage = () =>
 afterEach(() => jest.clearAllMocks());
 
 describe('SecurityPage — eliminar cuenta (UC-AUTH-16)', () => {
-  it('el boton de eliminacion abre el ConfirmModal', () => {
+  it('el boton de eliminacion abre el ConfirmModal (tras escribir password)', () => {
     renderPage();
     expect(screen.queryByTestId('confirm-modal')).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/Confirma tu contraseña/i), {
+      target: { value: 'Test1234!' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /solicitar eliminación/i }));
     expect(screen.getByTestId('confirm-modal')).toBeInTheDocument();
   });
 
-  it('al confirmar despacha deleteAccount y navega al login', async () => {
-    apiService.delete.mockResolvedValueOnce({ status: 204, data: null });
+  it('al confirmar con password despacha deactivate y navega al login', async () => {
+    apiService.post.mockResolvedValueOnce({ data: { detail: 'Cuenta dada de baja exitosamente.' } });
     renderPage();
 
+    fireEvent.change(screen.getByLabelText(/Confirma tu contraseña/i), {
+      target: { value: 'Test1234!' },
+    });
     fireEvent.click(screen.getByRole('button', { name: /solicitar eliminación/i }));
     fireEvent.click(screen.getByRole('button', { name: /^confirmar$/i }));
 
     await waitFor(() =>
-      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/auth/account/'),
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/auth/me/deactivate/',
+        { password: 'Test1234!' },
+      ),
     );
     await waitFor(() =>
       expect(mockNavigate).toHaveBeenCalledWith('/auth/login'),

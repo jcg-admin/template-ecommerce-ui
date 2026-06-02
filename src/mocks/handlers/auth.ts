@@ -134,8 +134,16 @@ export const authHandlers = [
     faker.seed();
     return HttpResponse.json({ ...base, ...patch });
   }),
-  // UC-AUTH-16 — dar de baja la cuenta: limpia la sesion activa.
-  http.delete('/api/v1/auth/account/', () => { _activeSession = null; return new HttpResponse(null, { status: 204 }); }),
+  // UC-AUTH-16 — baja logica de la cuenta. Reautenticacion con password
+  // (POST /auth/me/deactivate/). Password incorrecto -> 400 (AC-02).
+  http.post('/api/v1/auth/me/deactivate/', async ({ request }) => {
+    const body = (await request.json().catch(() => ({}))) as { password?: string };
+    if (body?.password !== 'Test1234!') {
+      return HttpResponse.json({ detail: 'Contrasena incorrecta.' }, { status: 400 });
+    }
+    _activeSession = null;
+    return HttpResponse.json({ detail: 'Cuenta dada de baja exitosamente.' });
+  }),
   http.post('/api/v1/auth/change-password/', () => HttpResponse.json({ detail: 'Contrasena actualizada.' })),
   http.post('/api/v1/auth/verify-email/',    () => HttpResponse.json({ detail: 'Email verificado.' })),
   http.post('/api/v1/auth/password-reset/',  () => HttpResponse.json({ detail: 'Si el email existe, se enviara un enlace.' })),

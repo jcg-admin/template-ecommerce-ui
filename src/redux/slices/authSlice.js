@@ -152,12 +152,14 @@ export const resendVerificationEmail = createAsyncThunk(
 
 // UC-AUTH-16 — Dar de baja la cuenta.
 /** Elimina (da de baja) la cuenta del comprador autenticado. */
+// UC-AUTH-16: baja logica de la propia cuenta. Requiere reautenticacion
+// con la contrasena actual (POST /auth/me/deactivate/ con {password}).
 export const deleteAccount = createAsyncThunk(
   'auth/deleteAccount',
-  async (_, { rejectWithValue }) => {
+  async ({ password } = {}, { rejectWithValue }) => {
     try {
-      await apiService.delete('/api/v1/auth/account/');
-      return null;
+      const res = await apiService.post('/api/v1/auth/me/deactivate/', { password });
+      return res?.data ?? null;
     } catch (error) {
       return rejectWithValue(error.message);
     }
