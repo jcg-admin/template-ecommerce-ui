@@ -432,6 +432,26 @@ export const adminHandlers = [
     });
   }),
 
+  // UC-PRO-04 — Reporte de uso del voucher (métricas + últimos canjes)
+  http.get('/api/v1/admin/vouchers/:id/usage/', ({ params }) => {
+    const id          = Number(params.id);
+    const totalUses   = faker.number.int({ min: 5, max: 60 });
+    const redemptions = Array.from({ length: Math.min(totalUses, 10) }, (_, i) => ({
+      id:              i + 1,
+      order_number:    `OXY-${1000 + id * 10 + i}`,
+      user_email:      faker.internet.email().toLowerCase(),
+      discount_amount: faker.number.int({ min: 50, max: 800 }),
+      redeemed_at:     faker.date.recent({ days: 30 }).toISOString(),
+    }));
+    const totalDiscount = redemptions.reduce((s, r) => s + r.discount_amount, 0);
+    return HttpResponse.json({
+      voucher_id:     id,
+      total_uses:     totalUses,
+      total_discount: totalDiscount,
+      redemptions,
+    });
+  }),
+
   http.post('/api/v1/admin/vouchers/', async ({ request }) => {
     const body = await request.json();
     const id   = Math.floor(Math.random() * 9000) + 1000;

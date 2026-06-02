@@ -5,6 +5,7 @@
  *   UC-PRO-01 — Crear voucher
  *   UC-PRO-02 — Listar / editar vouchers
  *   UC-PRO-03 — Desactivar voucher
+ *   UC-PRO-04 — Reporte de uso de vouchers (admin)
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
@@ -55,6 +56,19 @@ export const deactivateVoucher = createAsyncThunk(
   }
 );
 
+/** UC-PRO-04: Reporte de uso de un voucher (métricas + canjes) */
+export const fetchVoucherUsage = createAsyncThunk(
+  'vouchers/fetchUsage',
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get(`${ADMIN_VOUCHERS_URL}${id}/usage/`);
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(serializeApiError(err));
+    }
+  }
+);
+
 // =============================================================================
 // Slice
 // =============================================================================
@@ -68,6 +82,10 @@ const vouchersSlice = createSlice({
     error:        null,
     actionError:  null,
     lastAction:   null,    // 'created' | 'deactivated'
+    // UC-PRO-04: reporte de uso del voucher actualmente abierto
+    usage:        null,    // { total_uses, total_discount, redemptions[] }
+    isLoadingUsage: false,
+    usageError:   null,
   },
 
   reducers: {
@@ -127,6 +145,21 @@ const vouchersSlice = createSlice({
       .addCase(deactivateVoucher.rejected, (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload;
+      });
+
+    // fetchVoucherUsage (UC-PRO-04)
+    builder
+      .addCase(fetchVoucherUsage.pending, (state) => {
+        state.isLoadingUsage = true;
+        state.usageError     = null;
+      })
+      .addCase(fetchVoucherUsage.fulfilled, (state, action) => {
+        state.isLoadingUsage = false;
+        state.usage          = action.payload ?? null;
+      })
+      .addCase(fetchVoucherUsage.rejected, (state, action) => {
+        state.isLoadingUsage = false;
+        state.usageError     = action.payload;
       });
   },
 });
