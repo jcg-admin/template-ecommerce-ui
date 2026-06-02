@@ -8,8 +8,23 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAdminMetrics } from '@redux/slices/adminSlice';
 import { MetaTag, Price, Button } from '@components/common/primitives';
+import Gauge from '@components/common/Gauge';
 import styles from './AdminDashboardPage.module.scss';
 import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
+
+/**
+ * Metas operativas para los indicadores radiales (Gauges).
+ *
+ * El endpoint /api/v1/admin/metrics/ no expone metas ("target"/"goal"),
+ * así que se definen aquí como constantes razonables y documentadas:
+ *  - DAILY_SALES_TARGET: meta de facturación diaria en MXN.
+ *  - DAILY_ORDERS_TARGET: meta de pedidos cerrados por día.
+ *  - STOCK_ALERT_CEILING: nº de alertas a partir del cual la salud de
+ *    inventario se considera 0%. Con 0 alertas la salud es 100%.
+ */
+const DAILY_SALES_TARGET = 20000; // MXN
+const DAILY_ORDERS_TARGET = 60;
+const STOCK_ALERT_CEILING = 10;
 
 export default function AdminDashboardPage() {
   const dispatch = useDispatch();
@@ -58,6 +73,60 @@ export default function AdminDashboardPage() {
           delta={m.users_delta_pct}
           tone="muted"
         />
+      </section>
+
+      {/* Indicadores radiales (KPIs derivados de los datos reales) */}
+      <section className={styles.gauges} aria-label="Indicadores">
+        <header className={styles.gaugesHeader}>
+          <h2 className={styles.cardTitle}>Indicadores</h2>
+        </header>
+        <div className={styles.gaugesRow}>
+          {(() => {
+            const sales = m.sales_today || 0;
+            const orders = m.orders_today || 0;
+            const alertCount = (m.alerts || []).length;
+
+            // % de meta de ventas y pedidos (el Gauge ya hace clamp 0..max).
+            const salesPct = Math.round((sales / DAILY_SALES_TARGET) * 100);
+            const ordersPct = Math.round((orders / DAILY_ORDERS_TARGET) * 100);
+
+            // Salud de inventario: 100% sin alertas, decae con cada alerta
+            // hasta 0% cuando se alcanza STOCK_ALERT_CEILING.
+            const stockHealth = Math.max(
+              0,
+              Math.round((1 - alertCount / STOCK_ALERT_CEILING) * 100),
+            );
+
+            return (
+              <>
+                <Gauge
+                  value={salesPct}
+                  min={0}
+                  max={100}
+                  label="Meta de ventas"
+                  unit="%"
+                  ariaLabel={`Meta de ventas del día: ${salesPct}% de $${DAILY_SALES_TARGET.toLocaleString('es-MX')} MXN`}
+                />
+                <Gauge
+                  value={ordersPct}
+                  min={0}
+                  max={100}
+                  label="Meta de pedidos"
+                  unit="%"
+                  ariaLabel={`Meta de pedidos del día: ${ordersPct}% de ${DAILY_ORDERS_TARGET}`}
+                />
+                <Gauge
+                  value={stockHealth}
+                  min={0}
+                  max={100}
+                  label="Salud de inventario"
+                  unit="%"
+                  ariaLabel={`Salud de inventario: ${stockHealth}% (${alertCount} alertas activas)`}
+                />
+              </>
+            );
+          })()}
+        </div>
       </section>
 
       <div className={styles.grid}>

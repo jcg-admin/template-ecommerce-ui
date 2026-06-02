@@ -148,6 +148,20 @@ describe('AdminReportSalesPage (UC-REP-01)', () => {
     expect(arg.rows).toEqual(RESPONSE.series);
   });
 
+  it('renderiza el reporte pivote con celdas agregadas (UC-ADM-PIVOT)', async () => {
+    apiService.get.mockResolvedValue({ data: RESPONSE });
+    render(wrap(<AdminReportSalesPage />));
+    await screen.findByText(/12500\.00/);
+
+    const pivot = await screen.findByRole('table', { name: /Ingresos por año y mes/i });
+    expect(pivot).toBeInTheDocument();
+    // Dimensiones derivadas del bucket: año (fila) y mes (columna).
+    expect(pivot).toHaveTextContent('2026');
+    expect(pivot).toHaveTextContent('May');
+    // Celda agregada: 1000.00 + 1500.00 = 2500.
+    expect(pivot).toHaveTextContent('2500');
+  });
+
   it('muestra estado vacio cuando no hay serie', async () => {
     apiService.get.mockResolvedValue({
       data: { totals: { gross_revenue: '0.00', orders: 0 }, series: [], payment_breakdown: [] },

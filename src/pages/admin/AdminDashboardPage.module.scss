@@ -74,6 +74,25 @@
 .kpiDeltaUp { color: $lime-soft; }
 .kpiDeltaDown { color: $vino-soft; }
 
+// Indicadores radiales (Gauges)
+.gauges {
+  border: 1px solid $border-color;
+  background: $bg-elevated;
+  margin-bottom: $spacing-8;
+}
+.gaugesHeader {
+  padding: $spacing-4 $spacing-5;
+  border-bottom: 1px solid $border-color;
+}
+.gaugesRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-6;
+  padding: $spacing-6 $spacing-5;
+  justify-items: center;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+
 // Grid of cards
 .grid {
   display: grid;

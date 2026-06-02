@@ -95,4 +95,54 @@ describe('AdminDashboardPage — landing admin', () => {
     const links = await screen.findAllByRole('link', { name: /ver todos/i });
     expect(links.length).toBeGreaterThanOrEqual(1);
   });
+
+  // UC-ADM-GAUGE (F7): sección "Indicadores" con KPIs radiales.
+  describe('Indicadores radiales (Gauge)', () => {
+    it('renderiza la sección "Indicadores" con tres medidores', async () => {
+      apiService.get.mockResolvedValueOnce({ data: MOCK_METRICS });
+      renderPage();
+      // El título de sección aparece tras cargar las métricas.
+      expect(
+        await screen.findByRole('heading', { name: /^indicadores$/i }),
+      ).toBeInTheDocument();
+      // role="meter" expone cada Gauge.
+      const meters = await screen.findAllByRole('meter');
+      expect(meters).toHaveLength(3);
+    });
+
+    it('expone aria-valuenow derivado de los datos reales', async () => {
+      apiService.get.mockResolvedValueOnce({ data: MOCK_METRICS });
+      renderPage();
+      const meters = await screen.findAllByRole('meter');
+
+      // Meta de ventas: 12345 / 20000 * 100 = 61.7 -> 62
+      const sales = meters.find((el) =>
+        /meta de ventas/i.test(el.getAttribute('aria-label') || ''));
+      expect(sales).toHaveAttribute('aria-valuenow', '62');
+      expect(sales).toHaveAttribute('aria-valuemin', '0');
+      expect(sales).toHaveAttribute('aria-valuemax', '100');
+
+      // Meta de pedidos: 42 / 60 * 100 = 70
+      const orders = meters.find((el) =>
+        /meta de pedidos/i.test(el.getAttribute('aria-label') || ''));
+      expect(orders).toHaveAttribute('aria-valuenow', '70');
+
+      // Salud de inventario: 0 alertas -> 100%
+      const stock = meters.find((el) =>
+        /salud de inventario/i.test(el.getAttribute('aria-label') || ''));
+      expect(stock).toHaveAttribute('aria-valuenow', '100');
+    });
+
+    it('refleja alertas activas bajando la salud de inventario', async () => {
+      // 4 alertas / techo 10 -> (1 - 0.4) * 100 = 60%
+      apiService.get.mockResolvedValueOnce({
+        data: { ...MOCK_METRICS, alerts: [{}, {}, {}, {}] },
+      });
+      renderPage();
+      const meters = await screen.findAllByRole('meter');
+      const stock = meters.find((el) =>
+        /salud de inventario/i.test(el.getAttribute('aria-label') || ''));
+      expect(stock).toHaveAttribute('aria-valuenow', '60');
+    });
+  });
 });

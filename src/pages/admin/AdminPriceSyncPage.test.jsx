@@ -81,8 +81,9 @@ describe('AdminPriceSyncPage (UC-CAT-12)', () => {
     fireEvent.change(input);
 
     expect(await screen.findByText(/productos cambiarán de precio/i)).toBeInTheDocument();
-    expect(screen.getByText('SKU-1')).toBeInTheDocument();
-    expect(screen.getByText('SKU-2')).toBeInTheDocument();
+    // SKU aparece en la tabla de preview y en la hoja de edición rápida (DataSheet).
+    expect(screen.getAllByText('SKU-1').length).toBeGreaterThan(0);
+    expect(screen.getAllByText('SKU-2').length).toBeGreaterThan(0);
   });
 
   it('en el estado de preview muestra botón de confirmar y cancelar', async () => {
@@ -117,5 +118,43 @@ describe('AdminPriceSyncPage (UC-CAT-12)', () => {
     await waitFor(() => {
       expect(screen.getByText(/precios actualizados/i)).toBeInTheDocument();
     });
+  });
+
+  // UC-ADM-SHEET (F7) — DataSheet de edición rápida
+  it('renderiza la hoja editable «Edición rápida» con las filas de preview', async () => {
+    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
+    renderPage();
+
+    const input = document.querySelector('input[type="file"]');
+    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
+    Object.defineProperty(input, 'files', { value: [file] });
+    fireEvent.change(input);
+
+    await screen.findByText(/edición rápida/i);
+    const sheet = screen.getByRole('table', { name: /edición rápida de precios/i });
+    expect(sheet).toBeInTheDocument();
+
+    // Una celda editable de precio por fila de preview (new_price, type number).
+    const priceInputs = screen.getAllByLabelText(/precio nuevo fila/i);
+    expect(priceInputs).toHaveLength(PREVIEW.diffs.length);
+    expect(priceInputs[0]).toHaveValue(110);
+  });
+
+  it('editar una celda de precio actualiza el estado local de las filas', async () => {
+    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
+    renderPage();
+
+    const input = document.querySelector('input[type="file"]');
+    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
+    Object.defineProperty(input, 'files', { value: [file] });
+    fireEvent.change(input);
+
+    await screen.findByText(/edición rápida/i);
+    const priceInputs = screen.getAllByLabelText(/precio nuevo fila/i);
+
+    fireEvent.change(priceInputs[0], { target: { value: '150' } });
+
+    // El input es controlado: el nuevo valor refleja el estado actualizado.
+    expect(priceInputs[0]).toHaveValue(150);
   });
 });

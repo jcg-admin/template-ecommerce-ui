@@ -15,6 +15,7 @@ import {
   uploadPriceCSV, confirmPriceSync, downloadPriceTemplate,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
+import DataSheet from '@components/common/DataSheet';
 import styles from './AdminBulkPage.module.scss';
 
 export default function AdminPriceSyncPage() {
@@ -32,6 +33,19 @@ export default function AdminPriceSyncPage() {
     } catch (err) {
       alert(err?.detail || 'No se pudo procesar el CSV');
     } finally { setLoading(false); }
+  };
+
+  // UC-ADM-SHEET (F7): edición rápida de precios sobre las filas de preview.
+  // Cada celda editada actualiza new_price en el estado local de `preview.diffs`,
+  // de modo que la confirmación posterior usa los precios ajustados a mano.
+  const handleCellChange = (rowIndex, key, value) => {
+    setPreview((prev) => {
+      if (!prev) return prev;
+      const diffs = prev.diffs.map((d, i) =>
+        i === rowIndex ? { ...d, [key]: value === '' ? '' : Number(value) } : d,
+      );
+      return { ...prev, diffs };
+    });
   };
 
   const handleConfirm = async () => {
@@ -161,6 +175,27 @@ export default function AdminPriceSyncPage() {
               <div className={styles.previewMore}>+ {preview.diffs.length - 100} cambios más al confirmar</div>
             )}
           </div>
+
+          <div className={styles.previewHeader} style={{ marginTop: 24 }}>
+            <h3 className={styles.previewTitle}>Edición rápida</h3>
+          </div>
+          <p style={{ color: 'var(--c-ink-dim)', margin: '0 0 8px' }}>
+            Ajusta a mano el precio nuevo antes de confirmar. Los cambios se
+            aplican a la sincronización.
+          </p>
+          {/* UC-ADM-SHEET (F7): hoja editable sobre las filas de preview. */}
+          <DataSheet
+            ariaLabel="Edición rápida de precios"
+            getRowKey={(r, i) => r.sku ?? i}
+            columns={[
+              { key: 'sku', label: 'SKU' },
+              { key: 'name', label: 'Producto' },
+              { key: 'old_price', label: 'Precio actual' },
+              { key: 'new_price', label: 'Precio nuevo', editable: true, type: 'number' },
+            ]}
+            rows={preview.diffs.slice(0, 100)}
+            onCellChange={handleCellChange}
+          />
 
           <div className={styles.actions}>
             <Button variant="ghost" onClick={reset}>Cancelar</Button>
