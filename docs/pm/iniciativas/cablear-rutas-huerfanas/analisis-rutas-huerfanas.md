@@ -60,7 +60,7 @@ en ninguno son huérfanas de navegación.
 | admin/inventory/dashboard | enlace "Dashboard" en cabecera de AdminInventoryPage | HUÉRFANA — cableada F3 |
 | admin/config/gateways | tarjeta "Pasarelas de pago" del hub AdminConfigPage | HUÉRFANA — cableada F3 |
 | admin/config/shipping | tarjeta "Metodos y costos de envio" del hub | HUÉRFANA — cableada F3 |
-| admin/config/site | tarjeta "Ajustes del sitio" del hub | HUÉRFANA — cableada F3 |
+| admin/config/site | tarjeta "Ajustes del sitio" del hub (F3) → **luego DR-02 la repuntó a `/admin/system-settings` y eliminó `config/site`**) | HUÉRFANA — cableada F3, reconciliada en DR-02 |
 | admin/variants/:variantId/price | `AdminVariantsPage.jsx:168` ya tiene `<Link to={`/admin/variants/${variant.id}/price`}>` | **NO huérfana** — descartada |
 
 > **Repunte del hub de config (decisión RUP).** Las tarjetas CFG-01/02/03
@@ -75,9 +75,12 @@ en ninguno son huérfanas de navegación.
 > `/admin/products/nuevo` pero la ruta es `admin/products/new` (404).
 > Corregido en el mismo cambio (drift, principio-rector Cláusula 2).
 
-> **Drift pendiente (fuera de alcance):** existen DOS implementaciones de
-> SiteSettings — `/admin/system-settings` (UC-ADM-04) y `/admin/config/site`
-> (AdminSiteSettingsPage). Unificación → iniciativa separada.
+> **Drift RESUELTO en DR-02 (`unificar-sitesettings`):** existían DOS
+> implementaciones de SiteSettings — `/admin/system-settings` (UC-ADM-04) y
+> `/admin/config/site` (AdminSiteSettingsPage). DR-02 consolidó en
+> `AdminSystemSettingsPage`, **eliminó `/admin/config/site`** y repuntó la
+> tarjeta del hub a `/admin/system-settings`. El endpoint canónico de settings
+> es `/api/v1/config/settings/` (corregido en `corregir-deep-audit-refs`).
 
 ## NO son huérfanas
 
