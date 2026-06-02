@@ -168,3 +168,50 @@ describe('OrderDetailPage (UC-ORD-06 cambiar envio)', () => {
     });
   });
 });
+
+// ─── BUG-ORDER-01 — regresion redirect prematuro por race condition ─────────
+//
+// Mismo patron que BUG-PRODUCT-01: OrderDetailPage montaba con current=null
+// e isLoading=false (residual) y el primer render redirigia antes de que el
+// useEffect despachara fetchOrderDetail(id):
+//   buggy:  if (isLoading) ...                  -> false -> Navigate /account/orders
+//   fixed:  if (isLoading || (!order && id))    -> true  -> "Cargando pedido…"
+//
+// Reproducimos el ESTADO (current=null + isLoading=false) con un GET que
+// nunca resuelve. Una ruta sentinel en /account/orders distingue ambos:
+// con el bug se redirige alli; con el fix se queda en "Cargando pedido…".
+describe('OrderDetailPage — race redirect (BUG-ORDER-01)', () => {
+  const ORDERS_SENTINEL = 'orders-list-sentinel';
+
+  const wrapNoOrder = (ui) => {
+    const store = configureStore({
+      reducer: { orders: ordersReducer, auth: authReducer },
+      preloadedState: {
+        auth: { user: { first_name: 'Test' }, isAuthenticated: true },
+        orders: { current: null, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: null },
+      },
+    });
+    return (
+      <Provider store={store}>
+        <QueryClientProvider client={makeClient()}>
+          <MemoryRouter initialEntries={['/account/orders/PY-2026-000001']}>
+            <Routes>
+              <Route path="/account/orders/:id" element={ui} />
+              <Route path="/account/orders" element={<div data-testid={ORDERS_SENTINEL}>LISTA</div>} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
+      </Provider>
+    );
+  };
+
+  it('muestra "Cargando pedido…" y NO redirige a la lista con pedido aun no cargado', async () => {
+    // GET que nunca resuelve: fetchOrderDetail queda pending, order sigue null.
+    apiService.get.mockReturnValue(new Promise(() => {}));
+    render(wrapNoOrder(<OrderDetailPage />));
+
+    // Con el fix: pantalla de carga. Sin el fix: habria redirigido a la lista.
+    expect(await screen.findByText(/Cargando pedido/i)).toBeInTheDocument();
+    expect(screen.queryByTestId(ORDERS_SENTINEL)).not.toBeInTheDocument();
+  });
+});

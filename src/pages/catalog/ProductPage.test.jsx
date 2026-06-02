@@ -452,3 +452,58 @@ describe('ProductPage — Agregar a la bolsa (BUG-CART-03 / BUG-CART-04)', () =>
     expect(screen.queryByTestId(CART_SENTINEL)).not.toBeInTheDocument();
   });
 });
+
+// ─── BUG-PRODUCT-01 — regresion /404 prematuro por race condition ───────────
+//
+// Al navegar del catalogo a una ficha, ProductPage montaba con
+// currentProduct=null e isLoading=false (estado residual de un fetch previo
+// ya completado). El primer render evaluaba el guard antes de que el
+// useEffect despachara fetchProduct(slug):
+//   buggy:    if (isLoading) ...        -> false -> if (!product) -> /404
+//   fixed:    if (isLoading || (!product && slug)) -> true -> "Cargando…"
+//
+// Reproducimos ese ESTADO de forma determinista (sin simular el timing):
+// preload currentProduct=null + isLoading=false y un GET que nunca resuelve,
+// de modo que product siga null. Una ruta /404 sentinel distingue ambos
+// comportamientos: con el bug ProductPage navega a /404 en el primer commit;
+// con el fix se queda en "Cargando…" y nunca redirige.
+describe('ProductPage — race /404 (BUG-PRODUCT-01)', () => {
+  const NOT_FOUND_SENTINEL = 'not-found-sentinel';
+
+  const makeStoreNoProduct = () => makeStore({
+    catalog: {
+      products: [], currentProduct: null, searchResults: [], searchQuery: '',
+      activeFilters: {}, isLoading: false, isSearching: false, error: null, searchError: null,
+      pagination: { count: 0, page: 1, pageSize: 20, totalPages: 1, next: null, previous: null },
+      filters: { category: null, priceMin: null, priceMax: null, inStock: false, ordering: '-created_at' },
+      categories: [], featured: [],
+    },
+    auth:    { user: null, isAuthenticated: false, isLoading: false },
+    wishlist: { items: [] },
+    cart:    { items: [], totals: {}, voucher: null, isLoading: false, itemCount: 0 },
+    productVariants: { variants: [], isLoading: false },
+  });
+
+  const wrapWith404 = (slug, store, client = makeClient()) => (
+    <Provider store={store}>
+      <QueryClientProvider client={client}>
+        <MemoryRouter initialEntries={[`/catalog/${slug}`]}>
+          <Routes>
+            <Route path="/catalog/:slug" element={<ProductPage />} />
+            <Route path="/404" element={<div data-testid={NOT_FOUND_SENTINEL}>404</div>} />
+          </Routes>
+        </MemoryRouter>
+      </QueryClientProvider>
+    </Provider>
+  );
+
+  it('muestra "Cargando…" y NO redirige a /404 con producto aun no cargado', async () => {
+    // GET que nunca resuelve: fetchProduct queda pending, product sigue null.
+    apiService.get.mockReturnValue(new Promise(() => {}));
+    render(wrapWith404('collar-oshun-dorado', makeStoreNoProduct()));
+
+    // Con el fix: pantalla de carga. Sin el fix: habria navegado a /404.
+    expect(await screen.findByText(/Cargando/i)).toBeInTheDocument();
+    expect(screen.queryByTestId(NOT_FOUND_SENTINEL)).not.toBeInTheDocument();
+  });
+});
