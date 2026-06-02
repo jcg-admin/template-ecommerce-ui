@@ -47,3 +47,39 @@ matriz pasan de PARCIAL a IMPLEMENTADO.
 
 4/4 gaps cerrados. La matriz de trazabilidad queda **131 IMPLEMENTADO /
 23 BACKEND-OPS / 0 PARCIAL / 0 AUSENTE-UI**.
+
+## Corrección de uso de referencias (2026-06-02T21:52:02)
+
+El ejecutor señaló que `/tmp/references/*` no se estaba usando del todo bien.
+Verificación: los submódulos `api/` y `ui/` de `/tmp/references/e-comerce` están
+**vacíos** (0 archivos); la fuente canónica disponible es `e-comerce-docs`
+(specs UC + `source/backend/rest-api-conventions.rst`). Además, `-progress`
+(kno-react) y `ui-core-5.25.0` son las referencias de componentes, ya adaptadas
+nativamente en `src/components/common/` (DataGrid, TreeList, …).
+
+Dos correcciones aplicadas:
+
+- **C1 — Componente:** `AdminVoucherReportPage` usaba una `<table>` cruda →
+  reescrita con el **`DataGrid`** adaptado (consistente con `AdminUsersPage` /
+  `AdminVoucherDetailPage`). Reuso de la referencia de componentes en vez de
+  HTML ad-hoc.
+- **C2 — Contrato:** el endpoint de settings se alineó al **canónico
+  `/api/v1/config/settings/`** (singleton, `rest-api-conventions.rst:92`) en
+  `useSystemSettings`, `settingsSlice`, `AdminSystemSettingsPage`, `mock` y
+  `usePublicSettings`. Se **eliminó** el endpoint inventado
+  `/api/v1/settings/public/`. Esto corrige además un drift preexistente del UI
+  (UC-ADM-04/CFG-03 usaban `/admin/settings/`).
+
+**Hallazgo de spec (documentado, no inventado):** UC-CFG-05 POST-02 exige
+visibilidad pública (footer/contacto) pero el contrato canónico solo define
+`/api/v1/config/settings/` con `IsAdminUser` (auditoria-sprint-1-2.rst:45) — no
+hay endpoint público declarado. En el template/demo el mock sirve ese endpoint
+abiertamente; en backend real el flag `public_read_enabled` debería gobernarlo.
+Queda como gap del catálogo, no como endpoint fabricado por el UI.
+
+Re-verificación: jest 1702 passed / 0 failed; check-scss 168 clean;
+build:demo EXIT=0.
+
+Endpoints verificados contra el contrato canónico: AUTH-16
+`POST /auth/me/deactivate/` ✓, ORD-04 `POST /orders/<n>/cancel/` ✓, PRO-04
+`GET /admin/vouchers/report/` ✓, CFG-05 `GET/PATCH /config/settings/` ✓.

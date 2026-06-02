@@ -9,7 +9,7 @@
  *   GET  /api/v1/admin/vouchers/
  *   GET  /api/v1/admin/categories/
  *   GET  /api/v1/admin/payments
- *   GET  /api/v1/admin/settings/
+ *   GET  /api/v1/config/settings/   (singleton global; UC-ADM-04/CFG-03/05)
  *   GET  /api/v1/admin/product-discounts/
  *   POST /api/v1/admin/product-discounts/
  *   GET  /api/v1/admin/notifications/
@@ -177,8 +177,11 @@ export const adminHandlers = [
     });
   }),
 
-  // ── Configuración admin ─────────────────────────────────────────────
-  http.get('/api/v1/admin/settings/', () =>
+  // ── Configuración global (UC-ADM-04 / UC-CFG-03 / UC-CFG-05) ──────────
+  // Endpoint canónico singleton: GET/PATCH /api/v1/config/settings/
+  // (rest-api-conventions.rst:92). Sirve tanto al admin como al storefront
+  // (footer + contacto) en modo demo.
+  http.get('/api/v1/config/settings/', () =>
     HttpResponse.json({
       site_name: 'Práctica Yorùbà',
       site_description: 'Tienda de objetos ceremoniales',
@@ -201,25 +204,10 @@ export const adminHandlers = [
     })
   ),
 
-  http.patch('/api/v1/admin/settings/', async ({ request }) => {
+  http.patch('/api/v1/config/settings/', async ({ request }) => {
     const body = await request.json();
     return HttpResponse.json(body);
   }),
-
-  // UC-CFG-05 — lectura publica de datos de contacto (footer + contacto)
-  http.get('/api/v1/settings/public/', () =>
-    HttpResponse.json({
-      support_email: 'hola@practicayoruba.com',
-      phone: '+52 55 1111 2222',
-      address: 'Av. Reforma 123, Col. Centro, CDMX, 06600',
-      support_hours: 'Lunes a viernes · 10:00 — 19:00',
-      social_links: {
-        facebook:  'https://facebook.com/practicayoruba',
-        instagram: 'https://instagram.com/practicayoruba',
-        youtube:   'https://youtube.com/@practicayoruba',
-      },
-    })
-  ),
 
   // ── Descuentos de producto ──────────────────────────────────────────
   http.get('/api/v1/admin/product-discounts/', () => {

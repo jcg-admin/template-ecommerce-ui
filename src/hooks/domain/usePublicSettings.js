@@ -5,7 +5,7 @@
  * redes sociales) para el footer y la pagina de contacto. POST-02: los
  * cambios del admin son visibles de inmediato en el storefront.
  *
- *   GET /api/v1/settings/public/
+ *   GET /api/v1/config/settings/
  *
  * No usa React Query a proposito: el Footer se monta en casi todas las
  * vistas (y tests) y no debe exigir un QueryClientProvider. Hace un fetch
@@ -14,7 +14,7 @@
 import { useEffect, useState } from 'react';
 import apiService from '@services/apiService';
 
-const URL = '/api/v1/settings/public/';
+const URL = '/api/v1/config/settings/';
 
 export function usePublicSettings(fallback = {}) {
   const [data, setData] = useState(fallback);

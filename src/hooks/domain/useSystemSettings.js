@@ -1,14 +1,14 @@
 /**
  * useSystemSettings — UC-ADM-04
  *
- * GET /api/v1/admin/settings/
+ * GET /api/v1/config/settings/
  *
  * Devuelve la configuracion actual del sistema (objeto plano).
  */
 import { useQuery } from '@tanstack/react-query';
 import apiService from '@services/apiService';
 
-const URL = '/api/v1/admin/settings/';
+const URL = '/api/v1/config/settings/';
 export const SYSTEM_SETTINGS_KEY = ['admin', 'settings'];
 
 export function useSystemSettings() {

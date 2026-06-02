@@ -26,7 +26,7 @@ describe('Footer — datos de contacto (UC-CFG-05)', () => {
     render(<MemoryRouter><Footer /></MemoryRouter>);
 
     await waitFor(() =>
-      expect(apiService.get).toHaveBeenCalledWith('/api/v1/settings/public/'),
+      expect(apiService.get).toHaveBeenCalledWith('/api/v1/config/settings/'),
     );
     const fb = await screen.findByRole('link', { name: /Facebook/i });
     expect(fb).toHaveAttribute('href', 'https://facebook.com/demo');

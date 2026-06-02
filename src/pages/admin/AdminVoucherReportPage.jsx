@@ -5,13 +5,16 @@
  * ordenes generadas, ingresos y ROI, ordenado por -current_uses. Filtros por
  * estado y rango de fechas; exportacion CSV (Alt-B/C del UC).
  *
+ * Usa el componente adaptado `DataGrid` (de kno-react/ui-core) para la tabla,
+ * consistente con AdminUsersPage / AdminVoucherDetailPage.
+ *
  *   GET /api/v1/admin/vouchers/report/
  */
 import { useEffect, useState, useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
 import { fetchVoucherReport } from '@redux/slices/vouchersSlice';
 import { MetaTag, Button } from '@components/common/primitives';
+import DataGrid from '@components/common/DataGrid';
 import styles from './AdminTablePage.module.scss';
 
 const STATUS = [
@@ -20,21 +23,27 @@ const STATUS = [
   { id: 'inactive', label: 'Inactivos' },
 ];
 
-const COLUMNS = ['Código', 'Tipo', 'Usos', 'Descuento total', 'Órdenes', 'Ingresos', 'ROI'];
+const COLUMNS = [
+  { key: 'code',           label: 'Código',          sortable: true },
+  { key: 'type',           label: 'Tipo' },
+  { key: 'current_uses',   label: 'Usos',            sortable: true },
+  { key: 'total_discount', label: 'Descuento total', sortable: true },
+  { key: 'orders_count',   label: 'Órdenes' },
+  { key: 'revenue',        label: 'Ingresos',        sortable: true },
+  { key: 'roi',            label: 'ROI',             sortable: true },
+];
+
+const CSV_KEYS = COLUMNS.map((c) => c.key);
 
 function toCsv(rows) {
-  const header = ['code', 'type', 'current_uses', 'total_discount', 'orders_count', 'revenue', 'roi'];
-  const lines = [header.join(',')];
-  rows.forEach((r) => {
-    lines.push(header.map((k) => r[k] ?? '').join(','));
-  });
+  const lines = [CSV_KEYS.join(',')];
+  rows.forEach((r) => lines.push(CSV_KEYS.map((k) => r[k] ?? '').join(',')));
   return lines.join('\n');
 }
 
 export default function AdminVoucherReportPage() {
   const dispatch = useDispatch();
   const report = useSelector((s) => s.vouchers?.report || []);
-  const isLoading = useSelector((s) => s.vouchers?.isLoadingReport);
 
   const [status, setStatus] = useState('');
   const [createdAfter, setCreatedAfter] = useState('');
@@ -95,34 +104,14 @@ export default function AdminVoucherReportPage() {
         </label>
       </div>
 
-      <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>{COLUMNS.map((c) => <th key={c}>{c}</th>)}</tr>
-          </thead>
-          <tbody>
-            {isLoading && (
-              <tr><td colSpan={COLUMNS.length} className={styles.loading}>Cargando reporte…</td></tr>
-            )}
-            {!isLoading && report.length === 0 && (
-              <tr><td colSpan={COLUMNS.length} className={styles.empty}>
-                Aún no hay uso de vouchers. <Link to="/admin/vouchers">Crear el primero</Link>
-              </td></tr>
-            )}
-            {!isLoading && report.map((r) => (
-              <tr key={r.code}>
-                <td className={styles.mono}>{r.code}</td>
-                <td>{r.type}</td>
-                <td className={styles.right}>{r.current_uses}</td>
-                <td className={styles.right}>{r.total_discount}</td>
-                <td className={styles.right}>{r.orders_count}</td>
-                <td className={styles.right}>{r.revenue}</td>
-                <td className={styles.right}>{r.roi}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+      <DataGrid
+        columns={COLUMNS}
+        rows={report}
+        pageSize={20}
+        getRowKey={(r) => r.code}
+        emptyText="Aún no hay uso de vouchers."
+        ariaLabel="Reporte de uso de vouchers"
+      />
     </div>
   );
 }
