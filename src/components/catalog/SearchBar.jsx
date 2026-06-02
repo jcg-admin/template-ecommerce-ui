@@ -103,7 +103,6 @@ export default function SearchBar({ onSearch, initialValue = '', isSearching = f
             aria-label="Término de búsqueda"
             aria-describedby={error ? 'search-error' : undefined}
             autoComplete="off"
-            role="combobox"
             aria-expanded={showSuggestions}
             aria-controls={listId}
             aria-autocomplete="list"

@@ -38,7 +38,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
     const user = userEvent.setup();
     const { onSearch } = renderBar();
 
-    await user.type(screen.getByRole('combobox'), 'collar');
+    await user.type(screen.getByRole('searchbox'), 'collar');
     await user.click(screen.getByRole('button', { name: /buscar/i }));
 
     expect(onSearch).toHaveBeenCalledWith('collar');
@@ -49,7 +49,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
     const user = userEvent.setup();
     const { onSearch } = renderBar();
 
-    await user.type(screen.getByRole('combobox'), 'c');
+    await user.type(screen.getByRole('searchbox'), 'c');
     await user.click(screen.getByRole('button', { name: /buscar/i }));
 
     expect(onSearch).not.toHaveBeenCalled();
@@ -63,7 +63,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
     const user = userEvent.setup();
     renderBar();
 
-    await user.type(screen.getByRole('combobox'), 'col');
+    await user.type(screen.getByRole('searchbox'), 'col');
 
     await waitFor(() =>
       expect(apiService.get).toHaveBeenCalledWith(
@@ -84,7 +84,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
     const user = userEvent.setup();
     const { onSearch } = renderBar();
 
-    await user.type(screen.getByRole('combobox'), 'col');
+    await user.type(screen.getByRole('searchbox'), 'col');
 
     const option = await screen.findByText('Collar Oshun');
     await user.click(option);

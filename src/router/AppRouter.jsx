@@ -53,6 +53,7 @@ const OrderEditPage   = lazy(() => import('@pages/account/OrderEditPage'));
 const SecurityPage    = lazy(() => import('@pages/account/SecurityPage'));
 const WishlistPage    = lazy(() => import('@pages/account/WishlistPage'));
 const ProfilePage     = lazy(() => import('@pages/account/ProfilePage'));
+const ReferralPage    = lazy(() => import('@pages/account/ReferralPage'));
 const ChangePasswordPage = lazy(() => import('@pages/account/ChangePasswordPage'));
 const AddressesPage      = lazy(() => import('@pages/account/AddressesPage'));
 // UC-SRCH-03 — Historial personal de busquedas
@@ -110,6 +111,7 @@ const AdminPaymentRefundPage         = lazy(() => import('@pages/admin/AdminPaym
 const AdminPaymentsPage              = lazy(() => import('@pages/admin/AdminPaymentsPage'));
 // UC-CAT-06 / UC-CAT-09 / UC-CAT-10 — Categorias y CRUD de productos
 const AdminCategoriesPage            = lazy(() => import('@pages/admin/AdminCategoriesPage'));
+const AdminCouriersPage              = lazy(() => import('@pages/admin/AdminCouriersPage'));
 const AdminProductCreatePage         = lazy(() => import('@pages/admin/AdminProductCreatePage'));
 const AdminProductEditPage           = lazy(() => import('@pages/admin/AdminProductEditPage'));
 // UC-CAT-12 — Sincronizacion masiva de precios (CSV / ajuste porcentual)
@@ -209,6 +211,7 @@ export default function AppRouter() {
               <Route path="account/security"          element={<SecurityPage />} />
               <Route path="account/wishlist"    element={<WishlistPage />} />
               <Route path="account/profile"     element={<ProfilePage />} />
+              <Route path="account/referral"    element={<ReferralPage />} />
               {/* UC-AUTH-08 — Cambiar contrasena */}
               <Route path="account/change-password" element={<ChangePasswordPage />} />
               {/* UC-AUTH-07 — Libreta de direcciones */}
@@ -261,6 +264,7 @@ export default function AppRouter() {
               <Route path="admin/products/:id/variants/matrix" element={<AdminProductVariantsPage />} />
               {/* UC-CAT-06 — Gestionar categorias */}
               <Route path="admin/categories"         element={<AdminCategoriesPage />} />
+              <Route path="admin/couriers"           element={<AdminCouriersPage />} />
               {/* UC-CAT-12 — Sincronizar precios en lote */}
               <Route path="admin/price-sync"         element={<AdminPriceSyncPage />} />
               {/* UC-ADM-02 — Matriz de permisos */}
