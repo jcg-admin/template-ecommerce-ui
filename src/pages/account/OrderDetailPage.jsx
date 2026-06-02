@@ -11,9 +11,10 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
-import { fetchOrderDetail } from '@redux/slices/ordersSlice';
+import { fetchOrderDetail, cancelOrder } from '@redux/slices/ordersSlice';
 import { reportShippingIssue } from '@redux/slices/logisticsSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import PdfViewer from '@components/common/PdfViewer';
 import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
@@ -261,10 +262,18 @@ function PaymentCard({ payment }) {
 
 function SupportCard({ order, dispatch }) {
   const canRefund = order.status === 'DELIVERED' && !order.refund_requested;
+  // UC-ORD-04 — cancelar orden (cliente). Solo cancelable antes de despacho.
+  const canCancel = ['PENDING', 'PROCESSING'].includes(order.status);
+  const [showCancel, setShowCancel] = useState(false);
   // UC-LOG-07 — reportar problema de envío
   const [showIssue, setShowIssue] = useState(false);
   const [issueMsg, setIssueMsg] = useState('');
   const [issueSent, setIssueSent] = useState(false);
+
+  const handleCancel = () => {
+    dispatch(cancelOrder({ orderNumber: order.order_number, reason: '' }));
+    setShowCancel(false);
+  };
 
   const handleReport = async (e) => {
     e.preventDefault();
@@ -289,7 +298,21 @@ function SupportCard({ order, dispatch }) {
         {canRefund && (
           <Button variant="ghost" block size="sm">Solicitar reembolso</Button>
         )}
+        {canCancel && (
+          <Button variant="ghost" block size="sm" onClick={() => setShowCancel(true)}>
+            Cancelar pedido
+          </Button>
+        )}
       </div>
+
+      <ConfirmModal
+        open={showCancel}
+        message="¿Seguro que quieres cancelar este pedido? Si ya pagaste, el reembolso se procesara automaticamente."
+        confirmLabel="Confirmar cancelacion"
+        variant="danger"
+        onConfirm={handleCancel}
+        onClose={() => setShowCancel(false)}
+      />
       {issueSent && (
         <p className={styles.supportText}>Recibimos tu reporte. Te contactaremos pronto.</p>
       )}

@@ -97,7 +97,7 @@ describe('OrderDetailPage (UC-ORD-02 detalle)', () => {
 });
 
 describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
-  it.skip('comprador cancela un pedido PENDING via POST /cancel/ — PENDIENTE: accion eliminada en diseño Yoruba (usa Solicitar ayuda)', async () => {
+  it('comprador cancela un pedido PENDING via POST /cancel/', async () => {
     apiService.get.mockResolvedValue({ data: ORDER });
     apiService.post.mockResolvedValue({ data: { ...ORDER, status: 'CANCELLED' } });
     const user = userEvent.setup();
@@ -105,7 +105,7 @@ describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
 
-    await user.click(screen.getByRole('button', { name: /Cancelar/i }));
+    await user.click(screen.getByRole('button', { name: /Cancelar pedido/i }));
     await user.click(screen.getByRole('button', { name: /Confirmar cancelacion/i }));
 
     await waitFor(() => {
@@ -116,11 +116,11 @@ describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
     });
   });
 
-  it.skip('no muestra boton de cancelar para pedidos enviados — PENDIENTE: accion eliminada en diseño Yoruba (usa Solicitar ayuda)', async () => {
+  it('no muestra boton de cancelar para pedidos enviados', async () => {
     apiService.get.mockResolvedValue({ data: { ...ORDER, status: 'SHIPPED' } });
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
-    expect(screen.queryByRole('button', { name: /Cancelar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Cancelar pedido/i })).not.toBeInTheDocument();
   });
 });
 
