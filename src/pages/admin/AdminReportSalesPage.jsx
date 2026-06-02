@@ -8,7 +8,15 @@ import {
   useSalesReport,
   buildReportExportUrl,
 } from '@hooks/domain/useReports';
+import { exportSheet } from '@utils/exportSheet';
 import styles from './AdminReportPage.module.scss';
+
+// Columnas del CSV de la serie temporal del reporte (UC-ADM-XLSX).
+const SERIES_EXPORT_COLUMNS = [
+  { key: 'bucket',  label: 'Fecha' },
+  { key: 'revenue', label: 'Ingreso' },
+  { key: 'orders',  label: 'Órdenes' },
+];
 
 const PERIOD_OPTIONS = [
   { value: 'today',   label: 'Hoy' },
@@ -30,8 +38,15 @@ export default function AdminReportSalesPage() {
   const series     = data?.series     ?? [];
   const breakdown  = data?.payment_breakdown ?? [];
 
-  const csvHref = buildReportExportUrl('sales', { ...params, format: 'csv' });
   const pdfHref = buildReportExportUrl('sales', { ...params, format: 'pdf' });
+
+  const handleExportCsv = () => {
+    exportSheet({
+      filename: `reporte-ventas-${period}.csv`,
+      columns: SERIES_EXPORT_COLUMNS,
+      rows: series,
+    });
+  };
 
   const delta = comparison?.gross_revenue_delta_pct;
   const deltaClass =
@@ -45,7 +60,13 @@ export default function AdminReportSalesPage() {
           Reporte de ingresos y ventas
         </h1>
         <div className={styles.exportGroup}>
-          <a href={csvHref} className={styles.exportLink}>Exportar CSV</a>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportCsv}
+          >
+            Exportar CSV
+          </button>
           <a href={pdfHref} className={styles.exportLink}>Exportar PDF</a>
         </div>
       </header>

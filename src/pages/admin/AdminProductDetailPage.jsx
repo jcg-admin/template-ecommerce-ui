@@ -17,6 +17,8 @@ import {
   uploadProductImage, deleteProductImage, reorderProductImages,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import FileUpload from '@components/common/FileUpload';
+import SortableList from '@components/common/SortableList';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminProductDetailPage.module.scss';
 
@@ -214,23 +216,28 @@ export default function AdminProductDetailPage() {
 }
 
 function ImageGallery({ images, onUpload, onDelete, onReorder }) {
-  const handleUpload = (e) => {
-    const files = Array.from(e.target.files || []);
-    files.forEach(onUpload);
-  };
   return (
     <div className={styles.gallery}>
-      {images.map((img) => (
-        <div key={img.id} className={styles.galleryItem}>
-          <img src={img.url} alt="" />
-          {img.is_cover && <span className={styles.galleryCover}>Cover</span>}
-          <button type="button" className={styles.galleryDelete} onClick={() => onDelete(img.id)}>×</button>
-        </div>
-      ))}
-      <label className={styles.galleryUpload}>
-        <input type="file" multiple accept="image/*" onChange={handleUpload} hidden aria-label="Subir imágenes del producto" />
-        <span>+ Subir</span>
-      </label>
-      </div>
+      {/* Imagenes existentes: reordenables por drag/teclado (UC-ADM-SORT) */}
+      <SortableList
+        items={images}
+        ariaLabel="Imágenes del producto"
+        onReorder={(next) => onReorder(next.map((img) => img.id))}
+        renderItem={(img) => (
+          <div className={styles.galleryItem}>
+            <img src={img.url} alt="" />
+            {img.is_cover && <span className={styles.galleryCover}>Cover</span>}
+            <button type="button" className={styles.galleryDelete} onClick={() => onDelete(img.id)}>×</button>
+          </div>
+        )}
+      />
+      {/* Subida con drag-drop + preview (UC-ADM-IMG) */}
+      <FileUpload
+        accept="image/*"
+        multiple
+        onFiles={(files) => files.forEach(onUpload)}
+        label="Subir imágenes del producto"
+      />
+    </div>
   );
 }
