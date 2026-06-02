@@ -31,6 +31,41 @@ import { CATALOG_PRODUCTS, CATALOG_CATEGORIES } from '../data/catalog';
 const PAGE_SIZE = 20;
 
 export const catalogHandlers = [
+  // GET /api/v1/catalogue/search/suggestions/?q=...  (UC-SRCH-02)
+  // Autocomplete con sugerencias en vivo: devuelve nombres de productos
+  // del catalogo cuyo nombre coincide (case-insensitive) con `q`.
+  // Se registra ANTES de /search/ y /:slug/ para que la ruta mas
+  // especifica gane el match.
+  http.get('/api/v1/catalogue/search/suggestions/', ({ request }) => {
+    const url = new URL(request.url);
+    const q   = (url.searchParams.get('q') ?? '').trim().toLowerCase();
+
+    if (q.length < 2) {
+      return HttpResponse.json({ suggestions: [], count: 0 });
+    }
+
+    // Nombres unicos que contienen el termino, ordenados por
+    // relevancia simple (prefijo primero) y acotados a 8 resultados.
+    const seen = new Set<string>();
+    const matches = CATALOG_PRODUCTS
+      .filter(p => p.name.toLowerCase().includes(q))
+      .map(p => p.name)
+      .filter(name => {
+        const key = name.toLowerCase();
+        if (seen.has(key)) return false;
+        seen.add(key);
+        return true;
+      })
+      .sort((a, b) => {
+        const ap = a.toLowerCase().startsWith(q) ? 0 : 1;
+        const bp = b.toLowerCase().startsWith(q) ? 0 : 1;
+        return ap - bp || a.localeCompare(b);
+      })
+      .slice(0, 8);
+
+    return HttpResponse.json({ suggestions: matches, count: matches.length });
+  }),
+
   // GET /api/v1/catalogue/search/?q=...&category=<slug>
   http.get('/api/v1/catalogue/search/', ({ request }) => {
     const url      = new URL(request.url);

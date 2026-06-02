@@ -6,6 +6,11 @@
   width: 100%;
 }
 
+.field {
+  position: relative;
+  flex:     1;
+}
+
 .inputWrapper {
   @include flex-start;
   position:   relative;
@@ -66,4 +71,35 @@
   font-size: $font-size-sm;
   color:     $error-color;
   margin:    0;
+}
+
+// Panel de sugerencias en vivo (UC-SRCH-02).
+.suggestions {
+  position:      absolute;
+  top:           calc(100% + 4px);
+  left:          0;
+  right:         0;
+  z-index:       $z-dropdown;
+  margin:        0;
+  padding:       4px 0;
+  list-style:    none;
+  background:    $bg-elevated;
+  border:        1px solid $border-color;
+  border-radius: $border-radius-md;
+  box-shadow:    $shadow-md;
+  max-height:    320px;
+  overflow-y:    auto;
+}
+
+.suggestion {
+  padding:     9px 14px;
+  font-size:   $font-size-base;
+  color:       $text-primary;
+  cursor:      pointer;
+  transition:  background 0.12s;
+
+  &:hover,
+  &.active {
+    background: $bg-surface;
+  }
 }
