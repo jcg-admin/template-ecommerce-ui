@@ -8,7 +8,12 @@ import {
   sendContactMessage,
   clearContactActionState,
 } from '@redux/slices/contactSlice';
+import ChatWidget from '@components/common/ChatWidget';
 import styles from './ContactPage.module.scss';
+
+const INITIAL_CHAT = [
+  { id: 'chat-welcome', from: 'agent', text: 'Hola, ¿en qué podemos ayudarte?' },
+];
 
 const INITIAL = { name: '', email: '', subject: '', message: '' };
 
@@ -29,6 +34,34 @@ export default function ContactPage() {
     useSelector((s) => s.contact);
   const [form, setForm] = useState(INITIAL);
   const [errors, setErrors] = useState({});
+  const [chatMessages, setChatMessages] = useState(INITIAL_CHAT);
+
+  // Chat de soporte (UC-SUP-CHAT): sin backend de chat, el hilo se mantiene
+  // con estado local. Al enviar se añade el mensaje del usuario y una
+  // autorespuesta simulada del agente.
+  const handleChatSend = (text) => {
+    const userMessage = { id: `u-${Date.now()}`, from: 'user', text };
+    const agentReply = {
+      id: `a-${Date.now()}`,
+      from: 'agent',
+      text: 'Gracias, te responderemos pronto.',
+    };
+    setChatMessages((prev) => [...prev, userMessage, agentReply]);
+  };
+
+  const chatSection = (
+    <section className={styles.chat} aria-labelledby="contact-chat-title">
+      <h2 id="contact-chat-title" className={styles.chatTitle}>
+        Chat de soporte
+      </h2>
+      <ChatWidget
+        messages={chatMessages}
+        onSend={handleChatSend}
+        title="Soporte"
+        placeholder="Escribe un mensaje…"
+      />
+    </section>
+  );
 
   const setField = (name) => (event) => {
     setForm((prev) => ({ ...prev, [name]: event.target.value }));
@@ -74,6 +107,7 @@ export default function ContactPage() {
         >
           Enviar otro mensaje
         </button>
+        {chatSection}
       </section>
     );
   }
@@ -152,6 +186,8 @@ export default function ContactPage() {
           </button>
         </div>
       </form>
+
+      {chatSection}
     </section>
   );
 }
