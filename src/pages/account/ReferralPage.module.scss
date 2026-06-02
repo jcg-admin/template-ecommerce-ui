@@ -1,0 +1,103 @@
+@use '@styles/abstracts' as *;
+
+.page { background: $bg-page; min-height: 60vh; }
+.container {
+  max-width: $content-max-width;
+  margin: 0 auto;
+  padding: $spacing-12 $content-padding-desktop $spacing-24;
+  @media (max-width: $bp-md) { padding: $spacing-8 $content-padding-mobile $spacing-16; }
+}
+.breadcrumb {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  letter-spacing: 0.1em;
+  margin-bottom: $spacing-6;
+  display: flex; gap: $spacing-3;
+  a { color: $text-muted; &:hover { color: $text-secondary; } }
+}
+.bcCurrent { color: $text-secondary; }
+.layout {
+  display: grid;
+  grid-template-columns: 260px 1fr;
+  gap: $spacing-12;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; gap: $spacing-6; }
+}
+.header { margin-bottom: $spacing-8; }
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  font-weight: $font-weight-normal;
+  color: $text-primary;
+  margin-top: $spacing-3;
+}
+.lead { color: $text-secondary; margin-top: $spacing-2; max-width: 540px; line-height: $line-height-relaxed; }
+.loading { padding: $spacing-12; text-align: center; color: $text-muted; }
+.error {
+  padding: $spacing-5;
+  border: 1px solid $border-color;
+  color: $text-secondary;
+  background: rgba($coral, 0.05);
+}
+
+.codeCard {
+  border: 1px solid $border-color;
+  padding: $spacing-8;
+  margin-bottom: $spacing-8;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+}
+.codeLabel {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+.code {
+  font-family: $font-family-mono;
+  font-size: $font-size-3xl;
+  color: $text-primary;
+  letter-spacing: 0.05em;
+}
+.shareRow {
+  display: flex;
+  gap: $spacing-3;
+  margin-top: $spacing-2;
+  flex-wrap: wrap;
+  align-items: center;
+}
+.shareInput {
+  flex: 1 1 280px;
+  min-width: 0;
+  padding: $spacing-3 $spacing-4;
+  border: 1px solid $border-color;
+  background: $bg-page;
+  color: $text-secondary;
+  font-family: $font-family-mono;
+  font-size: $font-size-sm;
+}
+
+.metrics {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: $spacing-6;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+.metric {
+  border: 1px solid $border-color;
+  padding: $spacing-6;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+.metricValue {
+  font-family: $font-family-display;
+  font-size: $font-size-4xl;
+  color: $text-primary;
+}
+.metricLabel {
+  font-size: $font-size-sm;
+  color: $text-muted;
+}
