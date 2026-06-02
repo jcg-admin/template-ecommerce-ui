@@ -1,7 +1,7 @@
 /**
  * Tests — CheckoutPage (UC-ORD-01)
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -63,6 +63,37 @@ describe('CheckoutPage (UC-ORD-01)', () => {
     expect(
       screen.getByRole('heading', { name: /Tu pedido|compra|checkout/i })
     ).toBeInTheDocument();
+  });
+
+  // UC-CHT-SCHED (F6): selector de franja de entrega en el checkout.
+  describe('DeliveryScheduler (UC-CHT-SCHED)', () => {
+    it('renderiza el selector de fecha de entrega', () => {
+      render(wrap());
+      expect(
+        screen.getByRole('group', { name: 'Fecha de entrega' })
+      ).toBeInTheDocument();
+    });
+
+    it('ofrece franjas seleccionables y ninguna esta activa al inicio', () => {
+      render(wrap());
+      const group = screen.getByRole('group', { name: 'Fecha de entrega' });
+      const slots = within(group).getAllByRole('button');
+      // 3 dias x 2 franjas
+      expect(slots).toHaveLength(6);
+      slots.forEach((b) => expect(b).toHaveAttribute('aria-pressed', 'false'));
+    });
+
+    it('al elegir una franja la marca como seleccionada', async () => {
+      const user = userEvent.setup();
+      render(wrap());
+      const group = screen.getByRole('group', { name: 'Fecha de entrega' });
+      const [first] = within(group).getAllByRole('button');
+
+      expect(first).toHaveAttribute('aria-pressed', 'false');
+      await user.click(first);
+      expect(first).toHaveAttribute('aria-pressed', 'true');
+      expect(first).toHaveAttribute('aria-checked', 'true');
+    });
   });
 
   it.skip('crea la orden via POST /api/v1/checkout/ con direccion y metodo de envio -- PENDIENTE: form structure changed', async () => {
