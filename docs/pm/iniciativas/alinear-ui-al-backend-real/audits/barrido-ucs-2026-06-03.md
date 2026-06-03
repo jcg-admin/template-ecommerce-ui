@@ -158,5 +158,8 @@ inventory import (`inventory/import/`), variant adjust.
   `template-ecommerce-ui@b947c39`: modo porcentaje (preview/apply-percentage)
   añadido a la página; `priceSyncSlice.js` (muerto, no cableado) eliminado.
 
-**Pendiente único restante:** UC-LOG-07 (reportar problema de envío,
-buyer-facing) — verificado sin UI real; candidato a fabricar como UC-LOG-09.
+- **UC-LOG-07 (reportar problema de envío)** — RESUELTO: fabricado como
+  feature del template (componente `ShippingIssueReport` en `OrderDetailPage`,
+  `reportShippingIssue` + mock + UC doc). `template-ecommerce-ui@481f264`.
+
+**Matriz final: 133 IMPLEMENTADO / 0 AUSENTE-UI / 26 BACKEND-OPS.**

@@ -34,12 +34,13 @@ de este archivo, 2026-06-03):
 
 | Estado | Total | Significado |
 |--------|-------|-------------|
-| IMPLEMENTADO | 132 | Existe en el UI (con evidencia: componente/página/slice/test) |
+| IMPLEMENTADO | 133 | Existe en el UI (con evidencia: componente/página/slice/test) |
 | BACKEND-OPS | 26 | No es asunto del UI (emails, webhooks, cron, SSL/SSH, reportes DB) → `template-ecommerce-server` |
-| AUSENTE-UI | 1 | Hueco real de UI → alcance pendiente |
+| AUSENTE-UI | 0 | Sin huecos de UI pendientes |
 
-**Hueco AUSENTE-UI restante (1):** UC-LOG-07 (reportar problema de envío,
-buyer-facing) — verificado sin UI real al 2026-06-03.
+**0 huecos AUSENTE-UI.** UC-LOG-07 (reportar problema de envío, buyer-facing)
+se fabricó e implementó el 2026-06-03 (`template-ecommerce-ui@481f264`),
+cerrando el último hueco.
 
 
 ## AUTH / CART / WISH / SRCH / COM
@@ -163,7 +164,7 @@ buyer-facing) — verificado sin UI real al 2026-06-03.
 | UC-LOG-04 | Procesar webhook actualización envío | BACKEND-OPS | Procesamiento server-side de webhook del courier (transportista = sistema externo). Sin contraparte UI. |
 | UC-LOG-05 | Confirmar entrega manual | IMPLEMENTADO | `redux/slices/logisticsSlice.js` `confirmDelivery` → POST `/api/v1/logistics/guides/:id/confirm-delivery/`; boton «Confirmar entrega» en `AdminLogisticsPage.jsx` (grupo B). |
 | UC-LOG-06 | Gestionar couriers (admin) | IMPLEMENTADO | `src/pages/admin/AdminCouriersPage.jsx` + ruta `admin/couriers` (lazy en `AppRouter.jsx:115,267`), con `fetchCouriers` en `logisticsSlice.js`. Reconciliado 2026-06-03 (snapshot previo marcaba AUSENTE-UI). |
-| UC-LOG-07 | Reportar problema de envío | AUSENTE-UI | Actor comprador. No existe UI de «reportar problema/incidencia de envio» (grep sin coincidencias en `pages/`/`components/`). |
+| UC-LOG-07 | Reportar problema de envío | IMPLEMENTADO | **Feature fabricada del template.** `src/components/orders/ShippingIssueReport/` en `OrderDetailPage` del comprador (visible para órdenes SHIPPED/DELIVERED); `reportShippingIssue` en `ordersSlice.js` → `POST /api/v1/logistics/shipping-issues/` `{order_id, reason, description}` (mock en `logistics.ts`). UC documentado en `docs/pm/iniciativas/implementar-uc-log-07-reportar-problema-envio/`. Implementado 2026-06-03 (`template-ecommerce-ui@481f264`). |
 | UC-LOG-08 | Ver envíos pendientes despacho (admin) | IMPLEMENTADO | `pages/admin/AdminLogisticsPage.jsx` + `hooks/domain/useLogistics.js` (grupos A/B); ruta `admin/logistics` en `router/AppRouter.jsx`. |
 | UC-LOG-09 | Calcular costo de envío | IMPLEMENTADO | **Feature fabricada del template** (el backend de referencia no la expone; contrato definido y mockeado). `src/components/cart/ShippingCalculator/` (buyer-facing, accesible) montado en `pages/cart/CartPage.jsx`; thunk `fetchShippingQuote` en `cartSlice.js` → `POST /api/v1/logistics/shipping-quote/` `{postal_code, subtotal}` → `{zone, cost, estimated_days, qualifies_free_shipping}` (mock en `logistics.ts`). UC documentado en `docs/pm/iniciativas/implementar-uc-log-09-costo-envio/`. Implementado 2026-06-03 (`template-ecommerce-ui@bf9b960`). |
 | UC-LOG-10 | Crear guía de remisión | BACKEND-OPS | Documento de acompanamiento generado server-side (modulo ORDERS). Sin UI de emision; `remision` no aparece en el codigo. |
