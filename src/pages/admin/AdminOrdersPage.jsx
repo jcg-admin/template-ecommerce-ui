@@ -9,6 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAdminOrders } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
+import ButtonGroup from '@components/common/ButtonGroup';
+import DropDownButton from '@components/common/DropDownButton';
 import { exportSheet } from '@utils/exportSheet';
 import styles from './AdminTablePage.module.scss';
 
@@ -70,19 +72,25 @@ export default function AdminOrdersPage() {
           <h1 className={styles.title}>Pedidos</h1>
         </div>
         <div className={styles.headerActions}>
+          <DropDownButton
+            text="Acciones"
+            items={[{
+              label: 'Refrescar',
+              onClick: () => dispatch(fetchAdminOrders({ filter, search, dateStart, dateEnd })),
+            }]}
+          />
           <Button variant="secondary" onClick={handleExportCsv}>Exportar CSV</Button>
         </div>
       </header>
 
       <div className={styles.toolbar}>
         <div className={styles.filters}>
-          {STATUS_FILTERS.map((s) => (
-            <button
-              key={s.id}
-              className={`${styles.filterBtn} ${filter === s.id ? styles.filterBtnActive : ''}`}
-              onClick={() => setFilter(s.id)}
-            >{s.label}</button>
-          ))}
+          <ButtonGroup
+            items={STATUS_FILTERS.map((s) => ({ label: s.label, value: s.id }))}
+            value={filter}
+            onChange={setFilter}
+            ariaLabel="Filtrar por estado"
+          />
         </div>
         <input
           type="search"

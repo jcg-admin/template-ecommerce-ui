@@ -9,6 +9,7 @@ import {
   createReturnRequest,
   clearReturnsActionState,
 } from '@redux/slices/returnsSlice';
+import RadioGroup from '@components/common/RadioGroup';
 import styles from './ReturnCreatePage.module.scss';
 
 const REASONS = [
@@ -161,17 +162,13 @@ export default function ReturnCreatePage() {
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="return-reason">Motivo</label>
-          <select
-            id="return-reason"
-            name="reason"
+          <label>Motivo</label>
+          <RadioGroup
+            ariaLabel="Motivo de la devolución"
+            items={REASONS.map((r) => ({ label: r.label, value: r.value }))}
             value={fields.reason}
-            onChange={handleChange}
-          >
-            {REASONS.map((r) => (
-              <option key={r.value} value={r.value}>{r.label}</option>
-            ))}
-          </select>
+            onChange={(v) => setFields((f) => ({ ...f, reason: v }))}
+          />
         </div>
 
         <div className={styles.field}>

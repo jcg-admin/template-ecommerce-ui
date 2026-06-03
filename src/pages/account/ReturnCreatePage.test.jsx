@@ -38,14 +38,16 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
   it('renderiza los campos obligatorios', () => {
     render(wrap(<ReturnCreatePage />, makeStore()));
     expect(screen.getByLabelText(/Orden/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Motivo/i)).toBeInTheDocument();
-    expect(screen.getByLabelText(/Descripci/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('radiogroup', { name: /Motivo de la devoluci/i })
+    ).toBeInTheDocument();
+    expect(screen.getByLabelText(/Descripción del problema/i)).toBeInTheDocument();
   });
 
   it('muestra error si la descripcion tiene menos de 20 caracteres', () => {
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i),       { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),   { target: { value: 'corto' } });
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),   { target: { value: 'corto' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar solicitud/i }));
     expect(
       screen.getByText(/al menos 20 caracteres/i)
@@ -55,7 +57,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
 
   it('muestra error si la orden esta vacia', () => {
     render(wrap(<ReturnCreatePage />, makeStore()));
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'Descripcion mas que suficiente del problema' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar solicitud/i }));
     expect(screen.getByText(/La orden es obligatoria/i)).toBeInTheDocument();
@@ -69,8 +71,8 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
 
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i),     { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Motivo/i),    { target: { value: 'PRODUCTO_DANADO' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.click(screen.getByRole('radio', { name: /Producto dañado/i }));
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con daños visibles en el empaque' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar solicitud/i }));
 
@@ -92,7 +94,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
 
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i),     { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con un golpe muy visible' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar solicitud/i }));
 
@@ -120,7 +122,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
 
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i), { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con una rotura visible' } });
 
     const file1 = makeFile('frente.jpg');
@@ -145,7 +147,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
   it('rechaza si el comprador adjunta mas de 4 fotos', () => {
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i), { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con varios defectos visibles' } });
     const files = [1, 2, 3, 4, 5].map((n) => makeFile(`f${n}.jpg`));
     fireEvent.change(screen.getByLabelText(/Fotos del producto/i), {
@@ -160,7 +162,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
   it('rechaza si alguna foto supera 5 MB', () => {
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i), { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con defectos en la superficie' } });
     const big = makeFile('grande.jpg', 6 * 1024 * 1024);
     fireEvent.change(screen.getByLabelText(/Fotos del producto/i), {
@@ -179,7 +181,7 @@ describe('ReturnCreatePage (UC-RET-01)', () => {
 
     render(wrap(<ReturnCreatePage />, makeStore()));
     fireEvent.change(screen.getByLabelText(/Orden/i), { target: { value: 'ORD-100' } });
-    fireEvent.change(screen.getByLabelText(/Descripci/i),
+    fireEvent.change(screen.getByLabelText(/Descripción del problema/i),
       { target: { value: 'El producto llego con un golpe muy visible' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar solicitud/i }));
 
