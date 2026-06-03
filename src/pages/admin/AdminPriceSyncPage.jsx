@@ -1,14 +1,19 @@
 /**
  * AdminPriceSyncPage — Práctica Yorùbà
- * Sincronización masiva de precios por CSV. Solo actualiza, no crea.
+ * Sincronización masiva de precios. Solo actualiza, no crea.
  *
- * Endpoints (contrato real apps/catalogue/price_sync_views.py):
- *   POST /admin/price-sync/preview-csv/   → { session_id, preview, errors }
- *   POST /admin/price-sync/apply-csv/     ← { session_id } → { updated_count }
- *   GET  /admin/price-sync/template.csv
+ * Dos modos (contrato real apps/catalogue/price_sync_views.py):
+ *   CSV:
+ *     POST /admin/price-sync/preview-csv/   → { session_id, preview, errors }
+ *     POST /admin/price-sync/apply-csv/     ← { session_id } → { updated_count }
+ *     GET  /admin/price-sync/template.csv
+ *   Porcentaje:
+ *     POST /admin/price-sync/preview-percentage/  ← { pct, category_id?,
+ *           price_min?, price_max? } → { session_id, preview, pct }
+ *     POST /admin/price-sync/apply-percentage/    ← { session_id }
  *
- * Flujo single-shot: preview (dry-run) → confirmar. apply-csv aplica la
- * sesión almacenada en el server; no acepta ediciones de precio del cliente.
+ * Flujo: preview (dry-run) → confirmar. apply-* aplica la sesión almacenada
+ * en el server; no acepta ediciones de precio del cliente.
  */
 
 import { useRef, useState } from 'react';
@@ -16,16 +21,28 @@ import { useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   uploadPriceCSV, confirmPriceSync, downloadPriceTemplate,
+  previewPriceSyncPercentage, applyPriceSyncPercentage,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
 import styles from './AdminBulkPage.module.scss';
 
+const MODES = [
+  { id: 'csv',        label: 'Desde CSV' },
+  { id: 'percentage', label: 'Ajuste por porcentaje' },
+];
+
 export default function AdminPriceSyncPage() {
   const dispatch = useDispatch();
   const fileRef = useRef();
+  const [mode, setMode] = useState('csv');
   const [preview, setPreview] = useState(null);
   const [confirmed, setConfirmed] = useState(false);
   const [loading, setLoading] = useState(false);
+
+  // Estado del formulario de porcentaje.
+  const [pct, setPct] = useState('');
+  const [priceMin, setPriceMin] = useState('');
+  const [priceMax, setPriceMax] = useState('');
 
   const handleFile = async (file) => {
     setLoading(true);
@@ -37,18 +54,35 @@ export default function AdminPriceSyncPage() {
     } finally { setLoading(false); }
   };
 
+  const handlePercentagePreview = async () => {
+    if (pct === '' || Number.isNaN(Number(pct))) return;
+    setLoading(true);
+    try {
+      const res = await dispatch(previewPriceSyncPercentage({
+        pct: Number(pct), price_min: priceMin, price_max: priceMax,
+      })).unwrap();
+      setPreview(res);
+    } catch (err) {
+      alert(err?.detail || 'No se pudo previsualizar el ajuste');
+    } finally { setLoading(false); }
+  };
+
   const handleConfirm = async () => {
     setLoading(true);
     try {
-      await dispatch(confirmPriceSync(preview.session_id)).unwrap();
+      const apply = mode === 'percentage' ? applyPriceSyncPercentage : confirmPriceSync;
+      await dispatch(apply(preview.session_id)).unwrap();
       setConfirmed(true);
     } finally { setLoading(false); }
   };
 
   const reset = () => {
     setPreview(null); setConfirmed(false);
+    setPct(''); setPriceMin(''); setPriceMax('');
     if (fileRef.current) fileRef.current.value = '';
   };
+
+  const switchMode = (id) => { setMode(id); reset(); };
 
   if (confirmed) {
     return (
@@ -79,18 +113,38 @@ export default function AdminPriceSyncPage() {
       <header className={styles.header}>
         <div>
           <MetaTag tone="bronze">Operación masiva · precios</MetaTag>
-          <h1 className={styles.title}>Sincronizar precios desde CSV</h1>
+          <h1 className={styles.title}>Sincronizar precios</h1>
           <p className={styles.lead}>
-            Actualiza precios de productos existentes en bloque. Solo cambia precios;
-            no crea ni elimina productos. Modo dry-run obligatorio antes de aplicar.
+            Actualiza precios de productos existentes en bloque, desde un CSV o
+            aplicando un porcentaje. Solo cambia precios; no crea ni elimina
+            productos. Modo dry-run obligatorio antes de aplicar.
           </p>
         </div>
-        <Button variant="ghost" onClick={() => dispatch(downloadPriceTemplate())}>
-          ↓ Plantilla CSV
-        </Button>
+        {mode === 'csv' && (
+          <Button variant="ghost" onClick={() => dispatch(downloadPriceTemplate())}>
+            ↓ Plantilla CSV
+          </Button>
+        )}
       </header>
 
       {!preview && (
+        <div className={styles.modeTabs} role="tablist" aria-label="Modo de sincronización">
+          {MODES.map((m) => (
+            <button
+              key={m.id}
+              type="button"
+              role="tab"
+              aria-selected={mode === m.id}
+              className={`${styles.modeTab} ${mode === m.id ? styles.modeTabActive : ''}`}
+              onClick={() => switchMode(m.id)}
+            >
+              {m.label}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {!preview && mode === 'csv' && (
         <div className={styles.uploadCard} style={{ gridTemplateColumns: '1fr' }}>
           <label
             className={styles.dropZone}
@@ -106,6 +160,36 @@ export default function AdminPriceSyncPage() {
             <div className={styles.dropTitle}>{loading ? 'Validando…' : 'Arrastra el CSV de precios'}</div>
             <div className={styles.dropHint}>Columnas: sku, price · max 5 MB</div>
           </label>
+        </div>
+      )}
+
+      {!preview && mode === 'percentage' && (
+        <div className={styles.uploadCard} style={{ gridTemplateColumns: '1fr' }}>
+          <div className={styles.pctForm}>
+            <label className={styles.field}>
+              <span>Porcentaje de ajuste (%)</span>
+              <input
+                type="number" step="0.1" value={pct}
+                onChange={(e) => setPct(e.target.value)}
+                placeholder="Ej: 10 (sube 10%), -5 (baja 5%)"
+              />
+            </label>
+            <label className={styles.field}>
+              <span>Precio mínimo (opcional)</span>
+              <input type="number" value={priceMin} onChange={(e) => setPriceMin(e.target.value)} />
+            </label>
+            <label className={styles.field}>
+              <span>Precio máximo (opcional)</span>
+              <input type="number" value={priceMax} onChange={(e) => setPriceMax(e.target.value)} />
+            </label>
+            <Button
+              variant="primary"
+              onClick={handlePercentagePreview}
+              disabled={loading || pct === ''}
+            >
+              {loading ? 'Calculando…' : 'Previsualizar ajuste'}
+            </Button>
+          </div>
         </div>
       )}
 
@@ -145,7 +229,7 @@ export default function AdminPriceSyncPage() {
               <tbody>
                 {preview.diffs.slice(0, 100).map((d, i) => {
                   const delta = d.new_price - d.old_price;
-                  const pct = ((delta / d.old_price) * 100).toFixed(1);
+                  const pctDelta = ((delta / d.old_price) * 100).toFixed(1);
                   return (
                     <tr key={d.sku ?? i}>
                       <td className={styles.mono}>{d.sku}</td>
@@ -153,7 +237,7 @@ export default function AdminPriceSyncPage() {
                       <td className={styles.mono}><Price amount={d.old_price} size="sm" /></td>
                       <td className={styles.mono}><Price amount={d.new_price} size="sm" /></td>
                       <td className={delta > 0 ? styles.statLime : styles.statVino}>
-                        {delta > 0 ? '+' : ''}{delta.toLocaleString('es-MX')} ({pct}%)
+                        {delta > 0 ? '+' : ''}{delta.toLocaleString('es-MX')} ({pctDelta}%)
                       </td>
                     </tr>
                   );

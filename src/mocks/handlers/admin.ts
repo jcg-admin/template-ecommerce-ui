@@ -281,30 +281,32 @@ export const adminHandlers = [
     HttpResponse.json({ updated_count: 5, message: '5 precios actualizados correctamente.' })
   ),
 
+  // Shape real: ← { pct, category_id?, price_min?, price_max? }
+  //             → { session_id, valid_count, preview:[...], pct }
   http.post('/api/v1/admin/price-sync/preview-percentage/', async ({ request }) => {
-    const body = await request.json() as { percentage: number; category?: string };
-    const pct  = (body.percentage ?? 0) / 100;
+    const body = await request.json() as { pct: number };
+    const pct  = (body.pct ?? 0) / 100;
+    const rows = _adminProducts.slice(0, 3);
     return HttpResponse.json({
-      preview: _adminProducts.slice(0, 3).map(p => ({
-        sku: p.sku ?? `SKU-${p.id}`,
-        name: p.name,
-        current_price: p.price_with_tax,
-        new_price: Math.round(p.price_with_tax * (1 + pct)),
-        change: `${body.percentage > 0 ? '+' : ''}${body.percentage}%`,
+      session_id:  'sess-pct-mock',
+      valid_count: rows.length,
+      pct:         body.pct ?? 0,
+      preview: rows.map(p => ({
+        sku:          p.sku ?? `SKU-${p.id}`,
+        product_id:   p.id,
+        product_name: p.name,
+        old_price:    String(p.price_with_tax),
+        new_price:    String(Math.round(p.price_with_tax * (1 + pct))),
+        diff_pct:     body.pct ?? 0,
       })),
-      affected_count: _adminProducts.length,
-    });
-  }),
-
-  http.post('/api/v1/admin/price-sync/apply-percentage/', async ({ request }) => {
-    const body = await request.json() as { percentage: number };
-    return HttpResponse.json({
-      applied: true,
-      updated_count: _adminProducts.length,
-      percentage: body.percentage,
       errors: [],
     });
   }),
+
+  // apply-percentage real: ← { session_id } → { updated_count, message }
+  http.post('/api/v1/admin/price-sync/apply-percentage/', async () =>
+    HttpResponse.json({ updated_count: 3, message: '3 precios actualizados correctamente.' })
+  ),
 
   // ── Notificaciones admin ────────────────────────────────────────────
   http.get('/api/v1/admin/notifications/', () => {

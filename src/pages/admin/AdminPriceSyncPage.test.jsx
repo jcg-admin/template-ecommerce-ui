@@ -55,10 +55,10 @@ const uploadCsv = () => {
 afterEach(() => jest.clearAllMocks());
 
 describe('AdminPriceSyncPage (UC-CAT-12)', () => {
-  it('muestra el titulo «Sincronizar precios desde CSV»', () => {
+  it('muestra el titulo «Sincronizar precios»', () => {
     renderPage();
     expect(
-      screen.getByRole('heading', { name: /sincronizar precios desde csv/i, level: 1 }),
+      screen.getByRole('heading', { name: /^sincronizar precios$/i, level: 1 }),
     ).toBeInTheDocument();
   });
 
@@ -116,6 +116,60 @@ describe('AdminPriceSyncPage (UC-CAT-12)', () => {
       expect(apiService.post).toHaveBeenLastCalledWith(
         '/api/v1/admin/price-sync/apply-csv/',
         { session_id: 'sess-1' },
+      ),
+    );
+    expect(screen.getByText(/precios actualizados/i)).toBeInTheDocument();
+  });
+});
+
+describe('AdminPriceSyncPage — modo porcentaje (UC-CAT-12)', () => {
+  const PCT_RAW = {
+    session_id: 'sess-pct',
+    valid_count: 2,
+    pct: 10,
+    preview: [
+      { sku: 'SKU-1', product_id: 1, product_name: 'Elekes de Oshún', old_price: '100', new_price: '110', diff_pct: 10 },
+      { sku: 'SKU-2', product_id: 2, product_name: 'Sopera Yemayá',   old_price: '200', new_price: '220', diff_pct: 10 },
+    ],
+    errors: [],
+  };
+
+  const gotoPercentage = () => {
+    renderPage();
+    fireEvent.click(screen.getByRole('tab', { name: /ajuste por porcentaje/i }));
+  };
+
+  it('previsualiza el ajuste llamando a preview-percentage con { pct }', async () => {
+    apiService.post.mockResolvedValueOnce({ data: PCT_RAW });
+    gotoPercentage();
+
+    fireEvent.change(screen.getByLabelText(/porcentaje de ajuste/i), { target: { value: '10' } });
+    fireEvent.click(screen.getByRole('button', { name: /previsualizar ajuste/i }));
+
+    expect(await screen.findByText(/productos cambiarán de precio/i)).toBeInTheDocument();
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/admin/price-sync/preview-percentage/',
+        expect.objectContaining({ pct: 10 }),
+      ),
+    );
+  });
+
+  it('al confirmar llama a apply-percentage con { session_id }', async () => {
+    apiService.post
+      .mockResolvedValueOnce({ data: PCT_RAW })
+      .mockResolvedValueOnce({ data: { updated_count: 2, message: 'ok' } });
+    gotoPercentage();
+
+    fireEvent.change(screen.getByLabelText(/porcentaje de ajuste/i), { target: { value: '10' } });
+    fireEvent.click(screen.getByRole('button', { name: /previsualizar ajuste/i }));
+    await screen.findByText(/productos cambiarán de precio/i);
+    fireEvent.click(screen.getByRole('button', { name: /confirmar.*cambios/i }));
+
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenLastCalledWith(
+        '/api/v1/admin/price-sync/apply-percentage/',
+        { session_id: 'sess-pct' },
       ),
     );
     expect(screen.getByText(/precios actualizados/i)).toBeInTheDocument();

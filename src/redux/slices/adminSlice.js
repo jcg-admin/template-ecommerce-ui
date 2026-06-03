@@ -591,6 +591,12 @@ const adminSlice = createSlice({
       .addCase(confirmPriceSync.pending,   (state) => { state.isActioning = true; })
       .addCase(confirmPriceSync.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'price_sync_confirmed'; })
       .addCase(confirmPriceSync.rejected,  (state) => { state.isActioning = false; })
+      .addCase(previewPriceSyncPercentage.pending,   (state) => { state.isActioning = true; })
+      .addCase(previewPriceSyncPercentage.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(previewPriceSyncPercentage.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(applyPriceSyncPercentage.pending,   (state) => { state.isActioning = true; })
+      .addCase(applyPriceSyncPercentage.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'price_sync_confirmed'; })
+      .addCase(applyPriceSyncPercentage.rejected,  (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.pending,   (state) => { state.isActioning = true; })
       .addCase(uploadProductImage.fulfilled, (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.rejected,  (state) => { state.isActioning = false; })
@@ -833,6 +839,49 @@ export const downloadPriceTemplate = createAsyncThunk(
     try {
       const res = await apiService.get('/api/v1/admin/price-sync/template.csv');
       return res.data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// Variante por porcentaje (price_sync_views.py PriceSyncPreview/ApplyPercentage):
+//   preview-percentage ← { pct, category_id?, price_min?, price_max? }
+//                      → { session_id, valid_count, preview:[...], pct }
+//   apply-percentage   ← { session_id } → { updated_count, message }
+// La preview comparte shape con CSV; normalizamos igual (diffs/session_id).
+export const previewPriceSyncPercentage = createAsyncThunk(
+  'admin/previewPriceSyncPercentage',
+  async ({ pct, category_id, price_min, price_max }, { rejectWithValue }) => {
+    try {
+      const body = { pct };
+      if (category_id) body.category_id = category_id;
+      if (price_min !== undefined && price_min !== '') body.price_min = price_min;
+      if (price_max !== undefined && price_max !== '') body.price_max = price_max;
+      const data = (await apiService.post('/api/v1/admin/price-sync/preview-percentage/', body)).data;
+      const diffs = (data.preview ?? []).map((r) => ({
+        sku:       r.sku,
+        name:      r.product_name,
+        old_price: Number(r.old_price),
+        new_price: Number(r.new_price),
+        diff_pct:  r.diff_pct,
+      }));
+      const total_increase = diffs.reduce((acc, d) => acc + (d.new_price - d.old_price), 0);
+      return {
+        session_id:    data.session_id,
+        diffs,
+        not_found:     data.errors ?? [],
+        valid_count:   data.valid_count,
+        pct:           data.pct,
+        total_increase,
+      };
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const applyPriceSyncPercentage = createAsyncThunk(
+  'admin/applyPriceSyncPercentage',
+  async (sessionId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post('/api/v1/admin/price-sync/apply-percentage/', { session_id: sessionId })).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );

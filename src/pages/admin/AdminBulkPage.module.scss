@@ -183,3 +183,32 @@
   text-decoration: none;
   &:hover { color: $coral-soft; }
 }
+
+// UC-CAT-12 — selector de modo (CSV / porcentaje) + formulario de porcentaje
+.modeTabs {
+  display: flex; gap: $spacing-2; margin-bottom: $spacing-6;
+}
+.modeTab {
+  font-family: $font-family-mono; font-size: $font-size-xs;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: $spacing-2 $spacing-5; border: 1px solid $border-color;
+  background: transparent; color: $text-muted; cursor: pointer;
+  border-radius: $border-radius-sm;
+  &:hover { color: $text-secondary; }
+}
+.modeTabActive {
+  color: $text-primary; border-color: $text-primary;
+}
+.pctForm {
+  display: flex; flex-direction: column; gap: $spacing-4;
+  padding: $spacing-6;
+}
+.field {
+  display: flex; flex-direction: column; gap: $spacing-2;
+  span { font-size: $font-size-sm; color: $text-secondary; }
+  input {
+    padding: $spacing-3 $spacing-4; border: 1px solid $border-color;
+    border-radius: $border-radius-sm; background: $bg-elevated; color: $text-primary;
+    font-family: $font-family-mono;
+  }
+}

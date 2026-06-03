@@ -45,7 +45,6 @@ import logisticsReducer         from './slices/logisticsSlice';
 import reviewsReducer           from './slices/reviewsSlice';
 import addressesReducer         from './slices/addressesSlice';
 import searchHistoryReducer     from './slices/searchHistorySlice';
-import priceSyncReducer         from './slices/priceSyncSlice';
 import referralReducer          from './slices/referralSlice';
 
 import {
@@ -85,7 +84,6 @@ const store = configureStore({
     reviews:          reviewsReducer,
     addresses:        addressesReducer,
     searchHistory:    searchHistoryReducer,
-    priceSync:        priceSyncReducer,
     referral:         referralReducer,
   },
   middleware: (getDefaultMiddleware) =>
