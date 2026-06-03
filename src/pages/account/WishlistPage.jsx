@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchWishlist, removeWishlistItem, moveToCart } from '@redux/slices/wishlistSlice';
 import { MetaTag, Price, Button, EmptyState } from '@components/common/primitives';
+import Skeleton from '@components/common/Skeleton';
 import styles from './WishlistPage.module.scss';
 
 export default function WishlistPage() {
@@ -49,7 +50,13 @@ export default function WishlistPage() {
               )}
             </header>
 
-            {isLoading && <div className={styles.loading}>Cargando…</div>}
+            {isLoading && (
+              <div className={styles.grid}>
+                {Array.from({ length: 3 }, (_, i) => (
+                  <Skeleton key={i} shape="rectangle" height={80} />
+                ))}
+              </div>
+            )}
 
             {!isLoading && items.length === 0 && (
               <EmptyState

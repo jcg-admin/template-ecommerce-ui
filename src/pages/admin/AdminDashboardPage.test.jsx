@@ -5,7 +5,7 @@
  * BUG-TEST-AD01: tests anteriores usaban shape desactualizada (order_counts,
  * day_summary) que no coincide con lo que AdminDashboardPage renderiza.
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
@@ -105,9 +105,26 @@ describe('AdminDashboardPage — landing admin', () => {
       expect(
         await screen.findByRole('heading', { name: /^indicadores$/i }),
       ).toBeInTheDocument();
-      // role="meter" expone cada Gauge.
-      const meters = await screen.findAllByRole('meter');
+      // role="meter" expone cada Gauge. Se acota a la sección "Indicadores"
+      // porque el LinearGauge de alertas (en la tarjeta "Alertas") también
+      // expone role="meter".
+      const indicadores = await screen.findByRole('region', { name: /^indicadores$/i });
+      const meters = within(indicadores).getAllByRole('meter');
       expect(meters).toHaveLength(3);
+    });
+
+    // UC-INV-01 (F7): LinearGauge de nivel de alertas en la tarjeta "Alertas".
+    it('renderiza el LinearGauge de nivel de alertas de stock', async () => {
+      apiService.get.mockResolvedValueOnce({
+        data: { ...MOCK_METRICS, alerts: [{}, {}, {}] },
+      });
+      renderPage();
+      const stock = await screen.findByRole('meter', {
+        name: /nivel de alertas de stock/i,
+      });
+      // 3 alertas / techo 10.
+      expect(stock).toHaveAttribute('aria-valuenow', '3');
+      expect(stock).toHaveAttribute('aria-valuemax', '10');
     });
 
     it('expone aria-valuenow derivado de los datos reales', async () => {

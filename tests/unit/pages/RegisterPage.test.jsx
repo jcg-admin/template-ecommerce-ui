@@ -75,4 +75,24 @@ describe('RegisterPage', () => {
     renderPage();
     expect(screen.getByRole('button', { name: /crear mi cuenta/i })).toBeInTheDocument();
   });
+
+  it('el checkbox de terminos habilita el boton de submit (UC-AUTH-01)', () => {
+    // UC-AUTH-01: el submit está bloqueado hasta aceptar términos.
+    renderPage();
+    const submit = screen.getByRole('button', { name: /crear mi cuenta/i });
+    const terms = screen.getByRole('checkbox');
+
+    // Sin aceptar términos: deshabilitado.
+    expect(submit).toBeDisabled();
+
+    // Al marcar el checkbox: habilitado.
+    fireEvent.click(terms);
+    expect(terms).toBeChecked();
+    expect(submit).toBeEnabled();
+
+    // Al desmarcar: vuelve a deshabilitarse.
+    fireEvent.click(terms);
+    expect(terms).not.toBeChecked();
+    expect(submit).toBeDisabled();
+  });
 });

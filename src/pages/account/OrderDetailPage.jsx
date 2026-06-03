@@ -15,6 +15,7 @@ import { fetchOrderDetail, cancelOrder } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import PdfViewer from '@components/common/PdfViewer';
+import TimeLine from '@components/common/TimeLine';
 import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
 
@@ -104,31 +105,23 @@ export default function OrderDetailPage() {
 }
 
 function Timeline({ order, currentIndex }) {
+  const events = TIMELINE_STEPS.map((step, i) => {
+    const log = (order.status_logs || []).find(l => l.status === step.id);
+    const status = i < currentIndex ? 'done' : i === currentIndex ? 'current' : 'pending';
+    return {
+      title: step.t,
+      description: step.detail,
+      date: log
+        ? new Date(log.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' })
+        : undefined,
+      status,
+    };
+  });
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Seguimiento del envío</h2>
-      <div className={styles.timeline}>
-        <div className={styles.timelineRail} />
-        {TIMELINE_STEPS.map((step, i) => {
-          const done = i < currentIndex;
-          const active = i === currentIndex;
-          const log = (order.status_logs || []).find(l => l.status === step.id);
-          return (
-            <div key={step.id} className={styles.timelineRow}>
-              <div className={`${styles.timelineDot} ${done ? styles.timelineDotDone : ''} ${active ? styles.timelineDotActive : ''}`} />
-              <div>
-                <div className={`${styles.timelineTitle} ${(done || active) ? styles.timelineTitleActive : ''}`}>
-                  {step.t}
-                </div>
-                {step.detail && <div className={styles.timelineDetail}>{step.detail}</div>}
-              </div>
-              <div className={styles.timelineWhen}>
-                {log ? new Date(log.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : 'pendiente'}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <TimeLine events={events} ariaLabel="Seguimiento del envío" />
     </section>
   );
 }

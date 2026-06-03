@@ -12,6 +12,7 @@ import { Link } from 'react-router-dom';
 import { fetchProfile, updateProfile, uploadAvatar } from '@redux/slices/authSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import FileUpload from '@components/common/FileUpload';
+import Avatar from '@components/common/Avatar';
 import styles from './ProfilePage.module.scss';
 
 export default function ProfilePage() {
@@ -53,6 +54,11 @@ export default function ProfilePage() {
           <section>
             <header className={styles.header}>
               <MetaTag tone="bronze">Datos personales</MetaTag>
+              <Avatar
+                src={user.avatar_url}
+                name={`${user.first_name} ${user.last_name}`}
+                size="lg"
+              />
               <h1 className={styles.title}>Tu perfil</h1>
               <p className={styles.lead}>
                 Información que usamos para envíos, comunicación y facturación.

@@ -40,7 +40,9 @@ describe('ProductReviewCreatePage (UC-REV-01)', () => {
     expect(
       screen.getByRole('heading', { name: /Dejar rese[nñ]a/i }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText(/Calificaci[oó]n/i)).toBeInTheDocument();
+    expect(
+      screen.getByRole('radiogroup', { name: /Tu calificaci[oó]n/i }),
+    ).toBeInTheDocument();
     expect(screen.getByLabelText(/T[ií]tulo/i)).toBeInTheDocument();
   });
 
@@ -57,9 +59,9 @@ describe('ProductReviewCreatePage (UC-REV-01)', () => {
     apiService.post.mockResolvedValue({ data: { id: 11, status: 'PENDING_MODERATION' } });
     render(wrap());
 
-    fireEvent.change(screen.getByLabelText(/Calificaci[oó]n/i), {
-      target: { value: '5' },
-    });
+    fireEvent.click(
+      screen.getByRole('radio', { name: /^5 de 5 estrellas$/i }),
+    );
     fireEvent.change(screen.getByLabelText(/T[ií]tulo/i), {
       target: { value: 'Excelente producto' },
     });
@@ -84,9 +86,9 @@ describe('ProductReviewCreatePage (UC-REV-01)', () => {
   it('muestra confirmacion al recibir', async () => {
     apiService.post.mockResolvedValue({ data: { id: 11, status: 'PENDING_MODERATION' } });
     render(wrap());
-    fireEvent.change(screen.getByLabelText(/Calificaci[oó]n/i), {
-      target: { value: '4' },
-    });
+    fireEvent.click(
+      screen.getByRole('radio', { name: /^4 de 5 estrellas$/i }),
+    );
     fireEvent.change(screen.getByLabelText(/T[ií]tulo/i), {
       target: { value: 'Buen articulo' },
     });

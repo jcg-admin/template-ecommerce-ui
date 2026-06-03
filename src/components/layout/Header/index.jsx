@@ -12,6 +12,7 @@
 
 import Offcanvas from '@components/common/Offcanvas/Offcanvas';
 import Badge from '@components/common/Badge';
+import Avatar from '@components/common/Avatar';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -120,6 +121,7 @@ export default function Header() {
               <Dropdown
                 trigger={
                   <span className={styles.actionLink} aria-label="Menu de usuario">
+                    <Avatar src={user?.avatar_url} name={user?.first_name} size="sm" />
                     {user?.first_name || 'Mi cuenta'} ▾
                   </span>
                 }

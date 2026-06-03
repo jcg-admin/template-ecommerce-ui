@@ -9,11 +9,12 @@
  *   GET /catalogue/categories/
  */
 
+import Breadcrumb  from '@components/common/Breadcrumb';
 import Chip        from '@components/common/Chip/Chip';
 import RangeSlider from '@components/common/RangeSlider/RangeSlider';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   fetchProducts, searchProducts, clearSearch, setPage,
 } from '@redux/slices/catalogSlice';
@@ -119,10 +120,10 @@ export default function CatalogPage() {
     <main className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroInner}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Inicio</Link><span>/</span>
-            <span className={styles.bcCurrent}>{mode === 'search' ? 'Búsqueda' : 'Catálogo'}</span>
-          </nav>
+          <Breadcrumb items={[
+            { label: 'Inicio', to: '/' },
+            { label: mode === 'search' ? 'Búsqueda' : 'Catálogo' },
+          ]} />
           <div className={styles.heroGrid}>
             <div>
               <MetaTag tone="bronze">

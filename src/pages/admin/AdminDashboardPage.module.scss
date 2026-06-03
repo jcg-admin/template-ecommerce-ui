@@ -236,3 +236,28 @@
   color: $text-muted;
   text-align: right;
 }
+
+// Mini-charts (Sparkline / LinearGauge) — enhancements aditivos UC-REP.
+.kpiSpark { margin-top: $spacing-3; line-height: 0; }
+
+.orishaChart {
+  padding: 0 $spacing-5 $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+.orishaChartLabel {
+  font-family: $font-family-mono;
+  font-size: 10px;
+  color: $text-muted;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stockGauge { padding: $spacing-4 $spacing-5 $spacing-5; }
+.stockGaugeCaption {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $spacing-2;
+}
