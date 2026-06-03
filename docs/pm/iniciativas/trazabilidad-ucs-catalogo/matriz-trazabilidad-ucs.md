@@ -206,20 +206,20 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-SYS-04 | Reenviar emails fallidos | BACKEND-OPS | Reintento server-side de emails; sin UI (regla clave UC-SYS-*; ver BR-019) |
 | UC-SYS-05 | Soft delete historial | BACKEND-OPS | Comportamiento de persistencia server-side; sin UI (regla clave UC-SYS-*) |
 | UC-SYS-06 | Loud errors | BACKEND-OPS | Manejo/registro de errores server-side; sin UI (regla clave UC-SYS-*) |
-| UC-INV-01 | Ver stock | IMPLEMENTADO | `src/pages/admin/AdminInventoryPage.jsx` (ref. UC-INV-01), `src/hooks/domain/useInventory.js`, `src/redux/slices/inventorySlice.js` |
+| UC-INV-01 | Ver stock | IMPLEMENTADO | `src/pages/admin/AdminInventoryPage.jsx` (ref. UC-INV-01) con export CSV + Excel del listado (`@utils/exportSheet`, `@utils/exportWorkbook`), `src/hooks/domain/useInventory.js`, `src/redux/slices/inventorySlice.js` |
 | UC-INV-02 | Decrementar stock | IMPLEMENTADO | `src/pages/admin/AdminInventoryMovementsPage.jsx` (ref. UC-INV-02), `src/hooks/domain/useInventory.js`, `src/redux/slices/inventorySlice.js` |
 | UC-INV-03 | Restaurar stock | IMPLEMENTADO | `src/pages/admin/AdminInventoryMovementsPage.jsx` (ref. UC-INV-03), `src/redux/slices/inventorySlice.js` |
 | UC-INV-04 | Ajustar stock manual | IMPLEMENTADO | `src/pages/admin/AdminInventoryAdjustPage.jsx` (ref. UC-INV-04), `src/components/admin/StockAdjustModal`, `src/redux/slices/inventorySlice.js` |
-| UC-INV-05 | Importar productos CSV | IMPLEMENTADO | `src/pages/admin/AdminInventoryImportPage.jsx` (ref. UC-INV-05), `src/redux/slices/inventorySlice.js` |
+| UC-INV-05 | Importar productos CSV | IMPLEMENTADO | Dos páginas sobre el mismo endpoint real single-shot `POST /api/v1/admin/inventory/import/`: `src/pages/admin/AdminInventoryImportPage.jsx` (form simple) y `src/pages/admin/AdminProductImportPage.jsx` (UX dropzone + mapa de columnas + selector estado inicial), ambas vía `importProductsCsv` de `src/redux/slices/inventorySlice.js`. AdminProductImportPage se realineó del flujo preview/confirm/template inventado al contrato real (drift-inventory-import.md, `template-ecommerce-ui@3299584`). |
 | UC-REP-01 | Reporte ingresos ventas | IMPLEMENTADO | `src/pages/admin/AdminReportSalesPage.jsx` (ref. UC-REP-01), `src/hooks/domain/useReports.js` |
 | UC-REP-02 | Reporte top sellers | IMPLEMENTADO | `src/pages/admin/AdminReportTopSellersPage.jsx` (ref. UC-REP-02), `src/hooks/domain/useReports.js` |
 | UC-REP-03 | Dashboard analítico | IMPLEMENTADO | `src/pages/admin/AdminReportDashboardPage.jsx` (ref. UC-REP-03), `src/hooks/domain/useReports.js` |
 | UC-REP-04 | Reporte clientes RFM | IMPLEMENTADO | `src/pages/admin/AdminReportCustomersRfmPage.jsx` (ref. UC-REP-04), `src/hooks/domain/useReports.js` |
-| UC-REP-05 | Exportar reportes | IMPLEMENTADO | Exportación en `AdminReportSalesPage.jsx`, `AdminReportTopSellersPage.jsx`, `AdminReportCustomersRfmPage.jsx` (ref. UC-REP-05), `src/hooks/domain/useReports.js` |
+| UC-REP-05 | Exportar reportes | IMPLEMENTADO | Export server-delegated (`buildReportExportUrl` formato csv/pdf, `src/hooks/domain/useReports.js`) + export local CSV + Excel (XLSX nativo OOXML, `@utils/exportSheet` y `@utils/exportWorkbook`, sin dependencia nueva) en `AdminReportSalesPage.jsx`, `AdminReportTopSellersPage.jsx`, `AdminReportCustomersRfmPage.jsx` (ref. UC-REP-05) |
 | UC-RPT-01 | Ver reporte ventas | IMPLEMENTADO | `src/pages/admin/AdminReportSalesPage.jsx` (página admin de reporte de ventas) |
 | UC-RPT-02 | Ver reporte productos | IMPLEMENTADO | `src/pages/admin/AdminReportTopSellersPage.jsx` (reporte de productos/top sellers) |
 | UC-RPT-03 | Ver reporte compradores | IMPLEMENTADO | `src/pages/admin/AdminReportCustomersRfmPage.jsx` (reporte de compradores/RFM) |
-| UC-RPT-04 | Exportar reporte | IMPLEMENTADO | Exportación en páginas `AdminReport*Page.jsx` vía `src/hooks/domain/useReports.js` |
+| UC-RPT-04 | Exportar reporte | IMPLEMENTADO | Exportación en páginas `AdminReport*Page.jsx`: server-delegated vía `src/hooks/domain/useReports.js` + export local CSV/Excel (`@utils/exportSheet`, `@utils/exportWorkbook`) |
 | UC-OPS-01 | Configurar fail2ban | BACKEND-OPS | Operación de servidor (fail2ban); sin UI (regla clave UC-OPS-*) |
 | UC-OPS-02 | Aplicar hardening SSH | BACKEND-OPS | Hardening SSH server-side; sin UI (regla clave UC-OPS-*) |
 | UC-OPS-03 | Configurar SSL | BACKEND-OPS | Configuración SSL del servidor; sin UI (regla clave UC-OPS-*) |
