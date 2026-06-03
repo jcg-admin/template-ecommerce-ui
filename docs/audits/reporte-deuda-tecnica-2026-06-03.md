@@ -70,13 +70,17 @@ build:demo EXIT=0.
 **Recomendación:** fixear los 24 bloques vacíos + auto-fixables ya; hex →
 tokens y `!important` → revisión, bajo verificación visual (no romper estilos).
 
-### D-3 — `act()` warnings en tests (BAJA, higiene)
-~10 componentes emiten *"An update … was not wrapped in act(...)"* (AccountPage,
-ProfilePage, Footer, Popover, AdminVoucherDetailPage, ExpressCheckoutPage,
-PaymentReturnPage, PaymentFailedPage, AdminStaticPagesPage; raíz en
-`usePublicSettings.js:28` setData async tras unmount/efecto). No son fallos
-(suite verde) pero son deuda de higiene de tests. **Recomendación:** envolver
-las actualizaciones async en `act`/`waitFor` o cancelar el setState tras unmount.
+### D-3 — `act()` warnings en tests — **RESUELTO en `593852e`**
+9 componentes emitían *"An update … was not wrapped in act(...)"* (60→0
+ocurrencias). Raíz: setState async en `useEffect` (`usePublicSettings` fetch +
+páginas que fetchan al montar) que resolvía fuera de `act()` porque el test no
+esperaba el settle. Fix **solo en tests** (sin tocar producción): renders/asserts
+async con `await findBy`/`waitFor` o `await act(async () => {})` para flushear el
+efecto, + mocks de `apiService.get` deterministas donde faltaban (PaymentFailedPage,
+AccountPage). También cubierto `AccountLayout.test.jsx` (monta Footer en `it.each`).
+
+Verificado (árbol canónico): `grep -c "not wrapped in act"` → **0**; jest 1886/0;
+eslint 0; tsc 0; check-scss 185.
 
 ### D-4 — Drift de contrato del carrito — **RESUELTO en `0acb559`**
 El UI usaba `name`/`price` por item y computaba totales en cliente con modelo
