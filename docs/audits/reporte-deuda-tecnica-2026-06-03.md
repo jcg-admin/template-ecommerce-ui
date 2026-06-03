@@ -31,15 +31,25 @@ version: 1.0.0
 
 ## Deuda técnica pendiente (requiere decisión o conlleva riesgo)
 
-### D-1 — ESLint sin configuración (MEDIA)
-`npm run lint` falla: *"ESLint couldn't find a configuration file"*. No existe
-`.eslintrc*` ni `eslint.config.*` ni `eslintConfig` en `package.json`, pese a
-tener las deps (`eslint`, `eslint-plugin-react`, `eslint-plugin-react-hooks`,
-`@typescript-eslint/*`). **El lint nunca ha corrido.** Crear la config es una
-decisión (ruleset) y probablemente destape muchos hallazgos en código no
-lintado. **Recomendación:** iniciativa dedicada — añadir config base
-(react + react-hooks + typescript-eslint recomendado), correr, y triar/fixear
-por dominio.
+### D-1 — ESLint sin configuración — **RESUELTO en `1f59c5d` + `2600c75`**
+Se añadió `.eslintrc.json` (eslint:recommended + react + react/jsx-runtime +
+react-hooks + override TS; prop-types/display-name off por React 19 sin
+PropTypes). `npm run lint` pasa ahora con **0 problems** (0 errores, 0 warnings).
+
+Al correr el lint por primera vez (60 errores + 116 warnings) se encontraron
+**bugs reales de producción** (corregidos en `1f59c5d`):
+- CatalogPage: el `<select>` de "Ordenar" usaba `setSortOrder` inexistente y el
+  padre no pasaba `sortOrder`/`onSort` al Toolbar → ordenar lanzaba error.
+- adminSlice: clave `isLoadingVariants` duplicada en initialState.
+- Dropdown: `className` y `onKeyDown` duplicados en el trigger.
+- apiService: 2 `catch {}` vacíos.
+
+Los 116 warnings (103 no-unused-vars + 9 exhaustive-deps + otros) se llevaron a
+**0** en `2600c75`: dead-code eliminado vía codemod AST; exhaustive-deps con 8
+`useMemo`/`useCallback` triviales + 1 disable-justificado (AdminReturnRefundPanel).
+
+Verificado (árbol canónico): eslint 0, tsc 0, jest 1886/0, check-scss 185,
+build:demo EXIT=0.
 
 ### D-2 — Stylelint: ~51 violaciones — **RESUELTO en `2a35a35`**
 `npm run lint:style` ahora pasa con **0 violaciones** (antes ~51). Desglose
