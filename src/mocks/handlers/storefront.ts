@@ -50,8 +50,18 @@ const _addresses: Address[] = [
     country: 'MX',
     is_default: false,
   },
+];
 
-  // ── Actualizar dirección existente (PATCH) ──────────────────────────
+export const storefrontHandlers = [
+
+  // ── Direcciones ─────────────────────────────────────────────────────
+  http.get('/api/v1/auth/addresses/', () =>
+    HttpResponse.json({ count: _addresses.length, results: _addresses })
+  ),
+
+  // Actualizar dirección existente (PATCH). Estaba mal ubicado dentro del
+  // array de datos _addresses (fuera de storefrontHandlers) → no se
+  // registraba en MSW: editar dirección fallaba en DEMO_MODE.
   http.patch('/api/v1/auth/addresses/:id/', async ({ params, request }) => {
     const id   = Number(params.id);
     const body = await request.json() as Partial<Address>;
@@ -61,7 +71,7 @@ const _addresses: Address[] = [
     return HttpResponse.json(_addresses[idx]);
   }),
 
-  // ── Eliminar dirección (DELETE) ───────────────────────────────────────
+  // Eliminar dirección (DELETE). Mismo problema de ubicación que el PATCH.
   http.delete('/api/v1/auth/addresses/:id/', ({ params }) => {
     const id  = Number(params.id);
     const idx = _addresses.findIndex((a) => a.id === id);
@@ -69,14 +79,6 @@ const _addresses: Address[] = [
     _addresses.splice(idx, 1);
     return new HttpResponse(null, { status: 204 });
   }),
-];
-
-export const storefrontHandlers = [
-
-  // ── Direcciones ─────────────────────────────────────────────────────
-  http.get('/api/v1/auth/addresses/', () =>
-    HttpResponse.json({ count: _addresses.length, results: _addresses })
-  ),
 
   http.post('/api/v1/auth/addresses/', async ({ request }) => {
     const body = await request.json() as Partial<Address>;

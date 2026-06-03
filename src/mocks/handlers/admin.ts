@@ -210,7 +210,7 @@ export const adminHandlers = [
   ),
 
   http.patch('/api/v1/admin/settings/', async ({ request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json(body);
   }),
 
@@ -340,7 +340,7 @@ export const adminHandlers = [
 
   http.patch('/api/v1/admin/products/:id/', async ({ params, request }) => {
     const id   = Number(params.id);
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const idx  = _adminProducts.findIndex((x) => x.id === id);
     if (idx < 0) return HttpResponse.json({ detail: 'No encontrado' }, { status: 404 });
     _adminProducts[idx] = { ..._adminProducts[idx], ...body };
@@ -375,7 +375,7 @@ export const adminHandlers = [
   ),
 
   http.patch('/api/v1/admin/gateways/:id/', async ({ params, request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json({ id: params.id, ...body });
   }),
 
@@ -528,13 +528,13 @@ export const adminHandlers = [
   }),
 
   http.post('/api/v1/admin/vouchers/', async ({ request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     const id   = Math.floor(Math.random() * 9000) + 1000;
     return HttpResponse.json({ id, ...body }, { status: 201 });
   }),
 
   http.patch('/api/v1/admin/vouchers/:id/', async ({ params, request }) => {
-    const body = await request.json();
+    const body = await request.json() as Record<string, unknown>;
     return HttpResponse.json({ id: Number(params.id), ...body });
   }),
 
@@ -565,11 +565,14 @@ export const adminHandlers = [
   // ── Pedidos admin ───────────────────────────────────────────────────────────
   // F5-T06 GET /api/v1/admin/orders/:id/
   http.get('/api/v1/admin/orders/:id/', ({ params }) => {
-    const id = Number(params.id);
-    const base = _adminOrders.find((o) => o.id === id) ?? _adminOrders[0];
+    // El UI pide /admin/orders/{order_number}/ (fetchAdminOrder). Antes se
+    // buscaba por Number(params.id) contra una propiedad `id` inexistente en
+    // Order → NaN → siempre devolvía la primera orden. Se busca por order_number.
+    const orderNumber = String(params.id);
+    const base = _adminOrders.find((o) => o.order_number === orderNumber) ?? _adminOrders[0];
     return HttpResponse.json({
       ...base,
-      id,
+      order_number: base.order_number,
       status_logs: [
         { id: 1, status: 'PENDING_PAYMENT', created_at: new Date(Date.now() - 86400000).toISOString(), note: '' },
         { id: 2, status: base.status,       created_at: new Date().toISOString(),                      note: '' },

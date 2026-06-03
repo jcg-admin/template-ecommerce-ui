@@ -119,10 +119,14 @@ export interface CartItem {
   product_id?: number;
   variant_id?: number;
   name: string;
+  /** Nombre del producto (campo del serializer real `product_name`). */
+  product_name?: string;
   /** Precio unitario al momento de anadir (no se recalcula en cliente). */
   price: number;
   quantity: number;
   image?: string;
+  /** URL de imagen para la miniatura del carrito (la consume CartPage). */
+  image_url?: string;
 }
 
 // ──────────────────────────────────────────────────────────────────────

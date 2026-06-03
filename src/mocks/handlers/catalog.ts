@@ -86,11 +86,13 @@ export const catalogHandlers = [
     // Razon: una busqueda tipicamente devuelve pocos resultados y el
     // frontend muestra todos de una vez. La paginacion artificial
     // (A-02) generaba un `next` hardcodeado a page=2 que no funcionaba.
+    // BUG-FIX: este handler referenciaba `total`/`page`/`pages` que solo
+    // existen en el handler `/catalogue/` (ReferenceError al ejecutarse).
     const body: PaginatedResponse<typeof results[number]> = {
-      count:    total,
+      count:    results.length,
       results,
-      next:     page < pages ? `/api/v1/catalogue/?page=${page + 1}` : null,
-      previous: page > 1    ? `/api/v1/catalogue/?page=${page - 1}` : null,
+      next:     null,
+      previous: null,
     };
     return HttpResponse.json(body);
   }),
