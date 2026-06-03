@@ -41,17 +41,21 @@ lintado. **Recomendación:** iniciativa dedicada — añadir config base
 (react + react-hooks + typescript-eslint recomendado), correr, y triar/fixear
 por dominio.
 
-### D-2 — Stylelint: ~51 violaciones (MEDIA/BAJA)
-`npm run lint:style` falla. `check-scss.mjs` (el gate real) sí pasa; stylelint
-es más estricto y no se enforce. Desglose:
-- **24 bloques vacíos** (`block-no-empty`) en ~18 `.module.scss` — *seguros de
-  eliminar* (reglas CSS muertas).
-- **12 `!important`** (`declaration-no-important`) — quitarlos puede cambiar el
-  render; revisar caso por caso.
-- **11 hex hardcodeados** (`color-no-hex`) — mapear a tokens del design-system
-  (relacionado con la iniciativa `monitorear-y-reducir-allowlist-hex`).
-- **4 otros** (`selector-not-notation` ×2, `selector-pseudo-class-no-unknown`,
-  `declaration-property-value-keyword-no-deprecated`) — varios auto-fixables.
+### D-2 — Stylelint: ~51 violaciones — **RESUELTO en `2a35a35`**
+`npm run lint:style` ahora pasa con **0 violaciones** (antes ~51). Desglose
+de lo corregido:
+- **24 bloques vacíos** (`block-no-empty`) eliminados (reglas CSS muertas).
+- **12 `!important`** (`declaration-no-important`) eliminados; la especificidad
+  de los selectores basta (sin `stylelint-disable`).
+- **11 hex hardcodeados** (`color-no-hex`) → tokens (`#fff`→`$white`,
+  `#000`→`$black`) + 2 tokens semánticos nuevos en `_variables.scss`
+  (`$star-gold` #f5a623, `$tooltip-bg` #1a1a2e).
+- **4 otros**: `selector-not-notation` (Calendar) y `word-break` deprecado
+  (ChatWidget) vía `--fix`; `:global`/`:local` de CSS Modules permitidos en
+  `.stylelintrc.json` (`ignorePseudoClasses`).
+
+Verificado: stylelint 0, check-scss 185 clean, tsc 0, jest 1886/0,
+build:demo EXIT=0.
 
 **Recomendación:** fixear los 24 bloques vacíos + auto-fixables ya; hex →
 tokens y `!important` → revisión, bajo verificación visual (no romper estilos).
