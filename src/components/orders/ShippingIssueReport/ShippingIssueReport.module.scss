@@ -1,0 +1,52 @@
+@use '@styles/abstracts' as *;
+
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  margin-top: $spacing-3;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+
+  span {
+    font-size: $font-size-sm;
+    color: $text-secondary;
+  }
+
+  select,
+  textarea {
+    padding: $spacing-3 $spacing-4;
+    border: 1px solid $border-color;
+    border-radius: $border-radius-sm;
+    background: $bg-elevated;
+    color: $text-primary;
+    font-family: $font-family-base;
+    font-size: $font-size-sm;
+  }
+
+  textarea {
+    resize: vertical;
+  }
+}
+
+.actions {
+  display: flex;
+  gap: $spacing-2;
+  justify-content: flex-end;
+}
+
+.error {
+  color: $error;
+  font-size: $font-size-sm;
+  margin: 0;
+}
+
+.success {
+  color: $green;
+  font-size: $font-size-sm;
+  margin: 0;
+}

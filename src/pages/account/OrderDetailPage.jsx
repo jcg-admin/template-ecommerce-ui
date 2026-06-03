@@ -16,6 +16,7 @@ import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import PdfViewer from '@components/common/PdfViewer';
 import TimeLine from '@components/common/TimeLine';
+import ShippingIssueReport from '@components/orders/ShippingIssueReport';
 import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
 
@@ -256,6 +257,8 @@ function SupportCard({ order, dispatch }) {
   const canRefund = order.status === 'DELIVERED' && !order.refund_requested;
   // UC-ORD-04 — cancelar orden (cliente). Solo cancelable antes de despacho.
   const canCancel = ['PENDING', 'PROCESSING'].includes(order.status);
+  // UC-LOG-07 — reportar problema de envio: solo tras el despacho.
+  const canReportIssue = ['SHIPPED', 'DELIVERED'].includes(order.status);
   const [showCancel, setShowCancel] = useState(false);
 
   const handleCancel = () => {
@@ -280,6 +283,9 @@ function SupportCard({ order, dispatch }) {
           </Button>
         )}
       </div>
+
+      {/* UC-LOG-07 — reportar problema de envio (orden ya despachada). */}
+      {canReportIssue && <ShippingIssueReport orderId={order.id} />}
 
       <ConfirmModal
         open={showCancel}

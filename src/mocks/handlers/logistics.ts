@@ -178,4 +178,35 @@ export const logisticsHandlers = [
       qualifies_free_shipping: qualifies,
     });
   }),
+
+  // UC-LOG-07 — Reportar problema de envio (comprador). Feature FABRICADA del
+  // template (sin backend de referencia): el comprador abre una incidencia sobre
+  // una orden ya despachada. POST { order_id, reason, description } → 201.
+  http.post('/api/v1/logistics/shipping-issues/', async ({ request }) => {
+    const body = (await request.json().catch(() => null)) as
+      | { order_id?: number | string; reason?: string; description?: string }
+      | null;
+
+    if (!body?.reason || !body?.description?.trim()) {
+      return HttpResponse.json(
+        {
+          detail: 'Motivo y descripcion son obligatorios.',
+          codigo_error: 'SHIPPING_ISSUE_INVALID',
+        },
+        { status: 400 },
+      );
+    }
+
+    return HttpResponse.json(
+      {
+        id: Math.floor(Math.random() * 9000) + 1000,
+        order_id: body.order_id ?? null,
+        reason: body.reason,
+        description: body.description,
+        status: 'ABIERTO',
+        created_at: new Date().toISOString(),
+      },
+      { status: 201 },
+    );
+  }),
 ];
