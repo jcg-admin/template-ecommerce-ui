@@ -21,6 +21,7 @@ import {
 } from '@components/common/primitives';
 import { LoadingButton } from '@components/common';
 import ProgressBar from '@components/common/ProgressBar';
+import NumericTextBox from '@components/common/NumericTextBox';
 import styles from './CartPage.module.scss';
 
 const FREE_SHIPPING_THRESHOLD = 1500;
@@ -136,10 +137,6 @@ function ItemList({ items, dispatch }) {
 }
 
 function CartItem({ item, dispatch }) {
-  const handleQty = (delta) => {
-    const next = Math.max(1, item.quantity + delta);
-    dispatch(updateCartItem({ id: item.id, quantity: next }));
-  };
   const handleRemove = () => dispatch(removeCartItem(item.id));
 
   return (
@@ -161,9 +158,12 @@ function CartItem({ item, dispatch }) {
         </div>
       </div>
       <div className={styles.qtyBox}>
-        <button type="button" onClick={() => handleQty(-1)} aria-label="Reducir">−</button>
-        <span>{item.quantity}</span>
-        <button type="button" onClick={() => handleQty(+1)} aria-label="Aumentar">+</button>
+        <NumericTextBox
+          value={item.quantity}
+          min={1}
+          onChange={(n) => dispatch(updateCartItem({ id: item.id, quantity: Math.max(1, n) }))}
+          ariaLabel={`Cantidad de ${item.product_name}`}
+        />
       </div>
       <div className={styles.itemPrice}>
         <Price amount={item.unit_price * item.quantity} size="sm" />

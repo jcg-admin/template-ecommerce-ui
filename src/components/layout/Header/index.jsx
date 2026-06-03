@@ -11,6 +11,7 @@
  */
 
 import Offcanvas from '@components/common/Offcanvas/Offcanvas';
+import Badge from '@components/common/Badge';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -152,7 +153,7 @@ export default function Header() {
             >
               Bolsa
               <span className={styles.cartCount}>
-                {cartCount > 99 ? '99+' : cartCount}
+                <Badge value={cartCount} tone="coral" ariaLabel={`${cartCount} en la bolsa`} />
               </span>
             </button>
             <Offcanvas
