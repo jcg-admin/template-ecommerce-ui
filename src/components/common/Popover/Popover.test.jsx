@@ -2,8 +2,19 @@
  * Tests: Popover — extiende Tooltip (ui-core popover.js)
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import Popover from './Popover';
+
+// Al abrir el panel, floating-ui (whileElementsMounted: autoUpdate)
+// recalcula la posición de forma asíncrona y dispara un setState de
+// floatingStyles después del fireEvent síncrono. openPanel envuelve la
+// interacción y deja que ese update asíncrono se asiente dentro de act,
+// evitando el warning "not wrapped in act".
+const openPanel = async (el) => {
+  await act(async () => {
+    fireEvent.click(el);
+  });
+};
 
 describe('Popover', () => {
   it('no muestra el panel por defecto', () => {
@@ -11,52 +22,54 @@ describe('Popover', () => {
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('trigger=click abre el panel al hacer click (default de ui-core)', () => {
+  it('trigger=click abre el panel al hacer click (default de ui-core)', async () => {
     render(<Popover content="Contenido"><button>Abrir</button></Popover>);
-    fireEvent.click(screen.getByText('Abrir').closest('span'));
+    await openPanel(screen.getByText('Abrir').closest('span'));
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
     expect(screen.getByText('Contenido')).toBeInTheDocument();
   });
 
-  it('segundo click cierra el panel (toggle)', () => {
+  it('segundo click cierra el panel (toggle)', async () => {
     render(<Popover content="Info"><button>Toggle</button></Popover>);
     const wrapper = screen.getByText('Toggle').closest('span');
-    fireEvent.click(wrapper);
-    fireEvent.click(wrapper);
+    await openPanel(wrapper);
+    await act(async () => { fireEvent.click(wrapper); });
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('muestra header (popover-header) cuando se pasa title', () => {
+  it('muestra header (popover-header) cuando se pasa title', async () => {
     render(<Popover content="Cuerpo" title="Título"><button>T</button></Popover>);
-    fireEvent.click(screen.getByText('T').closest('span'));
+    await openPanel(screen.getByText('T').closest('span'));
     expect(screen.getByText('Título')).toBeInTheDocument();
     expect(screen.getByText('Cuerpo')).toBeInTheDocument();
   });
 
-  it('sin title no renderiza header (equivale a _isWithContent)', () => {
+  it('sin title no renderiza header (equivale a _isWithContent)', async () => {
     render(<Popover content="Solo cuerpo"><button>T</button></Popover>);
-    fireEvent.click(screen.getByText('T').closest('span'));
+    await openPanel(screen.getByText('T').closest('span'));
     expect(screen.queryByText('Título')).not.toBeInTheDocument();
   });
 
-  it('content como función se resuelve al abrir', () => {
+  it('content como función se resuelve al abrir', async () => {
     const contentFn = () => 'Contenido dinámico';
     render(<Popover content={contentFn}><button>T</button></Popover>);
-    fireEvent.click(screen.getByText('T').closest('span'));
+    await openPanel(screen.getByText('T').closest('span'));
     expect(screen.getByText('Contenido dinámico')).toBeInTheDocument();
   });
 
-  it('Escape cierra el panel', () => {
+  it('Escape cierra el panel', async () => {
     render(<Popover content="Info"><button>T</button></Popover>);
-    fireEvent.click(screen.getByText('T').closest('span'));
+    await openPanel(screen.getByText('T').closest('span'));
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    fireEvent.keyDown(document, { key: 'Escape' });
+    await act(async () => { fireEvent.keyDown(document, { key: 'Escape' }); });
     expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
   });
 
-  it('trigger=hover abre con mouseenter', () => {
+  it('trigger=hover abre con mouseenter', async () => {
     render(<Popover content="Info" trigger="hover"><button>T</button></Popover>);
-    fireEvent.mouseEnter(screen.getByText('T').closest('span'));
+    await act(async () => {
+      fireEvent.mouseEnter(screen.getByText('T').closest('span'));
+    });
     expect(screen.getByRole('tooltip')).toBeInTheDocument();
   });
 });

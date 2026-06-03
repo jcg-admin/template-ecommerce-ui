@@ -2,7 +2,7 @@
  * Tests — ExpressCheckoutPage
  * One-click checkout para clientes recurrentes
  */
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, act } from '@testing-library/react';
 import { Provider }     from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -45,36 +45,45 @@ const makeStore = (eligible = true) => configureStore({
   },
 });
 
-const renderPage = (eligible = true) => render(
-  <Provider store={makeStore(eligible)}>
-    <MemoryRouter><ExpressCheckoutPage /></MemoryRouter>
-  </Provider>
-);
+// renderPage es async: envuelve el mount en act y deja que los thunks
+// despachados en useEffect (fetchCart/fetchExpressEligibility) resuelvan
+// dentro de act, evitando el warning "not wrapped in act".
+const renderPage = async (eligible = true) => {
+  let result;
+  await act(async () => {
+    result = render(
+      <Provider store={makeStore(eligible)}>
+        <MemoryRouter><ExpressCheckoutPage /></MemoryRouter>
+      </Provider>
+    );
+  });
+  return result;
+};
 
 describe('ExpressCheckoutPage', () => {
   beforeEach(() => mockNavigate.mockClear());
 
-  it('muestra pantalla de no elegible si eligible=false', () => {
-    renderPage(false);
+  it('muestra pantalla de no elegible si eligible=false', async () => {
+    await renderPage(false);
     expect(screen.getByRole('heading', { name: /necesitas un pedido más/i }))
       .toBeInTheDocument();
   });
 
-  it('muestra botón de checkout express cuando es elegible', () => {
-    renderPage(true);
+  it('muestra botón de checkout express cuando es elegible', async () => {
+    await renderPage(true);
     // El botón de confirmar pago express
     const btn = screen.getByRole('button', { name: /pagar|confirmar|express/i });
     expect(btn).toBeInTheDocument();
   });
 
-  it('botón de no elegible navega a /checkout', () => {
-    renderPage(false);
+  it('botón de no elegible navega a /checkout', async () => {
+    await renderPage(false);
     fireEvent.click(screen.getByRole('button', { name: /checkout normal/i }));
     expect(mockNavigate).toHaveBeenCalledWith('/checkout');
   });
 
-  it('muestra los items del carrito cuando es elegible', () => {
-    renderPage(true);
+  it('muestra los items del carrito cuando es elegible', async () => {
+    await renderPage(true);
     // Al menos algún texto del carrito debería ser visible
     const text = document.body.textContent;
     expect(text).toMatch(/eleke|oshún|890|carrito/i);
