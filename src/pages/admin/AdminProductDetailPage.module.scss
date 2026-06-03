@@ -31,7 +31,6 @@
 }
 .tabActive { color: $text-primary; font-weight: $font-weight-medium; border-bottom-color: $bronze; }
 
-.form {}
 .section { display: flex; flex-direction: column; gap: $spacing-4; max-width: 880px; }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }
 .row3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: $spacing-4; @media (max-width: $bp-md) { grid-template-columns: 1fr; } }

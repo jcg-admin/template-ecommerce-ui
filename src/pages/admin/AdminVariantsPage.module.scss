@@ -121,8 +121,8 @@
   }
   tbody tr:last-child td { border-bottom: 0; }
   tbody tr:hover { background: rgba($lime, 0.03); }
+  tbody tr.rowDirty, tbody tr.rowDirty:hover { background: rgba($bronze, 0.06); }
 }
-.rowDirty { background: rgba($bronze, 0.06) !important; }
 .mono { font-family: $font-family-mono; color: $text-secondary; }
 
 .combo { display: flex; flex-wrap: wrap; gap: 6px; }

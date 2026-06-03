@@ -7,7 +7,7 @@
 }
 
 .tooltip {
-  background: #1a1a2e;
+  background: $tooltip-bg;
   color: $text-inverse;
   font-size: $font-size-xs;
   padding: $spacing-1 $spacing-2;

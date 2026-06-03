@@ -34,7 +34,7 @@
   border-radius: $border-radius-lg;
   font-size: $font-size-sm;
   line-height: 1.4;
-  word-break: break-word;
+  overflow-wrap: break-word;
 }
 
 .bubbleAgent {

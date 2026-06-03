@@ -113,7 +113,5 @@
 // Estados de validación
 .invalid .inputGroup { border-color: $error-color; }
 .valid   .inputGroup { border-color: $success-color; }
-.invalid { }
-.valid   { }
 
 .disabled { opacity: 0.5; pointer-events: none; }

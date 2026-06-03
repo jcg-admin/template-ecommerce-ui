@@ -8,7 +8,7 @@
   border: none;
   padding: 0;
   margin: 0;
-  color: #f5a623;   // amber — token de estrellas, no variable aún
+  color: $star-gold;
 
   &.disabled { opacity: 0.5; }
 }
@@ -20,7 +20,7 @@
   cursor: pointer;
   display: flex;
 
-  &:hover { color: color.scale(#f5a623, $lightness: -10%); }
+  &:hover { color: color.scale($star-gold, $lightness: -10%); }
 }
 
 .halfLabel {

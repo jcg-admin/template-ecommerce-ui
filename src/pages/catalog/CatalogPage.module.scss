@@ -38,7 +38,6 @@
   strong { color: $text-primary; }
 }
 .clearLink { background: none; border: 0; padding: 0; color: $coral; cursor: pointer; font: inherit; }
-.heroSearch {}
 
 .container {
   max-width: $content-max-width;
@@ -91,7 +90,6 @@
   place-items: center;
 }
 
-.slider {}
 .sliderTrack {
   position: relative;
   height: 4px;
@@ -123,7 +121,6 @@
 }
 
 // ─── Results ───
-.results {}
 .toolbar {
   display: flex;
   justify-content: space-between;
@@ -207,11 +204,12 @@
     &:hover:not(:disabled) { border-color: $bronze; color: $text-primary; }
     &:disabled { opacity: 0.4; cursor: not-allowed; }
   }
-}
-.pageActive {
-  background: $bronze !important;
-  border-color: $bronze !important;
-  color: $bg-page !important;
+  button.pageActive,
+  button.pageActive:hover:not(:disabled) {
+    background: $bronze;
+    border-color: $bronze;
+    color: $bg-page;
+  }
 }
 .pageEllipsis {
   display: inline-grid;

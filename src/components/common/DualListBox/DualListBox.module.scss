@@ -49,7 +49,7 @@
 
   &.optionActive {
     background: var(--ec-primary-color, #{$primary-color});
-    color: var(--ec-text-on-primary, #fff);
+    color: var(--ec-text-on-primary, $white);
   }
 }
 
