@@ -1,0 +1,68 @@
+// RadioGroup — grupo de opciones excluyentes, accesible y nativo.
+// Inspirado en kno-react-inputs RadioGroup/RadioButton.
+@use '@styles/abstracts' as *;
+
+.group {
+  display: flex;
+  gap: $spacing-3;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+.horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.option {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-2;
+  cursor: pointer;
+  color: var(--ec-text-primary);
+}
+
+.optionDisabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+// Input nativo: visualmente oculto pero accesible/focusable.
+.input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: 0;
+  padding: 0;
+  opacity: 0;
+}
+
+// Indicador visual (anillo + punto interno cuando checked).
+.control {
+  display: inline-flex;
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--ec-border-color);
+  border-radius: $border-radius-full;
+  background: var(--ec-bg-surface);
+  transition: border-color var(--ec-transition-base),
+    box-shadow var(--ec-transition-base);
+}
+
+.input:checked + .control {
+  border-color: var(--ec-primary);
+  box-shadow: inset 0 0 0 4px var(--ec-primary);
+}
+
+.input:focus-visible + .control {
+  @include focus-ring;
+}
+
+.label {
+  line-height: 1.2;
+}

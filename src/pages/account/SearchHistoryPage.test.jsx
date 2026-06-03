@@ -121,7 +121,7 @@ describe('SearchHistoryPage (UC-SRCH-03)', () => {
     await waitFor(() => screen.getByRole('button', { name: /Confirmar/i }));
     fireEvent.click(screen.getByRole('button', { name: /Confirmar/i }));
     await waitFor(() => {
-      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/search/history/');
+      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/catalogue/search/history/');
     });
   });
 
@@ -129,6 +129,6 @@ describe('SearchHistoryPage (UC-SRCH-03)', () => {
     apiService.get.mockResolvedValue({ data: { results: [], count: 0 } });
     renderPage();
     await screen.findByText(/aún no has buscado nada/i);
-    expect(apiService.get).toHaveBeenCalledWith('/api/v1/search/history/');
+    expect(apiService.get).toHaveBeenCalledWith('/api/v1/catalogue/search/history/');
   });
 });

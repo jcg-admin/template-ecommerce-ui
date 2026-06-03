@@ -12,6 +12,9 @@
     }],
 
     "declaration-no-important": true,
+    "selector-pseudo-class-no-unknown": [true, {
+      "ignorePseudoClasses": ["global", "local"]
+    }],
     "function-disallowed-list": ["lighten", "darken", "saturate", "desaturate", "adjust-hue", "fade-in", "fade-out", "opacify", "transparentize"],
     "property-disallowed-list": [],
 

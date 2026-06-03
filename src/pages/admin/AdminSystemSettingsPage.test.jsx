@@ -3,6 +3,7 @@
  *
  *   GET   /api/v1/admin/settings/
  *   PATCH /api/v1/admin/settings/
+ * (campos alineados al AdminSiteSettingsSerializer real)
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -20,11 +21,17 @@ import AdminSystemSettingsPage from './AdminSystemSettingsPage';
 
 const SETTINGS = {
   site_name: 'ecommerce-ui',
-  contact_email: 'hola@example.com',
-  support_phone: '+52 55 0000 0000',
-  tax_rate: 16,
+  support_email: 'hola@example.com',
+  phone: '+52 55 0000 0000',
+  address: 'Av. Reforma 123',
+  iva_rate: 16,
   currency: 'MXN',
-  maintenance_mode: false,
+  free_shipping_threshold: 1500,
+  min_stock_threshold: 5,
+  payment_timeout_minutes: 30,
+  order_timeout_minutes: 60,
+  max_return_days: 30,
+  social_links: { facebook: 'https://facebook.com/demo', instagram: '', youtube: '' },
 };
 
 const wrap = () => {
@@ -52,6 +59,17 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     expect(screen.getByDisplayValue('hola@example.com')).toBeInTheDocument();
   });
 
+  // UC-CFG-05 — datos de contacto + redes sociales
+  it('expone los campos de contacto y redes (UC-CFG-05)', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
+    render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(screen.getByLabelText(/Email de soporte/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Direccion del negocio/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/^Facebook$/i)).toHaveValue('https://facebook.com/demo');
+    expect(screen.getByLabelText(/^Instagram$/i)).toBeInTheDocument();
+  });
+
   it('envia PATCH /api/v1/admin/settings/ con los cambios', async () => {
     apiService.get.mockResolvedValue({ data: SETTINGS });
     apiService.patch.mockResolvedValue({ data: SETTINGS });
@@ -67,5 +85,30 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
         expect.objectContaining({ site_name: 'ecommerce-ui MX' }),
       );
     });
+  });
+
+  // Cableado de Switch: la rama `f.type === 'checkbox'` renderiza el
+  // componente Switch nativo (role="switch"), nunca un <input type="checkbox">
+  // crudo. Los FIELDS actuales del AdminSiteSettingsSerializer real no incluyen
+  // ningun campo boolean (todos son text/number/email), por lo que hoy la rama
+  // no se activa; la prueba bloquea la regresion de reintroducir un checkbox
+  // crudo si en el futuro se agrega un campo boolean de dominio.
+  it('no renderiza ningun <input type="checkbox"> crudo en el formulario', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
+    const { container } = render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(0);
+  });
+
+  // Campos reales del AdminSiteSettingsSerializer (alineados al backend).
+  it('expone los campos reales del serializer (iva, timeouts, stock, devolucion)', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
+    render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(screen.getByLabelText(/Tasa de IVA/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Umbral de envio gratis/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Umbral de stock minimo/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Timeout de pago/i)).toBeInTheDocument();
+    expect(screen.getByLabelText(/Dias maximos de devolucion/i)).toBeInTheDocument();
   });
 });

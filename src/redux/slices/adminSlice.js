@@ -133,7 +133,6 @@ const adminSlice = createSlice({
     productImages:      [],
     csvImport:          { status: 'idle', result: null, errors: [] },
     productVariants:    [],
-    isLoadingVariants:  false,
     variantTypes:       [],
     isLoadingVariantTypes: false,
     gateways:           [],
@@ -152,8 +151,6 @@ const adminSlice = createSlice({
     stockAlerts:        [],
     isLoadingInventory: false,
     isLoadingAlerts:    false,
-    siteSettings:       null,
-    isLoadingSettings:  false,
   },
 
   reducers: {
@@ -354,30 +351,6 @@ const adminSlice = createSlice({
         state.isLoadingAlerts = false;
       })
 
-      // ── BUG-SL-03: fetchSiteSettings + updateSiteSettings ────────────────
-      .addCase(fetchSiteSettings.pending,   (state) => {
-        state.isLoadingSettings = true;
-      })
-      .addCase(fetchSiteSettings.fulfilled, (state, action) => {
-        state.isLoadingSettings = false;
-        state.siteSettings      = action.payload ?? null;
-      })
-      .addCase(fetchSiteSettings.rejected,  (state) => {
-        state.isLoadingSettings = false;
-      })
-      .addCase(updateSiteSettings.pending,   (state) => {
-        state.isActioning = true;
-      })
-      .addCase(updateSiteSettings.fulfilled, (state, action) => {
-        state.isActioning  = false;
-        state.siteSettings = action.payload ?? state.siteSettings;
-        state.lastAction   = 'settings_updated';
-      })
-      .addCase(updateSiteSettings.rejected,  (state, action) => {
-        state.isActioning  = false;
-        state.actionError  = action.payload ?? null;
-      })
-
       // ── BUG-SL-04: fetchAdminVoucher + CRUD ──────────────────────────────
       .addCase(fetchAdminVoucher.pending,   (state) => {
         state.isLoadingVoucher = true;
@@ -420,7 +393,7 @@ const adminSlice = createSlice({
         state.actionError = action.payload ?? null;
       })
 
-      // ── fetchAdminPages + fetchAdminPage + savePageDraft + publishPage ────
+      // ── fetchAdminPages + fetchAdminPage + savePageDraft ─────────────────
       .addCase(fetchAdminPages.pending,   (state) => {
         state.isLoadingPages = true;
       })
@@ -437,37 +410,20 @@ const adminSlice = createSlice({
       .addCase(fetchAdminPage.fulfilled, (state, action) => {
         state.isLoadingPages = false;
         state.currentPage    = action.payload ?? null;
+        // Las versiones vienen anidadas en el detail serializer (versions[]).
+        state.pageVersions   = action.payload?.versions ?? [];
       })
       .addCase(fetchAdminPage.rejected,  (state) => {
-        state.isLoadingPages = false;
-      })
-      .addCase(fetchPageVersions.pending,   (state) => {
-        state.isLoadingPages = true;
-      })
-      .addCase(fetchPageVersions.fulfilled, (state, action) => {
-        state.isLoadingPages = false;
-        state.pageVersions   = action.payload?.results ?? action.payload ?? [];
-      })
-      .addCase(fetchPageVersions.rejected,  (state) => {
         state.isLoadingPages = false;
       })
       .addCase(savePageDraft.pending,   (state) => { state.isActioning = true; })
       .addCase(savePageDraft.fulfilled, (state, action) => {
         state.isActioning = false;
         state.currentPage = action.payload ?? state.currentPage;
+        state.pageVersions = action.payload?.versions ?? state.pageVersions;
         state.lastAction  = 'draft_saved';
       })
       .addCase(savePageDraft.rejected,  (state, action) => {
-        state.isActioning = false;
-        state.actionError = action.payload ?? null;
-      })
-      .addCase(publishPage.pending,   (state) => { state.isActioning = true; })
-      .addCase(publishPage.fulfilled, (state, action) => {
-        state.isActioning = false;
-        state.currentPage = { ...state.currentPage, ...action.payload };
-        state.lastAction  = 'published';
-      })
-      .addCase(publishPage.rejected,  (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload ?? null;
       })
@@ -488,6 +444,9 @@ const adminSlice = createSlice({
         state.variants          = action.payload?.results ?? action.payload ?? [];
       })
       .addCase(fetchProductVariants.rejected,  (state) => { state.isLoadingVariants = false; })
+      .addCase(saveVariantChanges.pending,   (state) => { state.isActioning = true; })
+      .addCase(saveVariantChanges.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(saveVariantChanges.rejected,  (state) => { state.isActioning = false; })
       .addCase(fetchVariantTypes.pending,   (state) => { state.isLoadingVariantTypes = true; })
       .addCase(fetchVariantTypes.fulfilled, (state, action) => {
         state.isLoadingVariantTypes = false;
@@ -506,12 +465,6 @@ const adminSlice = createSlice({
         state.shippingMethods   = action.payload?.results ?? action.payload ?? [];
       })
       .addCase(fetchShippingMethods.rejected,  (state) => { state.isLoadingShipping = false; })
-      .addCase(fetchImportStatus.pending,   (state) => { state.isActioning = true; })
-      .addCase(fetchImportStatus.fulfilled, (state, action) => {
-        state.isActioning = false;
-        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
-      })
-      .addCase(fetchImportStatus.rejected,  (state) => { state.isActioning = false; })
       // ── Grupo B: mutaciones ───────────────────────────────────────────────
       .addCase(createProduct.pending,   (state) => { state.isActioning = true; })
       .addCase(createProduct.fulfilled, (state, action) => {
@@ -540,9 +493,6 @@ const adminSlice = createSlice({
       .addCase(adjustVariantStock.pending,   (state) => { state.isActioning = true; })
       .addCase(adjustVariantStock.fulfilled, (state) => { state.isActioning = false; })
       .addCase(adjustVariantStock.rejected,  (state) => { state.isActioning = false; })
-      .addCase(duplicateVoucher.pending,   (state) => { state.isActioning = true; })
-      .addCase(duplicateVoucher.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'voucher_duplicated'; })
-      .addCase(duplicateVoucher.rejected,  (state) => { state.isActioning = false; })
       .addCase(toggleVoucherActive.pending,   (state) => { state.isActioning = true; })
       .addCase(toggleVoucherActive.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -585,24 +535,12 @@ const adminSlice = createSlice({
         if (action.payload?.typeId !== undefined) state.variantTypes = state.variantTypes.filter(t => t.id !== action.payload.typeId);
       })
       .addCase(deleteVariantType.rejected,  (state) => { state.isActioning = false; })
-      .addCase(createVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(createVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(createVariantOption.rejected,  (state) => { state.isActioning = false; })
-      .addCase(updateVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(updateVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(updateVariantOption.rejected,  (state) => { state.isActioning = false; })
-      .addCase(deleteVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(deleteVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(deleteVariantOption.rejected,  (state) => { state.isActioning = false; })
       .addCase(deleteCategory.pending,   (state) => { state.isActioning = true; })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isActioning = false;
         state.categoryTree = state.categoryTree.filter(c => c.id !== action.payload?.id);
       })
       .addCase(deleteCategory.rejected,  (state) => { state.isActioning = false; })
-      .addCase(moveCategoryNode.pending,   (state) => { state.isActioning = true; })
-      .addCase(moveCategoryNode.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(moveCategoryNode.rejected,  (state) => { state.isActioning = false; })
       .addCase(setUserActiveStatus.pending,   (state) => { state.isActioning = true; })
       .addCase(setUserActiveStatus.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -624,11 +562,6 @@ const adminSlice = createSlice({
       .addCase(fetchPublicPage.pending,   (state) => { state.isLoadingPages = true; })
       .addCase(fetchPublicPage.fulfilled, (state, action) => { state.isLoadingPages = false; state.currentPage = action.payload ?? null; })
       .addCase(fetchPublicPage.rejected,  (state) => { state.isLoadingPages = false; })
-      .addCase(restorePageVersion.pending,   (state) => { state.isActioning = true; })
-      .addCase(restorePageVersion.fulfilled, (state, action) => {
-        state.isActioning = false; state.currentPage = action.payload ?? state.currentPage; state.lastAction = 'version_restored';
-      })
-      .addCase(restorePageVersion.rejected,  (state) => { state.isActioning = false; })
       .addCase(createAdminPage.pending,   (state) => { state.isActioning = true; })
       .addCase(createAdminPage.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -647,12 +580,6 @@ const adminSlice = createSlice({
       .addCase(testGatewayConnection.pending,   (state) => { state.isActioning = true; })
       .addCase(testGatewayConnection.fulfilled, (state) => { state.isActioning = false; })
       .addCase(testGatewayConnection.rejected,  (state) => { state.isActioning = false; })
-      .addCase(bulkUpdateVariants.pending,   (state) => { state.isActioning = true; })
-      .addCase(bulkUpdateVariants.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(bulkUpdateVariants.rejected,  (state) => { state.isActioning = false; })
-      .addCase(regenerateVariants.pending,   (state) => { state.isActioning = true; })
-      .addCase(regenerateVariants.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(regenerateVariants.rejected,  (state) => { state.isActioning = false; })
       // ── Grupo C: upload/import ────────────────────────────────────────────
       .addCase(uploadPriceCSV.pending,   (state) => { state.isActioning = true; })
       .addCase(uploadPriceCSV.fulfilled, (state, action) => {
@@ -663,15 +590,12 @@ const adminSlice = createSlice({
       .addCase(confirmPriceSync.pending,   (state) => { state.isActioning = true; })
       .addCase(confirmPriceSync.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'price_sync_confirmed'; })
       .addCase(confirmPriceSync.rejected,  (state) => { state.isActioning = false; })
-      .addCase(uploadProductCSV.pending,   (state) => { state.isActioning = true; })
-      .addCase(uploadProductCSV.fulfilled, (state, action) => {
-        state.isActioning = false;
-        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
-      })
-      .addCase(uploadProductCSV.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
-      .addCase(confirmProductImport.pending,   (state) => { state.isActioning = true; })
-      .addCase(confirmProductImport.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'product_import_confirmed'; })
-      .addCase(confirmProductImport.rejected,  (state) => { state.isActioning = false; })
+      .addCase(previewPriceSyncPercentage.pending,   (state) => { state.isActioning = true; })
+      .addCase(previewPriceSyncPercentage.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(previewPriceSyncPercentage.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
+      .addCase(applyPriceSyncPercentage.pending,   (state) => { state.isActioning = true; })
+      .addCase(applyPriceSyncPercentage.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'price_sync_confirmed'; })
+      .addCase(applyPriceSyncPercentage.rejected,  (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.pending,   (state) => { state.isActioning = true; })
       .addCase(uploadProductImage.fulfilled, (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.rejected,  (state) => { state.isActioning = false; })
@@ -753,21 +677,9 @@ export const fetchStockAlerts = createAsyncThunk(
     catch (e) { return rejectWithValue(e.message); }
   },
 );
-export const fetchSiteSettings = createAsyncThunk(
-  'admin/siteSettings', async (_a, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/settings/')).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-export const updateSiteSettings = createAsyncThunk(
-  'admin/updateSettings', async (data, { rejectWithValue }) => {
-    try { return (await apiService.patch('/api/v1/admin/settings/', data)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
 export const fetchAdminPages = createAsyncThunk(
   'admin/pages', async (_a, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/pages/')).data; }
+    try { return (await apiService.get('/api/v1/admin/static-content/')).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -820,7 +732,7 @@ export const adminCancelOrder = createAsyncThunk(
 );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BUG-ADM-03: fetchAdminVouchers, duplicateVoucher, toggleVoucherActive
+// BUG-ADM-03: fetchAdminVouchers, toggleVoucherActive
 // Importados por AdminVouchersPage pero no definidos en el slice.
 // ─────────────────────────────────────────────────────────────────────────────
 export const fetchAdminVouchers = createAsyncThunk(
@@ -831,19 +743,16 @@ export const fetchAdminVouchers = createAsyncThunk(
   },
 );
 
-export const duplicateVoucher = createAsyncThunk(
-  'admin/duplicateVoucher',
-  async (id, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/duplicate/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
+// El VoucherViewSet real solo expone @action activate/deactivate/report
+// (apps/voucher/views.py:105,124,161). No hay endpoint toggle ni duplicate:
+// toggle se resuelve eligiendo activate/deactivate según el estado actual.
 export const toggleVoucherActive = createAsyncThunk(
   'admin/toggleVoucherActive',
-  async (id, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/toggle/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
+  async ({ id, isActive }, { rejectWithValue }) => {
+    try {
+      const action = isActive ? 'deactivate' : 'activate';
+      return (await apiService.post(`/api/v1/admin/vouchers/${id}/${action}/`)).data;
+    } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
@@ -879,22 +788,46 @@ export const updateCategory = createAsyncThunk(
 // BUG-PS02: uploadPriceCSV, confirmPriceSync, downloadPriceTemplate
 // Importados por AdminPriceSyncPage pero no definidos.
 // ─────────────────────────────────────────────────────────────────────────────
+// Contrato real (apps/catalogue/price_sync_views.py):
+//   preview-csv → { session_id, valid_count, invalid_count,
+//                   preview: [{sku, product_id, product_name, old_price,
+//                              new_price, diff_pct}], errors: [{sku,error,line}] }
+//   apply-csv   ← { session_id }  → { updated_count, message }
+//   template    → GET price-sync/template.csv
+// Normalizamos la respuesta de preview a la forma que consume la página
+// (diffs/not_found/session_id) para no acoplar el render al naming del backend.
 export const uploadPriceCSV = createAsyncThunk(
   'admin/uploadPriceCSV',
   async (file, { rejectWithValue }) => {
     try {
       const fd = new FormData();
       fd.append('file', file);
-      return (await apiService.post('/api/v1/admin/price-sync/preview-csv/', fd)).data;
+      const data = (await apiService.post('/api/v1/admin/price-sync/preview-csv/', fd)).data;
+      const diffs = (data.preview ?? []).map((r) => ({
+        sku:       r.sku,
+        name:      r.product_name,
+        old_price: Number(r.old_price),
+        new_price: Number(r.new_price),
+        diff_pct:  r.diff_pct,
+      }));
+      const total_increase = diffs.reduce((acc, d) => acc + (d.new_price - d.old_price), 0);
+      return {
+        session_id:    data.session_id,
+        diffs,
+        not_found:     data.errors ?? [],
+        valid_count:   data.valid_count,
+        invalid_count: data.invalid_count,
+        total_increase,
+      };
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
 export const confirmPriceSync = createAsyncThunk(
   'admin/confirmPriceSync',
-  async (syncId, { rejectWithValue }) => {
+  async (sessionId, { rejectWithValue }) => {
     try {
-      return (await apiService.post('/api/v1/admin/price-sync/apply-csv/', { sync_id: syncId })).data;
+      return (await apiService.post('/api/v1/admin/price-sync/apply-csv/', { session_id: sessionId })).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -903,8 +836,51 @@ export const downloadPriceTemplate = createAsyncThunk(
   'admin/downloadPriceTemplate',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await apiService.get('/api/v1/admin/price-sync/template/');
+      const res = await apiService.get('/api/v1/admin/price-sync/template.csv');
       return res.data;
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+// Variante por porcentaje (price_sync_views.py PriceSyncPreview/ApplyPercentage):
+//   preview-percentage ← { pct, category_id?, price_min?, price_max? }
+//                      → { session_id, valid_count, preview:[...], pct }
+//   apply-percentage   ← { session_id } → { updated_count, message }
+// La preview comparte shape con CSV; normalizamos igual (diffs/session_id).
+export const previewPriceSyncPercentage = createAsyncThunk(
+  'admin/previewPriceSyncPercentage',
+  async ({ pct, category_id, price_min, price_max }, { rejectWithValue }) => {
+    try {
+      const body = { pct };
+      if (category_id) body.category_id = category_id;
+      if (price_min !== undefined && price_min !== '') body.price_min = price_min;
+      if (price_max !== undefined && price_max !== '') body.price_max = price_max;
+      const data = (await apiService.post('/api/v1/admin/price-sync/preview-percentage/', body)).data;
+      const diffs = (data.preview ?? []).map((r) => ({
+        sku:       r.sku,
+        name:      r.product_name,
+        old_price: Number(r.old_price),
+        new_price: Number(r.new_price),
+        diff_pct:  r.diff_pct,
+      }));
+      const total_increase = diffs.reduce((acc, d) => acc + (d.new_price - d.old_price), 0);
+      return {
+        session_id:    data.session_id,
+        diffs,
+        not_found:     data.errors ?? [],
+        valid_count:   data.valid_count,
+        pct:           data.pct,
+        total_increase,
+      };
+    } catch (e) { return rejectWithValue(e.message); }
+  },
+);
+
+export const applyPriceSyncPercentage = createAsyncThunk(
+  'admin/applyPriceSyncPercentage',
+  async (sessionId, { rejectWithValue }) => {
+    try {
+      return (await apiService.post('/api/v1/admin/price-sync/apply-percentage/', { session_id: sessionId })).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -970,45 +946,11 @@ export const reorderProductImages = createAsyncThunk(
   },
 );
 
-// ── Importación de productos ─────────────────────────────────────────────────
-export const uploadProductCSV = createAsyncThunk(
-  'admin/uploadProductCSV',
-  async (file, { rejectWithValue }) => {
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-      return (await apiService.post('/api/v1/admin/products/import/', fd)).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const confirmProductImport = createAsyncThunk(
-  'admin/confirmProductImport',
-  async (importId, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/import/${importId}/confirm/`
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const fetchImportStatus = createAsyncThunk(
-  'admin/fetchImportStatus',
-  async (importId, { rejectWithValue }) => {
-    try {
-      return (await apiService.get(`/api/v1/admin/products/import/${importId}/`)).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const downloadImportTemplate = createAsyncThunk(
-  'admin/downloadImportTemplate',
-  async (_, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/products/import/template/')).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
+// Importación de productos: la página admin/products/import delega en
+// inventorySlice.importProductsCsv → POST /api/v1/admin/inventory/import/
+// (single-shot real). Los thunks products/import/* (upload/confirm/status/
+// template) eran endpoints inventados sin respaldo en el backend real y se
+// eliminaron junto con sus mocks.
 
 // ── Variantes ────────────────────────────────────────────────────────────────
 export const fetchProductVariants = createAsyncThunk(
@@ -1019,24 +961,26 @@ export const fetchProductVariants = createAsyncThunk(
   },
 );
 
-export const bulkUpdateVariants = createAsyncThunk(
-  'admin/bulkUpdateVariants',
+/**
+ * Guardar cambios de varias variantes.
+ *
+ * El backend (ProductVariantAdminViewSet) NO expone un endpoint
+ * `variants/bulk/`; cada variante se actualiza con un PATCH individual
+ * al detail `variants/<id>/` (ViewSet.partial_update). Este thunk
+ * recorre las variantes editadas y emite un PATCH por cada una.
+ */
+export const saveVariantChanges = createAsyncThunk(
+  'admin/saveVariantChanges',
   async ({ productId, variants }, { rejectWithValue }) => {
     try {
-      return (await apiService.patch(
-        `/api/v1/admin/products/${productId}/variants/bulk/`, { variants }
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const regenerateVariants = createAsyncThunk(
-  'admin/regenerateVariants',
-  async (productId, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/${productId}/variants/regenerate/`
-      )).data;
+      const results = [];
+      for (const { id, ...changes } of variants) {
+        const res = await apiService.patch(
+          `/api/v1/admin/products/${productId}/variants/${id}/`, changes,
+        );
+        results.push(res.data);
+      }
+      return results;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1078,40 +1022,6 @@ export const deleteVariantType = createAsyncThunk(
     try {
       await apiService.delete(`/api/v1/admin/products/${productId}/variant-types/${typeId}/`);
       return typeId;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const createVariantOption = createAsyncThunk(
-  'admin/createVariantOption',
-  async ({ productId, typeId, data }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/`, data
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const updateVariantOption = createAsyncThunk(
-  'admin/updateVariantOption',
-  async ({ productId, typeId, optionId, data }, { rejectWithValue }) => {
-    try {
-      return (await apiService.patch(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`, data
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const deleteVariantOption = createAsyncThunk(
-  'admin/deleteVariantOption',
-  async ({ productId, typeId, optionId }, { rejectWithValue }) => {
-    try {
-      await apiService.delete(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`
-      );
-      return optionId;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1179,10 +1089,13 @@ export const deleteShippingMethod = createAsyncThunk(
 // ── Páginas estáticas (CMS) ──────────────────────────────────────────────────
 
 
+// Real: StaticContentDetailView. La respuesta incluye las versiones anidadas
+// (campo `versions[]` del StaticContentSerializer); no hay endpoint separado
+// de versions/, ni de publish/ ni de restore/ (no existen en el backend).
 export const fetchAdminPage = createAsyncThunk(
   'admin/fetchAdminPage',
   async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    try { return (await apiService.get(`/api/v1/admin/static-content/${slug}/`)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1190,50 +1103,25 @@ export const fetchAdminPage = createAsyncThunk(
 export const fetchPublicPage = createAsyncThunk(
   'admin/fetchPublicPage',
   async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    try { return (await apiService.get(`/api/v1/admin/static-content/${slug}/`)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
 
-export const fetchPageVersions = createAsyncThunk(
-  'admin/fetchPageVersions',
-  async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/versions/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
+// Real: PATCH /api/v1/admin/static-content/:slug/ — edita la pagina y bumpea
+// version (crea StaticContentVersion). No hay distincion borrador/publicado.
 export const savePageDraft = createAsyncThunk(
   'admin/savePageDraft',
   async ({ slug, data }, { rejectWithValue }) => {
-    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    try { return (await apiService.patch(`/api/v1/admin/static-content/${slug}/`, data)).data; }
     catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const publishPage = createAsyncThunk(
-  'admin/publishPage',
-  async (slug, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/pages/${slug}/publish/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const restorePageVersion = createAsyncThunk(
-  'admin/restorePageVersion',
-  async ({ slug, versionId }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/pages/${slug}/restore/${versionId}/`
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
 export const createAdminPage = createAsyncThunk(
   'admin/createAdminPage',
   async (data, { rejectWithValue }) => {
-    try { return (await apiService.post('/api/v1/admin/pages/', data)).data; }
+    try { return (await apiService.post('/api/v1/admin/static-content/', data)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1241,7 +1129,7 @@ export const createAdminPage = createAsyncThunk(
 export const updateAdminPage = createAsyncThunk(
   'admin/updateAdminPage',
   async ({ slug, data }, { rejectWithValue }) => {
-    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    try { return (await apiService.patch(`/api/v1/admin/static-content/${slug}/`, data)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1321,17 +1209,6 @@ export const deleteCategory = createAsyncThunk(
     try {
       await apiService.delete(`/api/v1/admin/categories/${id}/`);
       return id;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const moveCategoryNode = createAsyncThunk(
-  'admin/moveCategoryNode',
-  async ({ id, targetId, position }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/categories/${id}/move/`, { target: targetId, position }
-      )).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );

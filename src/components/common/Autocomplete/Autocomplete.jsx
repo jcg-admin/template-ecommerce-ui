@@ -136,7 +136,7 @@ const Autocomplete = forwardRef(function Autocomplete({
   }, [show, runSearch]);
 
   // update(options) — equivale a Autocomplete.update()
-  const update = useCallback((newOptions) => {
+  const update = useCallback((_newOptions) => {
     // Se pasan las opciones directamente; el componente las usa en el próximo render
     // Para uso dinámico, prefer externalSearch o options prop reactivo
   }, []);

@@ -27,12 +27,11 @@ export const checkoutHandlers = [
     return HttpResponse.json({ ...order, ...body }, { status: 201 });
   }),
 
-  // GET /api/v1/checkout/eligibility/
+  // GET /api/v1/checkout/eligibility/ (CheckoutEligibilitySerializer real)
   http.get('/api/v1/checkout/eligibility/', () =>
     HttpResponse.json({
-      eligible: true,
-      reasons: [],
-      cart_item_count: faker.number.int({ min: 1, max: 5 }),
+      express_available: true,
+      reason: null,
     })
   ),
 

@@ -1,0 +1,81 @@
+@use '@styles/abstracts' as *;
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ec-border-color, #{$border-color});
+  border-radius: var(--ec-border-radius-md);
+  overflow: hidden;
+  font-family: var(--ec-font-family-base);
+}
+
+.item {
+  & + & {
+    border-top: 1px solid var(--ec-border-color, #{$border-color});
+  }
+}
+
+.heading {
+  margin: 0;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+.trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: $spacing-3;
+  width: 100%;
+  padding: $spacing-3 $spacing-4;
+  background: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  color: var(--ec-text-primary, #{$text-primary});
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  transition: background-color $transition-base, color $transition-base;
+
+  &:hover {
+    background-color: var(--ec-bg-sunken);
+  }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: -2px;
+  }
+
+  &[aria-expanded='true'] {
+    color: $primary-color;
+
+    .icon {
+      transform: rotate(180deg);
+    }
+  }
+}
+
+.title {
+  flex: 1 1 auto;
+}
+
+.icon {
+  flex: 0 0 auto;
+  width: 0.65em;
+  height: 0.65em;
+  border-right: 2px solid currentcolor;
+  border-bottom: 2px solid currentcolor;
+  transform: rotate(45deg);
+  transform-origin: center;
+  transition: transform $transition-base;
+}
+
+.panel {
+  overflow: hidden;
+}
+
+.panelInner {
+  padding: $spacing-3 $spacing-4 $spacing-4;
+  color: var(--ec-text-secondary, #{$text-muted});
+  font-size: $font-size-sm;
+}

@@ -16,11 +16,15 @@ const NAV_ITEMS = [
   { to: '/account',                              label: 'Resumen',          end: true },
   { to: '/account/orders',                       label: 'Mis pedidos'  },
   { to: '/account/wishlist',                     label: 'Mis favoritos' },
+  { to: '/account/addresses',                    label: 'Mis direcciones' },
   { to: '/account/returns',                      label: 'Mis devoluciones' },
   { to: '/support/tickets',                      label: 'Soporte' },
   { to: '/account/notifications/preferences',    label: 'Notificaciones' },
   { to: '/account/profile',                      label: 'Mi perfil' },
   { to: '/account/change-password',              label: 'Cambiar contrasena' },
+  { to: '/account/security',                     label: 'Seguridad' },
+  { to: '/account/referral',                     label: 'Referidos' },
+  { to: '/account/search-history',               label: 'Historial de busqueda' },
 ];
 
 export default function AccountLayout() {

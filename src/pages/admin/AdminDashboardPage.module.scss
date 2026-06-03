@@ -74,6 +74,25 @@
 .kpiDeltaUp { color: $lime-soft; }
 .kpiDeltaDown { color: $vino-soft; }
 
+// Indicadores radiales (Gauges)
+.gauges {
+  border: 1px solid $border-color;
+  background: $bg-elevated;
+  margin-bottom: $spacing-8;
+}
+.gaugesHeader {
+  padding: $spacing-4 $spacing-5;
+  border-bottom: 1px solid $border-color;
+}
+.gaugesRow {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $spacing-6;
+  padding: $spacing-6 $spacing-5;
+  justify-items: center;
+  @media (max-width: $bp-md) { grid-template-columns: 1fr; }
+}
+
 // Grid of cards
 .grid {
   display: grid;
@@ -216,4 +235,29 @@
   font-size: $font-size-xs;
   color: $text-muted;
   text-align: right;
+}
+
+// Mini-charts (Sparkline / LinearGauge) — enhancements aditivos UC-REP.
+.kpiSpark { margin-top: $spacing-3; line-height: 0; }
+
+.orishaChart {
+  padding: 0 $spacing-5 $spacing-4;
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+}
+.orishaChartLabel {
+  font-family: $font-family-mono;
+  font-size: 10px;
+  color: $text-muted;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.stockGauge { padding: $spacing-4 $spacing-5 $spacing-5; }
+.stockGaugeCaption {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  color: $text-muted;
+  margin-top: $spacing-2;
 }

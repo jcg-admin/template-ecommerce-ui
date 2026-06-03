@@ -31,7 +31,9 @@ export default function NewsletterUnsubscribePage() {
     event.preventDefault();
     if (!token) return;
     dispatch(clearNewsletterActionState());
-    dispatch(unsubscribeNewsletter({ token, reason: reason || null }));
+    // El backend (UnsubscribeSerializer) solo acepta `token`; el motivo
+    // se recoge solo para UX y no se envia.
+    dispatch(unsubscribeNewsletter({ token }));
   };
 
   if (!token) {

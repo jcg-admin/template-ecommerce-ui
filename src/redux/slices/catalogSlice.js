@@ -114,7 +114,7 @@ export const fetchCategories = createAsyncThunk(
 export const fetchSearchHistory = createAsyncThunk(
   'catalog/fetchSearchHistory',
   async (_, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/search/history/')).data; }
+    try { return (await apiService.get('/api/v1/catalogue/search/history/')).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -123,7 +123,7 @@ export const deleteSearchTerm = createAsyncThunk(
   'catalog/deleteSearchTerm',
   async (id, { rejectWithValue }) => {
     try {
-      await apiService.delete(`/api/v1/search/history/${id}/`);
+      await apiService.delete(`/api/v1/catalogue/search/history/${id}/`);
       return id;
     }
     catch (e) { return rejectWithValue(e.message); }
@@ -133,7 +133,7 @@ export const deleteSearchTerm = createAsyncThunk(
 export const clearSearchHistory = createAsyncThunk(
   'catalog/clearSearchHistory',
   async (_, { rejectWithValue }) => {
-    try { await apiService.delete('/api/v1/search/history/'); return true; }
+    try { await apiService.delete('/api/v1/catalogue/search/history/'); return true; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );

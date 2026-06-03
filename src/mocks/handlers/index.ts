@@ -50,6 +50,8 @@ import { checkoutHandlers }   from './checkout';
 import { supportHandlers }    from './support';
 import { adminHandlers }      from './admin';
 import { storefrontHandlers } from './storefront';
+import { referralHandlers }   from './referral';
+import { logisticsHandlers }  from './logistics';
 
 
 // DefinePlugin solo reemplaza accesos estaticos a process.env.VARIABLE.
@@ -88,6 +90,9 @@ export function buildHandlers(): HttpHandler[] {
   list.push(...supportHandlers);
   list.push(...adminHandlers);
   list.push(...storefrontHandlers);
+  // UC-PRO-05 (referral) y UC-LOG-01/02/06/07/09 (logistica): siempre activos.
+  list.push(...referralHandlers);
+  list.push(...logisticsHandlers);
   return list;
 }
 

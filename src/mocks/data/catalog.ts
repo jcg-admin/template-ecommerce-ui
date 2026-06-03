@@ -29,13 +29,41 @@ export const CATALOG_CATEGORIES = [
     "id": 2,
     "slug": "akoses-medicinas",
     "name": "Akoses / Medicinas",
-    "product_count": 74
+    "product_count": 74,
+    "children": [
+      {
+        "id": 101,
+        "slug": "akoses-proteccion",
+        "name": "Akoses de Proteccion",
+        "product_count": 21,
+        "parent": 2,
+        "children": []
+      }
+    ]
   },
   {
     "id": 3,
     "slug": "collares-y-pulseras",
     "name": "Collares y Pulseras",
-    "product_count": 69
+    "product_count": 69,
+    "children": [
+      {
+        "id": 102,
+        "slug": "collares",
+        "name": "Collares",
+        "product_count": 40,
+        "parent": 3,
+        "children": []
+      },
+      {
+        "id": 103,
+        "slug": "pulseras",
+        "name": "Pulseras",
+        "product_count": 29,
+        "parent": 3,
+        "children": []
+      }
+    ]
   },
   {
     "id": 4,

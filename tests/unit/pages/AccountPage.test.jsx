@@ -3,7 +3,7 @@
  * Hub de la cuenta / Sprint 2
  */
 
-import { render, screen } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -26,21 +26,39 @@ const MOCK_USER = {
   profile_completeness: 60, pending_fields: ['avatar', 'addresses'],
 };
 
-const renderPage = (user = MOCK_USER) =>
-  render(
-    <Provider store={configureStore({
-      reducer: { auth: authReducer, orders: ordersReducer, wishlist: wishlistReducer },
-      preloadedState: {
-        auth: { user, isAuthenticated: true, isLoading: false, error: null },
-        orders: { list: [], isLoading: false },
-        wishlist: { items: [], isLoading: false },
-      },
-    })}>
-      <MemoryRouter>
-        <AccountPage />
-      </MemoryRouter>
-    </Provider>
-  );
+// renderPage es async: envuelve el mount en act y deja que los thunks
+// despachados en useEffect (fetchProfile/fetchOrders) resuelvan dentro
+// de act, evitando el warning "not wrapped in act" en AccountPage y en
+// AccountSidebar (que también fetchea al montar).
+const renderPage = async (user = MOCK_USER) => {
+  // fetchProfile resuelve con el MISMO user del escenario para que el
+  // thunk.fulfilled (que sobrescribe state.auth.user) no degrade la
+  // completitud precargada — p.ej. mantener completeness=100 en su test.
+  apiService.get.mockImplementation((url) => {
+    if (url.includes('/orders/')) {
+      return Promise.resolve({ data: { results: [], count: 0 } });
+    }
+    return Promise.resolve({ data: user });
+  });
+  let result;
+  await act(async () => {
+    result = render(
+      <Provider store={configureStore({
+        reducer: { auth: authReducer, orders: ordersReducer, wishlist: wishlistReducer },
+        preloadedState: {
+          auth: { user, isAuthenticated: true, isLoading: false, error: null },
+          orders: { list: [], isLoading: false },
+          wishlist: { items: [], isLoading: false },
+        },
+      })}>
+        <MemoryRouter>
+          <AccountPage />
+        </MemoryRouter>
+      </Provider>
+    );
+  });
+  return result;
+};
 
 describe('AccountPage', () => {
   beforeEach(() => {
@@ -59,8 +77,8 @@ describe('AccountPage', () => {
 
 
 
-  it('muestra saludo personalizado con el nombre del usuario', () => {
-    renderPage();
+  it('muestra saludo personalizado con el nombre del usuario', async () => {
+    await renderPage();
     expect(screen.getByText(/hola, demo/i)).toBeInTheDocument();
   });
 
@@ -78,14 +96,14 @@ describe('AccountPage', () => {
     }, { timeout: 3000 });
   });
 
-  it('no muestra el link de completar cuando completeness es 100', () => {
-    renderPage({ ...MOCK_USER, profile_completeness: 100, pending_fields: [] });
+  it('no muestra el link de completar cuando completeness es 100', async () => {
+    await renderPage({ ...MOCK_USER, profile_completeness: 100, pending_fields: [] });
     expect(screen.queryByText(/Completar perfil|Completa tu perfil/i)).not.toBeInTheDocument();
   });
 
   it.skip('muestra los links de navegacion de la cuenta — PENDIENTE: fetchProfile.rejected limpia user; requiere mock de thunk', async () => {
     renderPage();
-    // La navegación la muestra AccountSidebar
+    // La navegación la muestra AccountLayout (nav canónica)
     await waitFor(() => {
       const html = document.body.innerHTML;
       expect(html).toContain('Datos personales');

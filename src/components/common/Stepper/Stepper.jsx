@@ -22,7 +22,7 @@ const Stepper = forwardRef(function Stepper({
   defaultStep  = 0,
   // Opciones de ui-core
   linear       = true,      // Default ui-core
-  skipValidation = false,   // Default ui-core
+  _skipValidation = false,   // Default ui-core
   // UI
   vertical     = false,
   showConnectors = true,
@@ -137,7 +137,7 @@ const Stepper = forwardRef(function Stepper({
 export default Stepper;
 
 /** StepPanel — contenido de un paso */
-export function StepPanel({ children, label, className = '' }) {
+export function StepPanel({ children, _label, className = '' }) {
   return (
     <div className={`${styles.panel} ${className}`}>
       {children}

@@ -29,6 +29,10 @@ export default function AdminReturnRefundPanel({ returnRequest }) {
 
   useEffect(() => {
     setAmount(initialAmount(returnRequest));
+    // Solo re-sincronizar el monto cuando cambia la solicitud (id) o el
+    // monto sugerido; depender del objeto completo reiniciaria la edicion
+    // del usuario en cada re-render con nueva identidad de returnRequest.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [returnRequest?.id, returnRequest?.refund_amount_suggested]);
 
   if (!eligible) return null;

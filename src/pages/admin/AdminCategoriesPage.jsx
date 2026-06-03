@@ -7,7 +7,6 @@
  *   POST   /admin/categories/
  *   PATCH  /admin/categories/<id>/
  *   DELETE /admin/categories/<id>/
- *   PATCH  /admin/categories/<id>/move/   { new_parent_id, new_order }
  */
 
 import { useEffect, useState } from 'react';
@@ -15,11 +14,44 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   fetchAdminCategories, createCategory, updateCategory,
-  deleteCategory, moveCategoryNode,
+  deleteCategory,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
+import TreeList from '@components/common/TreeList';
 import styles from './AdminCategoriesPage.module.scss';
+
+/**
+ * Jerarquia del TreeList:
+ * El slice admin ya entrega `categoryTree` como un arbol jerarquico
+ * (cada categoria con su array `children`). No hay que agrupar por un
+ * campo padre plano: se reusa la jerarquia tal cual viene de la API.
+ * `toTreeNodes` solo adapta cada categoria al contrato de TreeList:
+ *   - `label`  <- name
+ *   - `slug`   columna de texto
+ *   - `productos` columna derivada de product_count
+ *   - `children` se mapea recursivamente
+ * Se conservan los campos crudos (is_active, name, ...) para que
+ * renderActions pueda decidir y los handlers reciban la categoria real.
+ */
+function toTreeNodes(categories = []) {
+  return categories.map((c) => ({
+    ...c,
+    id: c.id,
+    label: c.name,
+    productos: `${c.product_count || 0} productos`,
+    children: toTreeNodes(c.children || []),
+  }));
+}
+
+const TREE_COLUMNS = [
+  { key: 'slug', label: 'Slug' },
+  { key: 'productos', label: 'Productos' },
+];
+
+function collectIds(categories = []) {
+  return categories.flatMap((c) => [c.id, ...collectIds(c.children || [])]);
+}
 
 export default function AdminCategoriesPage() {
   const dispatch = useDispatch();
@@ -28,15 +60,26 @@ export default function AdminCategoriesPage() {
   const isLoading = useSelector((s) => s.admin?.isLoadingCategories);
   const [editing, setEditing] = useState(null);
   const [creating, setCreating] = useState(null); // parentId
-  const [expanded, setExpanded] = useState(new Set());
 
   useEffect(() => { dispatch(fetchAdminCategories()); }, [dispatch]);
 
-  const toggle = (id) => {
-    const next = new Set(expanded);
-    next.has(id) ? next.delete(id) : next.add(id);
-    setExpanded(next);
+  const treeNodes = toTreeNodes(tree);
+
+  const handleDelete = (c) => {
+    setConfirm({
+      message: `¿Eliminar "${c.name}"? Se moverán sus subcategorías al nivel raíz.`,
+      action: () => dispatch(deleteCategory(c.id)),
+    });
   };
+
+  const renderActions = (node) => (
+    <div className={styles.nodeActions}>
+      {!node.is_active && <span className={styles.inactive}>Inactiva</span>}
+      <button type="button" onClick={() => setCreating(node.id)} className={styles.iconBtn} aria-label="Añadir hija">+</button>
+      <button type="button" onClick={() => setEditing(node)} className={styles.iconBtn} aria-label="Editar">✎</button>
+      <button type="button" onClick={() => handleDelete(node)} className={`${styles.iconBtn} ${styles.iconBtnDelete}`} aria-label="Eliminar">×</button>
+    </div>
+  );
 
   return (
     <>
@@ -61,24 +104,15 @@ export default function AdminCategoriesPage() {
       <div className={styles.tree}>
         {isLoading && <div className={styles.loading}>Cargando árbol…</div>}
         {!isLoading && tree.length === 0 && <div className={styles.empty}>Sin categorías. Crea la primera.</div>}
-        {!isLoading && tree.map((node) => (
-          <CategoryNode
-            key={node.id}
-            node={node}
-            depth={0}
-            expanded={expanded}
-            onToggle={toggle}
-            onEdit={(c) => setEditing(c)}
-            onDelete={(c) => {
-              setConfirm({
-                  message: `¿Eliminar "${c.name}"? Se moverán sus subcategorías al nivel raíz.`,
-                  action: () => dispatch(deleteCategory(c.id)),
-                });
-            }}
-            onAddChild={(parentId) => setCreating(parentId)}
-            onMove={(id, dir) => dispatch(moveCategoryNode({ id, direction: dir }))}
+        {!isLoading && tree.length > 0 && (
+          <TreeList
+            nodes={treeNodes}
+            columns={TREE_COLUMNS}
+            renderActions={renderActions}
+            defaultExpandedIds={collectIds(tree)}
+            ariaLabel="Categorías"
           />
-        ))}
+        )}
       </div>
 
       {(editing || creating !== undefined) && (
@@ -101,44 +135,6 @@ export default function AdminCategoriesPage() {
         onConfirm={() => { confirm?.action(); setConfirm(null); }}
         onClose={() => setConfirm(null)}
       />
-    </>
-  );
-}
-
-function CategoryNode({ node, depth, expanded, onToggle, onEdit, onDelete, onAddChild, onMove }) {
-  const hasChildren = node.children?.length > 0;
-  const isOpen = expanded.has(node.id);
-  return (
-    <>
-      <div className={styles.node} style={{ paddingLeft: depth * 24 + 12 }}>
-        <button
-          type="button" className={styles.expandBtn}
-          onClick={() => hasChildren && onToggle(node.id)}
-          style={{ visibility: hasChildren ? 'visible' : 'hidden' }}
-        >{isOpen ? '▼' : '▶'}</button>
-        <div className={styles.nodeInfo}>
-          <span className={styles.nodeName}>{node.name}</span>
-          <span className={styles.nodeMeta}>
-            {node.slug} · {node.product_count || 0} productos
-          </span>
-        </div>
-        {!node.is_active && <span className={styles.inactive}>Inactiva</span>}
-        <div className={styles.nodeActions}>
-          <button type="button" onClick={() => onMove(node.id, 'up')} className={styles.iconBtn} aria-label="Mover arriba">↑</button>
-          <button type="button" onClick={() => onMove(node.id, 'down')} className={styles.iconBtn} aria-label="Mover abajo">↓</button>
-          <button type="button" onClick={() => onAddChild(node.id)} className={styles.iconBtn} aria-label="Añadir hija">+</button>
-          <button type="button" onClick={() => onEdit(node)} className={styles.iconBtn} aria-label="Editar">✎</button>
-          <button type="button" onClick={() => onDelete(node)} className={`${styles.iconBtn} ${styles.iconBtnDelete}`} aria-label="Eliminar">×</button>
-        </div>
-      </div>
-      {hasChildren && isOpen && node.children.map((child) => (
-        <CategoryNode
-          key={child.id} node={child} depth={depth + 1}
-          expanded={expanded} onToggle={onToggle}
-          onEdit={onEdit} onDelete={onDelete}
-          onAddChild={onAddChild} onMove={onMove}
-        />
-      ))}
     </>
   );
 }

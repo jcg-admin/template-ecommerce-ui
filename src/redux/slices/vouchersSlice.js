@@ -5,6 +5,7 @@
  *   UC-PRO-01 — Crear voucher
  *   UC-PRO-02 — Listar / editar vouchers
  *   UC-PRO-03 — Desactivar voucher
+ *   UC-PRO-04 — Reporte de uso de vouchers (admin)
  */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
@@ -55,6 +56,19 @@ export const deactivateVoucher = createAsyncThunk(
   }
 );
 
+// UC-PRO-04: reporte agregado de uso de vouchers (ranking + ROI).
+export const fetchVoucherReport = createAsyncThunk(
+  'vouchers/fetchReport',
+  async (params = {}, { rejectWithValue }) => {
+    try {
+      const res = await apiService.get(`${ADMIN_VOUCHERS_URL}report/`, { params });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(serializeApiError(err));
+    }
+  }
+);
+
 // =============================================================================
 // Slice
 // =============================================================================
@@ -68,6 +82,13 @@ const vouchersSlice = createSlice({
     error:        null,
     actionError:  null,
     lastAction:   null,    // 'created' | 'deactivated'
+    // UC-PRO-04: reporte agregado (lista de vouchers con metricas + ROI).
+    // El backend solo expone el reporte agregado en GET .../vouchers/report/
+    // (detail=False). No existe un endpoint de uso por-voucher
+    // (.../vouchers/{id}/usage/), por eso no se modela aqui.
+    report:         [],
+    isLoadingReport: false,
+    reportError:    null,
   },
 
   reducers: {
@@ -127,6 +148,22 @@ const vouchersSlice = createSlice({
       .addCase(deactivateVoucher.rejected, (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload;
+      });
+
+    // fetchVoucherReport (UC-PRO-04 agregado)
+    builder
+      .addCase(fetchVoucherReport.pending, (state) => {
+        state.isLoadingReport = true;
+        state.reportError     = null;
+      })
+      .addCase(fetchVoucherReport.fulfilled, (state, action) => {
+        const results = action.payload?.results ?? action.payload ?? [];
+        state.report          = Array.isArray(results) ? results : [];
+        state.isLoadingReport = false;
+      })
+      .addCase(fetchVoucherReport.rejected, (state, action) => {
+        state.isLoadingReport = false;
+        state.reportError     = action.payload;
       });
   },
 });

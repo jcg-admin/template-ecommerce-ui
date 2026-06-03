@@ -34,22 +34,42 @@ const renderFilters = (props = {}) => {
 afterEach(() => jest.clearAllMocks());
 
 describe('CatalogFilters (UC-CAT-04 + UC-CAT-05)', () => {
-  it('renderiza un selector con las categorias aplanadas (UC-CAT-04)', async () => {
+  // UC-CAT-TREE F5-T16/T17: la categoria ahora se elige con <TreeView>
+  it('renderiza el TreeView de categorias con la jerarquia (UC-CAT-04)', async () => {
     renderFilters();
-    expect(
-      await screen.findByRole('option', { name: /^collares$/i }),
-    ).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: /collares orisha/i })).toBeInTheDocument();
-    expect(screen.getByRole('option', { name: /^soperas$/i })).toBeInTheDocument();
+    // Esperar a que el arbol se pueble con las categorias async.
+    expect(await screen.findByText(/^soperas$/i)).toBeInTheDocument();
+    // El arbol expone role="tree" con aria-label "Categorias".
+    expect(screen.getByRole('tree', { name: /categorias/i })).toBeInTheDocument();
+    // Nodo raiz y nodo hijo (defaultExpandedIds expande las raices).
+    expect(screen.getByText(/^collares$/i)).toBeInTheDocument();
+    expect(screen.getByText(/collares orisha/i)).toBeInTheDocument();
   });
 
-  it('emite onChange con category=<slug> al seleccionar una categoria', async () => {
+  it('renderiza un treeitem por cada categoria (raiz + hijo)', async () => {
+    renderFilters();
+    await screen.findByText(/^soperas$/i);
+    // 2 raices (Collares, Soperas) + 1 hijo (Collares Orisha) = 3
+    expect(screen.getAllByRole('treeitem')).toHaveLength(3);
+  });
+
+  it('emite onChange con category=<slug> al seleccionar un nodo raiz', async () => {
     const { onChange } = renderFilters();
-    await screen.findByRole('option', { name: /^soperas$/i });
-    fireEvent.change(screen.getByLabelText(/categoria/i), {
-      target: { value: 'soperas' },
-    });
+    fireEvent.click(await screen.findByText(/^soperas$/i));
     expect(onChange).toHaveBeenCalledWith({ category: 'soperas' });
+  });
+
+  it('emite onChange con el slug del hijo al seleccionar un nodo anidado', async () => {
+    const { onChange } = renderFilters();
+    fireEvent.click(await screen.findByText(/collares orisha/i));
+    expect(onChange).toHaveBeenCalledWith({ category: 'collares-orisha' });
+  });
+
+  it('emite onChange con category=null al pulsar «Todas las categorias»', async () => {
+    const { onChange } = renderFilters({ category: 'soperas' });
+    await screen.findByText(/^soperas$/i);
+    fireEvent.click(screen.getByRole('button', { name: /todas las categorias/i }));
+    expect(onChange).toHaveBeenCalledWith({ category: null });
   });
 
   // BUG-TEST-CF01: Tests actualizados tras migración de inputs separados a RangeSlider

@@ -20,6 +20,7 @@ import wishlistReducer, {
   removeFromWishlist,
   moveWishlistItemToCart,
   clearWishlistActionState,
+  toggleWishlist,
 } from './wishlistSlice';
 
 class APIError extends Error {
@@ -162,5 +163,31 @@ describe('wishlistSlice — UC-WISH-01..03', () => {
     store.dispatch(clearWishlistActionState());
     expect(store.getState().wishlist.actionError).toBe(null);
     expect(store.getState().wishlist.lastAction).toBe(null);
+  });
+
+  // BUG-WISHLIST-05: toggleWishlist (rama agregar) invocaba addToWishlist con
+  // { product_id: productId }, pero addToWishlist destructura { productId } ->
+  // productId quedaba undefined y el POST mandaba product_id: undefined, dejando
+  // un item basura en la wishlist (segundo desajuste snake/camel tras BUG-CART-04).
+  it('toggleWishlist (no en lista) agrega con productId correcto (BUG-WISHLIST-05)', async () => {
+    apiService.post.mockResolvedValue({ data: { id: 1, product_id: 7 } });
+    const store = makeStore();
+    await store.dispatch(toggleWishlist({ productId: 7, inWishlist: false }));
+    expect(apiService.post).toHaveBeenCalledWith(
+      expect.stringContaining('/wishlist'),
+      expect.objectContaining({ product_id: 7 }),
+    );
+  });
+
+  it('toggleWishlist (en lista) elimina usando el itemId real (BUG-WISHLIST-03)', async () => {
+    apiService.delete.mockResolvedValue({});
+    const store = makeStore();
+    // Sembrar un item: product_id 7 con id de registro 42.
+    store.dispatch({
+      type: fetchWishlist.fulfilled.type,
+      payload: { results: [{ id: 42, product_id: 7 }] },
+    });
+    await store.dispatch(toggleWishlist({ productId: 7, inWishlist: true }));
+    expect(apiService.delete).toHaveBeenCalledWith(expect.stringContaining('/wishlist/42/'));
   });
 });

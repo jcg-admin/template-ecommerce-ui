@@ -1,7 +1,7 @@
 /**
  * Tests — OrderDetailPage (UC-ORD-02 / UC-ORD-04 / UC-ORD-05 / UC-ORD-06)
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Provider } from 'react-redux';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
@@ -17,6 +17,7 @@ jest.mock('@services/apiService', () => ({
 
 import apiService from '@services/apiService';
 import ordersReducer from '@redux/slices/ordersSlice';
+import logisticsReducer from '@redux/slices/logisticsSlice';
 import OrderDetailPage from './OrderDetailPage';
 
 const makeClient = () =>
@@ -31,7 +32,7 @@ const wrap = (ui) => {
     shipping_method_label: 'DHL', subtotal: 1780, tax: 0, discount: 0,
   };
   const store = configureStore({
-    reducer: { orders: ordersReducer, auth: authReducer },
+    reducer: { orders: ordersReducer, auth: authReducer, logistics: logisticsReducer },
     preloadedState: {
       auth: { user: { first_name: 'Test' }, isAuthenticated: true },
       orders: { current: ORDER, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: 'PY-0088' },
@@ -96,7 +97,7 @@ describe('OrderDetailPage (UC-ORD-02 detalle)', () => {
 });
 
 describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
-  it.skip('comprador cancela un pedido PENDING via POST /cancel/ — PENDIENTE: accion eliminada en diseño Yoruba (usa Solicitar ayuda)', async () => {
+  it('comprador cancela un pedido PENDING via POST /cancel/', async () => {
     apiService.get.mockResolvedValue({ data: ORDER });
     apiService.post.mockResolvedValue({ data: { ...ORDER, status: 'CANCELLED' } });
     const user = userEvent.setup();
@@ -104,7 +105,7 @@ describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
 
-    await user.click(screen.getByRole('button', { name: /Cancelar/i }));
+    await user.click(screen.getByRole('button', { name: /Cancelar pedido/i }));
     await user.click(screen.getByRole('button', { name: /Confirmar cancelacion/i }));
 
     await waitFor(() => {
@@ -115,11 +116,11 @@ describe('OrderDetailPage (UC-ORD-04 cancelar)', () => {
     });
   });
 
-  it.skip('no muestra boton de cancelar para pedidos enviados — PENDIENTE: accion eliminada en diseño Yoruba (usa Solicitar ayuda)', async () => {
+  it('no muestra boton de cancelar para pedidos enviados', async () => {
     apiService.get.mockResolvedValue({ data: { ...ORDER, status: 'SHIPPED' } });
     render(wrap(<OrderDetailPage />));
     await screen.findByRole('heading', { name: /Seguimiento del envío/i });
-    expect(screen.queryByRole('button', { name: /Cancelar/i })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: /Cancelar pedido/i })).not.toBeInTheDocument();
   });
 });
 
@@ -166,5 +167,94 @@ describe('OrderDetailPage (UC-ORD-06 cambiar envio)', () => {
         { shipping_method_id: 3 },
       );
     });
+  });
+});
+
+// ─── BUG-ORDER-01 — regresion redirect prematuro por race condition ─────────
+//
+// Mismo patron que BUG-PRODUCT-01: OrderDetailPage montaba con current=null
+// e isLoading=false (residual) y el primer render redirigia antes de que el
+// useEffect despachara fetchOrderDetail(id):
+//   buggy:  if (isLoading) ...                  -> false -> Navigate /account/orders
+//   fixed:  if (isLoading || (!order && id))    -> true  -> "Cargando pedido…"
+//
+// Reproducimos el ESTADO (current=null + isLoading=false) con un GET que
+// nunca resuelve. Una ruta sentinel en /account/orders distingue ambos:
+// con el bug se redirige alli; con el fix se queda en "Cargando pedido…".
+describe('OrderDetailPage — race redirect (BUG-ORDER-01)', () => {
+  const ORDERS_SENTINEL = 'orders-list-sentinel';
+
+  const wrapNoOrder = (ui) => {
+    const store = configureStore({
+      reducer: { orders: ordersReducer, auth: authReducer, logistics: logisticsReducer },
+      preloadedState: {
+        auth: { user: { first_name: 'Test' }, isAuthenticated: true },
+        orders: { current: null, list: [], isLoading: false, isActioning: false, actionError: null, lastAction: null, lastOrderNumber: null },
+      },
+    });
+    return (
+      <Provider store={store}>
+        <QueryClientProvider client={makeClient()}>
+          <MemoryRouter initialEntries={['/account/orders/PY-2026-000001']}>
+            <Routes>
+              <Route path="/account/orders/:id" element={ui} />
+              <Route path="/account/orders" element={<div data-testid={ORDERS_SENTINEL}>LISTA</div>} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
+      </Provider>
+    );
+  };
+
+  it('muestra "Cargando pedido…" y NO redirige a la lista con pedido aun no cargado', async () => {
+    // GET que nunca resuelve: fetchOrderDetail queda pending, order sigue null.
+    apiService.get.mockReturnValue(new Promise(() => {}));
+    render(wrapNoOrder(<OrderDetailPage />));
+
+    // Con el fix: pantalla de carga. Sin el fix: habria redirigido a la lista.
+    expect(await screen.findByText(/Cargando pedido/i)).toBeInTheDocument();
+    expect(screen.queryByTestId(ORDERS_SENTINEL)).not.toBeInTheDocument();
+  });
+});
+
+// ─── UC-ORD-PDF — visor de factura embebido (PdfViewer) ─────────────────────
+describe('OrderDetailPage — factura PDF (UC-ORD-PDF)', () => {
+  it('muestra el visor de factura cuando el pedido trae invoice_url', async () => {
+    apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: '/mock/factura-demo.pdf' } });
+    render(wrap(<OrderDetailPage />));
+    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+    const frame = await screen.findByTitle(/Factura/i);
+    expect(frame).toBeInTheDocument();
+    expect(frame).toHaveAttribute('src', '/mock/factura-demo.pdf');
+  });
+
+  it('no muestra el visor cuando el pedido no trae invoice_url', async () => {
+    apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: undefined } });
+    render(wrap(<OrderDetailPage />));
+    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+    expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+  });
+});
+
+// ─── UC-LOG-07 eliminado: endpoint /shipping-issue/ no existe en el backend ─
+describe('OrderDetailPage — factura PDF', () => {
+
+  // UC-ORD-PDFGEN: generar la factura en el cliente (jsPDF) y verla en el visor.
+  it('genera la factura en cliente al pulsar "Generar factura en PDF"', async () => {
+    const original = URL.createObjectURL;
+    URL.createObjectURL = jest.fn(() => 'blob:generated-invoice');
+    try {
+      apiService.get.mockResolvedValue({ data: { ...ORDER, invoice_url: undefined } });
+      render(wrap(<OrderDetailPage />));
+      await screen.findByRole('heading', { name: /Seguimiento del envío/i });
+      // Sin invoice_url no hay visor todavia.
+      expect(screen.queryByTitle(/Factura/i)).not.toBeInTheDocument();
+      fireEvent.click(screen.getByRole('button', { name: /Generar factura en PDF/i }));
+      const frame = await screen.findByTitle(/Factura/i);
+      expect(frame).toHaveAttribute('src', 'blob:generated-invoice');
+      expect(URL.createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+    } finally {
+      URL.createObjectURL = original;
+    }
   });
 });

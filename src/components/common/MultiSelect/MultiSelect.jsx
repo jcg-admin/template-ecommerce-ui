@@ -22,7 +22,7 @@
  * Métodos via ref: toggle/show/hide/dispose/search/update/selectAll/deselectAll/getValue
  */
 import {
-  useState, useCallback, useRef, useId,
+  useState, useCallback, useRef, useId, useMemo,
   useImperativeHandle, forwardRef,
 } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
@@ -50,7 +50,7 @@ const MultiSelect = forwardRef(function MultiSelect({
   disabled             = false,
   invalid              = false,
   valid                = false,
-  required             = false,
+  _required             = false,
   name,
   id: externalId,
   onShow, onShown, onHide, onHidden,
@@ -68,9 +68,11 @@ const MultiSelect = forwardRef(function MultiSelect({
   const [query,    setQuery]    = useState('');
   const panelRef = useRef(null);
 
-  const sel = controlled !== undefined
-    ? (Array.isArray(controlled) ? controlled : [controlled])
-    : selected;
+  const sel = useMemo(() => (
+    controlled !== undefined
+      ? (Array.isArray(controlled) ? controlled : [controlled])
+      : selected
+  ), [controlled, selected]);
 
   const setVal = useCallback((next) => {
     if (controlled === undefined) setSelected(next);
@@ -267,7 +269,7 @@ const MultiSelect = forwardRef(function MultiSelect({
       </AnimatePresence>
 
       {/* Input oculto para formularios */}
-      {name && sel.map((v, i) => (
+      {name && sel.map((v, _i) => (
         <input key={`hidden-${v}`} type="hidden" name={name} value={v} />
       ))}
     </div>

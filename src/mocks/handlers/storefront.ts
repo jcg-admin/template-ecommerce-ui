@@ -4,7 +4,6 @@
  *
  * Paths:
  *   GET  /api/v1/auth/addresses/          — BUG-MOCK-01
- *   POST /api/v1/auth/profile/avatar/     — BUG-MOCK-01
  *   POST /api/v1/auth/resend-verification/ — BUG-MOCK-01
  *   GET  /api/v1/notifications/preferences/ — BUG-MOCK-01
  *   POST /api/v1/notifications/read-all/  — BUG-MOCK-01
@@ -51,8 +50,18 @@ const _addresses: Address[] = [
     country: 'MX',
     is_default: false,
   },
+];
 
-  // ── Actualizar dirección existente (PATCH) ──────────────────────────
+export const storefrontHandlers = [
+
+  // ── Direcciones ─────────────────────────────────────────────────────
+  http.get('/api/v1/auth/addresses/', () =>
+    HttpResponse.json({ count: _addresses.length, results: _addresses })
+  ),
+
+  // Actualizar dirección existente (PATCH). Estaba mal ubicado dentro del
+  // array de datos _addresses (fuera de storefrontHandlers) → no se
+  // registraba en MSW: editar dirección fallaba en DEMO_MODE.
   http.patch('/api/v1/auth/addresses/:id/', async ({ params, request }) => {
     const id   = Number(params.id);
     const body = await request.json() as Partial<Address>;
@@ -62,7 +71,7 @@ const _addresses: Address[] = [
     return HttpResponse.json(_addresses[idx]);
   }),
 
-  // ── Eliminar dirección (DELETE) ───────────────────────────────────────
+  // Eliminar dirección (DELETE). Mismo problema de ubicación que el PATCH.
   http.delete('/api/v1/auth/addresses/:id/', ({ params }) => {
     const id  = Number(params.id);
     const idx = _addresses.findIndex((a) => a.id === id);
@@ -70,14 +79,6 @@ const _addresses: Address[] = [
     _addresses.splice(idx, 1);
     return new HttpResponse(null, { status: 204 });
   }),
-];
-
-export const storefrontHandlers = [
-
-  // ── Direcciones ─────────────────────────────────────────────────────
-  http.get('/api/v1/auth/addresses/', () =>
-    HttpResponse.json({ count: _addresses.length, results: _addresses })
-  ),
 
   http.post('/api/v1/auth/addresses/', async ({ request }) => {
     const body = await request.json() as Partial<Address>;
@@ -96,12 +97,9 @@ export const storefrontHandlers = [
   }),
 
   // ── Avatar ──────────────────────────────────────────────────────────
-  http.post('/api/v1/auth/profile/avatar/', () =>
-    HttpResponse.json({
-      avatar_url: `https://api.dicebear.com/7.x/avataaars/svg?seed=${Date.now()}`,
-      message: 'Avatar actualizado',
-    })
-  ),
+  // (eliminado) No existe POST /api/v1/auth/profile/avatar/ en el backend:
+  // el avatar se sube via PATCH /api/v1/auth/profile/ (campo `avatar`),
+  // mockeado en handlers/auth.ts. El slice uploadAvatar pega ahi.
 
   // ── Reenviar verificación ───────────────────────────────────────────
   http.post('/api/v1/auth/resend-verification/', async ({ request }) => {
@@ -133,20 +131,22 @@ export const storefrontHandlers = [
     HttpResponse.json({ read: true, count: faker.number.int({ min: 1, max: 10 }) })
   ),
 
-  // ── Historial de búsqueda ───────────────────────────────────────────
-  http.get('/api/v1/search/history/', () => {
+  // ── Historial de búsqueda (catalogue.SearchHistoryView) ─────────────
+  http.get('/api/v1/catalogue/search/history/', () => {
     const terms = ['elekes', 'sopera de Yemayá', 'otanes', 'oshe', 'collar de Obatala'];
     return HttpResponse.json({
       count: terms.length,
       results: terms.map((q, i) => ({
         id: i + 1,
+        term: q,
         query: q,
         searched_at: faker.date.recent({ days: 14 }).toISOString(),
       })),
     });
   }),
 
-  http.delete('/api/v1/search/history/', () => new HttpResponse(null, { status: 204 })),
+  http.delete('/api/v1/catalogue/search/history/:id/', () => new HttpResponse(null, { status: 204 })),
+  http.delete('/api/v1/catalogue/search/history/', () => new HttpResponse(null, { status: 204 })),
 
   // ── Contacto ────────────────────────────────────────────────────────
   http.post('/api/v1/contact/messages/', async ({ request }) => {

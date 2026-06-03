@@ -9,8 +9,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchProfile } from '@redux/slices/authSlice';
 import { fetchOrders } from '@redux/slices/ordersSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, Price } from '@components/common/primitives';
+import ProgressBar from '@components/common/ProgressBar';
 import styles from './AccountPage.module.scss';
 
 export default function AccountPage() {
@@ -48,7 +48,6 @@ export default function AccountPage() {
         </header>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             {completeness < 100 && (
@@ -59,9 +58,8 @@ export default function AccountPage() {
                     Tu perfil está al {completeness}%
                     {user.pending_fields?.length > 0 && ` · falta ${user.pending_fields[0]}`}
                   </h3>
-                  <div className={styles.completenessBar}>
-                    <div style={{ width: `${completeness}%` }} />
-                  </div>
+                  <ProgressBar value={completeness} max={100} ariaLabel="Perfil completo" />
+
                   <div className={styles.completenessDesc}>
                     {user.pending_fields?.length > 0
                       ? `Solo te falta agregar ${user.pending_fields.join(', ')} para completar.`

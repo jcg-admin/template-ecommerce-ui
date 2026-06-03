@@ -27,13 +27,13 @@ const validatePaymentPayload = (payload) => {
   if (!payload || typeof payload !== 'object') {
     return { valid: false, message: 'Payment payload is required' };
   }
-  return CommonValidators.validateId('order_id')(payload.order_id);
+  return CommonValidators.validateId('order_number')(payload.order_number);
 };
 
-const MP_CHECKOUT_URL     = '/api/v1/payments/mercadopago/checkout';
-const PAYPAL_CHECKOUT_URL = '/api/v1/payments/paypal/checkout';
-const RETRY_URL           = '/api/v1/payments/retry';
-const ADMIN_REFUND_URL    = '/api/v1/admin/payments';
+// Endpoint canónico unificado (api: payments/urls.py): POST /payments/initiate/
+// con {order_number, gateway, installments}. Reembolso admin: /payments/admin/<id>/refund/.
+const INITIATE_URL        = '/api/v1/payments/initiate/';
+const ADMIN_REFUND_URL    = '/api/v1/payments/admin';
 
 // =============================================================================
 // Thunks
@@ -48,11 +48,11 @@ export const initiateMercadoPagoPayment = createAsyncThunk(
   'payments/initiateMercadoPago',
   withLogging(
     withValidation(
-      async ({ order_id, installments }, { rejectWithValue }) => {
+      async ({ order_number, installments }, { rejectWithValue }) => {
         try {
-          const payload = { order_id };
+          const payload = { order_number, gateway: 'MERCADOPAGO' };
           if (installments) payload.installments = Number(installments);
-          const res = await apiService.post(MP_CHECKOUT_URL, payload);
+          const res = await apiService.post(INITIATE_URL, payload);
           return res.data;
         } catch (err) {
           return rejectWithValue(serializeApiError(err));
@@ -72,9 +72,9 @@ export const initiateMercadoPagoPayment = createAsyncThunk(
  */
 export const initiatePayPalPayment = createAsyncThunk(
   'payments/initiatePayPal',
-  async ({ order_id }, { rejectWithValue }) => {
+  async ({ order_number }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(PAYPAL_CHECKOUT_URL, { order_id });
+      const res = await apiService.post(INITIATE_URL, { order_number, gateway: 'PAYPAL' });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
@@ -91,9 +91,10 @@ export const retryPayment = createAsyncThunk(
   'payments/retry',
   withLogging(
     withValidation(
-      async ({ order_id, gateway }, { rejectWithValue }) => {
+      async ({ order_number, gateway }, { rejectWithValue }) => {
         try {
-          const res = await apiService.post(RETRY_URL, { order_id, gateway });
+          // Reintento = re-iniciar el pago (posiblemente con otro gateway).
+          const res = await apiService.post(INITIATE_URL, { order_number, gateway });
           return res.data;
         } catch (err) {
           return rejectWithValue(serializeApiError(err));

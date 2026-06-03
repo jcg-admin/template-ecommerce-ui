@@ -8,7 +8,6 @@ import { useDebounce }     from './useDebounce';
 import { usePrevious }     from './usePrevious';
 import { useMountedState } from './useMountedState';
 import { useLocalStorage } from './useLocalStorage';
-import { useClickAway }    from './useClickAway';
 import { useThrottle }     from './useThrottle';
 import { useAsync }        from './useAsync';
 

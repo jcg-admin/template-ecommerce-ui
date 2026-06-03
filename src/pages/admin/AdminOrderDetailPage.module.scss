@@ -110,12 +110,12 @@
   & > div { display: flex; justify-content: space-between; padding: 6px 0; font-size: $font-size-sm; color: $text-secondary; }
   dt { margin: 0; }
   dd { margin: 0; color: $text-primary; font-family: $font-family-mono; }
-}
-.totalsFinal {
-  border-top: 1px solid $border-medium;
-  margin-top: 8px !important; padding-top: 12px !important;
-  & dt { font-family: $font-family-display; font-size: $font-size-base; color: $text-primary !important; }
-  & dd { font-family: $font-family-display !important; }
+  & .totalsFinal {
+    border-top: 1px solid $border-medium;
+    margin-top: 8px; padding-top: 12px;
+    & dt { font-family: $font-family-display; font-size: $font-size-base; color: $text-primary; }
+    & dd { font-family: $font-family-display; }
+  }
 }
 .logList {
   list-style: none; margin: 0; padding: 0;

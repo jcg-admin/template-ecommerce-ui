@@ -12,6 +12,12 @@
 
 .title { font-size: 1.5rem; margin: 0; }
 
+.headerActions {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
 .importLink {
   background: $bronze;
   color: $bg-elevated;

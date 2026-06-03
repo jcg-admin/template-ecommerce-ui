@@ -2,7 +2,7 @@
  * Tests — useCart hook
  * Operaciones de carrito: add, remove, clear, getTotals
  */
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import cartReducer from '@redux/slices/cartSlice';
@@ -16,7 +16,6 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn(), delete: jest.fn() },
 }));
-import apiService from '@services/apiService';
 import { useCart } from './useCart';
 
 const makeStore = (cart = {}) =>
@@ -69,8 +68,8 @@ describe('useCart', () => {
   it('cartCount retorna el número de items', () => {
     const store = makeStore({
       items: [
-        { id: 1, quantity: 2, variant_id: 10, price: 500 },
-        { id: 2, quantity: 1, variant_id: 11, price: 300 },
+        { id: 1, quantity: 2, variant_id: 10, product_name: 'A', unit_price: '500.00' },
+        { id: 2, quantity: 1, variant_id: 11, product_name: 'B', unit_price: '300.00' },
       ],
     });
     const { result } = renderHook(() => useCart(), { wrapper: wrapper(store) });

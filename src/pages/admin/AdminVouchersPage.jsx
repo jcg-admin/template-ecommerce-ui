@@ -3,16 +3,16 @@
  * Listado de vouchers con filtros + acciones.
  *
  * Endpoints:
- *   GET /admin/vouchers/?status=&q=
- *   POST /admin/vouchers/<id>/duplicate/
- *   PATCH /admin/vouchers/<id>/   { is_active }
+ *   GET  /admin/vouchers/?status=&q=
+ *   POST /admin/vouchers/<id>/activate/    (toggle → activar)
+ *   POST /admin/vouchers/<id>/deactivate/  (toggle → desactivar)
  */
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
-  fetchAdminVouchers, duplicateVoucher, toggleVoucherActive,
+  fetchAdminVouchers, toggleVoucherActive,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button } from '@components/common/primitives';
 import styles from './AdminTablePage.module.scss';
@@ -116,12 +116,7 @@ export default function AdminVouchersPage() {
                 <td className={styles.actions}>
                   <button
                     type="button" className={styles.actionBtn}
-                    onClick={() => dispatch(duplicateVoucher(v.id))}
-                    title="Duplicar"
-                  >⎘</button>
-                  <button
-                    type="button" className={styles.actionBtn}
-                    onClick={() => dispatch(toggleVoucherActive(v.id))}
+                    onClick={() => dispatch(toggleVoucherActive({ id: v.id, isActive: v.is_active }))}
                     title={v.is_active ? 'Desactivar' : 'Activar'}
                   >{v.is_active ? '◐' : '○'}</button>
                   <Link to={`/admin/vouchers/${v.id}`} className={styles.actionBtn} title="Editar">→</Link>

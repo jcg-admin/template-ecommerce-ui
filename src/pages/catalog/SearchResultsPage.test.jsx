@@ -140,4 +140,94 @@ describe('SearchResultsPage (UC-CAT-03 + UC-CAT-03-EXT)', () => {
     renderAt('?q=oshun');
     expect(await screen.findByRole('alert')).toBeInTheDocument();
   });
+
+  // --- BUG-SEARCH-03: en error debe ofrecerse reintentar y mantenerse el layout ---
+
+  it('muestra el boton «Reintentar busqueda» en estado de error (BUG-SEARCH-03)', async () => {
+    apiService.get.mockImplementation((url) => {
+      if (typeof url === 'string' && url.includes('/categories')) {
+        return Promise.resolve({ data: { results: CATEGORIES_FIXTURE, count: 1 } });
+      }
+      return Promise.reject(new Error('boom'));
+    });
+    renderAt('?q=oshun');
+    await screen.findByRole('alert');
+    expect(
+      screen.getByRole('button', { name: /reintentar/i }),
+    ).toBeInTheDocument();
+  });
+
+  it('mantiene el encabezado y los filtros visibles durante el error (BUG-SEARCH-03)', async () => {
+    apiService.get.mockImplementation((url) => {
+      if (typeof url === 'string' && url.includes('/categories')) {
+        return Promise.resolve({ data: { results: CATEGORIES_FIXTURE, count: 1 } });
+      }
+      return Promise.reject(new Error('boom'));
+    });
+    renderAt('?q=oshun');
+    await screen.findByRole('alert');
+    // El encabezado (layout) sigue presente junto al alert.
+    expect(
+      screen.getByRole('heading', { name: /resultados de busqueda/i }),
+    ).toBeInTheDocument();
+    // Los filtros (CatalogFilters) tambien siguen montados: la categoria
+    // del fixture sigue disponible aunque la busqueda haya fallado.
+    expect(screen.getByText(/collares/i)).toBeInTheDocument();
+  });
+
+  it('el boton «Reintentar busqueda» esta cableado a un onClick y no rompe al pulsarlo (BUG-SEARCH-03)', async () => {
+    apiService.get.mockImplementation((url) => {
+      if (typeof url === 'string' && url.includes('/categories')) {
+        return Promise.resolve({ data: { results: CATEGORIES_FIXTURE, count: 1 } });
+      }
+      return Promise.reject(new Error('boom'));
+    });
+    renderAt('?q=oshun');
+    await screen.findByRole('alert');
+
+    const retryBtn = screen.getByRole('button', { name: /reintentar/i });
+    expect(retryBtn).toBeInTheDocument();
+
+    // El boton debe poder pulsarse sin lanzar; el alert (y el boton) siguen
+    // presentes tras el click. Si se elimina el boton este test falla.
+    fireEvent.click(retryBtn);
+    expect(await screen.findByRole('alert')).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: /reintentar/i }),
+    ).toBeInTheDocument();
+  });
+
+  /**
+   * BUG-SEARCH-04 — «Reintentar busqueda» debe forzar un nuevo fetch.
+   *
+   * El fix original hacia setSearchParams(new URLSearchParams(searchParams)),
+   * re-aplicando los MISMOS parametros. Como la queryKey de useSearch es
+   * [...SEARCH_KEY, normalized, rest] y no cambiaba, React Query v5 reusaba el
+   * estado de error cacheado (retry:false) y NO re-ejecutaba queryFn: el boton
+   * era cosmetico. El fix de BUG-SEARCH-04 expone refetch() de useSearch y lo
+   * llama en el onClick, forzando una nueva peticion sin importar la queryKey.
+   */
+  it('al pulsar «Reintentar busqueda» dispara un nuevo fetch (BUG-SEARCH-04)', async () => {
+    apiService.get.mockImplementation((url) => {
+      if (typeof url === 'string' && url.includes('/categories')) {
+        return Promise.resolve({ data: { results: CATEGORIES_FIXTURE, count: 1 } });
+      }
+      return Promise.reject(new Error('boom'));
+    });
+    renderAt('?q=oshun');
+    await screen.findByRole('alert');
+
+    const searchCallsBefore = apiService.get.mock.calls.filter(
+      ([url]) => typeof url === 'string' && url.includes('/catalogue/search/'),
+    ).length;
+
+    fireEvent.click(screen.getByRole('button', { name: /reintentar/i }));
+
+    await waitFor(() => {
+      const searchCallsAfter = apiService.get.mock.calls.filter(
+        ([url]) => typeof url === 'string' && url.includes('/catalogue/search/'),
+      ).length;
+      expect(searchCallsAfter).toBeGreaterThan(searchCallsBefore);
+    });
+  });
 });

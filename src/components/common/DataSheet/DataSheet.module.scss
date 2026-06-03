@@ -1,0 +1,49 @@
+@use '@styles/abstracts' as *;
+
+.sheet {
+  width: 100%;
+  border-collapse: collapse;
+  color: var(--ec-text-primary);
+  font-size: $font-size-base;
+  text-align: left;
+}
+
+.th {
+  padding: $spacing-2 $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  background: var(--ec-bg-sunken);
+  color: var(--ec-text-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-semibold;
+  white-space: nowrap;
+}
+
+.tr {
+  &:hover {
+    background: var(--ec-bg-sunken);
+  }
+}
+
+.td {
+  padding: 0;
+  border: 1px solid var(--ec-border-color);
+  vertical-align: middle;
+
+  &:not(:has(.input)) {
+    padding: $spacing-2 $spacing-3;
+  }
+}
+
+.input {
+  width: 100%;
+  padding: $spacing-2 $spacing-3;
+  border: none;
+  background: transparent;
+  color: var(--ec-text-primary);
+  font: inherit;
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: -2px;
+  }
+}

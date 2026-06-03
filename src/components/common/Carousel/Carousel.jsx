@@ -38,7 +38,6 @@ const Carousel = forwardRef(function Carousel({
   // UI
   showDots       = true,
   showArrows     = true,
-  showCaptions   = false,
   dark           = false,
   // Callbacks (equivalen a eventos de ui-core)
   onSlide,   // (from, to, direction) — antes de animar

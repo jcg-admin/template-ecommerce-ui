@@ -37,7 +37,6 @@ const PRODUCTS = [
     is_active: true,  is_published: true,  category: { id: 3, name: 'Elekes' } },
 ];
 
-const RESPONSE_PAGE_1 = { count: 27, next: 'page=2', previous: null, results: PRODUCTS };
 
 const makeClient = () =>
   new QueryClient({ defaultOptions: { queries: { retry: false } } });
@@ -56,7 +55,7 @@ const makeStoreWithProducts = (products = PRODUCTS, count = PRODUCTS.length) =>
       actionError: null, lastAction: null,
       pagination: { count, page: 1, pageSize: 20, totalPages: 1, next: null, previous: null },
     },
-  });;
+  });
 
 const wrap = (ui, store = makeStore()) => (
   <QueryClientProvider client={makeClient()}>
@@ -109,6 +108,20 @@ describe('AdminProductsPage (D-011 listado)', () => {
     expect(
       await screen.findByText(/Sin productos que coincidan|no hay/i),
     ).toBeInTheDocument();
+  });
+});
+
+describe('AdminProductsPage — acciones de cabecera (F3)', () => {
+  it('enlaza Importar CSV a la pagina de importacion', async () => {
+    render(wrap(<AdminProductsPage />, makeStoreWithProducts()));
+    const link = await screen.findByRole('link', { name: /Importar CSV/i });
+    expect(link).toHaveAttribute('href', '/admin/products/import');
+  });
+
+  it('enlaza + Nuevo producto a /admin/products/new', async () => {
+    render(wrap(<AdminProductsPage />, makeStoreWithProducts()));
+    const link = await screen.findByRole('link', { name: /Nuevo producto/i });
+    expect(link).toHaveAttribute('href', '/admin/products/new');
   });
 });
 

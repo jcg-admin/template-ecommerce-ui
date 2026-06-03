@@ -10,8 +10,12 @@
  *
  * Lectura: useAdminDashboard (React Query).
  */
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
 import { useAdminDashboard } from '@hooks/domain/useOrders';
+import { updateOrderStatus } from '@redux/slices/adminSlice';
+import KanbanBoard from '@components/common/KanbanBoard';
 import styles from './AdminOrdersDashboardPage.module.scss';
 
 const STATUS_LABEL = {
@@ -22,6 +26,17 @@ const STATUS_LABEL = {
   DELIVERED:      'Entregado',
   CANCELLED:      'Cancelado',
 };
+
+// UC-ADM-KANBAN (F5-T13): columnas del tablero = estados operativos del
+// pedido en el dominio (los mismos que STATUS_LABEL, sin CANCELLED, que no
+// es un estado "movible" del flujo).
+const KANBAN_COLUMNS = [
+  { id: 'PENDING',        title: STATUS_LABEL.PENDING },
+  { id: 'PROCESSING',     title: STATUS_LABEL.PROCESSING },
+  { id: 'IN_PREPARATION', title: STATUS_LABEL.IN_PREPARATION },
+  { id: 'SHIPPED',        title: STATUS_LABEL.SHIPPED },
+  { id: 'DELIVERED',      title: STATUS_LABEL.DELIVERED },
+];
 
 function formatDate(iso) {
   if (!iso) return '—';
@@ -39,6 +54,17 @@ function formatCurrency(value) {
 
 export default function AdminOrdersDashboardPage() {
   const { data, isLoading, isError } = useAdminDashboard();
+  const dispatch = useDispatch();
+
+  // UC-ADM-KANBAN: al soltar/mover una tarjeta, despacha el cambio de estado
+  // del pedido. Se reutiliza el thunk real updateOrderStatus del adminSlice
+  // (PATCH /api/v1/orders/:orderNumber/status/). cardId es el order_number.
+  const handleCardMove = useCallback(
+    (cardId, toColumnId) => {
+      dispatch(updateOrderStatus({ orderNumber: cardId, status: toColumnId }));
+    },
+    [dispatch],
+  );
 
   if (isLoading) return <p>Cargando dashboard…</p>;
   if (isError || !data) {
@@ -53,6 +79,14 @@ export default function AdminOrdersDashboardPage() {
   const expiringOrders  = data.expiring_orders ?? [];
   const daySummary      = data.day_summary ?? {};
   const latestOrders    = data.latest_orders ?? [];
+
+  // UC-ADM-KANBAN: tarjetas del tablero a partir de los ultimos pedidos.
+  // columnId = estado del pedido; cada tarjeta usa el order_number como id.
+  const kanbanCards = latestOrders.map((o) => ({
+    id:       o.order_number,
+    columnId: o.status,
+    order:    o,
+  }));
 
   return (
     <section className={styles.page} aria-labelledby="dash-title">
@@ -125,6 +159,27 @@ export default function AdminOrdersDashboardPage() {
               ))}
             </tbody>
           </table>
+        )}
+      </section>
+
+      <section aria-labelledby="kanban-title" className={styles.section}>
+        <h2 id="kanban-title">Tablero</h2>
+        {kanbanCards.length === 0 ? (
+          <p>No hay pedidos para mostrar en el tablero.</p>
+        ) : (
+          <KanbanBoard
+            ariaLabel="Pedidos por estado"
+            columns={KANBAN_COLUMNS}
+            cards={kanbanCards}
+            onCardMove={handleCardMove}
+            renderCard={(card) => (
+              <Link to={`/admin/orders/${card.id}`}>
+                <strong>{card.id}</strong>
+                <span>{card.order?.user__email ?? '—'}</span>
+                <span>{formatCurrency(card.order?.value__total)}</span>
+              </Link>
+            )}
+          />
         )}
       </section>
     </section>

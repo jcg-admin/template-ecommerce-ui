@@ -39,18 +39,18 @@ export default function PaymentSelectionPage() {
   useEffect(() => () => { dispatch(clearPaymentsActionState()); }, [dispatch]);
 
   useEffect(() => {
-    const url = lastInitiation?.payment_url || lastInitiation?.approve_url;
+    const url = lastInitiation?.checkout_url || lastInitiation?.payment_url || lastInitiation?.approve_url;
     if (url) redirectToGateway(url);
   }, [lastInitiation]);
 
   const onPayMP = () => {
-    const payload = { order_id: orderId };
+    const payload = { order_number: orderId };
     if (installments) payload.installments = installments;
     dispatch(initiateMercadoPagoPayment(payload));
   };
 
   const onPayPP = () => {
-    dispatch(initiatePayPalPayment({ order_id: orderId }));
+    dispatch(initiatePayPalPayment({ order_number: orderId }));
   };
 
   return (

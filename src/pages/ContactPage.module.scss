@@ -21,6 +21,15 @@
   margin: 0;
 }
 
+.contactInfo {
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.4rem;
+  font-size: 0.9rem;
+  p { margin: 0.25rem 0; }
+}
+
 .form {
   display: grid;
   gap: 1rem;
@@ -83,4 +92,13 @@
 
 .error {
   color: $vino-deep;
+}
+
+.chat {
+  margin-top: 2rem;
+}
+
+.chatTitle {
+  font-size: 1.2rem;
+  margin: 0 0 0.75rem;
 }

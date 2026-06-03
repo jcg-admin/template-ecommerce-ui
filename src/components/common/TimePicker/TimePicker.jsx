@@ -18,7 +18,7 @@
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
 import {
-  useState, useRef, useCallback, useEffect, useId,
+  useState, useRef, useCallback, useId,
   useImperativeHandle, forwardRef,
 } from 'react';
 import useClickOutside from '@hooks/ui/useClickOutside';
@@ -49,7 +49,7 @@ const TimePicker = forwardRef(function TimePicker({
   seconds     = true,          // Default de ui-core
   inputReadOnly = false,
   inputOnChangeDelay = 750,    // Default de ui-core
-  locale      = 'default',
+  _locale      = 'default',
   name,
   className   = '',
   onShow,

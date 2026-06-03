@@ -12,16 +12,15 @@
   &:focus-visible    { outline: 2px solid $primary-color; outline-offset: 2px; }
 }
 .btn_primary  { background: $primary-color; color: $text-inverse;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $primary-color 85%, #000); } }
+  &:hover:not(:disabled) { background: color-mix(in srgb, $primary-color 85%, $black); } }
 .btn_secondary{ background: $bg-surface; color: $text-primary; border-color: $border-color;
   &:hover:not(:disabled) { background: $bg-elevated; } }
 .btn_ghost    { background: transparent; color: $primary-color;
   &:hover:not(:disabled) { background: color-mix(in srgb, $primary-color 8%, transparent); } }
 .btn_vino     { background: $error-color; color: $text-inverse;
-  &:hover:not(:disabled) { background: color-mix(in srgb, $error-color 85%, #000); } }
+  &:hover:not(:disabled) { background: color-mix(in srgb, $error-color 85%, $black); } }
 .btn_sm  { padding: $spacing-1 $spacing-3; font-size: $font-size-xs; }
 .btn_lg  { padding: $spacing-3 $spacing-6; font-size: $font-size-base; }
-.btn_md  {}
 .btnBlock { width: 100%; }
 
 .isLoading     { pointer-events: none; }

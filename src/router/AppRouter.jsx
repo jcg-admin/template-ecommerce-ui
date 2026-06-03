@@ -53,6 +53,7 @@ const OrderEditPage   = lazy(() => import('@pages/account/OrderEditPage'));
 const SecurityPage    = lazy(() => import('@pages/account/SecurityPage'));
 const WishlistPage    = lazy(() => import('@pages/account/WishlistPage'));
 const ProfilePage     = lazy(() => import('@pages/account/ProfilePage'));
+const ReferralPage    = lazy(() => import('@pages/account/ReferralPage'));
 const ChangePasswordPage = lazy(() => import('@pages/account/ChangePasswordPage'));
 const AddressesPage      = lazy(() => import('@pages/account/AddressesPage'));
 // UC-SRCH-03 — Historial personal de busquedas
@@ -95,6 +96,7 @@ const AdminVariantsPage              = lazy(() => import('@pages/admin/AdminVari
 const AdminVariantPricePage          = lazy(() => import('@pages/admin/AdminVariantPricePage'));
 const AdminNotificationComposePage   = lazy(() => import('@pages/admin/AdminNotificationComposePage'));
 const AdminProductDiscountsPage      = lazy(() => import('@pages/admin/AdminProductDiscountsPage'));
+const AdminVoucherReportPage         = lazy(() => import('@pages/admin/AdminVoucherReportPage'));
 const AdminReportSalesPage           = lazy(() => import('@pages/admin/AdminReportSalesPage'));
 const AdminReportTopSellersPage      = lazy(() => import('@pages/admin/AdminReportTopSellersPage'));
 const AdminReportCustomersRfmPage    = lazy(() => import('@pages/admin/AdminReportCustomersRfmPage'));
@@ -110,6 +112,7 @@ const AdminPaymentRefundPage         = lazy(() => import('@pages/admin/AdminPaym
 const AdminPaymentsPage              = lazy(() => import('@pages/admin/AdminPaymentsPage'));
 // UC-CAT-06 / UC-CAT-09 / UC-CAT-10 — Categorias y CRUD de productos
 const AdminCategoriesPage            = lazy(() => import('@pages/admin/AdminCategoriesPage'));
+const AdminCouriersPage              = lazy(() => import('@pages/admin/AdminCouriersPage'));
 const AdminProductCreatePage         = lazy(() => import('@pages/admin/AdminProductCreatePage'));
 const AdminProductEditPage           = lazy(() => import('@pages/admin/AdminProductEditPage'));
 // UC-CAT-12 — Sincronizacion masiva de precios (CSV / ajuste porcentual)
@@ -131,7 +134,6 @@ const AdminStaticPagesPage      = lazy(() => import('@pages/admin/AdminStaticPag
 const AdminStaticPageEditorPage = lazy(() => import('@pages/admin/AdminStaticPageEditorPage'));
 const AdminGatewaysPage         = lazy(() => import('@pages/admin/AdminGatewaysPage'));
 const AdminShippingMethodsPage  = lazy(() => import('@pages/admin/AdminShippingMethodsPage'));
-const AdminSiteSettingsPage     = lazy(() => import('@pages/admin/AdminSiteSettingsPage'));
 const AdminInventoryDashboardPage = lazy(() => import('@pages/admin/AdminInventoryDashboardPage'));
 const AdminStockAlertsPage      = lazy(() => import('@pages/admin/AdminStockAlertsPage'));
 // UC-CFG-01..05 — Hub de configuracion
@@ -209,6 +211,7 @@ export default function AppRouter() {
               <Route path="account/security"          element={<SecurityPage />} />
               <Route path="account/wishlist"    element={<WishlistPage />} />
               <Route path="account/profile"     element={<ProfilePage />} />
+              <Route path="account/referral"    element={<ReferralPage />} />
               {/* UC-AUTH-08 — Cambiar contrasena */}
               <Route path="account/change-password" element={<ChangePasswordPage />} />
               {/* UC-AUTH-07 — Libreta de direcciones */}
@@ -261,6 +264,7 @@ export default function AppRouter() {
               <Route path="admin/products/:id/variants/matrix" element={<AdminProductVariantsPage />} />
               {/* UC-CAT-06 — Gestionar categorias */}
               <Route path="admin/categories"         element={<AdminCategoriesPage />} />
+              <Route path="admin/couriers"           element={<AdminCouriersPage />} />
               {/* UC-CAT-12 — Sincronizar precios en lote */}
               <Route path="admin/price-sync"         element={<AdminPriceSyncPage />} />
               {/* UC-ADM-02 — Matriz de permisos */}
@@ -279,6 +283,8 @@ export default function AppRouter() {
               <Route path="admin/users"       element={<AdminUsersPage />} />
               <Route path="admin/users/:pk"   element={<AdminUserDetailPage />} />
               <Route path="admin/vouchers"    element={<AdminVouchersPage />} />
+              {/* UC-PRO-04 — reporte agregado (ruta estatica antes del :id) */}
+              <Route path="admin/vouchers/report" element={<AdminVoucherReportPage />} />
               {/* Detalle y creación de voucher — cubre /admin/vouchers/nuevo y /admin/vouchers/:id */}
               <Route path="admin/vouchers/:id"  element={<AdminVoucherDetailPage />} />
               <Route path="admin/support"     element={<AdminSupportPage />} />
@@ -332,7 +338,6 @@ export default function AppRouter() {
               {/* Configuración específica: gateways, envío, sitio */}
               <Route path="admin/config/gateways"                 element={<AdminGatewaysPage />} />
               <Route path="admin/config/shipping"                 element={<AdminShippingMethodsPage />} />
-              <Route path="admin/config/site"                     element={<AdminSiteSettingsPage />} />
               {/* UC-CFG-01..05 — Hub de configuracion */}
               <Route path="admin/config"                          element={<AdminConfigPage />} />
             </Route>

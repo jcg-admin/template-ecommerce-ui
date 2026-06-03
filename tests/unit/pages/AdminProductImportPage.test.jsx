@@ -1,32 +1,24 @@
 /**
- * Tests — AdminProductImportPage
- * Importación masiva de productos via CSV
+ * Tests — AdminProductImportPage (UC-INV-05)
+ * Importación masiva de productos via CSV — flujo single-shot contra el
+ * endpoint real POST /api/v1/admin/inventory/import/ (sin preview/confirm/
+ * template; esos endpoints eran inventados y se eliminaron).
  */
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider }     from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
-import adminReducer from '../../../src/redux/slices/adminSlice';
+import inventoryReducer from '../../../src/redux/slices/inventorySlice';
 
 jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn() },
 }));
-// adminSlice mock eliminado — funciones ya implementadas en el slice real
 
+import apiService from '@services/apiService';
 import AdminProductImportPage from '../../../src/pages/admin/AdminProductImportPage';
 
-const makeStore = () => configureStore({
-  reducer: { admin: adminReducer },
-  preloadedState: {
-    admin: {
-      csvImport: { status: 'idle', result: null, errors: [] },
-      isLoading: false,
-      products: [],
-      isLoadingProducts: false,
-    },
-  },
-});
+const makeStore = () => configureStore({ reducer: { inventory: inventoryReducer } });
 
 const renderPage = () => render(
   <Provider store={makeStore()}>
@@ -34,40 +26,68 @@ const renderPage = () => render(
   </Provider>
 );
 
-describe('AdminProductImportPage', () => {
+afterEach(() => jest.clearAllMocks());
+
+describe('AdminProductImportPage (UC-INV-05)', () => {
   it('renderiza el título de importación', () => {
     renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/importar|importación|CSV/i);
+    expect(document.body.textContent).toMatch(/importar|importación|CSV/i);
   });
 
   it('tiene zona de carga de archivo', () => {
     renderPage();
-    const fileInput = document.querySelector('input[type=file]') ||
-                      screen.queryByLabelText(/archivo|file|csv/i);
-    const hasDrop = document.querySelector('[class*="drop"]') ||
-                    document.querySelector('[class*="upload"]');
-    expect(fileInput || hasDrop || document.body.textContent.length > 50).toBeTruthy();
+    expect(document.querySelector('input[type=file]')).toBeTruthy();
   });
 
-  it('tiene botón para descargar la plantilla CSV', () => {
+  it('muestra las columnas CSV esperadas por el backend real', () => {
     renderPage();
-    const btns = screen.getAllByRole('button');
-    const hasTemplate = btns.some(b =>
-      /plantilla|template|descargar|download/i.test(b.textContent)
+    const body = document.body.textContent;
+    expect(body).toMatch(/sku/i);
+    expect(body).toMatch(/base_price/i);
+    expect(body).toMatch(/category_slug/i);
+  });
+
+  it('permite elegir el estado inicial (borrador/publicado)', () => {
+    renderPage();
+    expect(screen.getByLabelText(/estado inicial/i)).toBeInTheDocument();
+  });
+
+  it('importa via POST /admin/inventory/import/ con el archivo y estado', async () => {
+    apiService.post.mockResolvedValue({
+      data: {
+        created: 2, failed: 0, products_created: 2, products_failed: 0,
+        error_report: null, download_url: null,
+      },
+    });
+    renderPage();
+
+    const file = new File(['sku,name,base_price,category_slug\nA,B,10,c'], 'p.csv', { type: 'text/csv' });
+    fireEvent.change(document.querySelector('input[type=file]'), { target: { files: [file] } });
+    fireEvent.click(screen.getByRole('button', { name: /^Importar$/i }));
+
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/admin/inventory/import/',
+        expect.any(FormData),
+      ),
     );
-    expect(hasTemplate || btns.length > 0).toBe(true);
   });
 
-  it('muestra instrucciones de formato CSV', () => {
+  it('muestra el reporte single-shot al completar (creados/fallidos)', async () => {
+    apiService.post.mockResolvedValue({
+      data: {
+        created: 5, failed: 1, products_created: 5, products_failed: 1,
+        error_report: [{ row: 3, field: 'base_price', reason: 'Precio inválido' }],
+        download_url: '/api/v1/admin/inventory/import-reports/9.csv',
+      },
+    });
     renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/CSV|formato|columna|instrucción|campo/i);
-  });
 
-  it('muestra la zona de pasos del proceso de importación', () => {
-    renderPage();
-    const bodyText = document.body.textContent;
-    expect(bodyText).toMatch(/paso|step|1|2|3|validar|importar|resultado/i);
+    const file = new File(['x'], 'p.csv', { type: 'text/csv' });
+    fireEvent.change(document.querySelector('input[type=file]'), { target: { files: [file] } });
+    fireEvent.click(screen.getByRole('button', { name: /^Importar$/i }));
+
+    expect(await screen.findByText(/Importación con errores/i)).toBeInTheDocument();
+    expect(screen.getByText('Precio inválido')).toBeInTheDocument();
   });
 });

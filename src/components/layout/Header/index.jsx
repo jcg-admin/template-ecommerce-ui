@@ -11,6 +11,8 @@
  */
 
 import Offcanvas from '@components/common/Offcanvas/Offcanvas';
+import Badge from '@components/common/Badge';
+import Avatar from '@components/common/Avatar';
 import { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -119,6 +121,7 @@ export default function Header() {
               <Dropdown
                 trigger={
                   <span className={styles.actionLink} aria-label="Menu de usuario">
+                    <Avatar src={user?.avatar_url} name={user?.first_name} size="sm" />
                     {user?.first_name || 'Mi cuenta'} ▾
                   </span>
                 }
@@ -152,7 +155,7 @@ export default function Header() {
             >
               Bolsa
               <span className={styles.cartCount}>
-                {cartCount > 99 ? '99+' : cartCount}
+                <Badge value={cartCount} tone="coral" ariaLabel={`${cartCount} en la bolsa`} />
               </span>
             </button>
             <Offcanvas
@@ -185,9 +188,9 @@ export default function Header() {
                             style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4 }} />
                         )}
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{item.name}</div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{item.product_name}</div>
                           <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                            {item.quantity} × ${(item.price || 0).toLocaleString('es-MX')}
+                            {item.quantity} × ${Number(item.unit_price || 0).toLocaleString('es-MX')}
                           </div>
                         </div>
                       </div>

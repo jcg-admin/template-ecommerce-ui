@@ -14,6 +14,7 @@
  * Stack: React Query (useSearch). No mutaciones.
  */
 import { useCallback } from 'react';
+import { useSelector } from 'react-redux';
 import { Link, useSearchParams } from 'react-router-dom';
 import SearchBar from '@components/catalog/SearchBar';
 import ProductCard from '@components/catalog/ProductCard';
@@ -32,7 +33,7 @@ export default function SearchResultsPage() {
   const q = normalizeQuery(rawQ);
   const queryValid = isQueryValid(q);
 
-  const { data, isLoading, isError } = useSearch(
+  const { data, isLoading, isError, refetch } = useSearch(
     {
       q,
       category:  categoryParam || undefined,
@@ -44,6 +45,7 @@ export default function SearchResultsPage() {
 
   const results = data?.results ?? [];
   const count   = data?.count ?? 0;
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
 
   const handleSearch = useCallback((next) => {
     const params = new URLSearchParams(searchParams);
@@ -110,7 +112,7 @@ export default function SearchResultsPage() {
                 <p>Sin resultados para <strong>«{q}»</strong>.</p>
                 <button
                   type="button"
-                  onClick={() => setSearchParams(new URLSearchParams(searchParams))}
+                  onClick={() => refetch()}
                   className={styles.retryBtn}
                 >
                   Reintentar búsqueda
@@ -141,7 +143,11 @@ export default function SearchResultsPage() {
               <section aria-label="Resultados">
                 <div className={styles.grid}>
                   {results.map((p) => (
-                    <ProductCard key={p.id} product={p} />
+                    <ProductCard
+                      key={p.id}
+                      product={p}
+                      inWishlist={wishlistItems.some((i) => i.product_id === p.id)}
+                    />
                   ))}
                 </div>
               </section>

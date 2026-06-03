@@ -1,5 +1,4 @@
-import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
@@ -97,17 +96,28 @@ describe('AdminVouchersPage — listado (UC-PRO-02)', () => {
 });
 
 describe('AdminVouchersPage — desactivar (UC-PRO-03)', () => {
-  it('el boton toggle activa/desactiva via dispatch', async () => {
-    // BUG-TEST-V01: el componente usa botones ◐/○ que llaman toggleVoucherActive
-    // No usa 'Desactivar X' — simplificar: verificar que hay botones de toggle
+  it('toggle de voucher activo llama al endpoint real deactivate/', async () => {
     apiService.get.mockResolvedValue({ data: { results: VOUCHERS } });
     apiService.post.mockResolvedValue({ data: { ...VOUCHERS[0], is_active: false } });
     render(wrap(<AdminVouchersPage />));
     await screen.findByText('WELCOME10');
-    // El voucher activo (WELCOME10) tiene botón toggle '◐'
-    // El voucher inactivo (FIXED50) tiene botón '○'
-    const toggleBtns = document.querySelectorAll('button[class]');
-    expect(toggleBtns.length).toBeGreaterThan(0);
+    // WELCOME10 (id 1) está activo → el botón ◐ debe desactivar
+    fireEvent.click(screen.getByTitle('Desactivar'));
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith('/api/v1/admin/vouchers/1/deactivate/'),
+    );
+  });
+
+  it('toggle de voucher inactivo llama al endpoint real activate/', async () => {
+    apiService.get.mockResolvedValue({ data: { results: VOUCHERS } });
+    apiService.post.mockResolvedValue({ data: { ...VOUCHERS[1], is_active: true } });
+    render(wrap(<AdminVouchersPage />));
+    await screen.findByText('FIXED50');
+    // FIXED50 (id 2) está inactivo → el botón ○ debe activar
+    fireEvent.click(screen.getByTitle('Activar'));
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith('/api/v1/admin/vouchers/2/activate/'),
+    );
   });
 
   it('no muestra boton de accion en vouchers ya inactivos', async () => {

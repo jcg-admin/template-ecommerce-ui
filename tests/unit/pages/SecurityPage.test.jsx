@@ -12,10 +12,6 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn(), post: jest.fn(), patch: jest.fn(), put: jest.fn() },
 }));
-jest.mock('../../../src/components/account/AccountSidebar', () => ({
-  __esModule: true,
-  default: () => <nav data-testid="account-sidebar" />,
-}));
 import apiService  from '@services/apiService';
 import SecurityPage from '../../../src/pages/account/SecurityPage';
 
@@ -75,8 +71,17 @@ describe('SecurityPage', () => {
     await waitFor(() => expect(apiService.post).toHaveBeenCalled());
   });
 
-  it('el AccountSidebar se renderiza', () => {
+  it('cerrar todas las sesiones pega a /api/v1/auth/logout-all/', async () => {
+    apiService.post.mockResolvedValue({ data: { message: 'ok' } });
     renderPage();
-    expect(screen.getByTestId('account-sidebar')).toBeInTheDocument();
+    fireEvent.click(
+      screen.getByRole('button', { name: /cerrar todas las sesiones/i }),
+    );
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/auth/logout-all/',
+        {},
+      ),
+    );
   });
 });

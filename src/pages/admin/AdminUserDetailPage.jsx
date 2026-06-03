@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
-  fetchAdminUser, toggleUserActive, resetUserPassword, makeUserAdmin,
+  fetchAdminUser, toggleUserActive, resetUserPassword, 
 } from '@redux/slices/adminSlice';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import styles from './AdminUserDetailPage.module.scss';

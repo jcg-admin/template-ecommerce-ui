@@ -5,6 +5,10 @@
  * Endpoints:
  *   GET / POST / PATCH / DELETE /admin/vouchers/<id>/
  *   GET /admin/vouchers/<id>/changelog/
+ *
+ * El uso agregado por campaña vive en el reporte global
+ * GET /admin/vouchers/report/ (AdminVoucherReportPage). El backend no
+ * expone un endpoint de uso por-voucher (.../vouchers/<id>/usage/).
  */
 
 import { useEffect, useState } from 'react';

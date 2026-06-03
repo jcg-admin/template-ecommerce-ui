@@ -52,6 +52,8 @@ describe('ProductQuestionAskPage (UC-QST-01)', () => {
 
     fireEvent.change(screen.getByLabelText(/Tu pregunta/i),
       { target: { value: 'Cual es la talla recomendada para mediana?' } });
+    fireEvent.change(screen.getByLabelText(/Tu nombre/i),
+      { target: { value: 'Ada' } });
     fireEvent.change(screen.getByLabelText(/Email/i),
       { target: { value: 'visitante@example.com' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar pregunta/i }));
@@ -60,8 +62,9 @@ describe('ProductQuestionAskPage (UC-QST-01)', () => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/v1/products/42/questions/',
         expect.objectContaining({
-          body:  'Cual es la talla recomendada para mediana?',
-          email: 'visitante@example.com',
+          body:        'Cual es la talla recomendada para mediana?',
+          asker_name:  'Ada',
+          asker_email: 'visitante@example.com',
         }),
       );
     });

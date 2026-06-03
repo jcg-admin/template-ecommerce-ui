@@ -43,7 +43,7 @@ const Tooltip = forwardRef(function Tooltip({
   fallbackPlacements  = ['top', 'right', 'bottom', 'left'],
   animation           = true,     // Default ui-core
   customClass         = '',       // Default ui-core
-  html                = false,    // Default ui-core (html=false por seguridad)
+  _html                = false,    // Default ui-core (html=false por seguridad)
   // Callbacks
   onShow,
   onShown,

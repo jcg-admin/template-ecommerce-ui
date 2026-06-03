@@ -104,12 +104,15 @@ describe('mocks/handlers/inventory (UC-INV-01..05)', () => {
     expect(r.status).toBe(404);
   });
 
-  it('POST /api/v1/admin/inventory/import/ devuelve 201 con reporte', async () => {
+  it('POST /api/v1/admin/inventory/import/ devuelve 200 con reporte single-shot', async () => {
+    // Shape real del backend (apps/inventory/views.py ProductImportView):
+    // { created, failed, products_created, products_failed, error_report, download_url }
     const r = await post('http://localhost/api/v1/admin/inventory/import/');
-    expect(r.status).toBe(201);
+    expect(r.status).toBe(200);
     expect(r.data).toHaveProperty('created');
-    expect(r.data).toHaveProperty('updated');
-    expect(r.data).toHaveProperty('errors');
+    expect(r.data).toHaveProperty('failed');
+    expect(r.data).toHaveProperty('products_created');
+    expect(r.data).toHaveProperty('products_failed');
     expect(r.data).toHaveProperty('download_url');
   });
 });
@@ -137,9 +140,11 @@ describe('mocks/handlers/returns (UC-RET-01..06)', () => {
     expect(r.data.detail).toMatch(/no encontrada/i);
   });
 
-  it('POST /api/v1/returns/ crea (201) con order_id + reason', async () => {
+  it('POST /api/v1/returns/ crea (201) con order_number + reason', async () => {
+    // El backend (ReturnCreateSerializer) valida `order_number` en el body;
+    // la representación de lectura expone `order_id`.
     const r = await post('http://localhost/api/v1/returns/', {
-      order_id: 'ORD-9999',
+      order_number: 'ORD-9999',
       reason: 'WRONG_ITEM',
     });
     expect(r.status).toBe(201);
@@ -149,7 +154,7 @@ describe('mocks/handlers/returns (UC-RET-01..06)', () => {
 
   it('POST sin reason devuelve 400', async () => {
     const r = await post('http://localhost/api/v1/returns/', {
-      order_id: 'ORD-9999',
+      order_number: 'ORD-9999',
     });
     expect(r.status).toBe(400);
   });

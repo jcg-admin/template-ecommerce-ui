@@ -11,7 +11,13 @@ jest.mock('@services/apiService', () => ({
   default: { get: jest.fn(), post: jest.fn() },
 }));
 
+jest.mock('@utils/exportSheet', () => ({
+  __esModule: true,
+  exportSheet: jest.fn(),
+}));
+
 import apiService from '@services/apiService';
+import { exportSheet } from '@utils/exportSheet';
 import AdminReportSalesPage from './AdminReportSalesPage';
 
 const RESPONSE = {
@@ -97,14 +103,16 @@ describe('AdminReportSalesPage (UC-REP-01)', () => {
     expect(screen.getByText('PAYPAL')).toBeInTheDocument();
   });
 
-  it('tiene boton de exportar CSV y PDF', async () => {
+  it('tiene boton de exportar CSV y enlace de PDF', async () => {
+    // UC-ADM-XLSX: CSV ahora es exportacion client-side (boton), PDF sigue siendo link.
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportSalesPage />));
-    expect(await screen.findByRole('link', { name: /Exportar CSV/i })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: /Exportar CSV/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Exportar Excel/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Exportar PDF/i })).toBeInTheDocument();
   });
 
-  it('el enlace de exportar lleva el periodo seleccionado', async () => {
+  it('el enlace de PDF lleva el periodo seleccionado', async () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportSalesPage />));
     await screen.findByText(/12500\.00/);
@@ -113,12 +121,46 @@ describe('AdminReportSalesPage (UC-REP-01)', () => {
       { target: { value: 'year' } },
     );
     await waitFor(() => {
-      const csvLink = screen.getByRole('link', { name: /Exportar CSV/i });
-      expect(csvLink).toHaveAttribute(
+      const pdfLink = screen.getByRole('link', { name: /Exportar PDF/i });
+      expect(pdfLink).toHaveAttribute(
         'href',
-        '/api/v1/admin/reports/sales/export/?period=year&format=csv',
+        '/api/v1/admin/reports/sales/export/?period=year&format=pdf',
       );
     });
+  });
+
+  it('exporta las filas del reporte a CSV via exportSheet (UC-ADM-XLSX)', async () => {
+    apiService.get.mockResolvedValue({ data: RESPONSE });
+    render(wrap(<AdminReportSalesPage />));
+    await screen.findByText('2026-05-01');
+
+    fireEvent.click(screen.getByRole('button', { name: /Exportar CSV/i }));
+
+    expect(exportSheet).toHaveBeenCalledTimes(1);
+    const arg = exportSheet.mock.calls[0][0];
+    expect(arg.filename).toMatch(/^reporte-ventas-.*\.csv$/);
+    expect(arg.columns).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ key: 'bucket' }),
+        expect.objectContaining({ key: 'revenue' }),
+        expect.objectContaining({ key: 'orders' }),
+      ]),
+    );
+    expect(arg.rows).toEqual(RESPONSE.series);
+  });
+
+  it('renderiza el reporte pivote con celdas agregadas (UC-ADM-PIVOT)', async () => {
+    apiService.get.mockResolvedValue({ data: RESPONSE });
+    render(wrap(<AdminReportSalesPage />));
+    await screen.findByText(/12500\.00/);
+
+    const pivot = await screen.findByRole('table', { name: /Ingresos por año y mes/i });
+    expect(pivot).toBeInTheDocument();
+    // Dimensiones derivadas del bucket: año (fila) y mes (columna).
+    expect(pivot).toHaveTextContent('2026');
+    expect(pivot).toHaveTextContent('May');
+    // Celda agregada: 1000.00 + 1500.00 = 2500.
+    expect(pivot).toHaveTextContent('2500');
   });
 
   it('muestra estado vacio cuando no hay serie', async () => {

@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk(
 /** Cierra sesion e invalida el refresh token en blacklist. */
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async (_, { rejectWithValue }) => {
+  async (_, { _rejectWithValue }) => {
     try {
       await apiService.post('/api/v1/auth/logout/', {});
       return null;
@@ -101,9 +101,9 @@ export const changePassword = createAsyncThunk(
     async ({ currentPassword, newPassword, confirmPassword }, { rejectWithValue }) => {
       try {
         const response = await apiService.post('/api/v1/auth/change-password/', {
-          current_password: currentPassword,
-          new_password:     newPassword,
-          confirm_password: confirmPassword,
+          current_password:     currentPassword,
+          new_password:         newPassword,
+          new_password_confirm: confirmPassword,
         });
         return response.data;
       } catch (err) {
@@ -146,6 +146,22 @@ export const resendVerificationEmail = createAsyncThunk(
       return response.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
+    }
+  }
+);
+
+// UC-AUTH-16 — Dar de baja la cuenta.
+/** Elimina (da de baja) la cuenta del comprador autenticado. */
+// UC-AUTH-16: baja logica de la propia cuenta. Requiere reautenticacion
+// con la contrasena actual (POST /auth/me/deactivate/ con {password}).
+export const deleteAccount = createAsyncThunk(
+  'auth/deleteAccount',
+  async ({ password } = {}, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/auth/me/deactivate/', { password });
+      return res?.data ?? null;
+    } catch (error) {
+      return rejectWithValue(error.message);
     }
   }
 );
@@ -259,6 +275,25 @@ const authSlice = createSlice({
         state.isLoading = false;
         state.error = action.payload;
       });
+
+    // deleteAccount (UC-AUTH-16) — dar de baja la cuenta
+    builder
+      .addCase(deleteAccount.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(deleteAccount.fulfilled, (state) => {
+        // Baja exitosa: limpiar la sesion igual que en logout.
+        state.isLoading = false;
+        state.user = null;
+        state.isAuthenticated = false;
+        state.error = null;
+      })
+      .addCase(deleteAccount.rejected, (state, action) => {
+        // La baja fallo: preservar la sesion y exponer el error.
+        state.isLoading = false;
+        state.error = action.payload;
+      });
   },
 });
 
@@ -284,8 +319,26 @@ export const fetchAddresses = createAsyncThunk(
 // ── Aliases y thunks para compatibilidad con sistema de diseno Yoruba (F5, H-F5-01) ──
 
 export const login             = loginUser;
-export const logoutAllSessions = logoutUser;
 export const resendVerification = resendVerificationEmail;
+
+/**
+ * UC-AUTH-18: cierra todas las sesiones activas invalidando todos los
+ * refresh tokens del usuario. Endpoint real: POST /api/v1/auth/logout-all/
+ * (LogoutAllSessionsView). NO es un alias de logoutUser: ese pega a
+ * /auth/logout/ (blacklist del refresh token actual) y deja vivas las
+ * demas sesiones.
+ */
+export const logoutAllSessions = createAsyncThunk(
+  'auth/logoutAllSessions',
+  async (_arg, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/auth/logout-all/', {});
+      return res?.data ?? null;
+    } catch (error) {
+      return rejectWithValue(serializeApiError(error));
+    }
+  },
+);
 
 export const requestPasswordReset = createAsyncThunk(
   'auth/requestPasswordReset',
@@ -297,23 +350,38 @@ export const requestPasswordReset = createAsyncThunk(
   },
 );
 
+/**
+ * UC-AUTH-09 Fase 2: confirma el reset de contrasena con el token del
+ * enlace. El serializer (PasswordResetConfirmSerializer) es token-only y
+ * exige { token, new_password, new_password_confirm }. El uid NO existe en
+ * el serializer y se ignora si se envia: el token identifica al usuario.
+ */
 export const confirmPasswordReset = createAsyncThunk(
   'auth/confirmPasswordReset',
-  async ({ uid, token, new_password }, { rejectWithValue }) => {
+  async ({ token, new_password, new_password_confirm }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post('/api/v1/auth/password-reset/confirm/', { uid, token, new_password });
+      const res = await apiService.post('/api/v1/auth/password-reset/confirm/', {
+        token,
+        new_password,
+        new_password_confirm: new_password_confirm ?? new_password,
+      });
       return res.data;
     } catch (error) { return rejectWithValue(error.message); }
   },
 );
 
+/**
+ * UC-AUTH-06: sube/actualiza el avatar del perfil. NO existe una ruta
+ * /auth/profile/avatar/: ProfileView (PATCH /api/v1/auth/profile/) acepta
+ * el campo `avatar` via UpdateProfileSerializer (multipart).
+ */
 export const uploadAvatar = createAsyncThunk(
   'auth/uploadAvatar',
   async (file, { rejectWithValue }) => {
     try {
       const fd = new FormData();
       fd.append('avatar', file);
-      const res = await apiService.patch('/api/v1/auth/profile/avatar/', fd);
+      const res = await apiService.patch('/api/v1/auth/profile/', fd);
       return res.data;
     } catch (error) { return rejectWithValue(error.message); }
   },

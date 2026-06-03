@@ -32,3 +32,6 @@ npm-debug.log*
 # Misc
 .eslintcache
 .cache/
+
+# E2E screenshots (artefactos de tests/e2e/run.mjs)
+tests/e2e/screenshots/

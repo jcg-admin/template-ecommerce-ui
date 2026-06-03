@@ -48,36 +48,6 @@
   border-color: $lime;
   background: rgba($lime, 0.08);
 }
-.fsBarHeader {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: $font-size-sm;
-  color: $text-primary;
-  margin-bottom: $spacing-3;
-}
-.fsBarCheck {
-  color: $lime-soft;
-  margin-right: $spacing-2;
-}
-.fsBarPct {
-  font-family: $font-family-mono;
-  font-size: $font-size-xs;
-  color: $lime-soft;
-  letter-spacing: 0.08em;
-}
-.fsBarTrack {
-  height: 4px;
-  background: rgba($lime, 0.15);
-  border-radius: 2px;
-  overflow: hidden;
-}
-.fsBarFill {
-  height: 100%;
-  background: $lime;
-  border-radius: 2px;
-  transition: width $transition-base;
-}
 
 // ─────────────────────────────────────────────────────────────────────
 // Layout

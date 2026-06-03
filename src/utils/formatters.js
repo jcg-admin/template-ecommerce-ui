@@ -3,7 +3,7 @@
  * Funciones utilitarias de formateo para el e-commerce
  */
 
-import { CURRENCY, CURRENCY_SYMBOL } from '@constants';
+import { CURRENCY_SYMBOL } from '@constants';
 
 /**
  * Formatea un precio en pesos mexicanos.

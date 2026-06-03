@@ -6,7 +6,7 @@
  *
  * El listado base lo cubre AdminUsersPage.test.jsx.
  */
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
 import { MemoryRouter } from 'react-router-dom';
@@ -44,33 +44,10 @@ const wrap = () => {
 afterEach(() => jest.clearAllMocks());
 
 describe('AdminUsersPage — UC-ADM-01 cambio de rol', () => {
-  it.skip('expone un selector de rol por usuario — UI simplificada en diseño Yoruba', async () => {
-    apiService.get.mockResolvedValue({
-      data: { results: USERS, count: USERS.length, next: null, previous: null },
-    });
-    render(wrap());
-    expect(
-      await screen.findByLabelText(/Cambiar rol de comprador1/i),
-    ).toBeInTheDocument();
-  });
-
-  it.skip('envia POST /api/v1/admin/users/:id/role/ — sin selector por usuario en diseño Yoruba', async () => {
-    apiService.get.mockResolvedValue({
-      data: { results: USERS, count: USERS.length, next: null, previous: null },
-    });
-    apiService.post.mockResolvedValue({ data: { ok: true } });
-
-    render(wrap());
-    const select = await screen.findByLabelText(/Cambiar rol de comprador1/i);
-    fireEvent.change(select, { target: { value: 'admin' } });
-
-    await waitFor(() => {
-      expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/admin/users/1/role/',
-        { role: 'admin' },
-      );
-    });
-  });
+  // El backend (AdminUserViewSet) no expone una accion de cambio de rol:
+  // http_method_names = ['get','post',...] con solo suspend/reactivate, sin
+  // /admin/users/:id/role/. El diseno Yoruba ademas removio el selector de
+  // rol por usuario. Por eso no se prueba ningun POST a /role/.
 
   it('expone un filtro por rol', async () => {
     apiService.get.mockResolvedValue({

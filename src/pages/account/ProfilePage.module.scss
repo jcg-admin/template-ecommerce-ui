@@ -20,7 +20,7 @@
 .bcCurrent { color: $text-secondary; }
 .layout {
   display: grid;
-  grid-template-columns: 260px 1fr;
+  grid-template-columns: 1fr;
   gap: $spacing-12;
   @media (max-width: $bp-md) { grid-template-columns: 1fr; gap: $spacing-6; }
 }
@@ -77,7 +77,6 @@
   &:hover { border-color: $lime; color: $lime-soft; }
 }
 
-.form {}
 .formGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;

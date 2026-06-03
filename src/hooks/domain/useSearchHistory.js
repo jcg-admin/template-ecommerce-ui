@@ -6,14 +6,14 @@
  * Las mutaciones (eliminar uno, borrar todo) viven en searchHistorySlice
  * para preservar lastAction.
  *
- * Endpoint esperado:
- *   GET /api/v1/search/history/ → { results: SearchHistory[], count }
+ * Endpoint esperado (SearchHistoryView):
+ *   GET /api/v1/catalogue/search/history/ → SearchHistory[]
  *   donde SearchHistory = { id, term, searched_at }.
  */
 import { useQuery } from '@tanstack/react-query';
 import apiService from '@services/apiService';
 
-const HISTORY_URL = '/api/v1/search/history/';
+const HISTORY_URL = '/api/v1/catalogue/search/history/';
 export const SEARCH_HISTORY_KEY = ['search', 'history'];
 
 export function useSearchHistory(options = {}) {

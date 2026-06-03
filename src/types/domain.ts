@@ -106,23 +106,46 @@ export interface Product {
 // ──────────────────────────────────────────────────────────────────────
 // CartItem
 //
-// Estado: parcial. Cubre lo que el template usa para calcular totales
-// y renderizar el carrito. El dominio comun incluye `variant_id` y el
-// precio congelado al momento de anadir (para resistir cambios de
-// precio mientras el carrito esta abierto).
+// Estado: alineado al contrato real del backend (apps/cart/serializers.py
+// CartItemSerializer). El item del carrito expone `product_name`,
+// `unit_price` y `subtotal` (strings decimales en la respuesta DRF,
+// que el cliente normaliza con Number() donde hace aritmetica), mas
+// metadatos de disponibilidad (`available_stock`, `is_available`,
+// `price_changed`).
 //
-// Ver iniciativa `completar-dominio-de-ecommerce` para la extension
-// hacia variantes.
+// `image_url` es una EXTENSION DOCUMENTADA del template: el backend real
+// no incluye imagen por item, pero el storefront necesita una miniatura
+// (mismo criterio que UC-LOG-09). El mock la conserva como extension.
+//
+// Ver iniciativa `alinear-contrato-carrito` para el detalle del drift
+// corregido (cliente tax-exclusivo -> contrato tax-inclusivo del server).
 
 export interface CartItem {
   id: number;
+  /** Nombre del producto (DRF: `product_name`). */
+  product_name: string;
+  /** Slug del producto, para enlazar a la ficha. */
+  product_slug?: string;
+  /** Etiqueta de la variante seleccionada, si aplica. */
+  variant_label?: string;
+  /** SKU de la variante / producto. */
+  sku?: string;
+  quantity: number;
+  /** Precio unitario congelado. DRF lo serializa como string decimal. */
+  unit_price: string | number;
+  /** Subtotal del item (unit_price * quantity). DRF: string decimal. */
+  subtotal?: string | number;
+  /** Stock disponible para la variante. */
+  available_stock?: number;
+  /** false si el item dejo de estar disponible (sin stock / despublicado). */
+  is_available?: boolean;
+  /** true si el precio cambio desde que se anadio al carrito. */
+  price_changed?: boolean;
+  /** Identificadores usados por las mutaciones del cliente. */
   product_id?: number;
   variant_id?: number;
-  name: string;
-  /** Precio unitario al momento de anadir (no se recalcula en cliente). */
-  price: number;
-  quantity: number;
-  image?: string;
+  /** Extension del template (no esta en el backend real): miniatura. */
+  image_url?: string;
 }
 
 // ──────────────────────────────────────────────────────────────────────
@@ -182,6 +205,22 @@ export interface Order {
   /** ISO-8601. */
   created_at: string;
   items?: CartItem[];
+  /** URL de la factura del pedido en PDF (UC-ORD-PDF). */
+  invoice_url?: string;
+  /** Etapas datadas de fulfillment para la linea de tiempo (UC-LOG-GANTT). */
+  fulfillment_stages?: FulfillmentStage[];
+}
+
+/** Etapa de fulfillment con fechas, consumida por GanttChart (UC-LOG-GANTT). */
+export interface FulfillmentStage {
+  id: string;
+  name: string;
+  /** ISO-8601. */
+  start: string;
+  /** ISO-8601. */
+  end: string;
+  /** 0-100. */
+  progress?: number;
 }
 
 // ──────────────────────────────────────────────────────────────────────

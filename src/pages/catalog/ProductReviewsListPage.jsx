@@ -10,18 +10,8 @@
  */
 import { useParams } from 'react-router-dom';
 import { useProductReviews } from '@hooks/domain/useReviews';
+import Rating from '@components/common/Rating';
 import styles from './ProductReviewsListPage.module.scss';
-
-function StarRating({ value }) {
-  const rounded = Math.max(0, Math.min(5, Math.round(value)));
-  const filled  = '★'.repeat(rounded);
-  const empty   = '☆'.repeat(5 - rounded);
-  return (
-    <span aria-label={`Calificacion ${value}/5`} className={styles.rating}>
-      {filled}{empty}
-    </span>
-  );
-}
 
 export default function ProductReviewsListPage() {
   const { productId } = useParams();
@@ -50,7 +40,7 @@ export default function ProductReviewsListPage() {
           <span className={styles.average}>
             {Number(average).toFixed(1)}
           </span>
-          <StarRating value={Number(average)} />
+          <Rating value={Number(average)} readOnly />
           <span className={styles.total}>
             {total} {total === 1 ? 'resena' : 'resenas'}
           </span>
@@ -68,7 +58,7 @@ export default function ProductReviewsListPage() {
         <ul className={styles.list}>
           {reviews.map((r) => (
             <li key={r.id} className={styles.item}>
-              <StarRating value={r.rating} />
+              <Rating value={r.rating} readOnly />
               <p className={styles.itemTitle}>{r.title}</p>
               <p className={styles.itemBody}>{r.body}</p>
             </li>

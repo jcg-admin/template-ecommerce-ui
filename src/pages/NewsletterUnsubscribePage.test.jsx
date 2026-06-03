@@ -42,6 +42,8 @@ describe('NewsletterUnsubscribePage (UC-NEW-02)', () => {
     apiService.post.mockResolvedValue({ data: { ok: true } });
     render(wrap());
 
+    // El motivo se recoge solo para UX; el backend (UnsubscribeSerializer)
+    // solo acepta `token`, asi que no debe viajar en el payload.
     fireEvent.change(screen.getByLabelText(/Motivo/i),
       { target: { value: 'TOO_FREQUENT' } });
     fireEvent.click(screen.getByRole('button', { name: /Confirmar desuscripci[oó]n/i }));
@@ -50,11 +52,11 @@ describe('NewsletterUnsubscribePage (UC-NEW-02)', () => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/v1/newsletter/unsubscribe/',
         expect.objectContaining({
-          token:  'abc123',
-          reason: 'TOO_FREQUENT',
+          token: 'abc123',
         }),
       );
     });
+    expect(apiService.post.mock.calls[0][1]).not.toHaveProperty('reason');
   });
 
   it('muestra confirmacion tras el envio', async () => {

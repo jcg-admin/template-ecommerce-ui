@@ -11,8 +11,9 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '@redux/slices/authSlice';
 import { usePasswordStrength } from '@hooks/domain/usePasswordStrength';
-import { Button, Field, MetaTag } from '@components/common/primitives';
+import { Field, MetaTag } from '@components/common/primitives';
 import Alert         from '@components/common/Alert/Alert';
+import Checkbox      from '@components/common/Checkbox';
 import { LoadingButton } from '@components/common';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from '../auth/LoginPage.module.scss';
@@ -21,8 +22,9 @@ export default function RegisterPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [form, setForm] = useState({
-    first_name: '', last_name: '', email: '', username: '', password: '', terms: false,
+    first_name: '', last_name: '', email: '', username: '', password: '',
   });
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
   const { score: pwScore, label: pwLabel, color: pwColor } = usePasswordStrength(form.password);
   const [errors, setErrors] = useState({});
   const [loading, setLoading] = useState(false);
@@ -32,7 +34,7 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setErrors({});
-    if (!form.terms) {
+    if (!acceptedTerms) {
       setErrors({ terms: 'Debes aceptar los términos.' });
       return;
     }
@@ -126,18 +128,13 @@ export default function RegisterPage() {
               </div>
             )}
 
-            <label className={styles.checkboxLabel} style={{ alignItems: 'flex-start', marginTop: 4 }}>
-              <input
-                type="checkbox"
-                checked={form.terms}
-                onChange={(e) => setForm({ ...form, terms: e.target.checked })}
+            <div style={{ marginTop: 4 }}>
+              <Checkbox
+                checked={acceptedTerms}
+                onChange={setAcceptedTerms}
+                label={<>Acepto los <a href="/info/terminos">términos y condiciones</a></>}
               />
-              <span className={styles.checkbox} style={{ marginTop: 2 }} />
-              <span>
-                Acepto los <Link to="/info/terms">términos</Link> y el{' '}
-                <Link to="/info/privacy">aviso de privacidad</Link>.
-              </span>
-            </label>
+            </div>
             {errors.terms && <div style={{ color: 'var(--c-vino-soft)', fontSize: 12 }}>{errors.terms}</div>}
             {errors._form && (
               <Alert
@@ -149,7 +146,7 @@ export default function RegisterPage() {
               </Alert>
             )}
 
-            <LoadingButton type="submit" variant="primary" block size="lg" loading={loading} disabledOnLoading>
+            <LoadingButton type="submit" variant="primary" block size="lg" loading={loading} disabledOnLoading disabled={!acceptedTerms}>
               Crear mi cuenta
             </LoadingButton>
 

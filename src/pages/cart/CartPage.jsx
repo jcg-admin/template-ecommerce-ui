@@ -20,6 +20,9 @@ import {
   MetaTag, Price, Button, SumRow, EmptyState,
 } from '@components/common/primitives';
 import { LoadingButton } from '@components/common';
+import ProgressBar from '@components/common/ProgressBar';
+import NumericTextBox from '@components/common/NumericTextBox';
+import ShippingCalculator from '@components/cart/ShippingCalculator';
 import styles from './CartPage.module.scss';
 
 const FREE_SHIPPING_THRESHOLD = 1500;
@@ -81,6 +84,7 @@ export default function CartPage() {
           <div className={styles.itemsCol}>
             <ItemList items={items} dispatch={dispatch} />
             <VoucherBox voucher={voucher} dispatch={dispatch} />
+            <ShippingCalculator subtotal={subtotal} />
           </div>
 
           <CartSummary
@@ -101,26 +105,21 @@ export default function CartPage() {
 
 // ─────────────────────────────────────────────────────────────────────
 function FreeShippingBar({ subtotal, threshold }) {
-  const pct = Math.min(100, (subtotal / threshold) * 100);
+  const reached = subtotal >= threshold;
   const remaining = Math.max(0, threshold - subtotal);
+  const message = reached
+    ? '¡Tienes envío gratis!'
+    : `Te faltan $${remaining.toLocaleString('es-MX')} para envío gratis`;
 
   return (
-    <div className={`${styles.fsBar} ${pct >= 100 ? styles.fsBarComplete : ''}`}>
-      <div className={styles.fsBarHeader}>
-        <span>
-          {pct >= 100 ? (
-            <><span className={styles.fsBarCheck}>✓</span> <strong>Tu pedido califica para envío gratis</strong></>
-          ) : (
-            <>
-              Te faltan <strong>${remaining.toLocaleString('es-MX')}</strong> para envío gratis
-            </>
-          )}
-        </span>
-        <span className={styles.fsBarPct}>{Math.round(pct)}%</span>
-      </div>
-      <div className={styles.fsBarTrack}>
-        <div className={styles.fsBarFill} style={{ width: `${pct}%` }} />
-      </div>
+    <div className={`${styles.fsBar} ${reached ? styles.fsBarComplete : ''}`}>
+      <ProgressBar
+        value={subtotal}
+        max={threshold}
+        label={message}
+        showValue
+        ariaLabel="Progreso hacia el envío gratis"
+      />
     </div>
   );
 }
@@ -140,10 +139,6 @@ function ItemList({ items, dispatch }) {
 }
 
 function CartItem({ item, dispatch }) {
-  const handleQty = (delta) => {
-    const next = Math.max(1, item.quantity + delta);
-    dispatch(updateCartItem({ id: item.id, quantity: next }));
-  };
   const handleRemove = () => dispatch(removeCartItem(item.id));
 
   return (
@@ -165,9 +160,12 @@ function CartItem({ item, dispatch }) {
         </div>
       </div>
       <div className={styles.qtyBox}>
-        <button type="button" onClick={() => handleQty(-1)} aria-label="Reducir">−</button>
-        <span>{item.quantity}</span>
-        <button type="button" onClick={() => handleQty(+1)} aria-label="Aumentar">+</button>
+        <NumericTextBox
+          value={item.quantity}
+          min={1}
+          onChange={(n) => dispatch(updateCartItem({ id: item.id, quantity: Math.max(1, n) }))}
+          ariaLabel={`Cantidad de ${item.product_name}`}
+        />
       </div>
       <div className={styles.itemPrice}>
         <Price amount={item.unit_price * item.quantity} size="sm" />

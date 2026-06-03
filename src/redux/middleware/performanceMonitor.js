@@ -5,7 +5,7 @@
 
 const THRESHOLD_MS = 16;
 
-export const performanceMonitor = (store) => (next) => (action) => {
+export const performanceMonitor = (_store) => (next) => (action) => {
   if (process.env.NODE_ENV !== 'development') return next(action);
   const t0     = performance.now();
   const result = next(action);

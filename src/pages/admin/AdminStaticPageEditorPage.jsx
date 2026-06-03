@@ -1,21 +1,24 @@
 /**
  * AdminStaticPageEditorPage — Práctica Yorùbà
- * Editor de página estática con versionado.
+ * Editor de página estática con historial de versiones.
  *
- * Endpoints:
- *   GET   /admin/pages/<slug>/
- *   PATCH /admin/pages/<slug>/                       (guardar borrador)
- *   POST  /admin/pages/<slug>/publish/
- *   POST  /admin/pages/<slug>/versions/<n>/restore/
+ * Endpoints reales (apps.static_content, UC-CFG-04):
+ *   GET   /api/v1/admin/static-content/<slug>/   (pagina + versions[] anidadas)
+ *   PATCH /api/v1/admin/static-content/<slug>/   (edita: bumpea version)
+ *
+ * No existe distincion borrador/publicado ni endpoints de publish/restore:
+ * cada PATCH persiste y crea una StaticContentVersion. Las versiones se leen
+ * del campo `versions[]` del detail serializer (read-only).
  */
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
-  fetchAdminPage, fetchPageVersions, savePageDraft, publishPage, restorePageVersion,
+  fetchAdminPage, savePageDraft,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import RichTextEditor from '@components/common/RichTextEditor';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminStaticPageEditorPage.module.scss';
 
@@ -27,56 +30,35 @@ export default function AdminStaticPageEditorPage() {
   const versions = useSelector((s) => s.admin?.pageVersions || []);
   const isLoading = useSelector((s) => s.admin?.isLoadingPages);
 
-  const [form, setForm] = useState({ title: '', content: '', meta_description: '' });
+  const [form, setForm] = useState({ title: '', body: '' });
   const [activeVersionId, setActiveVersionId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [savedToast, setSavedToast] = useState('');
 
+  // El detail serializer trae la pagina + sus versiones anidadas en una sola
+  // respuesta; no hay endpoint separado de versions/.
   useEffect(() => { dispatch(fetchAdminPage(slug)); }, [dispatch, slug]);
-  useEffect(() => { if (slug) dispatch(fetchPageVersions(slug)); }, [dispatch, slug]);
   useEffect(() => {
     if (page) setForm({
       title: page.title || '',
-      content: page.draft_content || page.content || '',
-      meta_description: page.meta_description || '',
+      body: page.body || '',
     });
   }, [page]);
 
-  const handleSaveDraft = async () => {
+  const handleSave = async () => {
     setSaving(true);
     try {
       await dispatch(savePageDraft({ slug, data: form })).unwrap();
-      setSavedToast('Borrador guardado');
+      setSavedToast('Cambios guardados');
       setTimeout(() => setSavedToast(''), 2500);
     } finally { setSaving(false); }
-  };
-
-  const handlePublish = () => {
-    setConfirm({
-      message: '¿Publicar esta versión? El contenido será visible públicamente.',
-      action:  async () => {
-        setSaving(true);
-        try {
-          await dispatch(publishPage(slug)).unwrap();
-          setSavedToast('Publicado ✓');
-          setTimeout(() => setSavedToast(''), 2500);
-        } finally { setSaving(false); }
-      },
-    });
-  };
-
-  const handleRestore = (versionId) => {
-    setConfirm({
-      message: `¿Restaurar versión v${versions.find(v => v.id === versionId)?.version}? Se creará un nuevo borrador.`,
-      action:  () => { dispatch(restorePageVersion({ slug, versionId })); setActiveVersionId(null); },
-    });
   };
 
   if (isLoading) return <div className={styles.loading}>Cargando…</div>;
 
   const preview = activeVersionId
-    ? versions.find(v => v.id === activeVersionId)?.content || ''
-    : form.content;
+    ? versions.find(v => v.id === activeVersionId)?.body || ''
+    : form.body;
 
   return (
     <>
@@ -91,17 +73,13 @@ export default function AdminStaticPageEditorPage() {
         <div>
           <MetaTag tone="bronze">
             /info/{slug} · v{page?.version || 1}
-            {page?.has_unsaved_changes && ' · cambios sin guardar'}
           </MetaTag>
           <h1 className={styles.title}>{form.title || 'Sin título'}</h1>
         </div>
         <div className={styles.headerActions}>
           {savedToast && <span className={styles.toast}>{savedToast}</span>}
-          <Button variant="secondary" onClick={handleSaveDraft} disabled={saving}>
-            {saving ? 'Guardando…' : 'Guardar borrador'}
-          </Button>
-          <Button variant="primary" onClick={handlePublish} disabled={saving}>
-            Publicar
+          <Button variant="primary" onClick={handleSave} disabled={saving}>
+            {saving ? 'Guardando…' : 'Guardar'}
           </Button>
         </div>
       </header>
@@ -109,15 +87,13 @@ export default function AdminStaticPageEditorPage() {
       <div className={styles.layout}>
         <section className={styles.editor}>
           <Field label="Título de la página" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} required />
-          <Field label="Meta descripción (SEO)" value={form.meta_description} onChange={(e) => setForm({ ...form, meta_description: e.target.value })} textarea hint="Máximo 160 caracteres" />
 
           <label className={styles.contentLabel}>Contenido (HTML)</label>
-          <textarea
-            value={form.content}
-            onChange={(e) => setForm({ ...form, content: e.target.value })}
-            className={styles.contentArea}
-            spellCheck={false}
-            placeholder="<p>Escribe el contenido aquí. Acepta HTML básico (p, h2, h3, ul, li, strong, em, a).</p>"
+          <RichTextEditor
+            value={form.body ?? ''}
+            onChange={(html) => setForm({ ...form, body: html })}
+            ariaLabel="Contenido de la página"
+            placeholder="Escribe el contenido aquí. Acepta texto enriquecido (negrita, cursiva, listas, enlaces)."
           />
 
           <div className={styles.previewBox}>
@@ -146,20 +122,12 @@ export default function AdminStaticPageEditorPage() {
                   onClick={() => setActiveVersionId(activeVersionId === v.id ? null : v.id)}
                 >
                   <div className={styles.versionLabel}>
-                    v{v.version} {v.is_current && <span className={styles.currentBadge}>actual</span>}
+                    v{v.version} {v.version === page?.version && <span className={styles.currentBadge}>actual</span>}
                   </div>
                   <div className={styles.versionMeta}>
-                    {new Date(v.created_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })} · {v.by_user}
+                    {new Date(v.created_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', year: 'numeric' })} · {v.changed_by_username || '—'}
                   </div>
-                  {v.note && <div className={styles.versionNote}>"{v.note}"</div>}
                 </button>
-                {!v.is_current && (
-                  <button
-                    type="button"
-                    className={styles.restoreBtn}
-                    onClick={() => handleRestore(v.id)}
-                  >Restaurar</button>
-                )}
               </li>
             ))}
           </ul>

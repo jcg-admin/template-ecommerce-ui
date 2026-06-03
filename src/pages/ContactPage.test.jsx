@@ -53,7 +53,7 @@ describe('ContactPage (UC-COM-01)', () => {
       { target: { value: 'visitante@example.com' } });
     fireEvent.change(screen.getByLabelText(/Asunto/i),
       { target: { value: 'Consulta de prueba' } });
-    fireEvent.change(screen.getByLabelText(/Mensaje/i),
+    fireEvent.change(screen.getByLabelText(/^Mensaje$/i),
       { target: { value: 'Tengo una consulta sobre un producto del catalogo.' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar mensaje/i }));
 
@@ -64,7 +64,7 @@ describe('ContactPage (UC-COM-01)', () => {
           name:    'Visitante Uno',
           email:   'visitante@example.com',
           subject: 'Consulta de prueba',
-          message: 'Tengo una consulta sobre un producto del catalogo.',
+          body:    'Tengo una consulta sobre un producto del catalogo.',
         }),
       );
     });
@@ -77,7 +77,7 @@ describe('ContactPage (UC-COM-01)', () => {
     fireEvent.change(screen.getByLabelText(/Nombre/i), { target: { value: 'Ana' } });
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'ana@example.com' } });
     fireEvent.change(screen.getByLabelText(/Asunto/i), { target: { value: 'Hola' } });
-    fireEvent.change(screen.getByLabelText(/Mensaje/i), { target: { value: 'Este es un mensaje de prueba largo.' } });
+    fireEvent.change(screen.getByLabelText(/^Mensaje$/i), { target: { value: 'Este es un mensaje de prueba largo.' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar mensaje/i }));
 
     expect(
@@ -96,11 +96,42 @@ describe('ContactPage (UC-COM-01)', () => {
     fireEvent.change(screen.getByLabelText(/Nombre/i), { target: { value: 'Ana' } });
     fireEvent.change(screen.getByLabelText(/Email/i), { target: { value: 'ana@example.com' } });
     fireEvent.change(screen.getByLabelText(/Asunto/i), { target: { value: 'Hola' } });
-    fireEvent.change(screen.getByLabelText(/Mensaje/i), { target: { value: 'Mensaje de prueba con suficiente longitud.' } });
+    fireEvent.change(screen.getByLabelText(/^Mensaje$/i), { target: { value: 'Mensaje de prueba con suficiente longitud.' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar mensaje/i }));
 
     expect(
       await screen.findByText(/Limite de mensajes alcanzado/i),
     ).toBeInTheDocument();
+  });
+
+  // UC-SUP-CHAT (F7): chat de soporte con estado local.
+  it('muestra la seccion de chat de soporte con el ChatWidget', () => {
+    render(wrap(<ContactPage />, makeStore()));
+    expect(
+      screen.getByRole('heading', { name: /Chat de soporte/i }),
+    ).toBeInTheDocument();
+    // Titulo del widget y hilo accesible (role="log").
+    expect(screen.getByText('Soporte')).toBeInTheDocument();
+    expect(screen.getByRole('log')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText(/Escribe un mensaje/i),
+    ).toBeInTheDocument();
+  });
+
+  it('al enviar un mensaje en el chat lo añade al hilo con autorespuesta', () => {
+    render(wrap(<ContactPage />, makeStore()));
+
+    const input = screen.getByPlaceholderText(/Escribe un mensaje/i);
+    fireEvent.change(input, { target: { value: 'Hola, necesito ayuda' } });
+    fireEvent.click(screen.getByRole('button', { name: /Enviar$/i }));
+
+    // El mensaje del usuario aparece en el hilo.
+    expect(screen.getByText('Hola, necesito ayuda')).toBeInTheDocument();
+    // La autorespuesta simulada del agente aparece.
+    expect(
+      screen.getByText(/Gracias, te responderemos pronto/i),
+    ).toBeInTheDocument();
+    // El input se limpia tras enviar.
+    expect(input).toHaveValue('');
   });
 });

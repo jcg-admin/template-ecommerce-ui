@@ -19,8 +19,8 @@
   color: $text-muted; letter-spacing: 0.04em; margin-top: 8px;
   line-height: 1.7;
   strong { color: $text-primary; }
+  strong.maxAmount { color: $lime-soft; }
 }
-.maxAmount { color: $lime-soft !important; }
 
 .form { padding: $spacing-6; display: flex; flex-direction: column; gap: $spacing-4; }
 .label {

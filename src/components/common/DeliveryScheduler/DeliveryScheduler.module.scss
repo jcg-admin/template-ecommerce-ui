@@ -1,0 +1,69 @@
+// DeliveryScheduler — selector de fecha/franja de entrega
+@use '@styles/abstracts' as *;
+
+.scheduler {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ec-spacing-4);
+  color: var(--ec-text-primary);
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ec-spacing-2);
+}
+
+.groupHeading {
+  margin: 0;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--ec-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.slots {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: var(--ec-spacing-2);
+}
+
+.slot {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--ec-spacing-2) var(--ec-spacing-4);
+  border: 1px solid var(--ec-border-color);
+  border-radius: var(--ec-border-radius-lg);
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-secondary);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background var(--ec-transition-base),
+    border-color var(--ec-transition-base),
+    color var(--ec-transition-base);
+
+  &:hover:not(:disabled) {
+    border-color: var(--ec-primary);
+    color: var(--ec-text-primary);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: not-allowed;
+  }
+}
+
+.slotSelected {
+  border-color: var(--ec-primary);
+  background: color-mix(in srgb, var(--ec-primary) 18%, var(--ec-bg-elevated));
+  color: var(--ec-text-primary);
+}

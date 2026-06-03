@@ -65,7 +65,9 @@ export const replySupportTicket = createAsyncThunk(
     try {
       const res = await apiService.post(`${TICKETS_URL}${id}/replies/`, {
         body,
-        is_internal: isInternal,
+        // El backend (SupportTicketReplyCreateSerializer) usa
+        // `is_internal_note`, no `is_internal`.
+        is_internal_note: isInternal,
       });
       return res.data;
     } catch (err) {

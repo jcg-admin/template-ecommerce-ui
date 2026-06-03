@@ -22,12 +22,12 @@ import apiService from '@services/apiService';
 import AdminStaticPageEditorPage from '../../../src/pages/admin/AdminStaticPageEditorPage';
 
 const PAGE = {
+  id:               1,
   title:            'Acerca de Práctica Yorùbà',
   slug:             'about',
-  content:          '<p>Somos un espacio de práctica...</p>',
-  is_published:     true,
-  meta_title:       '',
-  meta_description: '',
+  body:             '<p>Somos un espacio de práctica...</p>',
+  version:          1,
+  versions:         [],
 };
 
 const makeStore = () => configureStore({
@@ -56,10 +56,7 @@ const renderPage = () => render(
 
 describe('AdminStaticPageEditorPage', () => {
   beforeEach(() => {
-    apiService.get.mockImplementation((url) => {
-      if (url.includes('/versions/')) return Promise.resolve({ data: { count: 0, results: [], next: null, previous: null } });
-      return Promise.resolve({ data: PAGE });
-    });
+    apiService.get.mockResolvedValue({ data: PAGE });
   });
 
   it('renderiza el editor de página', async () => {

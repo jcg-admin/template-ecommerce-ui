@@ -28,13 +28,13 @@ export default function PaymentRetryPage() {
   useEffect(() => () => { dispatch(clearPaymentsActionState()); }, [dispatch]);
 
   useEffect(() => {
-    const url = lastInitiation?.payment_url || lastInitiation?.approve_url;
+    const url = lastInitiation?.checkout_url || lastInitiation?.payment_url || lastInitiation?.approve_url;
     if (url) redirectToGateway(url);
   }, [lastInitiation]);
 
   const onSubmit = (e) => {
     e.preventDefault();
-    dispatch(retryPayment({ order_id: orderId, gateway }));
+    dispatch(retryPayment({ order_number: orderId, gateway }));
   };
 
   return (

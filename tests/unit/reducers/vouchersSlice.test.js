@@ -19,6 +19,11 @@ const INITIAL_STATE = {
   error: null,
   actionError: null,
   lastAction: null,
+  // UC-PRO-04 — reporte agregado de vouchers (.../vouchers/report/).
+  // No hay endpoint de uso por-voucher en el backend.
+  report: [],
+  isLoadingReport: false,
+  reportError: null,
 };
 
 const VOUCHER_A = {

@@ -16,7 +16,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import apiService from '@services/apiService';
 import { serializeApiError } from '@utils/serializeApiError';
 
-const CHECKOUT_URL              = '/api/v1/checkout/';
+const CHECKOUT_URL              = '/api/v1/orders/checkout/';
 const CANCEL_URL                = (orderNumber) => `/api/v1/orders/${orderNumber}/cancel/`;
 const ADDRESS_URL               = (orderNumber) => `/api/v1/orders/${orderNumber}/address/`;
 const SHIPPING_URL              = (orderNumber) => `/api/v1/orders/${orderNumber}/shipping/`;
@@ -111,6 +111,25 @@ export const adminCancelOrder = createAsyncThunk(
   },
 );
 
+/**
+ * UC-LOG-07: el comprador reporta un problema de envio sobre una orden ya
+ * despachada. Feature fabricada del template (contrato propio mockeado):
+ * POST /api/v1/logistics/shipping-issues/ { order_id, reason, description }.
+ */
+export const reportShippingIssue = createAsyncThunk(
+  'orders/reportShippingIssue',
+  async ({ orderId, reason, description }, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post('/api/v1/logistics/shipping-issues/', {
+        order_id: orderId, reason, description,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(serializeApiError(err));
+    }
+  },
+);
+
 // =============================================================================
 // Slice
 // =============================================================================
@@ -121,9 +140,10 @@ const initialState = {
   isLoading:       false,
   isActioning:     false,
   actionError:     null,
-  lastAction:      null, // 'checkout' | 'cancelled' | 'address_updated' | 'shipping_updated' | 'admin_transitioned' | 'admin_cancelled'
+  lastAction:      null, // 'checkout' | 'cancelled' | 'address_updated' | 'shipping_updated' | 'admin_transitioned' | 'admin_cancelled' | 'shipping_issue_reported'
   lastOrderNumber: null,
   lastOrder:       null,
+  shippingIssue:   null,   // incidencia de envio creada (UC-LOG-07)
 };
 
 const handlePending = (state) => {
@@ -152,6 +172,7 @@ const ordersSlice = createSlice({
       state.lastAction      = null;
       state.lastOrderNumber = null;
       state.lastOrder       = null;
+      state.shippingIssue   = null;
     },
   },
  
@@ -180,6 +201,14 @@ const ordersSlice = createSlice({
       .addCase(adminCancelOrder.pending,   handlePending)
       .addCase(adminCancelOrder.fulfilled, makeFulfilled('admin_cancelled'))
       .addCase(adminCancelOrder.rejected,  handleRejected)
+
+      .addCase(reportShippingIssue.pending,   handlePending)
+      .addCase(reportShippingIssue.fulfilled, (state, action) => {
+        state.isActioning   = false;
+        state.lastAction    = 'shipping_issue_reported';
+        state.shippingIssue = action.payload ?? null;
+      })
+      .addCase(reportShippingIssue.rejected,  handleRejected)
       // fetchOrderDetail — agrega state.current (UC-ORD-02)
       .addCase(fetchOrderDetail.pending, (state) => {
         state.isLoading = true;

@@ -76,7 +76,7 @@ describe('Dropdown — API completa ui-core', () => {
 
   it('ref.show() abre y ref.hide() cierra', () => {
     const ref = createRef();
-    const { rerender } = render(<Base ref={ref} />);
+    render(<Base ref={ref} />);
     act(() => ref.current.show());
     expect(screen.getByRole('menu')).toBeInTheDocument();
     act(() => ref.current.hide());

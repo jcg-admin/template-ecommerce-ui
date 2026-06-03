@@ -1,7 +1,7 @@
 /**
  * Tests: Sidebar — API completa de ui-core sidebar.js
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { createRef } from 'react';
 import Sidebar, { SidebarNav, SidebarNavItem, SidebarBrand } from './Sidebar';
 

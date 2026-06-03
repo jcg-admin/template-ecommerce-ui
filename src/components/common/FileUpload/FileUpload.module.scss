@@ -1,0 +1,158 @@
+// FileUpload — componente nativo de subida de archivos
+@use '@styles/abstracts' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-3;
+  width: 100%;
+}
+
+.dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: $spacing-1;
+  padding: $spacing-8 $spacing-5;
+  border: 2px dashed var(--ec-border-color);
+  border-radius: $border-radius-lg;
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-secondary);
+  text-align: center;
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+
+  &:hover,
+  &:focus-visible {
+    border-color: var(--ec-accent);
+    outline: none;
+  }
+}
+
+.dragging {
+  border-color: var(--ec-accent);
+  background: var(--ec-bg-elevated);
+}
+
+.label {
+  font-size: $font-size-md;
+  font-weight: 600;
+  color: var(--ec-text-primary);
+}
+
+.hint {
+  font-size: $font-size-xs;
+  color: var(--ec-text-muted);
+}
+
+.input {
+  display: none;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.error {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--ec-error);
+}
+
+.progress {
+  width: 100%;
+  height: 8px;
+  background: var(--ec-bg-sunken);
+  border-radius: $border-radius-pill;
+  overflow: hidden;
+}
+
+.progressBar {
+  height: 100%;
+  background: var(--ec-accent);
+  border-radius: $border-radius-pill;
+  transition: width 0.2s ease;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: $spacing-3;
+  padding: $spacing-2 $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-md;
+  background: var(--ec-bg-surface);
+}
+
+.thumb {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-sm;
+  background: var(--ec-bg-sunken);
+  object-fit: cover;
+  font-size: $font-size-xs;
+  font-weight: 600;
+  color: var(--ec-text-secondary);
+}
+
+.meta {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  flex: 1;
+}
+
+.name {
+  font-size: $font-size-sm;
+  color: var(--ec-text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.size {
+  font-size: $font-size-xs;
+  color: var(--ec-text-muted);
+}
+
+.remove {
+  flex: 0 0 auto;
+  width: 28px;
+  height: 28px;
+  border: none;
+  border-radius: $border-radius-full;
+  background: transparent;
+  color: var(--ec-text-secondary);
+  font-size: $font-size-lg;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover,
+  &:focus-visible {
+    background: var(--ec-bg-sunken);
+    color: var(--ec-text-primary);
+    outline: none;
+  }
+}

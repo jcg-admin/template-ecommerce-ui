@@ -8,7 +8,42 @@ import {
   useSalesReport,
   buildReportExportUrl,
 } from '@hooks/domain/useReports';
+import { exportSheet } from '@utils/exportSheet';
+import { exportXlsx } from '@utils/exportWorkbook';
+import PivotTable from '@components/common/PivotTable';
 import styles from './AdminReportPage.module.scss';
+
+const MONTH_LABELS = [
+  'Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+  'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic',
+];
+
+// La serie temporal trae una sola dimensión (bucket = fecha ISO). Para el
+// reporte pivote derivamos dos dimensiones del propio bucket: año (filas) y
+// mes (columnas), agregando el ingreso por suma. Las filas con bucket no
+// parseable (formato no ISO) se descartan del pivote.
+function buildPivotRows(series) {
+  const rows = [];
+  for (const row of series) {
+    const match = /^(\d{4})-(\d{2})/.exec(String(row?.bucket ?? ''));
+    if (!match) continue;
+    const year = match[1];
+    const month = MONTH_LABELS[Number(match[2]) - 1] ?? match[2];
+    rows.push({
+      year,
+      month,
+      revenue: Number(row.revenue) || 0,
+    });
+  }
+  return rows;
+}
+
+// Columnas del CSV de la serie temporal del reporte (UC-ADM-XLSX).
+const SERIES_EXPORT_COLUMNS = [
+  { key: 'bucket',  label: 'Fecha' },
+  { key: 'revenue', label: 'Ingreso' },
+  { key: 'orders',  label: 'Órdenes' },
+];
 
 const PERIOD_OPTIONS = [
   { value: 'today',   label: 'Hoy' },
@@ -27,11 +62,29 @@ export default function AdminReportSalesPage() {
 
   const totals     = data?.totals     ?? {};
   const comparison = data?.comparison ?? {};
-  const series     = data?.series     ?? [];
+  const series     = useMemo(() => data?.series ?? [], [data]);
   const breakdown  = data?.payment_breakdown ?? [];
 
-  const csvHref = buildReportExportUrl('sales', { ...params, format: 'csv' });
+  const pivotRows = useMemo(() => buildPivotRows(series), [series]);
+
   const pdfHref = buildReportExportUrl('sales', { ...params, format: 'pdf' });
+
+  const handleExportCsv = () => {
+    exportSheet({
+      filename: `reporte-ventas-${period}.csv`,
+      columns: SERIES_EXPORT_COLUMNS,
+      rows: series,
+    });
+  };
+
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: `reporte-ventas-${period}.xlsx`,
+      sheetName: 'Ventas',
+      columns: SERIES_EXPORT_COLUMNS,
+      rows: series,
+    });
+  };
 
   const delta = comparison?.gross_revenue_delta_pct;
   const deltaClass =
@@ -45,7 +98,20 @@ export default function AdminReportSalesPage() {
           Reporte de ingresos y ventas
         </h1>
         <div className={styles.exportGroup}>
-          <a href={csvHref} className={styles.exportLink}>Exportar CSV</a>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportCsv}
+          >
+            Exportar CSV
+          </button>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportXlsx}
+          >
+            Exportar Excel
+          </button>
           <a href={pdfHref} className={styles.exportLink}>Exportar PDF</a>
         </div>
       </header>
@@ -140,6 +206,21 @@ export default function AdminReportSalesPage() {
             ))}
           </tbody>
         </table>
+      )}
+
+      <h2 className={styles.sectionTitle}>Tabla pivote</h2>
+      {pivotRows.length === 0 ? (
+        <p className={styles.empty}>Sin datos para el pivote.</p>
+      ) : (
+        <PivotTable
+          data={pivotRows}
+          rowKey="year"
+          colKey="month"
+          valueKey="revenue"
+          aggregate="sum"
+          rowLabel="Año / Mes"
+          ariaLabel="Ingresos por año y mes"
+        />
       )}
     </section>
   );

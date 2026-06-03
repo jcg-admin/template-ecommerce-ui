@@ -87,4 +87,19 @@ describe('ProtectedRoute (UC-AUTH-01)', () => {
     expect(screen.queryByTestId('contenido-protegido')).not.toBeInTheDocument();
     expect(screen.queryByTestId('login-spy')).not.toBeInTheDocument();
   });
+
+  // Regresion BUG-ACCOUNT-01: el guard chequeaba isLoading ANTES que
+  // isAuthenticated. Tras el login, fetchProfile.pending volvia a poner
+  // isLoading=true -> el usuario autenticado quedaba en PageLoader
+  // indefinidamente. El fix renderiza el Outlet si ya esta autenticado
+  // aunque haya un fetch de auth en curso.
+  it('renderiza el contenido aunque isLoading sea true si ya esta autenticado (BUG-ACCOUNT-01)', () => {
+    renderRoutes({
+      isAuthenticated: true,
+      isLoading: true,
+      user: { id: 1, email: 'comprador@test.mx', is_staff: false },
+    });
+    expect(screen.getByTestId('contenido-protegido')).toBeInTheDocument();
+    expect(screen.queryByTestId('login-spy')).not.toBeInTheDocument();
+  });
 });

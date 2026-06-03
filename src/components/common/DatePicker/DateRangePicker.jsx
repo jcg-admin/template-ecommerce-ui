@@ -16,7 +16,7 @@
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
 import {
-  useState, useRef, useCallback, useEffect,
+  useState, useRef, useCallback, 
   useImperativeHandle, forwardRef, useId,
 } from 'react';
 import Calendar from './Calendar';
@@ -50,10 +50,10 @@ const DateRangePicker = forwardRef(function DateRangePicker({
   required      = false,
   cleaner       = true,
   timepicker    = false,           // TimePicker integrado opcional
-  size,
+  _size,
   className     = '',
   // Eventos
-  onShow, onShown, onHide, onHidden, onHidePrevented,
+  onShow, onShown, onHide, onHidden, _onHidePrevented,
 }, ref) {
   const [open, setOpen]         = useState(false);
   const [selStart, setSelStart] = useState(controlledStart ? new Date(controlledStart) : null);
@@ -138,7 +138,7 @@ const DateRangePicker = forwardRef(function DateRangePicker({
   }, [pickingEnd]);
 
   // Texto del input combinado
-  const inputValue = selStart || selEnd
+  const _inputValue = selStart || selEnd
     ? [fmt(selStart, locale), fmt(selEnd, locale)].filter(Boolean).join(` ${separator} `)
     : '';
 

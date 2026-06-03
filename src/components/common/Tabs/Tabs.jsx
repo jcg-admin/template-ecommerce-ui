@@ -10,7 +10,7 @@
 import {
   createContext, useContext, useState, useId,
   useCallback, useRef, useImperativeHandle, forwardRef,
-  Children, isValidElement,
+  
 } from 'react';
 import styles from './Tabs.module.scss';
 
@@ -69,7 +69,7 @@ export const TabList = forwardRef(function TabList({
   className = '',
   label = 'Navegacion por pestanas',
 }, externalRef) {
-  const { uid, setActiveTab, activeTab, orientation, activation } = useContext(TabsContext);
+  const { _uid, setActiveTab, activeTab, orientation, activation } = useContext(TabsContext);
   const listRef = useRef(null);
 
   const setRef = useCallback((el) => {

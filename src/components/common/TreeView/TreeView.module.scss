@@ -1,0 +1,82 @@
+@use '@styles/abstracts' as *;
+
+.tree {
+  list-style: none;
+  margin: 0;
+  padding: $spacing-2 0;
+  color: var(--ec-text-primary);
+  font-size: $font-size-base;
+}
+
+.group {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.treeitem {
+  margin: 0;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-2 $spacing-3;
+  padding-left: calc(#{$spacing-3} + var(--ec-tree-level, 0) * #{$spacing-4});
+  border-radius: $border-radius-md;
+  cursor: pointer;
+  transition: background-color $transition-base, color $transition-base;
+
+  &:hover { background: var(--ec-bg-elevated); }
+
+  &.rowActive {
+    background: var(--ec-bg-elevated);
+    color: var(--ec-primary);
+    font-weight: $font-weight-medium;
+  }
+}
+
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--ec-text-muted);
+  flex-shrink: 0;
+}
+
+.toggleSpacer {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  flex-shrink: 0;
+}
+
+.toggleIcon {
+  display: inline-block;
+  width: 0;
+  height: 0;
+  border-top: 0.3rem solid transparent;
+  border-bottom: 0.3rem solid transparent;
+  border-left: 0.4rem solid currentColor;
+  transition: transform $transition-base;
+
+  [aria-expanded='true'] & { transform: rotate(90deg); }
+}
+
+.label {
+  flex: 1;
+  outline: none;
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary);
+    outline-offset: 2px;
+    border-radius: $border-radius-sm;
+  }
+}

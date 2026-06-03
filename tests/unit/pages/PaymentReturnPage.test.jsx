@@ -42,9 +42,11 @@ describe('PaymentReturnPage', () => {
     apiService.get.mockClear();
   });
 
-  it('renderiza la pantalla de verificación en curso', () => {
+  it('renderiza la pantalla de verificación en curso', async () => {
     apiService.get.mockResolvedValue({ status: 'PENDING' });
-    renderPage();
+    // El polling de estado (setState async tras el primer poll) se asienta
+    // dentro de act para evitar el warning "not wrapped in act".
+    await act(async () => { renderPage(); });
     expect(screen.getAllByText(/verificando/i).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/PY-0042/i)).toBeInTheDocument();
   });

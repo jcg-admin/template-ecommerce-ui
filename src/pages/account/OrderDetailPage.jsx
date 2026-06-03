@@ -8,11 +8,16 @@
  *   POST /payments/{n}/refund/
  */
 
-import { useEffect } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
-import { fetchOrderDetail } from '@redux/slices/ordersSlice';
+import { fetchOrderDetail, cancelOrder } from '@redux/slices/ordersSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
+import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
+import PdfViewer from '@components/common/PdfViewer';
+import TimeLine from '@components/common/TimeLine';
+import ShippingIssueReport from '@components/orders/ShippingIssueReport';
+import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
 
 const TIMELINE_STEPS = [
@@ -86,12 +91,13 @@ export default function OrderDetailPage() {
             <Timeline order={order} currentIndex={currentStatusIndex} />
             <ItemsBlock items={order.items || []} />
             <AddressBlock address={order.shipping_address} />
+            <InvoiceBlock order={order} />
           </div>
 
           <aside className={styles.sideCol}>
             <TotalsCard order={order} />
             <PaymentCard payment={order.payment} />
-            <SupportCard order={order} />
+            <SupportCard order={order} dispatch={dispatch} />
           </aside>
         </div>
       </div>
@@ -100,31 +106,23 @@ export default function OrderDetailPage() {
 }
 
 function Timeline({ order, currentIndex }) {
+  const events = TIMELINE_STEPS.map((step, i) => {
+    const log = (order.status_logs || []).find(l => l.status === step.id);
+    const status = i < currentIndex ? 'done' : i === currentIndex ? 'current' : 'pending';
+    return {
+      title: step.t,
+      description: step.detail,
+      date: log
+        ? new Date(log.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' })
+        : undefined,
+      status,
+    };
+  });
+
   return (
     <section className={styles.section}>
       <h2 className={styles.sectionTitle}>Seguimiento del envío</h2>
-      <div className={styles.timeline}>
-        <div className={styles.timelineRail} />
-        {TIMELINE_STEPS.map((step, i) => {
-          const done = i < currentIndex;
-          const active = i === currentIndex;
-          const log = (order.status_logs || []).find(l => l.status === step.id);
-          return (
-            <div key={step.id} className={styles.timelineRow}>
-              <div className={`${styles.timelineDot} ${done ? styles.timelineDotDone : ''} ${active ? styles.timelineDotActive : ''}`} />
-              <div>
-                <div className={`${styles.timelineTitle} ${(done || active) ? styles.timelineTitleActive : ''}`}>
-                  {step.t}
-                </div>
-                {step.detail && <div className={styles.timelineDetail}>{step.detail}</div>}
-              </div>
-              <div className={styles.timelineWhen}>
-                {log ? new Date(log.created_at).toLocaleDateString('es-MX', { day: '2-digit', month: 'short' }) : 'pendiente'}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <TimeLine events={events} ariaLabel="Seguimiento del envío" />
     </section>
   );
 }
@@ -151,6 +149,39 @@ function ItemsBlock({ items }) {
           </div>
         ))}
       </div>
+    </section>
+  );
+}
+
+function InvoiceBlock({ order }) {
+  // UC-ORD-PDF: factura estatica (asset mock en DEMO via order.invoice_url).
+  // UC-ORD-PDFGEN: ademas se puede GENERAR la factura en el cliente desde los
+  // datos del pedido (jsPDF) y verla en el mismo visor.
+  const [pdfUrl, setPdfUrl] = useState(order.invoice_url || null);
+  const generatedRef = useRef(null);
+
+  const revoke = (url) => {
+    if (url && typeof URL.revokeObjectURL === 'function') URL.revokeObjectURL(url);
+  };
+
+  const handleGenerate = () => {
+    revoke(generatedRef.current);
+    const url = invoicePdfUrl(order);
+    generatedRef.current = url;
+    setPdfUrl(url);
+  };
+
+  useEffect(() => () => revoke(generatedRef.current), []);
+
+  return (
+    <section className={styles.section}>
+      <h2 className={styles.sectionTitle}>Factura</h2>
+      <Button variant="secondary" size="sm" onClick={handleGenerate}>
+        Generar factura en PDF
+      </Button>
+      {pdfUrl && (
+        <PdfViewer url={pdfUrl} title={`Factura ${order.order_number}`} height={480} />
+      )}
     </section>
   );
 }
@@ -222,8 +253,19 @@ function PaymentCard({ payment }) {
   );
 }
 
-function SupportCard({ order }) {
+function SupportCard({ order, dispatch }) {
   const canRefund = order.status === 'DELIVERED' && !order.refund_requested;
+  // UC-ORD-04 — cancelar orden (cliente). Solo cancelable antes de despacho.
+  const canCancel = ['PENDING', 'PROCESSING'].includes(order.status);
+  // UC-LOG-07 — reportar problema de envio: solo tras el despacho.
+  const canReportIssue = ['SHIPPED', 'DELIVERED'].includes(order.status);
+  const [showCancel, setShowCancel] = useState(false);
+
+  const handleCancel = () => {
+    dispatch(cancelOrder({ orderNumber: order.order_number, reason: '' }));
+    setShowCancel(false);
+  };
+
   return (
     <div className={styles.sideCardOutline}>
       <MetaTag tone="bronze">¿Hay algo con tu pedido?</MetaTag>
@@ -235,7 +277,24 @@ function SupportCard({ order }) {
         {canRefund && (
           <Button variant="ghost" block size="sm">Solicitar reembolso</Button>
         )}
+        {canCancel && (
+          <Button variant="ghost" block size="sm" onClick={() => setShowCancel(true)}>
+            Cancelar pedido
+          </Button>
+        )}
       </div>
+
+      {/* UC-LOG-07 — reportar problema de envio (orden ya despachada). */}
+      {canReportIssue && <ShippingIssueReport orderId={order.id} />}
+
+      <ConfirmModal
+        open={showCancel}
+        message="¿Seguro que quieres cancelar este pedido? Si ya pagaste, el reembolso se procesara automaticamente."
+        confirmLabel="Confirmar cancelacion"
+        variant="danger"
+        onConfirm={handleCancel}
+        onClose={() => setShowCancel(false)}
+      />
     </div>
   );
 }

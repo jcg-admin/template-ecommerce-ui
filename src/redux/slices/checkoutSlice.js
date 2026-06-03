@@ -2,11 +2,9 @@
  * checkoutSlice.js - ecommerce-ui
  *
  * @deprecated - Usar paymentsSlice.js para los thunks de pago.
- * Este slice usa los paths legacy /api/payments/create/ que ya
- * no tienen handler MSW. El slice activo es paymentsSlice.js que
- * usa /api/v1/payments/checkout y es el que importa
- * PaymentSelectionPage.jsx. Ver hallazgo A-03 en la iniciativa
- * auditar-integracion-catalogo.
+ * El slice activo es paymentsSlice.js (POST /api/v1/payments/initiate/).
+ * Los paths aquí se mantienen alineados al contrato real por si algún
+ * consumidor heredado los invoca. Ver hallazgo A-03.
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
@@ -16,7 +14,7 @@ export const createOrder = createAsyncThunk(
   'checkout/createOrder',
   async (orderData, { rejectWithValue }) => {
     try {
-      const res = await apiService.post('/api/orders/', orderData);
+      const res = await apiService.post('/api/v1/orders/checkout/', orderData);
       return res.data;
     } catch (error) {
       return rejectWithValue(error.message);
@@ -26,10 +24,10 @@ export const createOrder = createAsyncThunk(
 
 export const initMercadoPago = createAsyncThunk(
   'checkout/initMercadoPago',
-  async (orderId, { rejectWithValue }) => {
+  async (orderNumber, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(`/api/payments/mercadopago/create/`, { order_id: orderId });
-      return res.data; // { preference_id, init_point }
+      const res = await apiService.post('/api/v1/payments/initiate/', { order_number: orderNumber, gateway: 'MERCADOPAGO' });
+      return res.data; // { checkout_url, order_number, amount, installments }
     } catch (error) {
       return rejectWithValue(error.message);
     }
@@ -38,10 +36,10 @@ export const initMercadoPago = createAsyncThunk(
 
 export const initPayPal = createAsyncThunk(
   'checkout/initPayPal',
-  async (orderId, { rejectWithValue }) => {
+  async (orderNumber, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(`/api/payments/paypal/create/`, { order_id: orderId });
-      return res.data; // { order_id, approve_url }
+      const res = await apiService.post('/api/v1/payments/initiate/', { order_number: orderNumber, gateway: 'PAYPAL' });
+      return res.data; // { checkout_url, order_number, amount, installments }
     } catch (error) {
       return rejectWithValue(error.message);
     }

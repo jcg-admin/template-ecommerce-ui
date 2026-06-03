@@ -12,7 +12,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAddresses }                                      from '@redux/slices/authSlice';
 import { createAddress, deleteAddress, setDefaultAddress }     from '@redux/slices/addressesSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
 import { MetaTag, Button, Field }                from '@components/common/primitives';
 import { LoadingButton }                          from '@components/common';
 import styles from './AddressesPage.module.scss';
@@ -39,7 +38,6 @@ export default function AddressesPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>

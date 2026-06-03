@@ -155,8 +155,6 @@
 // Estados de validación
 .invalid .trigger { border-color: $error-color; }
 .valid   .trigger { border-color: $success-color; }
-.invalid { }
-.valid   { }
 
 .disabled {
   .trigger { opacity: 0.5; cursor: not-allowed; }

@@ -1,14 +1,9 @@
 /**
  * Handlers MSW del dominio payments.
  *
- * Paths alineados con paymentsSlice.js (el slice activo, con UC-PAY-*):
- *   POST /api/v1/payments/mercadopago/checkout
- *   POST /api/v1/payments/paypal/checkout
- *
- * Nota: existe un checkoutSlice.js legacy que usa los paths sin versionar
- * `/api/payments/mercadopago/create/` y `/api/payments/paypal/create/`.
- * La app activa (PaymentSelectionPage.jsx) usa paymentsSlice, no
- * checkoutSlice. Los handlers se alinean con el slice activo.
+ * Endpoint canónico unificado (api: payments/urls.py):
+ *   POST /api/v1/payments/initiate/  con {order_number, gateway, installments}
+ *   → {checkout_url, order_number, amount, installments}  (BR-006/007)
  *
  * Las URLs de redireccion apuntan a los sandboxes de MercadoPago y
  * PayPal. `scripts/verify-build.mjs` los tiene en la allowlist.
@@ -17,17 +12,19 @@
 import { http, HttpResponse } from 'msw';
 
 export const paymentsHandlers = [
-  http.post('/api/v1/payments/mercadopago/checkout', () => {
+  http.post('/api/v1/payments/initiate/', async ({ request }) => {
+    const body = (await request.json().catch(() => ({}))) as {
+      order_number?: string; gateway?: string; installments?: number;
+    };
+    const isPaypal = body?.gateway === 'PAYPAL';
     return HttpResponse.json({
-      preference_id: `TEST-${Date.now()}`,
-      init_point: 'https://sandbox.mercadopago.com.mx/checkout/mock',
-    });
-  }),
-
-  http.post('/api/v1/payments/paypal/checkout', () => {
-    return HttpResponse.json({
-      order_id: `PAYPAL-MOCK-${Date.now()}`,
-      approve_url: 'https://sandbox.paypal.com/checkoutnow/mock',
+      payment_id: null,
+      checkout_url: isPaypal
+        ? 'https://sandbox.paypal.com/checkoutnow/mock'
+        : 'https://sandbox.mercadopago.com.mx/checkout/mock',
+      order_number: body?.order_number ?? 'PY-MOCK',
+      amount: '1780.00',
+      installments: body?.installments ?? 1,
     });
   }),
 ];

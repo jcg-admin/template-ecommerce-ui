@@ -3,7 +3,7 @@
  * UC-AUTH-05 / UC-AUTH-06 / Sprint 2
  */
 
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -37,14 +37,22 @@ const makeStore = (user = MOCK_USER) =>
     },
   });
 
-const renderPage = (user = MOCK_USER) =>
-  render(
-    <Provider store={makeStore(user)}>
-      <MemoryRouter>
-        <ProfilePage />
-      </MemoryRouter>
-    </Provider>
-  );
+// renderPage es async: envuelve el mount en act y deja que el thunk
+// despachado en useEffect (fetchProfile) resuelva dentro de act, evitando
+// el warning "not wrapped in act" en los tests con asserts síncronos.
+const renderPage = async (user = MOCK_USER) => {
+  let result;
+  await act(async () => {
+    result = render(
+      <Provider store={makeStore(user)}>
+        <MemoryRouter>
+          <ProfilePage />
+        </MemoryRouter>
+      </Provider>
+    );
+  });
+  return result;
+};
 
 describe('ProfilePage', () => {
   beforeEach(() => {
@@ -57,32 +65,32 @@ describe('ProfilePage', () => {
 
 
   it('muestra el titulo Mi perfil', async () => {
-    renderPage();
+    await renderPage();
     expect(screen.getByRole('heading', { name: /Tu perfil|Mi perfil/i })).toBeInTheDocument();
   });
 
   it('muestra el nombre del usuario', async () => {
-    renderPage();
+    await renderPage();
     // El nombre está en el value del input, no como textContent
     const input = await screen.findByDisplayValue('Demo');
     expect(input).toBeInTheDocument();
   });
 
   it('muestra el email del usuario', async () => {
-    renderPage();
+    await renderPage();
     // El email está en el value del input
     await screen.findByDisplayValue('demo@test.mx');
   });
 
   it('muestra la barra de completitud con el porcentaje correcto', async () => {
-    renderPage();
+    await renderPage();
     // profile_completeness no está visible en el ProfilePage — está en AccountPage
     // Solo verificar que el comp renderizó el form
     await screen.findByDisplayValue('Demo');
   });
 
   it('muestra los pending_fields como sugerencia', async () => {
-    renderPage();
+    await renderPage();
     // pending_fields se muestran en AccountPage, no en ProfilePage
     // Verificar que el form está visible
     await screen.findByDisplayValue('demo@test.mx');
@@ -90,7 +98,7 @@ describe('ProfilePage', () => {
 
   it('no muestra pending_fields cuando completeness es 100', async () => {
     const completeUser = { ...MOCK_USER, profile_completeness: 100, pending_fields: [] };
-    renderPage(completeUser);
+    await renderPage(completeUser);
     expect(screen.queryByText(/completa tu perfil/i)).not.toBeInTheDocument();
   });
 

@@ -4,7 +4,7 @@
  * T-012 de la iniciativa resolver-hallazgos-de-deuda-del-template.
  *
  * Verifica que initiateMercadoPagoPayment y retryPayment:
- *   - Rechazan payloads sin order_id valido (withValidation).
+ *   - Rechazan payloads sin order_number valido (withValidation).
  *   - Aceptan payloads validos y llaman al apiService correcto.
  *   - Loguean inicio y duracion con el nombre canonico (withLogging).
  */
@@ -48,7 +48,7 @@ describe('paymentsSlice — decorators integration', () => {
 
   // ── Validacion ────────────────────────────────────────────────────
 
-  test('initiateMercadoPagoPayment rechaza payload sin order_id', async () => {
+  test('initiateMercadoPagoPayment rechaza payload sin order_number', async () => {
     const store = buildStore();
     const result = await store.dispatch(initiateMercadoPagoPayment({ installments: 3 }));
 
@@ -56,17 +56,17 @@ describe('paymentsSlice — decorators integration', () => {
     expect(apiService.post).not.toHaveBeenCalled();
   });
 
-  test('initiateMercadoPagoPayment rechaza si order_id es null', async () => {
+  test('initiateMercadoPagoPayment rechaza si order_number es null', async () => {
     const store = buildStore();
     const result = await store.dispatch(
-      initiateMercadoPagoPayment({ order_id: null, installments: 1 }),
+      initiateMercadoPagoPayment({ order_number: null, installments: 1 }),
     );
 
     expect(result.type).toBe('payments/initiateMercadoPago/rejected');
     expect(apiService.post).not.toHaveBeenCalled();
   });
 
-  test('retryPayment rechaza payload sin order_id', async () => {
+  test('retryPayment rechaza payload sin order_number', async () => {
     const store = buildStore();
     const result = await store.dispatch(retryPayment({ gateway: 'paypal' }));
 
@@ -76,35 +76,35 @@ describe('paymentsSlice — decorators integration', () => {
 
   // ── Camino feliz: dispara apiService ─────────────────────────────
 
-  test('initiateMercadoPagoPayment con order_id valido llama a apiService.post', async () => {
+  test('initiateMercadoPagoPayment con order_number valido llama a apiService.post', async () => {
     const store = buildStore();
     const result = await store.dispatch(
-      initiateMercadoPagoPayment({ order_id: 42, installments: 6 }),
+      initiateMercadoPagoPayment({ order_number: 42, installments: 6 }),
     );
 
     expect(result.type).toBe('payments/initiateMercadoPago/fulfilled');
     expect(apiService.post).toHaveBeenCalledTimes(1);
     const [url, body] = apiService.post.mock.calls[0];
     expect(url).toContain('/api/');
-    expect(body.order_id).toBe(42);
+    expect(body.order_number).toBe(42);
     expect(body.installments).toBe(6);
   });
 
-  test('retryPayment con order_id valido llama a apiService.post', async () => {
+  test('retryPayment con order_number valido llama a apiService.post', async () => {
     const store = buildStore();
-    apiService.post.mockResolvedValueOnce({ data: { paypal_order_id: 'pp-1' } });
-    const result = await store.dispatch(retryPayment({ order_id: '7', gateway: 'paypal' }));
+    apiService.post.mockResolvedValueOnce({ data: { paypal_order_number: 'pp-1' } });
+    const result = await store.dispatch(retryPayment({ order_number: '7', gateway: 'paypal' }));
 
     expect(result.type).toBe('payments/retry/fulfilled');
     expect(apiService.post).toHaveBeenCalledTimes(1);
-    expect(apiService.post.mock.calls[0][1]).toEqual({ order_id: '7', gateway: 'paypal' });
+    expect(apiService.post.mock.calls[0][1]).toEqual({ order_number: '7', gateway: 'paypal' });
   });
 
   // ── Logging ──────────────────────────────────────────────────────
 
   test('initiateMercadoPagoPayment loguea inicio y duracion', async () => {
     const store = buildStore();
-    await store.dispatch(initiateMercadoPagoPayment({ order_id: 1 }));
+    await store.dispatch(initiateMercadoPagoPayment({ order_number: 1 }));
 
     const messages = logSpy.mock.calls.map(c => c[0]);
     expect(
@@ -118,7 +118,7 @@ describe('paymentsSlice — decorators integration', () => {
   test('retryPayment loguea con nombre canonico', async () => {
     const store = buildStore();
     apiService.post.mockResolvedValueOnce({ data: { payment_url: 'https://x' } });
-    await store.dispatch(retryPayment({ order_id: 1, gateway: 'mp' }));
+    await store.dispatch(retryPayment({ order_number: 1, gateway: 'mp' }));
 
     const messages = logSpy.mock.calls.map(c => c[0]);
     expect(

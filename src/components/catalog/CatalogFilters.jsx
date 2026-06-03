@@ -13,17 +13,29 @@
 import { useState, useEffect } from 'react';
 import { useCategories } from '@hooks/domain/useCategories';
 import RangeSlider from '@components/common/RangeSlider/RangeSlider';
+import TreeView from '@components/common/TreeView';
 import styles from './CatalogFilters.module.scss';
 
-function flattenTree(nodes, depth = 0, acc = []) {
-  if (!Array.isArray(nodes)) return acc;
-  for (const n of nodes) {
-    acc.push({ id: n.id, slug: n.slug, name: n.name, depth });
-    if (Array.isArray(n.children) && n.children.length) {
-      flattenTree(n.children, depth + 1, acc);
-    }
-  }
-  return acc;
+/**
+ * Construye los `nodes` que espera <TreeView> a partir del arbol de
+ * categorias del API (padre -> children). El TreeView identifica los
+ * nodos por `id`; usamos el `slug` como id para que `selectedId` y
+ * `onSelect` trabajen directamente con el slug que vive en la URL.
+ */
+function toTreeNodes(nodes) {
+  if (!Array.isArray(nodes)) return [];
+  return nodes.map((n) => ({
+    id: n.slug,
+    label: n.name,
+    ...(Array.isArray(n.children) && n.children.length
+      ? { children: toTreeNodes(n.children) }
+      : {}),
+  }));
+}
+
+/** Slugs de todos los nodos raiz: expandidos por defecto para ver hijos. */
+function rootSlugs(nodes) {
+  return Array.isArray(nodes) ? nodes.map((n) => n.slug) : [];
 }
 
 export default function CatalogFilters({
@@ -34,7 +46,7 @@ export default function CatalogFilters({
 }) {
   const { data: catData } = useCategories();
   const tree = catData?.results ?? [];
-  const flat = flattenTree(tree);
+  const treeNodes = toTreeNodes(tree);
 
   const [priceMin, setPriceMin] = useState(priceMinProp);
   const [priceMax, setPriceMax] = useState(priceMaxProp);
@@ -50,29 +62,8 @@ export default function CatalogFilters({
   useEffect(() => { setPriceMin(priceMinProp); }, [priceMinProp]);
   useEffect(() => { setPriceMax(priceMaxProp); }, [priceMaxProp]);
 
-  const handleCategoryChange = (e) => {
-    const slug = e.target.value || '';
+  const handleCategorySelect = (slug) => {
     onChange?.({ category: slug || null });
-  };
-
-  const handlePriceApply = (e) => {
-    e.preventDefault();
-    const min = priceMin === '' ? null : Number(priceMin);
-    const max = priceMax === '' ? null : Number(priceMax);
-    if (min !== null && (Number.isNaN(min) || min < 0)) {
-      setPriceError('El precio minimo debe ser un numero >= 0.');
-      return;
-    }
-    if (max !== null && (Number.isNaN(max) || max < 0)) {
-      setPriceError('El precio maximo debe ser un numero >= 0.');
-      return;
-    }
-    if (min !== null && max !== null && max < min) {
-      setPriceError('El precio maximo no puede ser menor que el minimo.');
-      return;
-    }
-    setPriceError('');
-    onChange?.({ price_min: min, price_max: max });
   };
 
   const handleClear = () => {
@@ -86,25 +77,31 @@ export default function CatalogFilters({
     <aside className={styles.filters} aria-label="Filtros del catalogo">
       <h2 className={styles.title}>Filtros</h2>
 
-      {/* UC-CAT-04: categoria */}
+      {/* UC-CAT-04: categoria — TreeView jerarquico (UC-CAT-TREE F5-T16) */}
       <div className={styles.group}>
-        <label className={styles.label} htmlFor="filter-category">
+        <span className={styles.label} id="filter-category-label">
           Categoria
-        </label>
-        <select
-          id="filter-category"
-          className={styles.select}
-          value={categoryProp || ''}
-          onChange={handleCategoryChange}
+        </span>
+        <button
+          type="button"
+          className={styles.clearBtn}
+          onClick={() => handleCategorySelect('')}
+          disabled={!categoryProp}
         >
-          <option value="">Todas las categorias</option>
-          {flat.map((c) => (
-            <option key={c.id} value={c.slug}>
-              {' '.repeat(c.depth * 2)}
-              {c.name}
-            </option>
-          ))}
-        </select>
+          Todas las categorias
+        </button>
+        <TreeView
+          // El estado de expansion del TreeView se siembra solo en el
+          // montaje inicial; como las categorias llegan async (react-query),
+          // remontamos con `key` cuando cambia el conjunto de raices para
+          // que los nodos raiz queden expandidos por defecto.
+          key={rootSlugs(tree).join('|') || 'empty'}
+          nodes={treeNodes}
+          selectedId={categoryProp || ''}
+          onSelect={handleCategorySelect}
+          defaultExpandedIds={rootSlugs(tree)}
+          ariaLabel="Categorias"
+        />
       </div>
 
       {/* UC-CAT-05: rango de precio — T-605 RangeSlider (BUG-CF01 corregido) */}

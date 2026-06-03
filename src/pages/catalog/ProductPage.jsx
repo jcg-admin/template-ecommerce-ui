@@ -9,12 +9,14 @@
  *   POST /wishlist/
  */
 
-import Popover    from '@components/common/Popover/Popover';
+import Breadcrumb from '@components/common/Breadcrumb';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
+import ProductGallery from '@components/common/ProductGallery';
+import Accordion from '@components/common/Accordion';
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectIsInWishlist } from '@redux/selectors';
-import { Link, useParams, useNavigate, Navigate } from 'react-router-dom';
+import { useParams, useNavigate, Navigate } from 'react-router-dom';
 import { fetchProduct } from '@redux/slices/catalogSlice';
 import { addCartItem } from '@redux/slices/cartSlice';
 import { toggleWishlist } from '@redux/slices/wishlistSlice';
@@ -22,7 +24,6 @@ import ProductCard from '@components/catalog/ProductCard';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
 import { Collapse } from '@components/common/Collapse/Collapse';
-import Rating from '@components/catalog/Rating/Rating';
 import styles from './ProductPage.module.scss';
 
 export default function ProductPage() {
@@ -36,7 +37,6 @@ export default function ProductPage() {
   const [variant, setVariant] = useState(null);
   const tabsNavRef = useRef(null);
   const [qty, setQty] = useState(1);
-  const [activeImg, setActiveImg] = useState(0);
 
   useEffect(() => {
     dispatch(fetchProduct(slug));
@@ -64,6 +64,39 @@ export default function ProductPage() {
   const isAvailable = stock > 0;
   const related = product.related_products || [];
 
+  // UC-CAT-FAQ (F6): Preguntas frecuentes de la ficha.
+  // Si el producto trae preguntas/respuestas desde el backend
+  // (faqs o questions), se mapean a items del Accordion. En caso
+  // contrario se usa un set de FAQ estáticas razonables (envío,
+  // devoluciones, autenticidad) para no introducir infraestructura nueva.
+  const productFaqs = product.faqs || product.questions || [];
+  const faqItems = productFaqs.length > 0
+    ? productFaqs.map((q, i) => ({
+        id: q.id ?? i,
+        title: q.question ?? q.title,
+        content: q.answer ?? q.content,
+      }))
+    : [
+        {
+          id: 'envio',
+          title: '¿Cuánto tarda el envío?',
+          content: 'Enviamos a todo México en 2–4 días hábiles vía DHL. '
+            + 'Recibirás un número de guía para rastrear tu pedido.',
+        },
+        {
+          id: 'devoluciones',
+          title: '¿Puedo devolver esta pieza?',
+          content: 'Aceptamos devoluciones dentro de los 30 días posteriores '
+            + 'a la compra, siempre que el producto conserve su empaque sellado.',
+        },
+        {
+          id: 'autenticidad',
+          title: '¿Cómo garantizan la autenticidad?',
+          content: 'Cada pieza es elaborada de forma artesanal siguiendo la '
+            + 'tradición Yorùbà e incluye certificado de autenticidad.',
+        },
+      ];
+
   const handleAddToCart = async () => {
     try {
       await dispatch(addCartItem({
@@ -81,34 +114,28 @@ export default function ProductPage() {
     <main className={styles.page}>
       <section className={styles.main}>
         <div className={styles.container}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Inicio</Link><span>/</span>
-            <Link to="/catalog">Catálogo</Link><span>/</span>
-            {product.category_name && (<><Link to={`/catalog?category=${product.category_slug}`}>{product.category_name}</Link><span>/</span></>)}
-            {product.orisha_name && (<><Link to={`/catalog?orishas=${product.orisha_slug}`}>{product.orisha_name}</Link><span>/</span></>)}
-            <span className={styles.bcCurrent}>{product.name}</span>
-          </nav>
+          <Breadcrumb items={[
+            { label: 'Inicio', to: '/' },
+            { label: 'Catálogo', to: '/catalog' },
+            ...(product.category_name
+              ? [{ label: product.category_name, to: `/catalog?category=${product.category_slug}` }]
+              : []),
+            ...(product.orisha_name
+              ? [{ label: product.orisha_name, to: `/catalog?orishas=${product.orisha_slug}` }]
+              : []),
+            { label: product?.name },
+          ]} />
 
           <div className={styles.layout}>
-            {/* Gallery */}
+            {/* Galería (UC-CAT-GAL — componente nativo ProductGallery) */}
             <div className={styles.gallery}>
-              <div className={styles.thumbs}>
-                {images.length > 0 ? images.map((img, i) => (
-                  <button
-                    key={img.url ?? img.id ?? i}
-                    type="button"
-                    className={`${styles.thumb} ${i === activeImg ? styles.thumbActive : ''}`}
-                    onClick={() => setActiveImg(i)}
-                  >
-                    <img src={img.url} alt="" />
-                  </button>
-                )) : <div className={styles.thumbPlaceholder} />}
-              </div>
-              <div className={styles.mainImg}>
-                {images[activeImg]
-                  ? <img src={images[activeImg].url} alt={product.name} />
-                  : <div className={styles.imgPlaceholder}>{product.name}</div>}
-              </div>
+              <ProductGallery
+                images={images.map((img, i) => ({
+                  id: img.id ?? i,
+                  url: img.url,
+                  alt: product.name,
+                }))}
+              />
             </div>
 
             {/* Info */}
@@ -268,6 +295,19 @@ export default function ProductPage() {
         </div>
       </section>
 
+      {/* UC-CAT-FAQ (F6): Preguntas frecuentes */}
+      {faqItems.length > 0 && (
+        <section className={styles.faq} id="product-faq">
+          <div className={styles.faqInner}>
+            <header className={styles.faqHeader}>
+              <MetaTag tone="bronze">Antes de comprar</MetaTag>
+              <h2 className={styles.faqTitle}>Preguntas frecuentes</h2>
+            </header>
+            <Accordion items={faqItems} ariaLabel="Preguntas frecuentes" />
+          </div>
+        </section>
+      )}
+
       {/* Related */}
       {related.length > 0 && (
         <section className={styles.related}>
@@ -288,7 +328,7 @@ export default function ProductPage() {
   );
 }
 
-function DescBlock({ title, children }) {
+function _DescBlock({ title, children }) {
   return (
     <div className={styles.descBlock}>
       <h3 className={styles.descBlockTitle}>{title}</h3>

@@ -1,0 +1,84 @@
+// RichTextEditor — UC-ADM-RTE
+@use '@styles/abstracts' as *;
+
+.editor {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--ec-border-color, #{$border-color});
+  border-radius: var(--ec-border-radius-lg, #{$border-radius-lg});
+  background: var(--ec-bg-surface, #{$bg-surface});
+  overflow: hidden;
+
+  &:focus-within {
+    border-color: var(--ec-primary-color, #{$primary-color});
+  }
+}
+
+.toolbar {
+  display: flex;
+  align-items: center;
+  gap: $spacing-1;
+  padding: $spacing-1 $spacing-2;
+  border-bottom: 1px solid var(--ec-border-color, #{$border-color});
+  background: var(--ec-bg-sunken, #{$bg-sunken});
+}
+
+.toolButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  padding: 0;
+  border: none;
+  border-radius: var(--ec-border-radius-md, #{$border-radius-md});
+  background: transparent;
+  color: var(--ec-text-secondary, #{$text-secondary});
+  cursor: pointer;
+  transition: background $transition-fast, color $transition-fast;
+
+  &:hover {
+    background: var(--ec-bg-elevated, #{$bg-elevated});
+    color: var(--ec-text-primary, #{$text-primary});
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary-color, #{$primary-color});
+    outline-offset: 1px;
+  }
+}
+
+.surface {
+  position: relative;
+}
+
+.content {
+  min-height: 120px;
+  padding: $spacing-3 $spacing-4;
+  color: var(--ec-text-primary, #{$text-primary});
+  font-size: var(--ec-font-size-base, #{$font-size-base});
+  line-height: 1.6;
+  outline: none;
+  overflow-wrap: break-word;
+
+  :where(a) {
+    color: var(--ec-text-link, #{$text-link});
+    text-decoration: underline;
+  }
+
+  :where(ul) {
+    margin: 0;
+    padding-left: $spacing-5;
+  }
+}
+
+.placeholder {
+  position: absolute;
+  top: $spacing-3;
+  left: $spacing-4;
+  color: var(--ec-text-muted, #{$text-muted});
+  font-size: var(--ec-font-size-base, #{$font-size-base});
+  line-height: 1.6;
+  pointer-events: none;
+  user-select: none;
+}

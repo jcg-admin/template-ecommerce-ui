@@ -8,7 +8,13 @@ import {
   sendContactMessage,
   clearContactActionState,
 } from '@redux/slices/contactSlice';
+import ChatWidget from '@components/common/ChatWidget';
+import { usePublicSettings } from '@hooks/domain/usePublicSettings';
 import styles from './ContactPage.module.scss';
+
+const INITIAL_CHAT = [
+  { id: 'chat-welcome', from: 'agent', text: 'Hola, ¿en qué podemos ayudarte?' },
+];
 
 const INITIAL = { name: '', email: '', subject: '', message: '' };
 
@@ -29,6 +35,34 @@ export default function ContactPage() {
     useSelector((s) => s.contact);
   const [form, setForm] = useState(INITIAL);
   const [errors, setErrors] = useState({});
+  const [chatMessages, setChatMessages] = useState(INITIAL_CHAT);
+
+  // Chat de soporte (UC-SUP-CHAT): sin backend de chat, el hilo se mantiene
+  // con estado local. Al enviar se añade el mensaje del usuario y una
+  // autorespuesta simulada del agente.
+  const handleChatSend = (text) => {
+    const userMessage = { id: `u-${Date.now()}`, from: 'user', text };
+    const agentReply = {
+      id: `a-${Date.now()}`,
+      from: 'agent',
+      text: 'Gracias, te responderemos pronto.',
+    };
+    setChatMessages((prev) => [...prev, userMessage, agentReply]);
+  };
+
+  const chatSection = (
+    <section className={styles.chat} aria-labelledby="contact-chat-title">
+      <h2 id="contact-chat-title" className={styles.chatTitle}>
+        Chat de soporte
+      </h2>
+      <ChatWidget
+        messages={chatMessages}
+        onSend={handleChatSend}
+        title="Soporte"
+        placeholder="Escribe un mensaje…"
+      />
+    </section>
+  );
 
   const setField = (name) => (event) => {
     setForm((prev) => ({ ...prev, [name]: event.target.value }));
@@ -74,6 +108,7 @@ export default function ContactPage() {
         >
           Enviar otro mensaje
         </button>
+        {chatSection}
       </section>
     );
   }
@@ -86,6 +121,8 @@ export default function ContactPage() {
           Escribenos y nuestro equipo te respondera lo antes posible.
         </p>
       </header>
+
+      <ContactInfo />
 
       <form onSubmit={handleSubmit} noValidate className={styles.form}>
         <div className={styles.field}>
@@ -152,6 +189,35 @@ export default function ContactPage() {
           </button>
         </div>
       </form>
+
+      {chatSection}
     </section>
+  );
+}
+
+// UC-CFG-05 — datos de contacto del negocio, visibles de inmediato (POST-02).
+function ContactInfo() {
+  const settings = usePublicSettings({});
+  const social = settings.social_links || {};
+  const socialEntries = Object.entries(social).filter(([, url]) => url);
+  if (!settings.support_email && !settings.phone && !settings.address) return null;
+
+  return (
+    <aside className={styles.contactInfo} aria-label="Datos de contacto">
+      {settings.support_email && (
+        <p>Email: <a href={`mailto:${settings.support_email}`}>{settings.support_email}</a></p>
+      )}
+      {settings.phone && <p>Teléfono: {settings.phone}</p>}
+      {settings.address && <p>Dirección: {settings.address}</p>}
+      {socialEntries.length > 0 && (
+        <p>
+          {socialEntries.map(([platform, url]) => (
+            <a key={platform} href={url} target="_blank" rel="noopener noreferrer" style={{ marginRight: 12 }}>
+              {platform}
+            </a>
+          ))}
+        </p>
+      )}
+    </aside>
   );
 }

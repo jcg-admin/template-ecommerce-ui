@@ -54,8 +54,8 @@ describe('PaymentRetryPage (UC-PAY-08)', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/payments/retry',
-        { order_id: 'ORD-7', gateway: 'paypal' }
+        '/api/v1/payments/initiate/',
+        { order_number: 'ORD-7', gateway: 'paypal' }
       );
     });
     await waitFor(() => {

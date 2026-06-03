@@ -10,8 +10,8 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchOrders } from '@redux/slices/ordersSlice';
-import AccountSidebar from '@components/account/AccountSidebar';
-import { MetaTag, Price, Button, EmptyState } from '@components/common/primitives';
+import { Price, Button, EmptyState } from '@components/common/primitives';
+import Skeleton from '@components/common/Skeleton';
 import styles from './OrdersPage.module.scss';
 
 const STATUS_FILTERS = [
@@ -48,7 +48,6 @@ export default function OrdersPage() {
         </nav>
 
         <div className={styles.layout}>
-          <AccountSidebar />
 
           <section>
             <header className={styles.header}>
@@ -67,7 +66,13 @@ export default function OrdersPage() {
               </div>
             </header>
 
-            {isLoading && <div className={styles.loading}>Cargando pedidos…</div>}
+            {isLoading && (
+              <div className={styles.list}>
+                {Array.from({ length: 4 }, (_, i) => (
+                  <Skeleton key={i} shape="rectangle" height={72} />
+                ))}
+              </div>
+            )}
 
             {!isLoading && list.length === 0 && (
               <EmptyState

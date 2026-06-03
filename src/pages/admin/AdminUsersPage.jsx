@@ -6,11 +6,12 @@
  * Mantén tu lógica Redux existente; solo cambia la presentación.
  */
 
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAdminUsers } from '@redux/slices/adminSlice';
 import { MetaTag, Button } from '@components/common/primitives';
+import DataGrid from '@components/common/DataGrid';
 import styles from './AdminTablePage.module.scss';
 
 const ROLE_FILTERS = [
@@ -30,13 +31,72 @@ export default function AdminUsersPage() {
   const dispatch = useDispatch();
   const [role, setRole] = useState('all');
   const [status, setStatus] = useState('active');
-  const [search, setSearch] = useState('');
+  const search = '';
   const users = useSelector((s) => s.admin?.users || []);
   const isLoading = useSelector((s) => s.admin?.isLoading);
 
   useEffect(() => {
     dispatch(fetchAdminUsers({ role, status, search }));
   }, [dispatch, role, status, search]);
+
+  // Columnas del DataGrid. Las columnas con texto plano (correo, rol, estado,
+  // pedidos, actividad) se marcan sortable para que el orden/filtro nativos del
+  // grid operen sobre valores comparables. Las celdas con JSX (avatar, nombre
+  // con enlace, acción) se quedan sin sortable.
+  const columns = useMemo(
+    () => [
+      { key: 'avatar', label: '' },
+      { key: 'name', label: 'Usuario', sortable: true },
+      { key: 'email', label: 'Correo', sortable: true },
+      { key: 'roleLabel', label: 'Rol', sortable: true },
+      { key: 'statusLabel', label: 'Estado', sortable: true },
+      { key: 'order_count', label: 'Pedidos', sortable: true },
+      { key: 'lastActivity', label: 'Última actividad', sortable: true },
+      { key: 'actions', label: '' },
+    ],
+    [],
+  );
+
+  // Filas del DataGrid: cada columna sortable recibe un valor de texto/numérico
+  // comparable; las celdas presentacionales reciben nodos JSX.
+  const gridRows = useMemo(
+    () =>
+      users.map((u) => {
+        const roleLabel = u.is_admin ? 'Admin' : u.is_staff ? 'Staff' : 'Comprador';
+        const statusLabel = !u.is_active
+          ? 'Inactivo'
+          : !u.email_verified
+            ? 'Sin verificar'
+            : 'Activo';
+        const fullName = `${u.first_name || ''} ${u.last_name || ''}`.trim();
+        return {
+          id: u.id,
+          name: fullName || u.username || '',
+          email: u.email,
+          roleLabel,
+          statusLabel,
+          order_count: u.order_count ?? 0,
+          lastActivity: u.last_login
+            ? new Date(u.last_login).toLocaleDateString('es-MX')
+            : '—',
+          avatar: (
+            <div className={styles.avatarSm}>
+              {u.avatar_url ? (
+                <img src={u.avatar_url} alt="" />
+              ) : (
+                <span>{(u.first_name?.[0] || '') + (u.last_name?.[0] || '')}</span>
+              )}
+            </div>
+          ),
+          actions: (
+            <Link to={`/admin/users/${u.id}`} className={styles.actionBtn} title="Ver">
+              Ver →
+            </Link>
+          ),
+        };
+      }),
+    [users],
+  );
 
   return (
     <div className={styles.page}>
@@ -71,74 +131,23 @@ export default function AdminUsersPage() {
               onClick={() => setStatus(s.id)}
             >{s.label}</button>
           ))}
-          <input
-            type="search"
-            placeholder="Buscar por nombre o correo…"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className={styles.search}
-            style={{ marginLeft: 'auto' }}
-          />
         </div>
       </div>
 
       <div className={styles.tableWrap}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th style={{ width: 50 }}></th>
-              <th>Usuario</th>
-              <th>Correo</th>
-              <th>Rol</th>
-              <th>Estado</th>
-              <th>Pedidos</th>
-              <th>Última actividad</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody>
-            {isLoading && <tr><td colSpan={8} className={styles.loading}>Cargando usuarios…</td></tr>}
-            {!isLoading && users.length === 0 && (
-              <tr><td colSpan={8} className={styles.empty}>Sin usuarios que coincidan</td></tr>
-            )}
-            {!isLoading && users.map((u) => (
-              <tr key={u.id}>
-                <td className={styles.thumbCol}>
-                  <div className={styles.avatarSm}>
-                    {u.avatar_url
-                      ? <img src={u.avatar_url} alt="" />
-                      : <span>{(u.first_name?.[0] || '')+(u.last_name?.[0] || '')}</span>
-                    }
-                  </div>
-                </td>
-                <td>
-                  <Link to={`/admin/users/${u.id}`} className={styles.itemName}>
-                    {u.first_name} {u.last_name}
-                  </Link>
-                  <div className={styles.muted}>@{u.username}</div>
-                </td>
-                <td>{u.email}</td>
-                <td>
-                  <span className={`${styles.statusPill} ${styles[`pill_${u.is_admin ? 'bronze' : u.is_staff ? 'coral' : 'muted'}`]}`}>
-                    {u.is_admin ? 'Admin' : u.is_staff ? 'Staff' : 'Comprador'}
-                  </span>
-                </td>
-                <td>
-                  <span className={`${styles.statusPill} ${styles[`pill_${u.is_active ? (u.email_verified ? 'lime' : 'bronze') : 'vino'}`]}`}>
-                    {!u.is_active ? 'Inactivo' : !u.email_verified ? 'Sin verificar' : 'Activo'}
-                  </span>
-                </td>
-                <td className={`${styles.right} ${styles.mono}`}>{u.order_count}</td>
-                <td className={styles.mono}>
-                  {u.last_login ? new Date(u.last_login).toLocaleDateString('es-MX') : '—'}
-                </td>
-                <td className={styles.actions}>
-                  <Link to={`/admin/users/${u.id}`} className={styles.actionBtn} title="Ver">→</Link>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        {isLoading ? (
+          <p className={styles.loading}>Cargando usuarios…</p>
+        ) : (
+          <DataGrid
+            columns={columns}
+            rows={gridRows}
+            pageSize={10}
+            filterable
+            getRowKey={(r) => r.id}
+            emptyText="Sin usuarios que coincidan"
+            ariaLabel="Listado de usuarios"
+          />
+        )}
       </div>
     </div>
   );

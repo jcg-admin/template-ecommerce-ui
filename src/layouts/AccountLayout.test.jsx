@@ -4,7 +4,7 @@
  * Verifica que el menu lateral incluya todas las secciones que el
  * comprador puede usar (UC-WIS, UC-RET, UC-SUPP, UC-NOT, UC-AUTH-08).
  */
-import { render, screen, within } from '@testing-library/react';
+import { render, screen, within, act } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';
@@ -52,13 +52,21 @@ describe('AccountLayout — sidebar del comprador', () => {
     ['Resumen',             '/account'],
     ['Mis pedidos',         '/account/orders'],
     ['Mis favoritos',       '/account/wishlist'],
+    ['Mis direcciones',     '/account/addresses'],
     ['Mis devoluciones',    '/account/returns'],
     ['Soporte',             '/support/tickets'],
     ['Notificaciones',      '/account/notifications/preferences'],
     ['Mi perfil',           '/account/profile'],
     ['Cambiar contrasena',  '/account/change-password'],
-  ])('expone el link "%s" hacia %s', (label, href) => {
+    ['Seguridad',           '/account/security'],
+    ['Referidos',           '/account/referral'],
+    ['Historial de busqueda', '/account/search-history'],
+  ])('expone el link "%s" hacia %s', async (label, href) => {
     renderLayout();
+    // AccountLayout monta el Footer, que via usePublicSettings hace un
+    // setState async tras await apiService.get. Flushear dentro de act
+    // evita el warning "not wrapped in act".
+    await act(async () => {});
     const nav  = screen.getByRole('navigation', { name: /menu de cuenta/i });
     const link = within(nav).getByRole('link', { name: new RegExp(`^${label}$`, 'i') });
     expect(link).toHaveAttribute('href', href);

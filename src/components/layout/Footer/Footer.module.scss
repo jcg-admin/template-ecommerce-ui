@@ -82,8 +82,19 @@
   text-transform: uppercase;
 }
 
+.social {
+  display: flex;
+  gap: $spacing-4;
+  margin-top: $spacing-3;
+  font-size: $font-size-xs;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+
+  a { color: $text-muted; text-decoration: none; }
+  a:hover { color: $bronze; }
+}
+
 // Columns
-.col h4 {}
 .colTitle {
   font-family: $font-family-mono;
   font-size: $font-size-xs;

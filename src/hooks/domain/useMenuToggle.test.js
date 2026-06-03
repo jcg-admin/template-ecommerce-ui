@@ -2,7 +2,7 @@
  * Tests — useMenuToggle
  * Toggle de menú lateral (Redux)
  */
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { Provider } from 'react-redux';
 import { MemoryRouter } from 'react-router-dom';
 import { configureStore } from '@reduxjs/toolkit';

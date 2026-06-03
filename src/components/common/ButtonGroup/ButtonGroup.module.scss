@@ -1,0 +1,57 @@
+// ButtonGroup — segmento de botones unidos (admin toolbars / filter bars)
+@use '@styles/abstracts' as *;
+
+.root {
+  display: inline-flex;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-md;
+  background: var(--ec-bg-surface);
+  overflow: hidden;
+}
+
+.horizontal {
+  flex-direction: row;
+}
+
+.vertical {
+  flex-direction: column;
+}
+
+// Bordes unidos: separadores internos entre elementos adyacentes.
+.horizontal > * + * {
+  border-left: 1px solid var(--ec-border-color);
+}
+
+.vertical > * + * {
+  border-top: 1px solid var(--ec-border-color);
+}
+
+// Segmento del modo selector controlado.
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: $spacing-2 $spacing-3;
+  border: none;
+  background: transparent;
+  color: var(--ec-text-muted);
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  cursor: pointer;
+  transition: color $transition-base, background $transition-base;
+
+  &:hover {
+    color: var(--ec-text-primary);
+    background: var(--ec-bg-elevated);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--ec-primary-color);
+    outline-offset: -2px;
+  }
+}
+
+.active {
+  background: var(--ec-bg-elevated);
+  color: var(--ec-primary-color);
+}

@@ -21,8 +21,8 @@
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
 import {
-  useState, useCallback, useRef,
-  useImperativeHandle, forwardRef, useMemo, useId,
+  useState, useCallback, 
+  useImperativeHandle, forwardRef, useId,
 } from 'react';
 import styles from './Calendar.module.scss';
 
@@ -60,7 +60,7 @@ function isDisabled(date, minDate, maxDate, disabledDates) {
 
 function isSameMonth(a, b)   { return a.getFullYear() === b.getFullYear() && a.getMonth() === b.getMonth(); }
 function isSameYear(a, b)    { return a.getFullYear() === b.getFullYear(); }
-function isSameQuarter(a, b) {
+function _isSameQuarter(a, b) {
   return a.getFullYear() === b.getFullYear()
     && Math.floor(a.getMonth() / 3) === Math.floor(b.getMonth() / 3);
 }
@@ -138,16 +138,16 @@ const Calendar = forwardRef(function Calendar({
   onDateChange,          // para selección simple
   onStartDateChange,     // para rango
   onEndDateChange,
-  onCalendarDateChange,
+  _onCalendarDateChange,
   // Display
   calendars       = 1,   // Default ui-core
   firstDayOfWeek  = 1,   // 1 = lunes (Default ui-core)
   locale          = 'default',
   dayFormat       = 'numeric',
   monthFormat     = 'short',
-  yearFormat      = 'numeric',
+  _yearFormat      = 'numeric',
   weekdayFormat   = 2,   // número de letras o 'short'/'long'
-  showWeekNumber  = false,
+  _showWeekNumber  = false,
   showAdjacementDays = true,
   selectAdjacementDays = false,
   // Constraints
@@ -316,7 +316,7 @@ const Calendar = forwardRef(function Calendar({
           <table className={styles.table} role="grid">
             <thead>
               <tr>
-                {weekdays.map((d, i) => (
+                {weekdays.map((d, _i) => (
                   <th key={d.toISOString()} scope="col" abbr={d.toLocaleDateString(locale, { weekday: 'long' })}>
                     {fmtWeekday(d)}
                   </th>

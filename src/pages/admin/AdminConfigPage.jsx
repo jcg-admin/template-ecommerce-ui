@@ -21,21 +21,21 @@ import styles from './AdminConfigPage.module.scss';
 const ITEMS = [
   {
     uc:    'UC-CFG-03',
-    title: 'Configuracion del Sistema',
-    desc:  'Parametros globales del sitio: nombre, moneda, IVA, modo mantenimiento.',
+    title: 'Ajustes del sitio',
+    desc:  'SiteSettings: nombre, moneda, IVA, modo mantenimiento (UC-ADM-04).',
     to:    '/admin/system-settings',
   },
   {
     uc:    'UC-CFG-01',
-    title: 'Gateways y pagos',
-    desc:  'Estado de los gateways activos y reporte de transacciones.',
-    to:    '/admin/payments',
+    title: 'Pasarelas de pago',
+    desc:  'CRUD de gateways (Mercado Pago, PayPal); credenciales cifradas.',
+    to:    '/admin/config/gateways',
   },
   {
     uc:    'UC-CFG-02',
     title: 'Metodos y costos de envio',
-    desc:  'Couriers y guias de envio operativas (panel UC-LOG-08).',
-    to:    '/admin/logistics',
+    desc:  'CRUD de metodos de envio y sus costos.',
+    to:    '/admin/config/shipping',
   },
   {
     uc:    'UC-CFG-05',

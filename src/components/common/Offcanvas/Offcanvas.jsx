@@ -23,7 +23,7 @@
  * @param {Function}  onShow / onShown / onHide / onHidden / onHidePrevented
  * @param {ReactNode} children
  */
-import { useRef, useEffect, useCallback } from 'react';
+import { useEffect, useCallback } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import useScrollLock from '@hooks/ui/useScrollLock';
 import useEscapeKey  from '@hooks/ui/useEscapeKey';

@@ -48,7 +48,7 @@ describe('AdminContactMessageDetailPage (UC-COM-03)', () => {
         name: 'Ana',
         email: 'ana@example.com',
         subject: 'Consulta sobre el producto X',
-        message: 'Hola, queria saber sobre el envio.',
+        body: 'Hola, queria saber sobre el envio.',
         status: 'UNREAD',
         created_at: '2026-05-01T10:00:00Z',
       },
@@ -81,19 +81,19 @@ describe('AdminContactMessageDetailPage (UC-COM-03)', () => {
 
     fireEvent.change(screen.getByLabelText(/Respuesta para el remitente/i),
       { target: { value: 'Gracias por escribirnos, el envio tarda 3 dias.' } });
-    fireEvent.change(screen.getByLabelText(/Nota interna/i),
-      { target: { value: 'cliente recurrente' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar respuesta/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/v1/admin/contact/messages/7/reply/',
         expect.objectContaining({
-          reply_body:    'Gracias por escribirnos, el envio tarda 3 dias.',
-          internal_note: 'cliente recurrente',
+          reply_body: 'Gracias por escribirnos, el envio tarda 3 dias.',
         }),
       );
     });
+    // El backend (ContactMessageReplySerializer) solo acepta `reply_body`:
+    // no debe enviarse `internal_note`.
+    expect(apiService.post.mock.calls[0][1]).not.toHaveProperty('internal_note');
   });
 
   it('muestra mensaje de exito tras responder', async () => {

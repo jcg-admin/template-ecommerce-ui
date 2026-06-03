@@ -41,7 +41,7 @@ export default function Chip({
 }) {
   const [isSelected, setIsSelected] = useState(initSelected);
   const [exists, setExists]         = useState(true);
-  const id = useId();
+  const _id = useId();
 
   // toggle() — equivale a toggle() de ui-core
   const toggle = useCallback(() => {

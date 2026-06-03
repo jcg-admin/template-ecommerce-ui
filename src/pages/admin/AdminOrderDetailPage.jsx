@@ -15,7 +15,11 @@ import { Link, useParams } from 'react-router-dom';
 import {
   fetchAdminOrder, updateOrderStatus, adminCancelOrder,
 } from '@redux/slices/adminSlice';
+import {
+  createShipmentGuide, updateGuideStatus,
+} from '@redux/slices/logisticsSlice';
 import RefundModal from '@components/admin/RefundModal';
+import GanttChart from '@components/common/GanttChart';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import styles from './AdminOrderDetailPage.module.scss';
 
@@ -49,6 +53,11 @@ export default function AdminOrderDetailPage() {
   const [cancelReason, setCancelReason] = useState('');
   const [showRefund, setShowRefund] = useState(false);
   const [showCancel, setShowCancel] = useState(false);
+  // UC-LOG-01 / UC-LOG-02 — envío
+  const [guideCourier, setGuideCourier] = useState('');
+  const [guideTracking, setGuideTracking] = useState('');
+  const [guideStatus, setGuideStatus] = useState('');
+  const currentGuide = useSelector((s) => s.logistics?.currentGuide);
 
   useEffect(() => { dispatch(fetchAdminOrder(order_number)); }, [dispatch, order_number]);
 
@@ -56,6 +65,18 @@ export default function AdminOrderDetailPage() {
 
   const validNext = NEXT_STATES[order.status] || [];
   const currentIdx = STATUS_FLOW.findIndex(s => s.id === order.status);
+
+  // Etapas datadas para el Gantt de fulfillment (UC-LOG-GANTT). Se derivan del
+  // STATUS_FLOW y la fecha de creacion; el progreso refleja el estado actual.
+  const ganttBase = order.created_at ? new Date(order.created_at).getTime() : Date.now();
+  const DAY_MS = 86_400_000;
+  const fulfillmentTasks = STATUS_FLOW.map((s, i) => ({
+    id: s.id,
+    name: s.label,
+    start: new Date(ganttBase + i * DAY_MS).toISOString(),
+    end: new Date(ganttBase + (i + 1) * DAY_MS).toISOString(),
+    progress: i < currentIdx ? 100 : i === currentIdx ? 50 : 0,
+  }));
 
   const handleAdvance = async (e) => {
     e.preventDefault();
@@ -69,6 +90,29 @@ export default function AdminOrderDetailPage() {
     if (!cancelReason.trim()) return;
     await dispatch(adminCancelOrder({ orderNumber: order_number, reason: cancelReason }));
     setShowCancel(false); setCancelReason('');
+  };
+
+  // UC-LOG-01 — crear guía de envío
+  // Real: POST /api/v1/logistics/guides/ con { order_id, courier_id,
+  // tracking_number }. tracking_number es requerido por el backend.
+  const handleCreateGuide = async (e) => {
+    e.preventDefault();
+    if (!guideTracking.trim()) return;
+    await dispatch(createShipmentGuide({
+      orderId: order?.id,
+      ...(guideCourier ? { courierId: Number(guideCourier) } : {}),
+      trackingNumber: guideTracking.trim(),
+    }));
+    setGuideCourier(''); setGuideTracking('');
+  };
+
+  // UC-LOG-02 — actualizar estado de la guía
+  // Real: PATCH /api/v1/logistics/guides/:id/ con { status }.
+  const handleUpdateStatus = async (e) => {
+    e.preventDefault();
+    if (!currentGuide?.id || !guideStatus) return;
+    await dispatch(updateGuideStatus({ guideId: currentGuide.id, status: guideStatus }));
+    setGuideStatus('');
   };
 
   return (
@@ -155,6 +199,70 @@ export default function AdminOrderDetailPage() {
                 />
                 <Button type="submit" variant="primary" size="sm" disabled={!nextStatus}>
                   Aplicar cambio
+                </Button>
+              </div>
+            </form>
+          )}
+        </section>
+
+        {/* Linea de tiempo de fulfillment (UC-LOG-GANTT) */}
+        <section className={styles.card}>
+          <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Línea de tiempo de fulfillment</h2></header>
+          <GanttChart tasks={fulfillmentTasks} />
+        </section>
+
+        {/* Envío — guía (UC-LOG-01) y rastreo (UC-LOG-02) */}
+        <section className={styles.card}>
+          <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Envío</h2></header>
+          {currentGuide?.id && (
+            <p className={styles.muted} style={{ padding: '0 16px' }}>
+              Guía actual: <strong>#{currentGuide.id}</strong>
+              {currentGuide.tracking_number && <> · Rastreo: <strong>{currentGuide.tracking_number}</strong></>}
+              {currentGuide.status && <> · Estado: <strong>{currentGuide.status}</strong></>}
+            </p>
+          )}
+          <form onSubmit={handleCreateGuide} className={styles.transitionForm}>
+            <MetaTag tone="bronze">Crear guía de envío</MetaTag>
+            <div className={styles.transitionRow}>
+              <input
+                type="number"
+                aria-label="ID del courier"
+                placeholder="ID courier (opcional)"
+                value={guideCourier}
+                onChange={(e) => setGuideCourier(e.target.value)}
+                className={styles.input}
+              />
+              <input
+                type="text"
+                aria-label="Número de rastreo"
+                placeholder="Número de rastreo"
+                value={guideTracking}
+                onChange={(e) => setGuideTracking(e.target.value)}
+                className={styles.input}
+              />
+              <Button type="submit" variant="primary" size="sm" disabled={!guideTracking.trim()}>
+                Crear guía
+              </Button>
+            </div>
+          </form>
+          {currentGuide?.id && (
+            <form onSubmit={handleUpdateStatus} className={styles.transitionForm}>
+              <MetaTag tone="bronze">Actualizar estado de la guía</MetaTag>
+              <div className={styles.transitionRow}>
+                <select
+                  aria-label="Estado de la guía"
+                  value={guideStatus}
+                  onChange={(e) => setGuideStatus(e.target.value)}
+                  className={styles.input}
+                >
+                  <option value="">Selecciona estado…</option>
+                  <option value="PICKED_UP">Recolectado</option>
+                  <option value="IN_TRANSIT">En tránsito</option>
+                  <option value="INCIDENT">Incidencia</option>
+                  <option value="CANCELLED">Cancelada</option>
+                </select>
+                <Button type="submit" variant="secondary" size="sm" disabled={!guideStatus}>
+                  Actualizar estado
                 </Button>
               </div>
             </form>

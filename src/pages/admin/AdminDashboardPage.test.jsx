@@ -5,7 +5,7 @@
  * BUG-TEST-AD01: tests anteriores usaban shape desactualizada (order_counts,
  * day_summary) que no coincide con lo que AdminDashboardPage renderiza.
  */
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
@@ -94,5 +94,72 @@ describe('AdminDashboardPage — landing admin', () => {
     // El dashboard tiene links 'Ver todos →' hacia pedidos y productos
     const links = await screen.findAllByRole('link', { name: /ver todos/i });
     expect(links.length).toBeGreaterThanOrEqual(1);
+  });
+
+  // UC-ADM-GAUGE (F7): sección "Indicadores" con KPIs radiales.
+  describe('Indicadores radiales (Gauge)', () => {
+    it('renderiza la sección "Indicadores" con tres medidores', async () => {
+      apiService.get.mockResolvedValueOnce({ data: MOCK_METRICS });
+      renderPage();
+      // El título de sección aparece tras cargar las métricas.
+      expect(
+        await screen.findByRole('heading', { name: /^indicadores$/i }),
+      ).toBeInTheDocument();
+      // role="meter" expone cada Gauge. Se acota a la sección "Indicadores"
+      // porque el LinearGauge de alertas (en la tarjeta "Alertas") también
+      // expone role="meter".
+      const indicadores = await screen.findByRole('region', { name: /^indicadores$/i });
+      const meters = within(indicadores).getAllByRole('meter');
+      expect(meters).toHaveLength(3);
+    });
+
+    // UC-INV-01 (F7): LinearGauge de nivel de alertas en la tarjeta "Alertas".
+    it('renderiza el LinearGauge de nivel de alertas de stock', async () => {
+      apiService.get.mockResolvedValueOnce({
+        data: { ...MOCK_METRICS, alerts: [{}, {}, {}] },
+      });
+      renderPage();
+      const stock = await screen.findByRole('meter', {
+        name: /nivel de alertas de stock/i,
+      });
+      // 3 alertas / techo 10.
+      expect(stock).toHaveAttribute('aria-valuenow', '3');
+      expect(stock).toHaveAttribute('aria-valuemax', '10');
+    });
+
+    it('expone aria-valuenow derivado de los datos reales', async () => {
+      apiService.get.mockResolvedValueOnce({ data: MOCK_METRICS });
+      renderPage();
+      const meters = await screen.findAllByRole('meter');
+
+      // Meta de ventas: 12345 / 20000 * 100 = 61.7 -> 62
+      const sales = meters.find((el) =>
+        /meta de ventas/i.test(el.getAttribute('aria-label') || ''));
+      expect(sales).toHaveAttribute('aria-valuenow', '62');
+      expect(sales).toHaveAttribute('aria-valuemin', '0');
+      expect(sales).toHaveAttribute('aria-valuemax', '100');
+
+      // Meta de pedidos: 42 / 60 * 100 = 70
+      const orders = meters.find((el) =>
+        /meta de pedidos/i.test(el.getAttribute('aria-label') || ''));
+      expect(orders).toHaveAttribute('aria-valuenow', '70');
+
+      // Salud de inventario: 0 alertas -> 100%
+      const stock = meters.find((el) =>
+        /salud de inventario/i.test(el.getAttribute('aria-label') || ''));
+      expect(stock).toHaveAttribute('aria-valuenow', '100');
+    });
+
+    it('refleja alertas activas bajando la salud de inventario', async () => {
+      // 4 alertas / techo 10 -> (1 - 0.4) * 100 = 60%
+      apiService.get.mockResolvedValueOnce({
+        data: { ...MOCK_METRICS, alerts: [{}, {}, {}, {}] },
+      });
+      renderPage();
+      const meters = await screen.findAllByRole('meter');
+      const stock = meters.find((el) =>
+        /salud de inventario/i.test(el.getAttribute('aria-label') || ''));
+      expect(stock).toHaveAttribute('aria-valuenow', '60');
+    });
   });
 });

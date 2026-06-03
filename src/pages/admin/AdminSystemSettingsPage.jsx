@@ -18,15 +18,25 @@ import {
 import {
   updateSettings, clearSettingsActionState,
 } from '@redux/slices/settingsSlice';
+import { Button } from '@components/common/primitives';
+import { Switch } from '@components/common';
 import styles from './AdminSystemSettingsPage.module.scss';
 
+// Campos alineados al AdminSiteSettingsSerializer real
+// (api: apps/settings_app/serializers.py). UC-ADM-04 / UC-CFG-03 / UC-CFG-05.
 const FIELDS = [
-  { key: 'site_name',        label: 'Nombre del sitio',         type: 'text' },
-  { key: 'contact_email',    label: 'Email de contacto',        type: 'email' },
-  { key: 'support_phone',    label: 'Telefono de soporte',      type: 'tel' },
-  { key: 'tax_rate',         label: 'Tasa de IVA (%)',          type: 'number' },
-  { key: 'currency',         label: 'Moneda',                   type: 'text' },
-  { key: 'maintenance_mode', label: 'Modo mantenimiento',       type: 'checkbox' },
+  { key: 'site_name',               label: 'Nombre del sitio',          type: 'text' },
+  { key: 'currency',                label: 'Moneda',                    type: 'text' },
+  { key: 'iva_rate',                label: 'Tasa de IVA (%)',           type: 'number' },
+  { key: 'free_shipping_threshold', label: 'Umbral de envio gratis',    type: 'number' },
+  { key: 'min_stock_threshold',     label: 'Umbral de stock minimo',    type: 'number' },
+  { key: 'payment_timeout_minutes', label: 'Timeout de pago (min)',     type: 'number' },
+  { key: 'order_timeout_minutes',   label: 'Timeout de orden (min)',    type: 'number' },
+  { key: 'max_return_days',         label: 'Dias maximos de devolucion', type: 'number' },
+  // UC-CFG-05 — datos de contacto (sub-contrato de SiteSettings)
+  { key: 'support_email',           label: 'Email de soporte',          type: 'email' },
+  { key: 'phone',                   label: 'Telefono de soporte',       type: 'tel' },
+  { key: 'address',                 label: 'Direccion del negocio',     type: 'text' },
 ];
 
 export default function AdminSystemSettingsPage() {
@@ -49,6 +59,15 @@ export default function AdminSystemSettingsPage() {
             : type === 'number'   ? (value === '' ? '' : Number(value))
             : value,
     }));
+  };
+
+  // Toggle boolean (Switch emite el booleano resultante, no un evento).
+  const setBool = (name) => (next) => setForm((p) => ({ ...p, [name]: next }));
+
+  // UC-CFG-05 — redes sociales (social_links es un dict anidado)
+  const handleSocial = (platform) => (e) => {
+    const { value } = e.target;
+    setForm((p) => ({ ...p, social_links: { ...(p.social_links || {}), [platform]: value } }));
   };
 
   const handleSubmit = async (e) => {
@@ -79,12 +98,10 @@ export default function AdminSystemSettingsPage() {
           <div key={f.key} className={styles.field}>
             <label htmlFor={`set-${f.key}`}>{f.label}</label>
             {f.type === 'checkbox' ? (
-              <input
-                id={`set-${f.key}`}
-                name={f.key}
-                type="checkbox"
+              <Switch
                 checked={Boolean(form[f.key])}
-                onChange={handleChange}
+                onChange={setBool(f.key)}
+                ariaLabel={f.label}
               />
             ) : (
               <input
@@ -98,6 +115,25 @@ export default function AdminSystemSettingsPage() {
           </div>
         ))}
 
+        {/* UC-CFG-05 — redes sociales */}
+        <fieldset className={styles.field}>
+          <legend>Redes sociales</legend>
+          {['facebook', 'instagram', 'youtube'].map((platform) => (
+            <div key={platform} className={styles.field}>
+              <label htmlFor={`set-social-${platform}`}>
+                {platform.charAt(0).toUpperCase() + platform.slice(1)}
+              </label>
+              <input
+                id={`set-social-${platform}`}
+                name={`social_${platform}`}
+                type="url"
+                value={form.social_links?.[platform] ?? ''}
+                onChange={handleSocial(platform)}
+              />
+            </div>
+          ))}
+        </fieldset>
+
         {actionError && (
           <p role="alert" className={styles.apiError}>
             {actionError.message ?? 'No se pudo guardar la configuracion.'}
@@ -110,9 +146,9 @@ export default function AdminSystemSettingsPage() {
         )}
 
         <div className={styles.actions}>
-          <button type="submit" disabled={isActioning}>
+          <Button type="submit" loading={isActioning}>
             Guardar cambios
-          </button>
+          </Button>
         </div>
       </form>
     </section>

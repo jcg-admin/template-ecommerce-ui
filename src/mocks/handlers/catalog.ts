@@ -31,6 +31,35 @@ import { CATALOG_PRODUCTS, CATALOG_CATEGORIES } from '../data/catalog';
 const PAGE_SIZE = 20;
 
 export const catalogHandlers = [
+  // GET /api/v1/catalogue/autocomplete/?q=...  (UC-SRCH-02, AutocompleteView)
+  // Autocomplete con sugerencias en vivo: devuelve un array de productos
+  // {id, name, slug} cuyo nombre empieza (case-insensitive) con `q`,
+  // igual que el backend real (AutocompleteSerializer).
+  // Se registra ANTES de /search/ y /:slug/ para que la ruta mas
+  // especifica gane el match.
+  http.get('/api/v1/catalogue/autocomplete/', ({ request }) => {
+    const url = new URL(request.url);
+    const q   = (url.searchParams.get('q') ?? '').trim().toLowerCase();
+
+    if (q.length < 2) {
+      return HttpResponse.json([]);
+    }
+
+    // Productos cuyo nombre coincide con el termino, ordenados por
+    // relevancia simple (prefijo primero) y acotados a 8 resultados.
+    const matches = CATALOG_PRODUCTS
+      .filter(p => p.name.toLowerCase().includes(q))
+      .sort((a, b) => {
+        const ap = a.name.toLowerCase().startsWith(q) ? 0 : 1;
+        const bp = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+        return ap - bp || a.name.localeCompare(b.name);
+      })
+      .slice(0, 8)
+      .map(p => ({ id: p.id, name: p.name, slug: p.slug }));
+
+    return HttpResponse.json(matches);
+  }),
+
   // GET /api/v1/catalogue/search/?q=...&category=<slug>
   http.get('/api/v1/catalogue/search/', ({ request }) => {
     const url      = new URL(request.url);
@@ -57,11 +86,13 @@ export const catalogHandlers = [
     // Razon: una busqueda tipicamente devuelve pocos resultados y el
     // frontend muestra todos de una vez. La paginacion artificial
     // (A-02) generaba un `next` hardcodeado a page=2 que no funcionaba.
+    // BUG-FIX: este handler referenciaba `total`/`page`/`pages` que solo
+    // existen en el handler `/catalogue/` (ReferenceError al ejecutarse).
     const body: PaginatedResponse<typeof results[number]> = {
-      count:    total,
+      count:    results.length,
       results,
-      next:     page < pages ? `/api/v1/catalogue/?page=${page + 1}` : null,
-      previous: page > 1    ? `/api/v1/catalogue/?page=${page - 1}` : null,
+      next:     null,
+      previous: null,
     };
     return HttpResponse.json(body);
   }),

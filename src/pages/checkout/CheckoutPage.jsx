@@ -12,16 +12,42 @@
 
 import { LoadingButton } from '@components/common';
 import Alert         from '@components/common/Alert/Alert';
+import DeliveryScheduler from '@components/common/DeliveryScheduler';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchAddresses } from '@redux/slices/authSlice';
 import { createOrder }                  from '@redux/slices/checkoutSlice';
 import { initiatePayment }              from '@redux/slices/paymentsSlice';
-import { MetaTag, Price, Button, Field, SumRow } from '@components/common/primitives';
+import { Price, Field, SumRow } from '@components/common/primitives';
 import { Stepper } from '@components/common/Stepper/Stepper';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './CheckoutPage.module.scss';
+
+// Franjas de entrega: próximos 3 días, 2 franjas por día.
+// Se definen localmente en la página para no acoplar el checkout a MSW;
+// el id codifica fecha+franja para que el payload (delivery_slot) sea estable.
+function buildDeliverySlots(from = new Date()) {
+  const FRANJAS = [
+    { suffix: 'am', label: '09:00 – 12:00' },
+    { suffix: 'pm', label: '15:00 – 18:00' },
+  ];
+  const slots = [];
+  for (let d = 1; d <= 3; d += 1) {
+    const day = new Date(from);
+    day.setDate(day.getDate() + d);
+    const date = day.toISOString().slice(0, 10); // YYYY-MM-DD
+    for (const f of FRANJAS) {
+      slots.push({
+        id: `${date}-${f.suffix}`,
+        date,
+        label: f.label,
+        available: true,
+      });
+    }
+  }
+  return slots;
+}
 
 export default function CheckoutPage() {
   const dispatch = useDispatch();
@@ -36,6 +62,8 @@ export default function CheckoutPage() {
   const [email, setEmail] = useState(auth.user?.email || '');
   const [address, setAddress] = useState({});
   const [shipping, setShipping] = useState('std');
+  const [deliverySlots] = useState(() => buildDeliverySlots());
+  const [deliverySlot, setDeliverySlot] = useState('');
   const [payment, setPayment] = useState('mp');
   const [submitting, setSubmitting] = useState(false);
   const [orderError, setOrderError] = useState('');
@@ -47,7 +75,7 @@ export default function CheckoutPage() {
     setSubmitting(true);
     try {
       const order = await dispatch(createOrder({
-        email, address, shipping_method: shipping, mode,
+        email, address, shipping_method: shipping, delivery_slot: deliverySlot, mode,
       })).unwrap();
       const { redirect_url } = await dispatch(initiatePayment({
         order_number: order.order_number, gateway: payment,
@@ -137,8 +165,18 @@ export default function CheckoutPage() {
               <ShippingOptions selected={shipping} onSelect={setShipping} />
             </Section>
 
+            {/* Fecha de entrega */}
+            <Section n="04" title="Fecha de entrega">
+              <DeliveryScheduler
+                slots={deliverySlots}
+                value={deliverySlot}
+                onSelect={setDeliverySlot}
+                ariaLabel="Fecha de entrega"
+              />
+            </Section>
+
             {/* Pago */}
-            <Section n="04" title="Forma de pago">
+            <Section n="05" title="Forma de pago">
               <PaymentMethods selected={payment} onSelect={setPayment} />
             </Section>
           </div>
@@ -165,7 +203,7 @@ export default function CheckoutPage() {
   );
 }
 
-function Step({ n, label, state }) {
+function _Step({ n, label, state }) {
   return (
     <div className={`${styles.step} ${styles[`step_${state}`]}`}>
       <span className={styles.stepNum}>{state === 'done' ? '✓' : n}</span>

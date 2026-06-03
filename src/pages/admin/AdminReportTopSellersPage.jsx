@@ -8,7 +8,17 @@ import {
   useTopSellersReport,
   buildReportExportUrl,
 } from '@hooks/domain/useReports';
+import { exportXlsx } from '@utils/exportWorkbook';
 import styles from './AdminReportPage.module.scss';
+
+// Columnas del export del ranking (UC-ADM-XLSX). Espejan la tabla en pantalla.
+const EXPORT_COLUMNS = [
+  { key: 'name',      label: 'Producto' },
+  { key: 'sku',       label: 'SKU' },
+  { key: 'units',     label: 'Unidades' },
+  { key: 'revenue',   label: 'Ingreso' },
+  { key: 'share_pct', label: '% del total' },
+];
 
 const PERIOD_OPTIONS = [
   { value: 'today',   label: 'Hoy' },
@@ -33,6 +43,15 @@ export default function AdminReportTopSellersPage() {
   const csvHref = buildReportExportUrl('top-sellers', { ...params, format: 'csv' });
   const pdfHref = buildReportExportUrl('top-sellers', { ...params, format: 'pdf' });
 
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: 'reporte-top-sellers.xlsx',
+      sheetName: 'Top sellers',
+      columns: EXPORT_COLUMNS,
+      rows: results,
+    });
+  };
+
   return (
     <section className={styles.page} aria-labelledby="report-top-sellers-title">
       <header className={styles.header}>
@@ -41,6 +60,14 @@ export default function AdminReportTopSellersPage() {
         </h1>
         <div className={styles.exportGroup}>
           <a href={csvHref} className={styles.exportLink}>Exportar CSV</a>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportXlsx}
+            disabled={results.length === 0}
+          >
+            Exportar Excel
+          </button>
           <a href={pdfHref} className={styles.exportLink}>Exportar PDF</a>
         </div>
       </header>

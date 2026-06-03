@@ -9,15 +9,17 @@
  *   GET /catalogue/categories/
  */
 
+import Breadcrumb  from '@components/common/Breadcrumb';
 import Chip        from '@components/common/Chip/Chip';
 import RangeSlider from '@components/common/RangeSlider/RangeSlider';
 import { useEffect, useState, useCallback, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import {
   fetchProducts, searchProducts, clearSearch, setPage,
 } from '@redux/slices/catalogSlice';
 import SearchBar from '@components/catalog/SearchBar';
+import ViewToggle from '@components/common/ViewToggle';
 import ProductCard from '@components/catalog/ProductCard';
 import { MetaTag, Button, EmptyState } from '@components/common/primitives';
 import styles from './CatalogPage.module.scss';
@@ -33,12 +35,14 @@ export default function CatalogPage() {
     searchQuery, isLoading, isSearching,
     error, searchError, pagination = {},
   } = useSelector((s) => s.catalog || {});
+  const wishlistItems = useSelector((s) => s.wishlist?.items ?? []);
   const currentPage = pagination?.page ?? 1;
 
 
   const qParam        = searchParams.get('q')        || '';
   const categoryParam = searchParams.get('category') || '';
   const orishasParam  = searchParams.get('orishas')  || '';
+  const view          = searchParams.get('view') === 'list' ? 'list' : 'grid';
   const [activeOrishas, setActiveOrishas]   = useState(
     () => orishasParam ? orishasParam.split(',') : []
   );
@@ -93,6 +97,15 @@ export default function CatalogPage() {
     prevPageRef.current = currentPage;
   }, [products, currentPage]);
 
+  const handleViewChange = useCallback((next) => {
+    setSearchParams((prev) => {
+      const params = new URLSearchParams(prev);
+      if (next === 'list') params.set('view', 'list');
+      else params.delete('view'); // grid es el default → no ensucia la URL
+      return params;
+    });
+  }, [setSearchParams]);
+
   const handleSearch = useCallback((q) => setSearchParams({ q }), [setSearchParams]);
   const handleClearSearch = useCallback(() => {
     setSearchParams({});
@@ -107,10 +120,10 @@ export default function CatalogPage() {
     <main className={styles.page}>
       <header className={styles.hero}>
         <div className={styles.heroInner}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Inicio</Link><span>/</span>
-            <span className={styles.bcCurrent}>{mode === 'search' ? 'Búsqueda' : 'Catálogo'}</span>
-          </nav>
+          <Breadcrumb items={[
+            { label: 'Inicio', to: '/' },
+            { label: mode === 'search' ? 'Búsqueda' : 'Catálogo' },
+          ]} />
           <div className={styles.heroGrid}>
             <div>
               <MetaTag tone="bronze">
@@ -155,7 +168,14 @@ export default function CatalogPage() {
         />
 
           <section className={styles.results}>
-            <Toolbar count={displayItems.length} total={pagination.count} />
+            <Toolbar
+              count={displayItems.length}
+              total={pagination.count}
+              sortOrder={sortOrder}
+              onSort={setSortOrder}
+              view={view}
+              onViewChange={handleViewChange}
+            />
 
             {loading && (
               <div className={styles.loading} aria-live="polite">
@@ -181,8 +201,14 @@ export default function CatalogPage() {
             )}
 
             {!loading && displayItems.length > 0 && (
-              <div className={styles.grid}>
-                {displayItems.map((p) => <ProductCard key={p.id} product={p} />)}
+              <div className={`${styles.grid} ${view === 'list' ? styles.gridList : ''}`}>
+                {displayItems.map((p) => (
+                  <ProductCard
+                    key={p.id}
+                    product={p}
+                    inWishlist={wishlistItems.some((i) => i.product_id === p.id)}
+                  />
+                ))}
               </div>
             )}
 
@@ -201,7 +227,7 @@ export default function CatalogPage() {
 }
 
 function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActiveTypes,
-  availability, setAvailability, priceMin, priceMax, setPriceMin, setPriceMax }) {
+  availability, setAvailability, _priceMin, _priceMax, setPriceMin, setPriceMax }) {
   return (
     <aside className={styles.sidebar}>
       <FilterGroup title="Òrìsà">
@@ -284,7 +310,7 @@ function Check({ label, checked = false }) {
     </label>
   );
 }
-function PriceSlider() {
+function _PriceSlider() {
   return (
     <div className={styles.slider}>
       <div className={styles.sliderTrack}>
@@ -299,16 +325,17 @@ function PriceSlider() {
   );
 }
 
-function Toolbar({ count, total, sortOrder, onSort }) {
+function Toolbar({ count, total, sortOrder, onSort, view = 'grid', onViewChange }) {
   return (
     <div className={styles.toolbar}>
       <div className={styles.toolbarCount}>
         Mostrando <strong>{count}</strong> de {total || count} piezas
       </div>
       <div className={styles.toolbarRight}>
+        <ViewToggle value={view} onChange={onViewChange} ariaLabel="Vista del catálogo" />
         <label className={styles.sort}>
           <span>Ordenar:</span>
-          <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+          <select value={sortOrder} onChange={e => onSort(e.target.value)}>
             <option value="">Recomendados</option>
             <option value="base_price">Precio: menor</option>
             <option value="-base_price">Precio: mayor</option>

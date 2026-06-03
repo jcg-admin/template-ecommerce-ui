@@ -1,6 +1,5 @@
-import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -9,6 +8,7 @@ import uiReducer   from '@redux/slices/uiSlice';
 import ordersReducer from '@redux/slices/ordersSlice';
 
 import apiService from '@services/apiService';
+import { exportSheet } from '@utils/exportSheet';
 import AdminOrdersPage from './AdminOrdersPage';
 
 jest.mock('@services/apiService', () => ({
@@ -21,6 +21,11 @@ jest.mock('@services/apiService', () => ({
   },
 }));
 
+jest.mock('@utils/exportSheet', () => ({
+  __esModule: true,
+  exportSheet: jest.fn(),
+}));
+
 const makeStore = (state = {}) => configureStore({
   reducer: { admin: adminReducer, ui: uiReducer, orders: ordersReducer },
   preloadedState: state,
@@ -28,7 +33,7 @@ const makeStore = (state = {}) => configureStore({
 
 const makeClient = () => new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
-function renderPage(storeState = {}) {
+function _renderPage(storeState = {}) {
   return render(
     <Provider store={makeStore(storeState)}>
       <QueryClientProvider client={makeClient()}>
@@ -106,6 +111,28 @@ describe('AdminOrdersPage (UC-ORD-09)', () => {
     await waitFor(() => {
       expect(apiService.get).toHaveBeenCalledTimes(2);
     });
+  });
+
+  it('exporta las ordenes visibles a CSV al hacer click en "Exportar CSV"', async () => {
+    // UC-ADM-XLSX: el boton invoca exportSheet con columns + las filas visibles.
+    apiService.get.mockResolvedValue({ data: { results: ORDERS, count: 2 } });
+    render(wrap(<AdminOrdersPage />));
+    await screen.findByText('PY-2026-000101');
+
+    fireEvent.click(screen.getByRole('button', { name: /Exportar CSV/i }));
+
+    expect(exportSheet).toHaveBeenCalledTimes(1);
+    const arg = exportSheet.mock.calls[0][0];
+    expect(arg.filename).toBe('pedidos.csv');
+    expect(arg.columns).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ key: 'order_number' }),
+        expect.objectContaining({ key: 'status' }),
+        expect.objectContaining({ key: 'total' }),
+        expect.objectContaining({ key: 'created_at' }),
+      ]),
+    );
+    expect(arg.rows).toEqual(ORDERS);
   });
 
   it('enlaza al detalle admin de cada orden', async () => {

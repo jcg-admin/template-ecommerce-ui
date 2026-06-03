@@ -19,7 +19,7 @@
 import {
   TimeoutError,
   NetworkError,
-  isRetryableError,
+  
   createErrorFromResponse,
 } from '@utils/apiErrors';
 
@@ -126,7 +126,7 @@ class APIService {
       }
 
       let errorBody = {};
-      try { errorBody = await response.json(); } catch {}
+      try { errorBody = await response.json(); } catch { /* respuesta de error sin cuerpo JSON */ }
 
       if (response.status === 401) {
         this.clearAuthToken();
@@ -140,7 +140,7 @@ class APIService {
 
     let data = null;
     if (response.status !== 204) {
-      try { data = await response.json(); } catch {}
+      try { data = await response.json(); } catch { /* respuesta sin cuerpo JSON */ }
     }
 
     let result = { data, status: response.status, headers: response.headers };

@@ -123,17 +123,19 @@ export const returnsHandlers = [
   }),
 
   http.post('/api/v1/returns/', async ({ request }) => {
+    // El backend (ReturnCreateSerializer) valida `order_number` en el body
+    // de creación; la representación de lectura expone `order_id`.
     const body = (await request.json().catch(() => null)) as
-      | { order_id?: string; reason?: string; description?: string }
+      | { order_number?: string; reason?: string; description?: string }
       | null;
-    if (!body?.order_id || !body?.reason) {
+    if (!body?.order_number || !body?.reason) {
       return HttpResponse.json(
-        { detail: 'order_id y reason son obligatorios.' },
+        { detail: 'order_number y reason son obligatorios.' },
         { status: 400 }
       );
     }
     const created = buildSeed(state.nextId++, {
-      order_id: body.order_id,
+      order_id: body.order_number,
       reason: body.reason,
       description: body.description ?? '',
       status: 'PENDIENTE_REVISION',

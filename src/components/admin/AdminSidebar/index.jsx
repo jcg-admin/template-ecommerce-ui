@@ -20,21 +20,35 @@ const ADMIN_NAV = [
   { to: '/admin/products',     label: 'Productos' },
   { to: '/admin/products/new', label: 'Crear Producto' },
   { to: '/admin/categories',   label: 'Categorías' },
+  { to: '/admin/product-discounts', label: 'Descuentos' },
   { section: 'Ventas' },
-  { to: '/admin/orders',       label: 'Pedidos' },
+  { to: '/admin/orders',           label: 'Pedidos' },
+  { to: '/admin/orders-dashboard', label: 'Panel de pedidos' },
   { to: '/admin/payments',     label: 'Pagos' },
   { to: '/admin/returns',      label: 'Devoluciones' },
   { to: '/admin/vouchers',     label: 'Vouchers' },
+  { to: '/admin/vouchers/report', label: 'Reporte de vouchers' },
   { section: 'Clientes' },
   { to: '/admin/users',        label: 'Usuarios' },
   { to: '/admin/support',      label: 'Soporte' },
+  { section: 'Comunicación' },
+  { to: '/admin/notifications/compose',   label: 'Enviar notificacion' },
+  { to: '/admin/newsletter/compose',      label: 'Redactar boletin' },
+  { to: '/admin/newsletter/subscribers',  label: 'Suscriptores' },
+  { to: '/admin/questions/answer',        label: 'Responder preguntas' },
+  { to: '/admin/questions/moderation',    label: 'Moderar preguntas' },
+  { to: '/admin/reviews/moderation',      label: 'Moderar resenas' },
   { section: 'Operaciones' },
   { to: '/admin/inventory',    label: 'Inventario' },
+  { to: '/admin/price-sync',   label: 'Sincronizar precios' },
   { to: '/admin/logistics',    label: 'Logística' },
+  { to: '/admin/couriers',     label: 'Mensajeros' },
   { to: '/admin/reports',      label: 'Reportes', end: true },
   { section: 'Configuración' },
   { to: '/admin/config',       label: 'Configuración' },
   { to: '/admin/system-settings', label: 'Sistema' },
+  { to: '/admin/permissions',  label: 'Permisos' },
+  { to: '/admin/backups',      label: 'Respaldos' },
   { to: '/admin/audit-log',    label: 'Auditoría' },
 ];
 
@@ -50,7 +64,7 @@ export default function AdminSidebar() {
       </div>
 
       <nav className={styles.nav}>
-        {ADMIN_NAV.map((item, i) =>
+        {ADMIN_NAV.map((item) =>
           item.section ? (
             <p key={item.section} className={styles.navSection}>{item.section}</p>
           ) : (

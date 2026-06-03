@@ -1,0 +1,110 @@
+@use '@styles/abstracts' as *;
+
+$kanban-column-min-width: 240px;
+
+.board {
+  display: flex;
+  gap: $spacing-4;
+  align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  padding-bottom: $spacing-2;
+  color: var(--ec-text-primary);
+}
+
+.column {
+  display: flex;
+  flex: 1 0 $kanban-column-min-width;
+  flex-direction: column;
+  min-width: $kanban-column-min-width;
+  padding: $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-lg;
+  background: var(--ec-bg-sunken);
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: $spacing-3;
+}
+
+.columnTitle {
+  margin: 0;
+  font-size: $font-size-sm;
+  font-weight: $font-weight-bold;
+}
+
+.count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: $spacing-5;
+  height: $spacing-5;
+  padding: 0 $spacing-2;
+  border-radius: $border-radius-full;
+  background: var(--ec-bg-surface);
+  color: var(--ec-text-secondary);
+  font-size: $font-size-xs;
+}
+
+.cardList {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: $spacing-2;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  padding: $spacing-3;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-md;
+  background: var(--ec-bg-surface);
+  cursor: grab;
+
+  &:active {
+    cursor: grabbing;
+  }
+}
+
+.cardBody {
+  font-size: $font-size-sm;
+}
+
+.cardControls {
+  display: flex;
+  justify-content: flex-end;
+  gap: $spacing-1;
+}
+
+.moveButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: $spacing-6;
+  height: $spacing-6;
+  padding: 0;
+  border: 1px solid var(--ec-border-color);
+  border-radius: $border-radius-sm;
+  background: var(--ec-bg-elevated);
+  color: var(--ec-text-primary);
+  font-size: $font-size-base;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: var(--ec-bg-page);
+  }
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
