@@ -1,12 +1,11 @@
 /**
  * Tests — AdminPriceSyncPage (UC-CAT-12)
  *
- * BUG-TEST-PS01: el test original importaba priceSyncSlice (no existe) y
- * buscaba tabs "cargar csv"/"ajuste porcentual" que el componente no tiene.
- * La página es un flujo único: subir CSV → preview → confirmar.
- *
- * BUG-PS02: uploadPriceCSV, confirmPriceSync, downloadPriceTemplate no
- * estaban definidos en adminSlice — corregidos.
+ * Flujo único contra el backend real (apps/catalogue/price_sync_views.py):
+ *   POST /admin/price-sync/preview-csv/ → { session_id, preview, errors }
+ *   POST /admin/price-sync/apply-csv/   ← { session_id } → { updated_count }
+ * uploadPriceCSV normaliza la respuesta a { session_id, diffs, not_found }.
+ * No hay edición de precios en cliente: apply-csv aplica la sesión del server.
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider } from 'react-redux';
@@ -23,44 +22,50 @@ jest.mock('@services/apiService', () => ({
 import apiService from '@services/apiService';
 import AdminPriceSyncPage from './AdminPriceSyncPage';
 
-const PREVIEW = {
-  sync_id: 'preview-abc',
-  diffs: [
-    { sku: 'SKU-1', name: 'Elekes de Oshún', old_price: 100, new_price: 110 },
-    { sku: 'SKU-2', name: 'Sopera Yemayá',   old_price: 200, new_price: 220 },
+// Shape REAL que devuelve preview-csv (el thunk lo normaliza).
+const PREVIEW_RAW = {
+  session_id:    'sess-1',
+  valid_count:   2,
+  invalid_count: 0,
+  preview: [
+    { sku: 'SKU-1', product_id: 1, product_name: 'Elekes de Oshún', old_price: '100', new_price: '110', diff_pct: 10 },
+    { sku: 'SKU-2', product_id: 2, product_name: 'Sopera Yemayá',   old_price: '200', new_price: '220', diff_pct: 10 },
   ],
-  total_increase: 30,
-  not_found: [],
+  errors: [],
 };
 
 const makeStore = () =>
   configureStore({ reducer: { admin: adminReducer, ui: uiReducer } });
 
-const renderPage = () => {
-  return render(
-    <Provider store={makeStore()}>
-      <MemoryRouter>
-        <AdminPriceSyncPage />
-      </MemoryRouter>
-    </Provider>,
-  );
+const renderPage = () => render(
+  <Provider store={makeStore()}>
+    <MemoryRouter>
+      <AdminPriceSyncPage />
+    </MemoryRouter>
+  </Provider>,
+);
+
+const uploadCsv = () => {
+  const input = document.querySelector('input[type="file"]');
+  const file = new File(['sku,price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
+  Object.defineProperty(input, 'files', { value: [file] });
+  fireEvent.change(input);
 };
 
 afterEach(() => jest.clearAllMocks());
 
 describe('AdminPriceSyncPage (UC-CAT-12)', () => {
   it('muestra el titulo «Sincronizar precios desde CSV»', () => {
-    // BUG-TEST-PS01: título real, no hay Tabs en este componente
     renderPage();
     expect(
       screen.getByRole('heading', { name: /sincronizar precios desde csv/i, level: 1 }),
     ).toBeInTheDocument();
   });
 
-  it('muestra la zona de drop para subir el CSV', () => {
+  it('muestra la zona de drop con las columnas reales (sku, price)', () => {
     renderPage();
     expect(screen.getByText(/arrastra el csv de precios/i)).toBeInTheDocument();
-    expect(screen.getByText(/columnas: sku, new_price/i)).toBeInTheDocument();
+    expect(screen.getByText(/columnas: sku, price/i)).toBeInTheDocument();
   });
 
   it('muestra el botón de descargar plantilla', () => {
@@ -68,93 +73,51 @@ describe('AdminPriceSyncPage (UC-CAT-12)', () => {
     expect(screen.getByRole('button', { name: /plantilla csv/i })).toBeInTheDocument();
   });
 
-  it('al subir un CSV llama a uploadPriceCSV y muestra preview', async () => {
-    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
+  it('al subir un CSV llama a preview-csv y muestra el preview normalizado', async () => {
+    apiService.post.mockResolvedValueOnce({ data: PREVIEW_RAW });
     renderPage();
-
-    // El input de file está oculto — disparar onChange directamente
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
-
-    // Mockear el thunk via apiService.post ya mockeado
-    Object.defineProperty(input, 'files', { value: [file] });
-    fireEvent.change(input);
+    uploadCsv();
 
     expect(await screen.findByText(/productos cambiarán de precio/i)).toBeInTheDocument();
-    // SKU aparece en la tabla de preview y en la hoja de edición rápida (DataSheet).
-    expect(screen.getAllByText('SKU-1').length).toBeGreaterThan(0);
-    expect(screen.getAllByText('SKU-2').length).toBeGreaterThan(0);
+    expect(screen.getByText('SKU-1')).toBeInTheDocument();
+    expect(screen.getByText('SKU-2')).toBeInTheDocument();
+    // Nombre normalizado desde product_name.
+    expect(screen.getByText('Elekes de Oshún')).toBeInTheDocument();
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/admin/price-sync/preview-csv/',
+        expect.any(FormData),
+      ),
+    );
   });
 
   it('en el estado de preview muestra botón de confirmar y cancelar', async () => {
-    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
+    apiService.post.mockResolvedValueOnce({ data: PREVIEW_RAW });
     renderPage();
-
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
-    Object.defineProperty(input, 'files', { value: [file] });
-    fireEvent.change(input);
+    uploadCsv();
 
     await screen.findByText(/productos cambiarán de precio/i);
     expect(screen.getByRole('button', { name: /confirmar.*cambios/i })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: /cancelar/i })).toBeInTheDocument();
   });
 
-  it('al confirmar llama a confirmPriceSync y muestra estado de éxito', async () => {
+  it('al confirmar llama a apply-csv con { session_id } y muestra éxito', async () => {
     apiService.post
-      .mockResolvedValueOnce({ data: PREVIEW })
-      .mockResolvedValueOnce({ data: { ok: true } });
+      .mockResolvedValueOnce({ data: PREVIEW_RAW })
+      .mockResolvedValueOnce({ data: { updated_count: 2, message: 'ok' } });
 
     renderPage();
-
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
-    Object.defineProperty(input, 'files', { value: [file] });
-    fireEvent.change(input);
+    uploadCsv();
 
     await screen.findByText(/productos cambiarán de precio/i);
     fireEvent.click(screen.getByRole('button', { name: /confirmar.*cambios/i }));
 
-    await waitFor(() => {
-      expect(screen.getByText(/precios actualizados/i)).toBeInTheDocument();
-    });
-  });
-
-  // UC-ADM-SHEET (F7) — DataSheet de edición rápida
-  it('renderiza la hoja editable «Edición rápida» con las filas de preview', async () => {
-    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
-    renderPage();
-
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
-    Object.defineProperty(input, 'files', { value: [file] });
-    fireEvent.change(input);
-
-    await screen.findByText(/edición rápida/i);
-    const sheet = screen.getByRole('table', { name: /edición rápida de precios/i });
-    expect(sheet).toBeInTheDocument();
-
-    // Una celda editable de precio por fila de preview (new_price, type number).
-    const priceInputs = screen.getAllByLabelText(/precio nuevo fila/i);
-    expect(priceInputs).toHaveLength(PREVIEW.diffs.length);
-    expect(priceInputs[0]).toHaveValue(110);
-  });
-
-  it('editar una celda de precio actualiza el estado local de las filas', async () => {
-    apiService.post.mockResolvedValueOnce({ data: PREVIEW });
-    renderPage();
-
-    const input = document.querySelector('input[type="file"]');
-    const file = new File(['sku,new_price\nSKU-1,110'], 'precios.csv', { type: 'text/csv' });
-    Object.defineProperty(input, 'files', { value: [file] });
-    fireEvent.change(input);
-
-    await screen.findByText(/edición rápida/i);
-    const priceInputs = screen.getAllByLabelText(/precio nuevo fila/i);
-
-    fireEvent.change(priceInputs[0], { target: { value: '150' } });
-
-    // El input es controlado: el nuevo valor refleja el estado actualizado.
-    expect(priceInputs[0]).toHaveValue(150);
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenLastCalledWith(
+        '/api/v1/admin/price-sync/apply-csv/',
+        { session_id: 'sess-1' },
+      ),
+    );
+    expect(screen.getByText(/precios actualizados/i)).toBeInTheDocument();
   });
 });

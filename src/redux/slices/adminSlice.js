@@ -494,9 +494,6 @@ const adminSlice = createSlice({
       .addCase(adjustVariantStock.pending,   (state) => { state.isActioning = true; })
       .addCase(adjustVariantStock.fulfilled, (state) => { state.isActioning = false; })
       .addCase(adjustVariantStock.rejected,  (state) => { state.isActioning = false; })
-      .addCase(duplicateVoucher.pending,   (state) => { state.isActioning = true; })
-      .addCase(duplicateVoucher.fulfilled, (state) => { state.isActioning = false; state.lastAction = 'voucher_duplicated'; })
-      .addCase(duplicateVoucher.rejected,  (state) => { state.isActioning = false; })
       .addCase(toggleVoucherActive.pending,   (state) => { state.isActioning = true; })
       .addCase(toggleVoucherActive.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -730,7 +727,7 @@ export const adminCancelOrder = createAsyncThunk(
 );
 
 // ─────────────────────────────────────────────────────────────────────────────
-// BUG-ADM-03: fetchAdminVouchers, duplicateVoucher, toggleVoucherActive
+// BUG-ADM-03: fetchAdminVouchers, toggleVoucherActive
 // Importados por AdminVouchersPage pero no definidos en el slice.
 // ─────────────────────────────────────────────────────────────────────────────
 export const fetchAdminVouchers = createAsyncThunk(
@@ -741,19 +738,16 @@ export const fetchAdminVouchers = createAsyncThunk(
   },
 );
 
-export const duplicateVoucher = createAsyncThunk(
-  'admin/duplicateVoucher',
-  async (id, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/duplicate/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
+// El VoucherViewSet real solo expone @action activate/deactivate/report
+// (apps/voucher/views.py:105,124,161). No hay endpoint toggle ni duplicate:
+// toggle se resuelve eligiendo activate/deactivate según el estado actual.
 export const toggleVoucherActive = createAsyncThunk(
   'admin/toggleVoucherActive',
-  async (id, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/vouchers/${id}/toggle/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
+  async ({ id, isActive }, { rejectWithValue }) => {
+    try {
+      const action = isActive ? 'deactivate' : 'activate';
+      return (await apiService.post(`/api/v1/admin/vouchers/${id}/${action}/`)).data;
+    } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
@@ -789,22 +783,46 @@ export const updateCategory = createAsyncThunk(
 // BUG-PS02: uploadPriceCSV, confirmPriceSync, downloadPriceTemplate
 // Importados por AdminPriceSyncPage pero no definidos.
 // ─────────────────────────────────────────────────────────────────────────────
+// Contrato real (apps/catalogue/price_sync_views.py):
+//   preview-csv → { session_id, valid_count, invalid_count,
+//                   preview: [{sku, product_id, product_name, old_price,
+//                              new_price, diff_pct}], errors: [{sku,error,line}] }
+//   apply-csv   ← { session_id }  → { updated_count, message }
+//   template    → GET price-sync/template.csv
+// Normalizamos la respuesta de preview a la forma que consume la página
+// (diffs/not_found/session_id) para no acoplar el render al naming del backend.
 export const uploadPriceCSV = createAsyncThunk(
   'admin/uploadPriceCSV',
   async (file, { rejectWithValue }) => {
     try {
       const fd = new FormData();
       fd.append('file', file);
-      return (await apiService.post('/api/v1/admin/price-sync/preview-csv/', fd)).data;
+      const data = (await apiService.post('/api/v1/admin/price-sync/preview-csv/', fd)).data;
+      const diffs = (data.preview ?? []).map((r) => ({
+        sku:       r.sku,
+        name:      r.product_name,
+        old_price: Number(r.old_price),
+        new_price: Number(r.new_price),
+        diff_pct:  r.diff_pct,
+      }));
+      const total_increase = diffs.reduce((acc, d) => acc + (d.new_price - d.old_price), 0);
+      return {
+        session_id:    data.session_id,
+        diffs,
+        not_found:     data.errors ?? [],
+        valid_count:   data.valid_count,
+        invalid_count: data.invalid_count,
+        total_increase,
+      };
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
 export const confirmPriceSync = createAsyncThunk(
   'admin/confirmPriceSync',
-  async (syncId, { rejectWithValue }) => {
+  async (sessionId, { rejectWithValue }) => {
     try {
-      return (await apiService.post('/api/v1/admin/price-sync/apply-csv/', { sync_id: syncId })).data;
+      return (await apiService.post('/api/v1/admin/price-sync/apply-csv/', { session_id: sessionId })).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -813,7 +831,7 @@ export const downloadPriceTemplate = createAsyncThunk(
   'admin/downloadPriceTemplate',
   async (_, { rejectWithValue }) => {
     try {
-      const res = await apiService.get('/api/v1/admin/price-sync/template/');
+      const res = await apiService.get('/api/v1/admin/price-sync/template.csv');
       return res.data;
     } catch (e) { return rejectWithValue(e.message); }
   },

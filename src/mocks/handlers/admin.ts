@@ -256,21 +256,29 @@ export const adminHandlers = [
   }),
 
   // ── Price sync ──────────────────────────────────────────────────────
+  // Shape real (price_sync_views.py): { session_id, valid_count,
+  // invalid_count, preview: [{sku, product_name, old_price, new_price,
+  // diff_pct}], errors: [{sku, error, line}] }
   http.post('/api/v1/admin/price-sync/preview-csv/', async () =>
     HttpResponse.json({
+      session_id:    'sess-mock-001',
+      valid_count:   5,
+      invalid_count: 0,
       preview: _adminProducts.slice(0, 5).map(p => ({
-        sku: p.sku ?? `SKU-${p.id}`,
-        name: p.name,
-        current_price: p.price_with_tax,
-        new_price: Math.round(p.price_with_tax * 1.05),
-        change: '+5%',
+        sku:          p.sku ?? `SKU-${p.id}`,
+        product_id:   p.id,
+        product_name: p.name,
+        old_price:    String(p.price_with_tax),
+        new_price:    String(Math.round(p.price_with_tax * 1.05)),
+        diff_pct:     5,
       })),
-      affected_count: 5,
+      errors: [],
     })
   ),
 
+  // apply-csv real: ← { session_id } → { updated_count, message }
   http.post('/api/v1/admin/price-sync/apply-csv/', async () =>
-    HttpResponse.json({ applied: true, updated_count: 5, errors: [] })
+    HttpResponse.json({ updated_count: 5, message: '5 precios actualizados correctamente.' })
   ),
 
   http.post('/api/v1/admin/price-sync/preview-percentage/', async ({ request }) => {
@@ -671,10 +679,10 @@ export const adminHandlers = [
   // inventados sin respaldo en el backend real y se eliminaron.
 
   // ── Price sync ────────────────────────────────────────────────────────────
-  // F5-T07 GET /api/v1/admin/price-sync/template/
-  http.get('/api/v1/admin/price-sync/template/', () =>
+  // GET real: price-sync/template.csv (sin slash, columnas sku,name,price)
+  http.get('/api/v1/admin/price-sync/template.csv', () =>
     new HttpResponse(
-      'sku,new_price\nEJEMPLO-001,150\nEJEMPLO-002,200\n',
+      'sku,name,price\nEJEMPLO-001,Producto ejemplo,150\nEJEMPLO-002,Otro,200\n',
       { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="price-sync-template.csv"' } }
     )
   ),
@@ -707,18 +715,14 @@ export const adminHandlers = [
   ),
 
   // ── Vouchers ───────────────────────────────────────────────────────────────
-  // F5-T24 POST /api/v1/admin/vouchers/:id/duplicate/
-  http.post('/api/v1/admin/vouchers/:id/duplicate/', ({ params }) => {
-    const newId = faker.number.int({ min: 9000, max: 9999 });
-    const base  = { id: newId, code: `COPIA-${params.id}-${newId}`, is_active: false };
-    return HttpResponse.json(base, { status: 201 });
-  }),
+  // VoucherViewSet real: @action activate / deactivate (no toggle ni duplicate).
+  http.post('/api/v1/admin/vouchers/:id/activate/', ({ params }) =>
+    HttpResponse.json({ id: Number(params.id), is_active: true })
+  ),
 
-  // F5-T25 POST /api/v1/admin/vouchers/:id/toggle/
-  http.post('/api/v1/admin/vouchers/:id/toggle/', ({ params }) => {
-    // Alterna is_active — sin estado mutable, devolvemos true como default
-    return HttpResponse.json({ id: Number(params.id), is_active: true });
-  }),
+  http.post('/api/v1/admin/vouchers/:id/deactivate/', ({ params }) =>
+    HttpResponse.json({ id: Number(params.id), is_active: false })
+  ),
 
   // ── Páginas estáticas ──────────────────────────────────────────────────────
   // F5-T16 POST /api/v1/admin/static-content/
