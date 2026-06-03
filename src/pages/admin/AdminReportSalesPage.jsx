@@ -9,6 +9,7 @@ import {
   buildReportExportUrl,
 } from '@hooks/domain/useReports';
 import { exportSheet } from '@utils/exportSheet';
+import { exportXlsx } from '@utils/exportWorkbook';
 import PivotTable from '@components/common/PivotTable';
 import styles from './AdminReportPage.module.scss';
 
@@ -76,6 +77,15 @@ export default function AdminReportSalesPage() {
     });
   };
 
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: `reporte-ventas-${period}.xlsx`,
+      sheetName: 'Ventas',
+      columns: SERIES_EXPORT_COLUMNS,
+      rows: series,
+    });
+  };
+
   const delta = comparison?.gross_revenue_delta_pct;
   const deltaClass =
     delta == null ? '' :
@@ -94,6 +104,13 @@ export default function AdminReportSalesPage() {
             onClick={handleExportCsv}
           >
             Exportar CSV
+          </button>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportXlsx}
+          >
+            Exportar Excel
           </button>
           <a href={pdfHref} className={styles.exportLink}>Exportar PDF</a>
         </div>

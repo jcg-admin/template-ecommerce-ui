@@ -16,6 +16,7 @@ import { fetchVoucherReport } from '@redux/slices/vouchersSlice';
 import { MetaTag, Button } from '@components/common/primitives';
 import DataGrid from '@components/common/DataGrid';
 import DatePicker from '@components/common/DatePicker/DatePicker';
+import { exportXlsx } from '@utils/exportWorkbook';
 import styles from './AdminTablePage.module.scss';
 
 // DatePicker emite un Date en onChange; el query param canónico
@@ -78,6 +79,15 @@ export default function AdminVoucherReportPage() {
     if (typeof URL.revokeObjectURL === 'function') URL.revokeObjectURL(url);
   };
 
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: 'reporte-vouchers.xlsx',
+      sheetName: 'Vouchers',
+      columns: COLUMNS,
+      rows: report,
+    });
+  };
+
   return (
     <div className={styles.page}>
       <header className={styles.header}>
@@ -88,6 +98,9 @@ export default function AdminVoucherReportPage() {
         <div className={styles.headerActions}>
           <Button variant="secondary" onClick={handleExport} disabled={report.length === 0}>
             Exportar CSV
+          </Button>
+          <Button variant="secondary" onClick={handleExportXlsx} disabled={report.length === 0}>
+            Exportar Excel
           </Button>
         </div>
       </header>

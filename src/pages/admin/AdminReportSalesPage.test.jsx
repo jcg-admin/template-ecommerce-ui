@@ -108,6 +108,7 @@ describe('AdminReportSalesPage (UC-REP-01)', () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportSalesPage />));
     expect(await screen.findByRole('button', { name: /Exportar CSV/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Exportar Excel/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Exportar PDF/i })).toBeInTheDocument();
   });
 

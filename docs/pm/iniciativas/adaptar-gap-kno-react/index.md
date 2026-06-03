@@ -135,3 +135,33 @@ Veredicto tras cruzar con el contrato real (UCs + backend Django):
 
 Conclusión: **0 trabajo de UI**; el export del UI está completo y alineado. XLSX
 queda como deuda del backend (documentada, no fabricada en el cliente).
+
+## CORRECCIÓN — XLSX nativo implementado (2026-06-03)
+
+El ejecutor corrigió el criterio anterior: el banner "premium/license key" es del
+paquete npm original; **nosotros NO instalamos el paquete, adaptamos la técnica
+nativamente** desde el `dist` de referencia (igual que DataGrid/Gauge/etc.). El
+"premium" NO es un límite.
+
+Implementado **export `.xlsx` nativo, sin dependencias nuevas**, adaptando OOXML
+de `kno-ooxml/dist/es/` + el contenedor ZIP de `jszip-esm`:
+- `src/utils/zipStore.js` — escritor ZIP STORE-only (CRC32 propio, polinomio
+  `0xEDB88320`; headers local/central + EOCD). Vector verificado:
+  `crc32("123456789") = 0xCBF43926`.
+- `src/utils/exportWorkbook.js` — `exportXlsx({filename, sheetName, columns, rows})`
+  (misma API que el CSV `exportSheet`). Genera las 5 partes OOXML
+  (`[Content_Types].xml`, `_rels/.rels`, `xl/workbook.xml`,
+  `xl/_rels/workbook.xml.rels`, `xl/worksheets/sheet1.xml`); números `t="n"`,
+  strings `t="inlineStr"`. MIME `...spreadsheetml.sheet`. Bytes inician en `PK`.
+- Cableado "Exportar Excel" (aditivo, junto a CSV) en `AdminReportSalesPage` y
+  `AdminVoucherReportPage`. 31 tests del bloque verde.
+
+Esto **cierra el gap XLSX del lado UI** (UC-RPT-04 formato XLSX) de forma
+client-side real. (El backend sigue sin generar XLSX server-side — eso queda como
+deuda independiente del backend si se prefiere la ruta de URL firmada.)
+
+**Word/.docx:** `kno-ooxml` también cubre docx; la base ZIP+OOXML aquí creada lo
+habilita, pero **sigue sin UC** que lo justifique → no implementado.
+
+Lección general: "premium/licencia" en un paquete de referencia **no** es un
+bloqueante — se adapta la técnica nativamente.

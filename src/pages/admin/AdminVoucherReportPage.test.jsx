@@ -60,6 +60,13 @@ describe('AdminVoucherReportPage (UC-PRO-04)', () => {
     expect(screen.getByRole('button', { name: /Exportar CSV/i })).toBeInTheDocument();
   });
 
+  it('expone un boton de exportar Excel', async () => {
+    apiService.get.mockResolvedValue({ data: { results: REPORT } });
+    render(wrap());
+    await screen.findByText('WELCOME10');
+    expect(screen.getByRole('button', { name: /Exportar Excel/i })).toBeInTheDocument();
+  });
+
   it('al filtrar por estado re-consulta el reporte con el param', async () => {
     apiService.get.mockResolvedValue({ data: { results: REPORT } });
     render(wrap());
