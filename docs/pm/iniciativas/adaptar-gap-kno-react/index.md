@@ -82,3 +82,26 @@ DualListBox, CoverageMap, Modal, Dropdown, MultiSelect, DatePicker, etc.
 
 ## Verificación 2ª ola
 jest 1850 passed / 0 failed; check-scss 182 clean; build:demo (ver commit).
+
+## Cierre del loop de componentes (2026-06-03)
+
+**15 componentes nativos** adaptados de kno-react (`-progress`) y **cableados** a UCs:
+Rating, NumericTextBox, Switch, Badge, Skeleton, Avatar, Checkbox, RadioGroup,
+Breadcrumb, TimeLine, Sparkline, LinearGauge, ButtonGroup, DropDownButton, **Card**.
+
+Cableados: Rating→reseñas, NumericTextBox→carrito, Switch→(disponible), Badge→header,
+Skeleton→Wishlist/Orders, Avatar→Header/Profile, Checkbox→Register, RadioGroup→ReturnCreate,
+Breadcrumb→Catalog/Product, TimeLine→OrderDetail, Sparkline/LinearGauge→AdminDashboard,
+ButtonGroup→AdminOrders filtro, DropDownButton→AdminOrders acciones, Card→(disponible).
+
+**Backlog de componentes GAP de alto valor: AGOTADO.** Los restantes del catálogo son:
+- **Genéricos de bajo valor** (no perseguidos): AppBar, FloatingLabel, Animation,
+  GridLayout, StackLayout, BottomNavigation, Ripple, ActionSheet.
+- **PARTIAL / no triviales** (documentados, no adaptados): ContextMenu, Splitter,
+  TileLayout, ComboBox, DropDownTree, DateInput, ColorPalette.
+- **Pesados — NO conviene nativo** (usar lib dedicada si se necesitan): Chart/StockChart
+  engine, Scheduler engine, OrgChart, Map GIS, MaskedTextBox, ColorPicker, Signature,
+  SpeechToText, ListView (paging premium).
+
+Verificación de cierre: jest 1858 passed / 0 failed; check-scss 183 clean;
+build:demo EXIT=0.

@@ -1,0 +1,87 @@
+// Card — contenedor de contenido nativo (sin deps).
+// Inspirado en kno-react-layout Card. Tokens del template únicamente.
+@use '@styles/abstracts' as *;
+
+.card {
+  display: flex;
+  flex-direction: column;
+  background: var(--ec-bg-surface);
+  border: 1px solid var(--ec-border-color);
+  border-radius: var(--ec-border-radius-md);
+  overflow: hidden;
+}
+
+// ── Tonos: acento en el borde izquierdo ─────────────────────────────────
+.tone_default {
+  // sin acento extra; estilo base
+}
+
+.tone_vino {
+  border-left: $spacing-1 solid var(--ec-primary);
+}
+
+.tone_lime {
+  border-left: $spacing-1 solid var(--ec-success);
+}
+
+.tone_coral {
+  border-left: $spacing-1 solid var(--ec-error);
+}
+
+.tone_bronze {
+  border-left: $spacing-1 solid var(--ec-accent);
+}
+
+// ── Header ──────────────────────────────────────────────────────────────
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  padding: $spacing-4 $spacing-6;
+  border-bottom: 1px solid var(--ec-border-color);
+}
+
+.title {
+  margin: 0;
+  font-size: $font-size-lg;
+  font-weight: $font-weight-semibold;
+  color: var(--ec-text-primary);
+}
+
+.subtitle {
+  margin: 0;
+  font-size: $font-size-sm;
+  color: var(--ec-text-secondary);
+}
+
+// ── Body ────────────────────────────────────────────────────────────────
+.body {
+  flex: 1 1 auto;
+  color: var(--ec-text-primary);
+}
+
+.padding_none {
+  padding: 0;
+}
+
+.padding_sm {
+  padding: $spacing-3;
+}
+
+.padding_md {
+  padding: $spacing-6;
+}
+
+.padding_lg {
+  padding: $spacing-8;
+}
+
+// ── Footer ──────────────────────────────────────────────────────────────
+.footer {
+  display: flex;
+  align-items: center;
+  gap: $spacing-2;
+  padding: $spacing-4 $spacing-6;
+  border-top: 1px solid var(--ec-border-color);
+  background: var(--ec-bg-sunken);
+}

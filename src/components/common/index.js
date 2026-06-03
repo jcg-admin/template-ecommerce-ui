@@ -10,6 +10,7 @@ export { default as Rating }         from './Rating';
 export { default as NumericTextBox }  from './NumericTextBox';
 export { default as Switch }         from './Switch';
 export { default as Badge }          from './Badge';
+export { default as Card }           from './Card';
 export { default as Skeleton }       from './Skeleton';
 export { default as Avatar }         from './Avatar';
 export { default as Checkbox }       from './Checkbox';
