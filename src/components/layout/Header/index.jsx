@@ -188,9 +188,9 @@ export default function Header() {
                             style={{ width: 48, height: 48, objectFit: 'cover', borderRadius: 4 }} />
                         )}
                         <div style={{ flex: 1 }}>
-                          <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{item.name}</div>
+                          <div style={{ fontSize: '0.85rem', fontWeight: 500 }}>{item.product_name}</div>
                           <div style={{ fontSize: '0.8rem', color: '#888' }}>
-                            {item.quantity} × ${(item.price || 0).toLocaleString('es-MX')}
+                            {item.quantity} × ${Number(item.unit_price || 0).toLocaleString('es-MX')}
                           </div>
                         </div>
                       </div>

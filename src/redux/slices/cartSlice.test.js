@@ -37,7 +37,7 @@ describe('cartSlice (UC-CART-01)', () => {
   it('addToCart: marca lastAction=added en estado tras exito', async () => {
     apiService.post.mockResolvedValue({
       data: {
-        items: [{ id: 1, product_id: 4321, name: 'Test', price: 100, quantity: 1 }],
+        items: [{ id: 1, product_id: 4321, product_name: 'Test', unit_price: '100.00', quantity: 1 }],
         voucher: null,
       },
     });
@@ -72,8 +72,8 @@ describe('cartSlice (UC-CART-01)', () => {
     apiService.post.mockResolvedValue({
       data: {
         items: [
-          { id: 1, product_id: 10, name: 'Anonimo', price: 100, quantity: 1 },
-          { id: 2, product_id: 20, name: 'Cuenta',  price: 50,  quantity: 2 },
+          { id: 1, product_id: 10, product_name: 'Anonimo', unit_price: '100.00', quantity: 1 },
+          { id: 2, product_id: 20, product_name: 'Cuenta',  unit_price: '50.00',  quantity: 2 },
         ],
         voucher: null,
       },

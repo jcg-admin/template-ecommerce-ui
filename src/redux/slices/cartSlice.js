@@ -10,12 +10,12 @@
  *   - Estado por accion (lastAction, isActioning, actionError) para UI
  *
  * API endpoints (English keys per DEC-DOC-005):
- *   GET    /api/cart/            — leer carrito
- *   POST   /api/cart/items/      — agregar producto (UC-CART-01)
- *   PATCH  /api/cart/items/:id/  — cambiar cantidad
- *   DELETE /api/cart/items/:id/  — eliminar item
- *   POST   /api/cart/voucher/    — aplicar cupon
- *   DELETE /api/cart/voucher/    — quitar cupon
+ *   GET    /api/v1/cart/            — leer carrito
+ *   POST   /api/v1/cart/items/      — agregar producto (UC-CART-01)
+ *   PATCH  /api/v1/cart/items/:id/  — cambiar cantidad
+ *   DELETE /api/v1/cart/items/:id/  — eliminar item
+ *   POST   /api/v1/cart/voucher/    — aplicar cupon
+ *   DELETE /api/v1/cart/voucher/    — quitar cupon
  */
 
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
@@ -164,17 +164,82 @@ export const fetchShippingQuote = createAsyncThunk(
 
 // ─── Helpers ──────────────────────────────────────────────────────────
 
-const calculateTotals = (items, voucher, taxRate = 0.16) => {
-  const subtotal = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+const EMPTY_TOTALS = {
+  subtotal: 0,
+  discount: 0,
+  subtotal_net: 0,
+  tax_included: 0,
+  tax: 0,
+  shipping_cost: null,
+  total: 0,
+  free_shipping_threshold: null,
+  free_shipping_remaining: null,
+  free_shipping_applied: false,
+  item_count: 0,
+};
+
+/**
+ * Mapea el objeto `totals` del servidor (modelo tax-INCLUSIVO) al estado
+ * del slice. El backend serializa los montos como strings decimales; se
+ * normalizan con Number() para que los consumidores hagan aritmetica.
+ *
+ * Compat: `tax` es alias de `tax_included` (IVA informativo, ya incluido
+ * en el precio — NO se suma al total). `total === subtotal_net`.
+ *
+ * Ya NO se recalcula en cliente: la fuente de verdad son los totales del
+ * server. Esto corrige el drift tax-exclusivo (`total = subtotal + 16%`)
+ * que sobre-cobraba IVA.
+ */
+const mapTotals = (totals) => {
+  if (!totals) return { ...EMPTY_TOTALS };
+  const num = (v) => (v == null ? null : Number(v));
+  const taxIncluded = num(totals.tax_included) ?? 0;
+  return {
+    subtotal:                num(totals.subtotal) ?? 0,
+    discount:                num(totals.discount) ?? 0,
+    subtotal_net:            num(totals.subtotal_net) ?? 0,
+    tax_included:            taxIncluded,
+    // Alias de compatibilidad para consumidores legacy que leen `tax`.
+    tax:                     taxIncluded,
+    shipping_cost:           num(totals.shipping_cost),
+    total:                   num(totals.total) ?? 0,
+    free_shipping_threshold: num(totals.free_shipping_threshold),
+    free_shipping_remaining: num(totals.free_shipping_remaining),
+    free_shipping_applied:   !!totals.free_shipping_applied,
+    item_count:              num(totals.item_count) ?? 0,
+  };
+};
+
+/**
+ * Reproyeccion local de totales con el modelo tax-INCLUSIVO, usada solo
+ * cuando una mutacion devuelve un delta (no el Cart completo), p.ej.
+ * `removeCartItem` que devuelve el itemId. Replica la formula del server:
+ * `total = subtotal_net`, IVA ya incluido en `unit_price`.
+ */
+const IVA_RATE = 0.16;
+
+const recomputeTotalsTaxInclusive = (items, voucher) => {
+  const subtotal = items.reduce(
+    (sum, item) => sum + Number(item.unit_price ?? 0) * item.quantity,
+    0,
+  );
   const discount = voucher
     ? voucher.type === 'PERCENT'
       ? subtotal * (voucher.value / 100)
       : Math.min(voucher.value, subtotal)
     : 0;
-  const taxable  = subtotal - discount;
-  const tax      = taxable * taxRate;
-  const total    = taxable + tax;
-  return { subtotal, discount, tax, total };
+  const subtotalNet = subtotal - discount;
+  const taxIncluded = subtotalNet * (IVA_RATE / (1 + IVA_RATE));
+  return {
+    ...EMPTY_TOTALS,
+    subtotal:     subtotal,
+    discount:     discount,
+    subtotal_net: subtotalNet,
+    tax_included: taxIncluded,
+    tax:          taxIncluded,
+    total:        subtotalNet,
+    item_count:   items.reduce((n, i) => n + i.quantity, 0),
+  };
 };
 
 // ─── Slice ────────────────────────────────────────────────────────────
@@ -184,12 +249,7 @@ const cartSlice = createSlice({
   initialState: {
     items:     [],
     voucher:   null,
-    totals: {
-      subtotal: 0,
-      discount: 0,
-      tax:      0,
-      total:    0,
-    },
+    totals:    { ...EMPTY_TOTALS },
     itemCount:   0,
     isLoading:   false,
     error:       null,
@@ -205,7 +265,7 @@ const cartSlice = createSlice({
     clearCart(state) {
       state.items    = [];
       state.voucher  = null;
-      state.totals   = { subtotal: 0, discount: 0, tax: 0, total: 0 };
+      state.totals   = { ...EMPTY_TOTALS };
       state.itemCount = 0;
     },
     clearCartActionState(state) {
@@ -223,8 +283,12 @@ const cartSlice = createSlice({
       const cart = action.payload ?? {};
       state.items    = cart.items ?? [];
       state.voucher  = cart.voucher ?? null;
-      state.totals   = calculateTotals(state.items, state.voucher);
-      state.itemCount = state.items.reduce((n, i) => n + i.quantity, 0);
+      // Totales desde la respuesta del server (tax-inclusivo). NO se
+      // recalculan en cliente.
+      state.totals   = mapTotals(cart.totals);
+      state.itemCount = cart.totals?.item_count != null
+        ? Number(cart.totals.item_count)
+        : state.items.reduce((n, i) => n + i.quantity, 0);
       state.isLoading = false;
       state.error    = null;
     };
@@ -258,8 +322,11 @@ const cartSlice = createSlice({
     builder
       .addCase(updateCartItem.fulfilled, setCart)
       .addCase(removeCartItem.fulfilled, (state, action) => {
+        // El thunk DELETE devuelve solo el itemId. Se actualiza la lista
+        // localmente y se reproyectan los totales con el modelo
+        // tax-inclusivo del server hasta el proximo fetch.
         state.items     = state.items.filter((i) => i.id !== action.payload);
-        state.totals    = calculateTotals(state.items, state.voucher);
+        state.totals    = recomputeTotalsTaxInclusive(state.items, state.voucher);
         state.itemCount = state.items.reduce((n, i) => n + i.quantity, 0);
       });
 

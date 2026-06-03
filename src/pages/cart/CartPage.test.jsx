@@ -38,6 +38,9 @@ const wrap = (ui, store) => (
   </Provider>
 );
 
+// Contrato real del server: items con product_name/unit_price/subtotal y
+// totals tax-inclusivo (total == subtotal_net; tax_included informativo).
+// subtotal = 199*2 + 50*1 = 448.
 const CART_PAYLOAD = {
   items: [
     {
@@ -46,10 +49,11 @@ const CART_PAYLOAD = {
       variant_id: 87,
       product_name: 'Collar Yemaya',
       variant_label: 'Mediano',
-      unit_price: 199.00,
-      price: 199.00,  // para calculateTotals en cartSlice
+      unit_price: '199.00',
+      subtotal: '398.00',
       quantity: 2,
-      stock: 5,
+      available_stock: 5,
+      is_available: true,
     },
     {
       id: 12,
@@ -57,16 +61,24 @@ const CART_PAYLOAD = {
       variant_id: null,
       product_name: 'Vela Ogun',
       variant_label: null,
-      unit_price: 50.00,
-      price: 50.00,  // para calculateTotals en cartSlice
+      unit_price: '50.00',
+      subtotal: '50.00',
       quantity: 1,
-      stock: 10,
+      available_stock: 10,
+      is_available: true,
     },
   ],
   voucher: null,
+  totals: {
+    subtotal: '448.00', discount: '0.00', subtotal_net: '448.00',
+    tax_included: '61.79', shipping_cost: null, total: '448.00',
+    free_shipping_threshold: '1500.00', free_shipping_remaining: '1052.00',
+    free_shipping_applied: false, item_count: 3,
+  },
 };
 
-// Subtotal alto (>= umbral de envío gratis = 1500): 2000 * 1 = 2000
+// Subtotal alto (>= umbral de envío gratis = 1500): 2000 * 1 = 2000.
+// totals tax-inclusivo del server; free_shipping_applied=true.
 const CART_PAYLOAD_FREESHIP = {
   items: [
     {
@@ -75,13 +87,20 @@ const CART_PAYLOAD_FREESHIP = {
       variant_id: null,
       product_name: 'Estatua Changó',
       variant_label: null,
-      unit_price: 2000.00,
-      price: 2000.00,
+      unit_price: '2000.00',
+      subtotal: '2000.00',
       quantity: 1,
-      stock: 3,
+      available_stock: 3,
+      is_available: true,
     },
   ],
   voucher: null,
+  totals: {
+    subtotal: '2000.00', discount: '0.00', subtotal_net: '2000.00',
+    tax_included: '275.86', shipping_cost: null, total: '2000.00',
+    free_shipping_threshold: '1500.00', free_shipping_remaining: '0.00',
+    free_shipping_applied: true, item_count: 1,
+  },
 };
 
 afterEach(() => jest.clearAllMocks());
