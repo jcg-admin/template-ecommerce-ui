@@ -171,6 +171,8 @@ export default function CatalogPage() {
             <Toolbar
               count={displayItems.length}
               total={pagination.count}
+              sortOrder={sortOrder}
+              onSort={setSortOrder}
               view={view}
               onViewChange={handleViewChange}
             />
@@ -333,7 +335,7 @@ function Toolbar({ count, total, sortOrder, onSort, view = 'grid', onViewChange 
         <ViewToggle value={view} onChange={onViewChange} ariaLabel="Vista del catálogo" />
         <label className={styles.sort}>
           <span>Ordenar:</span>
-          <select value={sortOrder} onChange={e => setSortOrder(e.target.value)}>
+          <select value={sortOrder} onChange={e => onSort(e.target.value)}>
             <option value="">Recomendados</option>
             <option value="base_price">Precio: menor</option>
             <option value="-base_price">Precio: mayor</option>

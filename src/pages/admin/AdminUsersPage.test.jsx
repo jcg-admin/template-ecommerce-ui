@@ -108,6 +108,7 @@ describe('AdminUsersPage — listado (UC-AUTH-11)', () => {
     render(wrap(<AdminUsersPage />, makeStore()));
     await screen.findByText('buyer1');
 
+    const links = screen.getAllByRole('link');
     expect(links.length).toBeGreaterThan(0);
     expect(links[0]).toHaveAttribute('href', expect.stringContaining('/admin/users/'));
   });

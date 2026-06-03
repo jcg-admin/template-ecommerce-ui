@@ -56,7 +56,7 @@ const makeStoreWithProducts = (products = PRODUCTS, count = PRODUCTS.length) =>
       actionError: null, lastAction: null,
       pagination: { count, page: 1, pageSize: 20, totalPages: 1, next: null, previous: null },
     },
-  });;
+  });
 
 const wrap = (ui, store = makeStore()) => (
   <QueryClientProvider client={makeClient()}>

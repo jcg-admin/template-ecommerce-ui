@@ -108,16 +108,8 @@ const Dropdown = forwardRef(function Dropdown({
     <div className={`${styles.wrapper} ${className}`}>
       <div
         ref={setTriggerRef}
-        className={styles.trigger}
-        className={styles.triggerWrapper}
+        className={`${styles.trigger} ${styles.triggerWrapper}`}
         onClick={toggle}
-        onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            toggle();
-          }
-          if (e.key === 'ArrowDown' && !open) show();
-        }}
         aria-haspopup="menu"
         aria-expanded={open}
         aria-controls={panelId}

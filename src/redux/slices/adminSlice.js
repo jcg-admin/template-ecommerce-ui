@@ -133,7 +133,6 @@ const adminSlice = createSlice({
     productImages:      [],
     csvImport:          { status: 'idle', result: null, errors: [] },
     productVariants:    [],
-    isLoadingVariants:  false,
     variantTypes:       [],
     isLoadingVariantTypes: false,
     gateways:           [],

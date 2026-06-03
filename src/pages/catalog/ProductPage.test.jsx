@@ -118,7 +118,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
 
   it.skip('muestra "Sin stock" cuando availability=OUT_OF_STOCK', async () => {
     apiService.get.mockResolvedValue({
-      data: { ...PRODUCT, stock: 0, stock: 0 },
+      data: { ...PRODUCT, stock: 0 },
     });
     render(wrap('collar-oshun-dorado', makeStoreWithProduct()));
     await waitFor(() => expect(document.body.textContent).toMatch(/Agotado|Sin stock/), { timeout: 8000 });
@@ -126,7 +126,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
 
   it.skip('deshabilita el botón de carrito cuando sin stock', async () => {
     apiService.get.mockResolvedValue({
-      data: { ...PRODUCT, stock: 0, stock: 0 },
+      data: { ...PRODUCT, stock: 0 },
     });
     render(wrap('collar-oshun-dorado', makeStoreWithProduct()));
     const btn = await screen.findByRole('button', { name: /Sin disponibilidad/i });
@@ -262,17 +262,17 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
       {
         id: 11, label: 'Chico', slug: 'chico', sku_suffix: '-CH',
         stock: 4, is_available: true,
-        price_with_tax: '1200.00', price_with_tax: 1392.00,
+        price_with_tax: 1392.00,
       },
       {
         id: 12, label: 'Mediano', slug: 'mediano', sku_suffix: '-MD',
         stock: 3, is_available: true,
-        price_with_tax: '1500.00', price_with_tax: 1740.00,
+        price_with_tax: 1740.00,
       },
       {
         id: 13, label: 'Grande', slug: 'grande', sku_suffix: '-LG',
         stock: 0, is_available: false,
-        price_with_tax: '1800.00', price_with_tax: 2088.00,
+        price_with_tax: 2088.00,
       },
     ];
 
