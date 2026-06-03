@@ -1,0 +1,108 @@
+// TimeLine — línea de tiempo vertical de eventos con conector + dots.
+// Sirve seguimiento de pedido/envío (UC-ORD / UC-LOG).
+@use '@styles/abstracts' as *;
+
+$tl-dot-size: 16px;
+$tl-rail-x: 7px; // centro del dot: ($tl-dot-size - rail 2px) / 2
+
+.timeline {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  position: relative;
+}
+
+.item {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: $spacing-3;
+  padding-bottom: $spacing-4;
+
+  // Conector vertical: arranca bajo el dot y baja hasta el siguiente item.
+  &::before {
+    content: '';
+    position: absolute;
+    top: $tl-dot-size;
+    left: $tl-rail-x;
+    width: 2px;
+    bottom: 0;
+    background: $border-color;
+    transition: background $transition-base;
+  }
+
+  &.itemLast {
+    padding-bottom: 0;
+
+    &::before { display: none; }
+  }
+}
+
+.dot {
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+  width: $tl-dot-size;
+  height: $tl-dot-size;
+  border-radius: 50%;
+  border: 2px solid $border-color;
+  background: $bg-surface;
+  color: $text-inverse;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: $font-size-xs;
+  font-weight: $font-weight-bold;
+  transition: all $transition-base;
+}
+
+.dotPending {
+  border-color: $border-color;
+  background: $bg-surface;
+}
+
+.dotDone {
+  border-color: $success-color;
+  background: $success-color;
+  color: $text-inverse;
+}
+
+.dotCurrent {
+  border-color: $primary-color;
+  background: $primary-color;
+  color: $text-inverse;
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  padding-top: 0;
+}
+
+.title {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: $text-muted;
+}
+
+.date {
+  font-size: $font-size-xs;
+  color: $text-muted;
+}
+
+.description {
+  font-size: $font-size-xs;
+  color: $text-secondary;
+}
+
+// Estados: realzar título/conector de hitos alcanzados.
+.item_done {
+  &::before { background: $success-color; }
+
+  .title { color: $text-secondary; }
+}
+
+.item_current {
+  .title { color: $text-primary; font-weight: $font-weight-semibold; }
+}

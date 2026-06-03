@@ -1,0 +1,72 @@
+// LinearGauge — medidor lineal horizontal SVG/CSS accesible nativo.
+// Inspirado en kno-react-gauges LinearGauge. Mapea a UC-INV-01 / KPIs admin.
+@use '@styles/abstracts' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-1;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $spacing-2;
+}
+
+.label {
+  font-size: $font-size-sm;
+  color: var(--ec-text-secondary);
+}
+
+.value {
+  font-size: $font-size-sm;
+  font-weight: $font-weight-medium;
+  color: var(--ec-text-primary);
+}
+
+.track {
+  position: relative;
+  width: 100%;
+  height: 10px;
+  background: var(--ec-bg-sunken);
+  border-radius: var(--ec-border-radius-sm);
+  overflow: hidden;
+}
+
+// Zonas de umbral pintadas sobre el track como referencia tenue.
+.zone {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  opacity: 0.25;
+}
+
+.fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--ec-primary);
+  transition: width var(--ec-transition-base);
+}
+
+// Tonos — solo tokens existentes, sin hex hardcodeado.
+.tonePrimary {
+  background: var(--ec-primary);
+}
+
+.toneSuccess {
+  background: var(--ec-success);
+}
+
+.toneWarning {
+  background: var(--ec-warning);
+}
+
+.toneError {
+  background: var(--ec-error);
+}

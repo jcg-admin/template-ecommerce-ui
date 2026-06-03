@@ -1,0 +1,45 @@
+// Sparkline — micro-gráfico SVG inline accesible nativo.
+// Iniciativa: UC-REP-01 (mini-charts de reporte) / KPIs admin.
+@use '@styles/abstracts' as *;
+
+.svg {
+  display: inline-block;
+  vertical-align: middle;
+  overflow: visible;
+}
+
+.line {
+  fill: none;
+  stroke: $bronze;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.area {
+  fill: rgba($bronze, 0.18);
+  stroke: none;
+}
+
+.bar {
+  fill: $bronze;
+}
+
+// Variantes de tono — sobreescriben el trazo/relleno por defecto.
+.toneBronze {
+  .line { stroke: $bronze; }
+  .area { fill: rgba($bronze, 0.18); }
+  .bar  { fill: $bronze; }
+}
+
+.toneLime {
+  .line { stroke: $lime; }
+  .area { fill: rgba($lime, 0.18); }
+  .bar  { fill: $lime; }
+}
+
+.toneCoral {
+  .line { stroke: $coral; }
+  .area { fill: rgba($coral, 0.18); }
+  .bar  { fill: $coral; }
+}

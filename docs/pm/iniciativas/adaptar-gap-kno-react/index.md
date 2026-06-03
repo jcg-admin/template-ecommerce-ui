@@ -54,3 +54,31 @@ Total 65 tests, todos verdes. Exportados en el barrel `src/components/common/ind
 Cablear a UCs: Rating → ProductReviewCreatePage/ProductReviewsListPage;
 Badge → contador de carrito en header; NumericTextBox → selector de cantidad en
 CartPage; Switch → toggles en AdminVouchers/AdminProducts/Settings.
+
+## 2ª ola (mapeo ampliado — 3 catálogos por agentes)
+
+Catálogos completos en `catalogo-inputs-forms.md`, `catalogo-layout-indicators.md`,
+`catalogo-data-misc.md`. Segunda tanda implementada (8 componentes nativos):
+
+| Componente | Paquete | UC | Tests |
+|---|---|---|---|
+| Checkbox | inputs | UC-AUTH-01/CFG/ADM | 8 |
+| RadioGroup (+RadioButton) | inputs | UC-CFG-01/02, pago | 7 |
+| Breadcrumb | layout | UC-CAT nav | 10 |
+| TimeLine | layout | UC-ORD/LOG tracking | 11 |
+| Sparkline | charts | UC-REP-01 | 13 |
+| LinearGauge | gauges | UC-INV-01 | 13 |
+| ButtonGroup | buttons | toolbars/filtros | 10 |
+| DropDownButton | buttons | UC-ADM acciones | 10 |
+
+Total 2ª ola: 82 tests. Acumulado componentes nuevos: 14 (6+8), 147 tests.
+
+## Pesados descartados (no nativo)
+Chart/StockChart engine, Scheduler engine, OrgChart, Map GIS, MaskedTextBox,
+ColorPicker/ColorGradient, Signature, SpeechToText, ListView (paging premium).
+Ya cubiertos por adaptaciones previas: DataGrid, TreeList, TreeView, PivotTable,
+DataSheet, KanbanBoard, Gantt, Gauge, SortableList, FileUpload, PdfViewer,
+DualListBox, CoverageMap, Modal, Dropdown, MultiSelect, DatePicker, etc.
+
+## Verificación 2ª ola
+jest 1850 passed / 0 failed; check-scss 182 clean; build:demo (ver commit).
