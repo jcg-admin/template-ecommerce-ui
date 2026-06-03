@@ -4,7 +4,7 @@
  * Listado publico del arbol jerarquico de categorias. Read-only,
  * React Query contra GET /api/v1/categories/.
  */
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 

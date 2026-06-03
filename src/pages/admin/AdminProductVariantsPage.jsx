@@ -17,7 +17,7 @@ import { Link, useParams } from 'react-router-dom';
 import {
   fetchProductVariants, saveVariantChanges,
 } from '@redux/slices/adminSlice';
-import { MetaTag, Button, Price } from '@components/common/primitives';
+import { MetaTag, Button } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminVariantsPage.module.scss';
 
@@ -156,7 +156,7 @@ export default function AdminProductVariantsPage() {
                   <td className={styles.mono}>{v.sku}</td>
                   <td>
                     <div className={styles.combo}>
-                      {v.options?.map((o, i) => (
+                      {v.options?.map((o, _i) => (
                         <span key={`${o.type_name}-${o.label}`} className={styles.comboChip}>
                           {o.type_name}: <strong>{o.label}</strong>
                         </span>

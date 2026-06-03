@@ -1,7 +1,7 @@
 /**
  * Tests: MultiSelect — API completa de ui-core multi-select.js
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { createRef } from 'react';
 import MultiSelect from './MultiSelect';
 

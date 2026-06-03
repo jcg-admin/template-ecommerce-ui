@@ -10,7 +10,6 @@
  */
 
 import Breadcrumb from '@components/common/Breadcrumb';
-import Popover    from '@components/common/Popover/Popover';
 import ScrollSpy  from '@components/common/ScrollSpy/ScrollSpy';
 import ProductGallery from '@components/common/ProductGallery';
 import Accordion from '@components/common/Accordion';
@@ -25,7 +24,6 @@ import ProductCard from '@components/catalog/ProductCard';
 import { MetaTag, Price, Button } from '@components/common/primitives';
 import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
 import { Collapse } from '@components/common/Collapse/Collapse';
-import Rating from '@components/catalog/Rating/Rating';
 import styles from './ProductPage.module.scss';
 
 export default function ProductPage() {
@@ -330,7 +328,7 @@ export default function ProductPage() {
   );
 }
 
-function DescBlock({ title, children }) {
+function _DescBlock({ title, children }) {
   return (
     <div className={styles.descBlock}>
       <h3 className={styles.descBlockTitle}>{title}</h3>

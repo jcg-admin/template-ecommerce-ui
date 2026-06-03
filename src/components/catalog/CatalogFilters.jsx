@@ -66,26 +66,6 @@ export default function CatalogFilters({
     onChange?.({ category: slug || null });
   };
 
-  const handlePriceApply = (e) => {
-    e.preventDefault();
-    const min = priceMin === '' ? null : Number(priceMin);
-    const max = priceMax === '' ? null : Number(priceMax);
-    if (min !== null && (Number.isNaN(min) || min < 0)) {
-      setPriceError('El precio minimo debe ser un numero >= 0.');
-      return;
-    }
-    if (max !== null && (Number.isNaN(max) || max < 0)) {
-      setPriceError('El precio maximo debe ser un numero >= 0.');
-      return;
-    }
-    if (min !== null && max !== null && max < min) {
-      setPriceError('El precio maximo no puede ser menor que el minimo.');
-      return;
-    }
-    setPriceError('');
-    onChange?.({ price_min: min, price_max: max });
-  };
-
   const handleClear = () => {
     setPriceMin('');
     setPriceMax('');

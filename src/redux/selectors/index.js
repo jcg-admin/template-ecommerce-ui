@@ -6,7 +6,6 @@
 import { createSelector } from 'reselect';
 
 // ─── Auth ──────────────────────────────────────────────────────────────
-const selectAuthState  = (state) => state.auth;
 export const selectUser            = (state) => state.auth.user;
 export const selectIsAuthenticated = (state) => state.auth.isAuthenticated;
 // Un usuario tiene acceso admin si es is_staff (staff tecnico del sistema)

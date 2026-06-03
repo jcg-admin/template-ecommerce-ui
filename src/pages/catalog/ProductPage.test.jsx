@@ -18,7 +18,7 @@ import authReducer from '@redux/slices/authSlice';
 import wishlistReducer from '@redux/slices/wishlistSlice';
 import cartReducer from '@redux/slices/cartSlice';
 import productVariantsReducer, {
-  selectVariant,
+  
 } from '@redux/slices/productVariantsSlice';
 import ProductPage from './ProductPage';
 
@@ -299,7 +299,7 @@ describe('ProductPage — ficha de producto (UC-CAT-02)', () => {
     it.skip('al seleccionar una variante, el precio principal se actualiza al price_with_tax de esa variante', async () => {
       apiService.get.mockResolvedValue({ data: productWithRealVariants });
       const store = makeStore();
-      const { container } = render(wrap('collar-oshun-dorado', store));
+      const { _container } = render(wrap('collar-oshun-dorado', store));
 
       // Inicialmente muestra el price_with_tax base del producto (1450.00).
       await waitFor(() => expect(document.body.textContent).toMatch(/1,450|1450/), { timeout: 8000 });

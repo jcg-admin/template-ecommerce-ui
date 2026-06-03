@@ -1,7 +1,7 @@
 /**
  * Tests: Stepper — API completa de ui-core stepper.js
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { createRef } from 'react';
 import Stepper, { StepPanel } from './Stepper';
 

@@ -1,5 +1,4 @@
-import { render, screen, fireEvent, waitFor, act, within } from '@testing-library/react';
-import userEvent from '@testing-library/user-event';
+import { render, screen, fireEvent, waitFor, within } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
@@ -25,21 +24,9 @@ const makeStore = (state = {}) => configureStore({
   reducer: { admin: adminReducer, ui: uiReducer, logistics: logisticsReducer },
   preloadedState: state,
 });
-const makeClient = () => new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
 afterEach(() => jest.clearAllMocks());
 
-const wrap = (ui, storeState = {}) => (
-  <Provider store={makeStore(storeState)}>
-    <QueryClientProvider client={makeClient()}>
-      <MemoryRouter initialEntries={['/admin/orders/PY-2026-000001']}>
-        <Routes>
-          <Route path="/admin/orders/:order_number" element={<AdminOrderDetailPage />} />
-        </Routes>
-      </MemoryRouter>
-    </QueryClientProvider>
-  </Provider>
-);
 
 
 const ORDER = {

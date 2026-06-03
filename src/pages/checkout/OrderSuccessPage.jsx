@@ -12,7 +12,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail } from '@redux/slices/ordersSlice';
-import { MetaTag, Price, Button } from '@components/common/primitives';
+import { MetaTag, Button } from '@components/common/primitives';
 import styles from './OrderSuccessPage.module.scss';
 
 export default function OrderSuccessPage() {

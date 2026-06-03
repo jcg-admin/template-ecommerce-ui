@@ -95,7 +95,7 @@ describe('AddToWishlistButton (UC-WISH-01)', () => {
   });
 
   it('muestra aviso cuando el producto ya esta en la lista (409)', async () => {
-    const err = Object.assign(new Error('ya'), {
+    const _err = Object.assign(new Error('ya'), {
       name: 'APIError',
       code: 'PRODUCTO_YA_EN_WISHLIST',
       statusCode: 409,

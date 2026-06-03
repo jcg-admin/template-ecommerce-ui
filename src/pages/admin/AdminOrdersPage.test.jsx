@@ -1,6 +1,5 @@
-import userEvent from '@testing-library/user-event';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { MemoryRouter, Route, Routes } from 'react-router-dom';
+import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
@@ -34,7 +33,7 @@ const makeStore = (state = {}) => configureStore({
 
 const makeClient = () => new QueryClient({ defaultOptions: { queries: { retry: false } } });
 
-function renderPage(storeState = {}) {
+function _renderPage(storeState = {}) {
   return render(
     <Provider store={makeStore(storeState)}>
       <QueryClientProvider client={makeClient()}>

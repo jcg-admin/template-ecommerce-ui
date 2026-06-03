@@ -10,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchOrders } from '@redux/slices/ordersSlice';
-import { MetaTag, Price, Button, EmptyState } from '@components/common/primitives';
+import { Price, Button, EmptyState } from '@components/common/primitives';
 import Skeleton from '@components/common/Skeleton';
 import styles from './OrdersPage.module.scss';
 

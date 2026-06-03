@@ -48,7 +48,7 @@ export default function GanttChart({
   rangeStart,
   rangeEnd,
   ticks = 5,
-  showToday = true,
+  _showToday = true,
   className = '',
 }) {
   const list = Array.isArray(tasks) ? tasks : [];

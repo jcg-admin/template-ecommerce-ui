@@ -381,7 +381,7 @@ export function getErrorClassByStatusCode(statusCode) {
 /**
  * Create error from HTTP response
  */
-export function createErrorFromResponse(response, originalError = null) {
+export function createErrorFromResponse(response, _originalError = null) {
   const statusCode = response?.status;
   const ErrorClass = getErrorClassByStatusCode(statusCode);
 

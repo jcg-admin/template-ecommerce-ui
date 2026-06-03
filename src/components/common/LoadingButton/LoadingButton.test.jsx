@@ -2,7 +2,7 @@
  * Tests: LoadingButton — lógica completa de ui-core loading-button.js
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, act } from '@testing-library/react';
 import { createRef } from 'react';
 import LoadingButton from './LoadingButton';
 

@@ -49,7 +49,7 @@ describe('GanttChart', () => {
   });
 
   it('pinta el relleno de progreso dentro de la barra', () => {
-    const { container } = render(<GanttChart tasks={tasks} />);
+    render(<GanttChart tasks={tasks} />);
     const bar = screen.getByRole('img', { name: /Empaque/i });
     const progress = bar.querySelector('span');
     expect(progress).not.toBeNull();

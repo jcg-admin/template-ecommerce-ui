@@ -2,10 +2,8 @@
  * Tests — usePasswordStrength
  * Evaluación de fuerza de contraseña
  */
-import { renderHook, act } from '@testing-library/react';
-import { Provider } from 'react-redux';
+import { renderHook } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
-import { configureStore } from '@reduxjs/toolkit';
 
 import { usePasswordStrength } from './usePasswordStrength';
 

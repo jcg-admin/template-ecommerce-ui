@@ -62,7 +62,7 @@ export default function AdminReportSalesPage() {
 
   const totals     = data?.totals     ?? {};
   const comparison = data?.comparison ?? {};
-  const series     = data?.series     ?? [];
+  const series     = useMemo(() => data?.series ?? [], [data]);
   const breakdown  = data?.payment_breakdown ?? [];
 
   const pivotRows = useMemo(() => buildPivotRows(series), [series]);

@@ -15,7 +15,7 @@
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
 import {
-  useState, useRef, useCallback, useEffect,
+  useState, useRef, useCallback, useEffect, useMemo,
   useImperativeHandle, forwardRef, useId,
 } from 'react';
 import Calendar from './Calendar';
@@ -81,7 +81,10 @@ const DatePicker = forwardRef(function DatePicker({
   const inputRef  = useRef(null);
   const id = useId();
 
-  const date = controlled !== undefined ? (controlled ? new Date(controlled) : null) : internal;
+  const date = useMemo(
+    () => (controlled !== undefined ? (controlled ? new Date(controlled) : null) : internal),
+    [controlled, internal],
+  );
 
   const setDate = useCallback((val) => {
     if (controlled === undefined) setInternal(val);

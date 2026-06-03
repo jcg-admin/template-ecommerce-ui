@@ -40,7 +40,7 @@ export default function DataGrid({
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(0);
 
-  const safeRows = Array.isArray(rows) ? rows : [];
+  const safeRows = useMemo(() => (Array.isArray(rows) ? rows : []), [rows]);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();

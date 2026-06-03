@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchAdminPages } from '@redux/slices/adminSlice';
-import { MetaTag, Button } from '@components/common/primitives';
+import { MetaTag } from '@components/common/primitives';
 import styles from './AdminTablePage.module.scss';
 
 export default function AdminStaticPagesPage() {

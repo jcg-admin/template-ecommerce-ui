@@ -10,7 +10,7 @@ import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { fetchInventoryDashboard } from '@redux/slices/adminSlice';
-import { MetaTag, Price } from '@components/common/primitives';
+import { MetaTag } from '@components/common/primitives';
 import styles from './AdminInventoryDashboardPage.module.scss';
 
 const MOVEMENT_TYPES = {
@@ -24,7 +24,7 @@ const MOVEMENT_TYPES = {
 export default function AdminInventoryDashboardPage() {
   const dispatch = useDispatch();
   const data      = useSelector((s) => s.admin?.inventoryDashboard) || {};
-  const isLoading  = useSelector((s) => s.admin?.isLoadingInventory);
+  const _isLoading  = useSelector((s) => s.admin?.isLoadingInventory);
 
   useEffect(() => { dispatch(fetchInventoryDashboard()); }, [dispatch]);
 

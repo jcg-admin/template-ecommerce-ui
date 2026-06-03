@@ -33,7 +33,7 @@ const Modal = forwardRef(function Modal({
   // Opciones de ui-core
   backdrop     = true,   // true | false | 'static'
   keyboard     = true,   // Escape cierra
-  focus        = true,   // focus trap (nativo del <dialog>)
+  _focus        = true,   // focus trap (nativo del <dialog>)
   // Tamaño
   size,                  // 'sm' | 'lg' | 'xl' | 'fullscreen'
   scrollable   = false,  // contenido interno con scroll

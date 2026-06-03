@@ -21,7 +21,7 @@
  * Evento: onChange(value)
  */
 import {
-  useState, useCallback, useRef, useId,
+  useState, useCallback, useId,
   useImperativeHandle, forwardRef,
 } from 'react';
 import styles from './RangeSlider.module.scss';

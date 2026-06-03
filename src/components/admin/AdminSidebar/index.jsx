@@ -64,7 +64,7 @@ export default function AdminSidebar() {
       </div>
 
       <nav className={styles.nav}>
-        {ADMIN_NAV.map((item, i) =>
+        {ADMIN_NAV.map((item) =>
           item.section ? (
             <p key={item.section} className={styles.navSection}>{item.section}</p>
           ) : (

@@ -9,7 +9,7 @@ import useClickOutside from './useClickOutside';
 describe('useClickOutside', () => {
   it('llama handler cuando click es fuera del ref', () => {
     const handler = jest.fn();
-    const { result } = renderHook(() => {
+    const { _result } = renderHook(() => {
       const ref = useRef(document.createElement('div'));
       useClickOutside(ref, handler);
       return ref;

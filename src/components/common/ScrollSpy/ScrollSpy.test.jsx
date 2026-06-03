@@ -9,7 +9,7 @@ import { renderHook } from '@testing-library/react';
 
 // IntersectionObserver mock para jsdom
 let observerCallback;
-global.IntersectionObserver = jest.fn().mockImplementation((cb, opts) => {
+global.IntersectionObserver = jest.fn().mockImplementation((cb, _opts) => {
   observerCallback = cb;
   return {
     observe:    jest.fn(),

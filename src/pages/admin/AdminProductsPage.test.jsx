@@ -37,7 +37,6 @@ const PRODUCTS = [
     is_active: true,  is_published: true,  category: { id: 3, name: 'Elekes' } },
 ];
 
-const RESPONSE_PAGE_1 = { count: 27, next: 'page=2', previous: null, results: PRODUCTS };
 
 const makeClient = () =>
   new QueryClient({ defaultOptions: { queries: { retry: false } } });

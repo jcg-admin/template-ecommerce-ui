@@ -38,7 +38,7 @@ export const loginUser = createAsyncThunk(
 /** Cierra sesion e invalida el refresh token en blacklist. */
 export const logoutUser = createAsyncThunk(
   'auth/logout',
-  async (_, { rejectWithValue }) => {
+  async (_, { _rejectWithValue }) => {
     try {
       await apiService.post('/api/v1/auth/logout/', {});
       return null;

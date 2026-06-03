@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { registerUser } from '@redux/slices/authSlice';
 import { usePasswordStrength } from '@hooks/domain/usePasswordStrength';
-import { Button, Field, MetaTag } from '@components/common/primitives';
+import { Field, MetaTag } from '@components/common/primitives';
 import Alert         from '@components/common/Alert/Alert';
 import Checkbox      from '@components/common/Checkbox';
 import { LoadingButton } from '@components/common';

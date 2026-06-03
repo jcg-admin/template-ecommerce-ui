@@ -227,7 +227,7 @@ export default function CatalogPage() {
 }
 
 function FilterSidebar({ activeOrishas, setActiveOrishas, activeTypes, setActiveTypes,
-  availability, setAvailability, priceMin, priceMax, setPriceMin, setPriceMax }) {
+  availability, setAvailability, _priceMin, _priceMax, setPriceMin, setPriceMax }) {
   return (
     <aside className={styles.sidebar}>
       <FilterGroup title="Òrìsà">
@@ -310,7 +310,7 @@ function Check({ label, checked = false }) {
     </label>
   );
 }
-function PriceSlider() {
+function _PriceSlider() {
   return (
     <div className={styles.slider}>
       <div className={styles.sliderTrack}>

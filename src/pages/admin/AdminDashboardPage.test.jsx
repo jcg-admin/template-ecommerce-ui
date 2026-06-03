@@ -5,7 +5,7 @@
  * BUG-TEST-AD01: tests anteriores usaban shape desactualizada (order_counts,
  * day_summary) que no coincide con lo que AdminDashboardPage renderiza.
  */
-import { render, screen, waitFor, within } from '@testing-library/react';
+import { render, screen, within } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Provider } from 'react-redux';

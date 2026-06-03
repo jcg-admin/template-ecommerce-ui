@@ -2,7 +2,7 @@
  * Tests — useSearch hook
  * Búsqueda de productos con debounce y historial
  */
-import { renderHook, act } from '@testing-library/react';
+import { renderHook } from '@testing-library/react';
 import { Provider }  from 'react-redux';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { configureStore } from '@reduxjs/toolkit';
@@ -13,7 +13,6 @@ jest.mock('@services/apiService', () => ({
   __esModule: true,
   default: { get: jest.fn() },
 }));
-import apiService from '@services/apiService';
 import useSearch from './useSearch';
 
 const makeStore = () => configureStore({

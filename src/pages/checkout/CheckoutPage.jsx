@@ -19,7 +19,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { fetchAddresses } from '@redux/slices/authSlice';
 import { createOrder }                  from '@redux/slices/checkoutSlice';
 import { initiatePayment }              from '@redux/slices/paymentsSlice';
-import { MetaTag, Price, Button, Field, SumRow } from '@components/common/primitives';
+import { Price, Field, SumRow } from '@components/common/primitives';
 import { Stepper } from '@components/common/Stepper/Stepper';
 import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './CheckoutPage.module.scss';
@@ -203,7 +203,7 @@ export default function CheckoutPage() {
   );
 }
 
-function Step({ n, label, state }) {
+function _Step({ n, label, state }) {
   return (
     <div className={`${styles.step} ${styles[`step_${state}`]}`}>
       <span className={styles.stepNum}>{state === 'done' ? '✓' : n}</span>

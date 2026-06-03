@@ -2,7 +2,7 @@
  * Tests: TimePicker — lógica completa de ui-core time-picker.js
  * Iniciativa: implementar-componentes-diferidos-ui-core
  */
-import { render, screen, fireEvent, act } from '@testing-library/react';
+import { render, screen, fireEvent } from '@testing-library/react';
 import { createRef } from 'react';
 import TimePicker from './TimePicker';
 

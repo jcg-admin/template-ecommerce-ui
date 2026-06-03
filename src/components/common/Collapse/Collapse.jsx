@@ -22,8 +22,8 @@ const Collapse = forwardRef(function Collapse({
   open: controlled,
   defaultOpen = false,
   // Opciones de ui-core
-  toggle: toggleOnMount = false, // toggle:true en ui-core = mostrar al crear si data-toggle
-  parent,         // selector de accordeon (sin uso directo aquí — ver Accordion)
+  toggle: _toggleOnMount = false, // toggle:true en ui-core = mostrar al crear si data-toggle
+  _parent,         // selector de accordeon (sin uso directo aquí — ver Accordion)
   horizontal = false, // colapso horizontal en lugar de vertical
   // Eventos
   onShow,

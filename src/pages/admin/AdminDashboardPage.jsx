@@ -12,7 +12,6 @@ import Gauge from '@components/common/Gauge';
 import Sparkline from '@components/common/Sparkline';
 import LinearGauge from '@components/common/LinearGauge';
 import styles from './AdminDashboardPage.module.scss';
-import { Tabs, TabList, Tab, TabPanel } from '@components/common/Tabs/Tabs';
 
 /**
  * Metas operativas para los indicadores radiales (Gauges).

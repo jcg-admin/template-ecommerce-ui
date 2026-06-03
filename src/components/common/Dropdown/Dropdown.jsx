@@ -35,7 +35,7 @@ const Dropdown = forwardRef(function Dropdown({
   autoClose  = true,     // true | false | 'inside' | 'outside'
   offset     = [0, 2],   // Default ui-core [skid, distance]
   display    = 'dynamic',// 'dynamic' | 'static'
-  reference  = 'toggle', // 'toggle' | 'parent'
+  _reference  = 'toggle', // 'toggle' | 'parent'
   // Callbacks
   onShow,
   onShown,
