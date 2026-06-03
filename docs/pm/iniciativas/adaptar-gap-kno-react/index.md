@@ -105,3 +105,33 @@ ButtonGroup→AdminOrders filtro, DropDownButton→AdminOrders acciones, Card→
 
 Verificación de cierre: jest 1858 passed / 0 failed; check-scss 183 clean;
 build:demo EXIT=0.
+
+## Revisión de referencias de documentos/datos (Excel/Word/PDF/CSV/ZIP) — 2026-06-03
+
+Más allá de los componentes UI, `-progress` incluye librerías de documentos:
+`kno-csv`, `kno-react-pdf`, `kno-react-excel-export`, `kno-ooxml`, `jszip-esm`,
+`pako-esm`, `kno-drawing`, `kno-file-saver`, `kno-data-query`.
+
+Veredicto tras cruzar con el contrato real (UCs + backend Django):
+
+- **CSV** — ✅ cubierto: `src/utils/exportSheet.js` (client, `text/csv`) +
+  `useReports.buildReportExportUrl(format=csv)` (server). Alineado con UC-REP-05.
+- **PDF** — ✅ cubierto: `generateInvoicePdf` (jsPDF) + `PdfViewer` +
+  `format=pdf` (server `_placeholder_pdf`). UC-REP-05 / UC-ORD-PDF.
+- **Excel / XLSX** — ⚠️ NO implementar en el UI:
+  1. `kno-react-excel-export` es **componente PREMIUM/licenciado** (license key);
+     no se puede vendorizar.
+  2. El contrato (UC-RPT-04) define XLSX como export **server-side** que devuelve
+     una **URL firmada**; NO es un motor de cliente.
+  3. El **backend real NO genera XLSX**: `apps/reports/exports.py::export_sales`
+     retorna `None` para `fmt='xlsx'` (solo CSV real + PDF placeholder).
+  → **Deuda del backend/catálogo**, no del UI. Registrado como gap para
+  `e-comerce-api`/`e-comerce-docs` (implementar export XLSX real con openpyxl y
+  exponer `format=xlsx`); el UI ya delega vía `buildReportExportUrl` y solo
+  añadiría la opción "XLSX" cuando el servidor la soporte.
+- **Word / .docx** (`kno-ooxml`) — ❌ **ningún UC** lo requiere → fuera de alcance.
+- **ZIP** (`jszip-esm`/`pako-esm`) — infra interna de los engines OOXML/xlsx; el
+  UI no la consume directamente.
+
+Conclusión: **0 trabajo de UI**; el export del UI está completo y alineado. XLSX
+queda como deuda del backend (documentada, no fabricada en el cliente).
