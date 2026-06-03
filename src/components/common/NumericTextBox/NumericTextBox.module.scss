@@ -1,0 +1,62 @@
+@use '@styles/abstracts' as *;
+
+.wrapper {
+  display: inline-flex;
+  align-items: stretch;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-md;
+  overflow: hidden;
+  background: $bg-surface;
+}
+
+.disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  border: none;
+  background: $bg-surface;
+  color: $text-primary;
+  font-size: $font-size-base;
+  font-weight: $font-weight-medium;
+  line-height: 1;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: $border-color;
+  }
+
+  &:disabled {
+    color: $text-muted;
+    cursor: not-allowed;
+  }
+}
+
+.input {
+  width: 56px;
+  border: none;
+  border-left: 1px solid $border-color;
+  border-right: 1px solid $border-color;
+  background: $bg-surface;
+  color: $text-primary;
+  font-size: $font-size-sm;
+  text-align: center;
+  padding: $spacing-2 $spacing-1;
+  -moz-appearance: textfield;
+  appearance: textfield;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+}

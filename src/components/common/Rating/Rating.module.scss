@@ -1,0 +1,51 @@
+// Rating — calificación por estrellas accesible nativa.
+// Adaptado de kno-react-inputs (Rating). Iniciativa: UC-REV-01/02.
+@use '@styles/abstracts' as *;
+
+.wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: $spacing-1;
+  line-height: 1;
+}
+
+.star {
+  display: block;
+}
+
+.starOutline {
+  fill: none;
+  stroke: $text-muted;
+  stroke-width: 1;
+}
+
+.starFill {
+  fill: $bronze;
+  stroke: $bronze;
+  stroke-width: 1;
+}
+
+.starStatic {
+  display: inline-flex;
+}
+
+.starButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  color: inherit;
+  border-radius: $border-radius-sm;
+  transition: transform $transition-base;
+
+  &:hover { transform: scale(1.1); }
+
+  &:focus-visible {
+    outline: 2px solid $primary-color;
+    outline-offset: 2px;
+  }
+}

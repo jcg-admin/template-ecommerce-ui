@@ -1,0 +1,86 @@
+// Skeleton — placeholder de carga accesible nativo.
+// Usa exclusivamente tokens existentes de abstracts (sin hex hardcodeados).
+@use '@styles/abstracts' as *;
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  width: 100%;
+}
+
+.piece {
+  display: block;
+  background: var(--ec-bg-sunken);
+  border-radius: var(--ec-border-radius-sm);
+}
+
+// --- Shapes -----------------------------------------------------------
+
+.text {
+  width: 100%;
+  height: $font-size-base;
+  border-radius: var(--ec-border-radius-sm);
+}
+
+.rectangle {
+  width: 100%;
+  height: 120px;
+}
+
+.circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+}
+
+// --- Animations -------------------------------------------------------
+
+// Pulse: latido sutil de opacidad.
+.pulse {
+  animation: skeleton-pulse 1.4s ease-in-out infinite;
+}
+
+// Wave: barrido de brillo de izquierda a derecha sobre la pieza.
+.wave {
+  position: relative;
+  overflow: hidden;
+
+  &::after {
+    position: absolute;
+    inset: 0;
+    content: '';
+    background: linear-gradient(
+      90deg,
+      transparent 0%,
+      var(--ec-bg-elevated) 50%,
+      transparent 100%
+    );
+    transform: translateX(-100%);
+    animation: skeleton-wave 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+@keyframes skeleton-wave {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+// Respeta la preferencia de movimiento reducido del usuario.
+@media (prefers-reduced-motion: reduce) {
+  .pulse,
+  .wave::after {
+    animation: none;
+  }
+}

@@ -1,0 +1,71 @@
+// Switch — toggle (interruptor) accesible nativo.
+// Inspirado en kno-react-inputs Switch.
+@use '@styles/abstracts' as *;
+
+.switch {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  padding: 0;
+  border: none;
+  border-radius: var(--ec-border-radius-full);
+  background: var(--ec-bg-sunken);
+  cursor: pointer;
+  transition: background var(--ec-transition-base);
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.checked {
+  background: var(--ec-primary);
+}
+
+.knob {
+  position: absolute;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+  border-radius: var(--ec-border-radius-full);
+  background: var(--ec-text-inverse);
+  transition: left var(--ec-transition-base);
+}
+
+// ── Tamaño md (default) ───────────────────────────────────────────────
+.sizeMd {
+  width: 44px;
+  height: 24px;
+
+  .knob {
+    width: 18px;
+    height: 18px;
+    left: $spacing-1;
+  }
+
+  &.checked .knob {
+    left: 23px;
+  }
+}
+
+// ── Tamaño sm ─────────────────────────────────────────────────────────
+.sizeSm {
+  width: 34px;
+  height: 18px;
+
+  .knob {
+    width: 14px;
+    height: 14px;
+    left: $spacing-1;
+  }
+
+  &.checked .knob {
+    left: 17px;
+  }
+}

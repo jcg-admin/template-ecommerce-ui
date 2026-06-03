@@ -5,6 +5,14 @@
  * Iniciativa: completar-api-ui-core
  */
 
+// ── kno-react adaptados (gap de -progress vs UCs) ──────────────────────────────
+export { default as Rating }         from './Rating';
+export { default as NumericTextBox }  from './NumericTextBox';
+export { default as Switch }         from './Switch';
+export { default as Badge }          from './Badge';
+export { default as Skeleton }       from './Skeleton';
+export { default as Avatar }         from './Avatar';
+
 // ── Overlays ──────────────────────────────────────────────────────────────────
 export { default as Modal }      from './Modal/Modal';
 export { default as Offcanvas }  from './Offcanvas/Offcanvas';
