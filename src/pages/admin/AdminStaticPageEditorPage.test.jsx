@@ -5,8 +5,8 @@
  * página estática, reemplazando el textarea plano. Cubre:
  *   - El RichTextEditor está presente (role="textbox" + aria-label).
  *   - Precarga el contenido HTML existente de la página.
- *   - Editar emite HTML que se persiste al guardar el borrador
- *     (PATCH /api/v1/admin/pages/:slug/ con data.content actualizado).
+ *   - Editar emite HTML que se persiste al guardar
+ *     (PATCH /api/v1/admin/static-content/:slug/ con data.body actualizado).
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
@@ -41,10 +41,9 @@ afterEach(() => jest.clearAllMocks());
 const PAGE = {
   slug: 'nosotros',
   title: 'Nosotros',
-  content: '<p>Contenido <strong>original</strong></p>',
-  draft_content: '',
-  meta_description: 'meta',
+  body: '<p>Contenido <strong>original</strong></p>',
   version: 2,
+  versions: [],
 };
 
 const makeStore = (state = {}) => configureStore({
@@ -74,11 +73,8 @@ const renderPage = (storeState = {}) => {
 
 describe('AdminStaticPageEditorPage — RichTextEditor (UC-ADM-RTE)', () => {
   beforeEach(() => {
-    // fetchAdminPage / fetchPageVersions disparan al montar: el endpoint de
-    // versiones debe devolver un array para que la lista de historial mapee.
-    apiService.get.mockImplementation((url) =>
-      Promise.resolve({ data: url.endsWith('/versions/') ? [] : PAGE }),
-    );
+    // fetchAdminPage trae la pagina + versions[] anidadas en una sola respuesta.
+    apiService.get.mockResolvedValue({ data: PAGE });
   });
 
   it('renderiza el RichTextEditor para el contenido en lugar del textarea plano', async () => {
@@ -97,20 +93,20 @@ describe('AdminStaticPageEditorPage — RichTextEditor (UC-ADM-RTE)', () => {
     });
   });
 
-  it('al guardar borrador, persiste el HTML editado vía PATCH', async () => {
-    apiService.patch.mockResolvedValue({ data: { ...PAGE, draft_content: 'x' } });
+  it('al guardar, persiste el HTML editado vía PATCH (campo body)', async () => {
+    apiService.patch.mockResolvedValue({ data: { ...PAGE, version: 3 } });
     renderPage();
 
     const editor = await screen.findByRole('textbox', { name: 'Contenido de la página' });
     editor.innerHTML = '<p>Contenido <em>editado</em></p>';
     fireEvent.input(editor);
 
-    fireEvent.click(screen.getByRole('button', { name: /Guardar borrador/i }));
+    fireEvent.click(screen.getByRole('button', { name: /Guardar/i }));
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/v1/admin/pages/nosotros/',
-        expect.objectContaining({ content: '<p>Contenido <em>editado</em></p>' }),
+        '/api/v1/admin/static-content/nosotros/',
+        expect.objectContaining({ body: '<p>Contenido <em>editado</em></p>' }),
       );
     });
   });

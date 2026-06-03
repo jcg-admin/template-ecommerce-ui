@@ -390,65 +390,67 @@ export const adminHandlers = [
     })
   ),
 
-  // ── Páginas CMS estáticas ────────────────────────────────────────────
-  http.get('/api/v1/admin/pages/', () =>
-    HttpResponse.json({
-      count: 3,
-      results: [
-        { slug: 'acerca-de',    title: 'Acerca de Oja Yoruba', status: 'published', last_published_at: '2026-04-01T00:00:00Z', version: 3 },
-        { slug: 'terminos',     title: 'Términos y condiciones', status: 'published', last_published_at: '2026-03-15T00:00:00Z', version: 2 },
-        { slug: 'privacidad',   title: 'Aviso de privacidad', status: 'draft', last_published_at: null, version: 1 },
-      ],
-    })
+  // ── Páginas CMS estáticas (apps.static_content, UC-CFG-04) ───────────
+  // El list view real devuelve un array plano (StaticContentSerializer many).
+  http.get('/api/v1/admin/static-content/', () =>
+    HttpResponse.json([
+      { id: 1, slug: 'acerca-de',  title: 'Acerca de Oja Yoruba',   body: '<p>Somos una tienda especializada en productos para la práctica yorùbá.</p>', version: 3, updated_at: '2026-04-01T00:00:00Z' },
+      { id: 2, slug: 'terminos',   title: 'Términos y condiciones',  body: '<p>Estos son nuestros términos.</p>', version: 2, updated_at: '2026-03-15T00:00:00Z' },
+      { id: 3, slug: 'privacidad', title: 'Aviso de privacidad',     body: '<p>Aviso de privacidad de Oja Yoruba.</p>', version: 1, updated_at: '2026-03-10T00:00:00Z' },
+    ])
   ),
 
-  http.get('/api/v1/admin/pages/:slug/', ({ params }) => {
+  // Detail: pagina + versions[] anidadas (StaticContentSerializer).
+  http.get('/api/v1/admin/static-content/:slug/', ({ params }) => {
+    const mk = (id: number, slug: string, title: string, body: string, version: number) => ({
+      id, slug, title, body, version, updated_at: '2026-04-01T00:00:00Z',
+      versions: Array.from({ length: version }, (_, i) => ({
+        id:         id * 100 + (version - i),
+        version:    version - i,
+        title,
+        body,
+        changed_by: 1,
+        changed_by_username: 'admin',
+        created_at: '2026-03-01T00:00:00Z',
+      })),
+    });
     const pages: Record<string, object> = {
-      'orishas':   { slug: 'orishas',   title: 'Los Òrìsà', status: 'published', content: '<p>Los Òrìsà son las deidades de la tradición yorùbá. Cada uno rige aspectos de la naturaleza y la vida humana: Elegguá los caminos, Ogún el hierro y el trabajo, Yemayá el mar, Oshún el amor y el agua dulce, Shangó el trueno, Obatalá la sabiduría y la paz.</p>', draft_content: null, meta_description: 'Los Òrìsà de la tradición yorùbá.', last_published_at: '2026-02-01T00:00:00Z', version: 1 },
-      'pataki':    { slug: 'pataki',     title: 'Pataki — Las Historias Sagradas', status: 'published', content: '<p>Los pataki son los relatos sagrados del sistema Ifá que ilustran las enseñanzas de los Òrìsà y los odu. A través de las historias se transmite la sabiduría yorùbá de generación en generación.</p>', draft_content: null, meta_description: 'Los pataki de la tradición yorùbá.', last_published_at: '2026-02-10T00:00:00Z', version: 1 },
-      'glosario':  { slug: 'glosario',   title: 'Glosario Yorùbà', status: 'published', content: '<p><strong>Babalawo</strong>: sacerdote de Ifá. <strong>Ile Osha</strong>: casa de los santos. <strong>Odu</strong>: cada uno de los 256 signos del sistema Ifá. <strong>Ebo</strong>: ofrenda o trabajo espiritual. <strong>Addimú</strong>: ofrenda de alimentos.</p>', draft_content: null, meta_description: 'Glosario de términos de la práctica yorùbá.', last_published_at: '2026-03-01T00:00:00Z', version: 2 },
-      'pago':      { slug: 'pago',       title: 'Formas de Pago', status: 'published', content: '<p>Aceptamos MercadoPago (tarjeta de crédito/débito, OXXO, transferencia SPEI) y PayPal. Todos los precios están en pesos mexicanos (MXN). El cargo se realiza en el momento de confirmar el pedido.</p>', draft_content: null, meta_description: 'Formas de pago aceptadas.', last_published_at: '2026-01-15T00:00:00Z', version: 1 },
-      'faq':       { slug: 'faq',        title: 'Preguntas Frecuentes', status: 'published', content: '<p><strong>¿Envían a toda la República?</strong> Sí, con DHL y Estafeta.</p><p><strong>¿Puedo devolver un producto?</strong> Sí, en 15 días hábiles.</p><p><strong>¿Los productos son auténticos?</strong> Todos nuestros artículos son elaborados por artesanos con práctica yorùbá activa.</p>', draft_content: null, meta_description: 'Preguntas frecuentes de Oja Yoruba.', last_published_at: '2026-01-20T00:00:00Z', version: 3 },
-      'acerca-de':  { slug: 'acerca-de',  title: 'Acerca de Oja Yoruba', status: 'published', content: '<p>Somos una tienda especializada en productos para la práctica yorùbá.</p>', draft_content: null, meta_description: 'Oja Yoruba — Tienda de productos rituales y espirituales.', last_published_at: '2026-04-01T00:00:00Z', version: 3 },
-      'terminos':   { slug: 'terminos',   title: 'Términos y condiciones', status: 'published', content: '<p>Estos son nuestros términos.</p>', draft_content: null, meta_description: 'Términos y condiciones de uso.', last_published_at: '2026-03-15T00:00:00Z', version: 2 },
-      'ifa':        { slug: 'ifa',        title: 'Ifá y la Práctica Yorùbà', status: 'published', content: '<p>Ifá es el sistema de adivinación de la tradición yorùbá. A través de los odu (poemas sagrados), el babalawo interpreta el destino y aconseja a quienes buscan guía espiritual.</p>', draft_content: null, meta_description: 'Qué es Ifá y la práctica yorùbá.', last_published_at: '2026-03-01T00:00:00Z', version: 1 },
-      'santoral':  { slug: 'santoral',   title: 'Santoral de los Òrìsà', status: 'published', content: '<p>El santoral yorùbá reúne las fechas de celebración y los atributos de los Òrìsà: Elegguá, Ogún, Obatalá, Yemayá, Oshún, Shangó, Oyá y los demás.</p>', draft_content: null, meta_description: 'Calendario y santoral de los Òrìsà.', last_published_at: '2026-02-15T00:00:00Z', version: 2 },
-      'envios':    { slug: 'envios',     title: 'Envíos y Devoluciones', status: 'published', content: '<p>Enviamos a toda la República Mexicana con DHL Express (1-3 días) y Estafeta Estándar (5-7 días). Envío gratis en pedidos mayores a $1,200 MXN. Devoluciones en 15 días hábiles.</p>', draft_content: null, meta_description: 'Política de envíos y devoluciones.', last_published_at: '2026-01-10T00:00:00Z', version: 1 },
-      'terms':     { slug: 'terms',      title: 'Terms and Conditions', status: 'published', content: '<p>By using this site you agree to our terms of service. All sales are subject to Mexican commercial law.</p>', draft_content: null, meta_description: 'Terms and conditions of use.', last_published_at: '2026-03-15T00:00:00Z', version: 1 },
-      'privacy':   { slug: 'privacy',    title: 'Privacy Policy', status: 'published', content: '<p>We collect only the information necessary to process your orders. We do not sell your data to third parties.</p>', draft_content: null, meta_description: 'Privacy policy.', last_published_at: '2026-03-15T00:00:00Z', version: 1 },
-      'privacidad': { slug: 'privacidad', title: 'Aviso de privacidad', status: 'draft', content: '<p>Este es el contenido publicado.</p>', draft_content: '<p>Este es el borrador actualizado.</p>', meta_description: 'Aviso de privacidad de Oja Yoruba.', last_published_at: null, version: 1 },
+      'orishas':    mk(10, 'orishas',    'Los Òrìsà', '<p>Los Òrìsà son las deidades de la tradición yorùbá. Cada uno rige aspectos de la naturaleza y la vida humana.</p>', 1),
+      'pataki':     mk(11, 'pataki',     'Pataki — Las Historias Sagradas', '<p>Los pataki son los relatos sagrados del sistema Ifá.</p>', 1),
+      'glosario':   mk(12, 'glosario',   'Glosario Yorùbà', '<p><strong>Babalawo</strong>: sacerdote de Ifá. <strong>Odu</strong>: cada uno de los 256 signos del sistema Ifá.</p>', 2),
+      'pago':       mk(13, 'pago',       'Formas de Pago', '<p>Aceptamos MercadoPago y PayPal. Precios en MXN.</p>', 1),
+      'faq':        mk(14, 'faq',        'Preguntas Frecuentes', '<p><strong>¿Envían a toda la República?</strong> Sí, con DHL y Estafeta.</p>', 3),
+      'acerca-de':  mk(1,  'acerca-de',  'Acerca de Oja Yoruba', '<p>Somos una tienda especializada en productos para la práctica yorùbá.</p>', 3),
+      'terminos':   mk(2,  'terminos',   'Términos y condiciones', '<p>Estos son nuestros términos.</p>', 2),
+      'ifa':        mk(15, 'ifa',        'Ifá y la Práctica Yorùbà', '<p>Ifá es el sistema de adivinación de la tradición yorùbá.</p>', 1),
+      'santoral':   mk(16, 'santoral',   'Santoral de los Òrìsà', '<p>El santoral yorùbá reúne las fechas de celebración de los Òrìsà.</p>', 2),
+      'envios':     mk(17, 'envios',     'Envíos y Devoluciones', '<p>Enviamos a toda la República con DHL Express y Estafeta. Devoluciones en 15 días hábiles.</p>', 1),
+      'terms':      mk(18, 'terms',      'Terms and Conditions', '<p>By using this site you agree to our terms of service.</p>', 1),
+      'privacy':    mk(19, 'privacy',    'Privacy Policy', '<p>We collect only the information necessary to process your orders.</p>', 1),
+      'privacidad': mk(3,  'privacidad', 'Aviso de privacidad', '<p>Aviso de privacidad de Oja Yoruba.</p>', 1),
     };
     const page = pages[params.slug as string];
-    if (!page) return HttpResponse.json({ detail: 'Página no encontrada' }, { status: 404 });
+    if (!page) return HttpResponse.json({ detail: 'Contenido no encontrado.', codigo_error: 'CONTENT_NOT_FOUND' }, { status: 404 });
     return HttpResponse.json(page);
   }),
 
-  http.patch('/api/v1/admin/pages/:slug/', async ({ params, request }) => {
-    const body = await request.json();
-    return HttpResponse.json({ slug: params.slug, ...body, status: 'draft' });
-  }),
-
-
-  // ── Versiones de una página CMS ─────────────────────────────────────────
-  http.get('/api/v1/admin/pages/:slug/versions/', ({ params }) => {
+  // PATCH bumpea version y agrega una StaticContentVersion (no hay publish/restore).
+  http.patch('/api/v1/admin/static-content/:slug/', async ({ params, request }) => {
+    const body = await request.json().catch(() => ({})) as Record<string, unknown>;
+    const nextVersion = 2;
     return HttpResponse.json({
-      count:    0,
-      results:  [],
-      next:     null,
-      previous: null,
+      id: 1,
+      slug: params.slug,
+      title: body.title ?? 'Sin título',
+      body: body.body ?? '',
+      version: nextVersion,
+      updated_at: new Date().toISOString(),
+      versions: [
+        { id: 102, version: nextVersion, title: body.title ?? '', body: body.body ?? '', changed_by: 1, changed_by_username: 'admin', created_at: new Date().toISOString() },
+        { id: 101, version: 1, title: 'Versión previa', body: '<p>previo</p>', changed_by: 1, changed_by_username: 'admin', created_at: '2026-03-01T00:00:00Z' },
+      ],
     });
   }),
-
-  http.get('/api/v1/admin/pages/:slug/versions/', () =>
-    HttpResponse.json({ count: 0, results: [], next: null, previous: null })
-  ),
-  http.post('/api/v1/admin/pages/:slug/publish/', ({ params }) =>
-    HttpResponse.json({
-      slug:               params.slug,
-      status:             'published',
-      last_published_at:  new Date().toISOString(),
-    })
-  ),
 
   // ── Vouchers — detalle, crear, actualizar, eliminar ──────────────────
   http.get('/api/v1/admin/vouchers/:id/', ({ params }) => {
@@ -748,8 +750,8 @@ export const adminHandlers = [
   }),
 
   // ── Páginas estáticas ──────────────────────────────────────────────────────
-  // F5-T16 POST /api/v1/admin/pages/
-  http.post('/api/v1/admin/pages/', async ({ request }) => {
+  // F5-T16 POST /api/v1/admin/static-content/
+  http.post('/api/v1/admin/static-content/', async ({ request }) => {
     const body = await request.json().catch(() => ({})) as Record<string, unknown>;
     return HttpResponse.json(
       { id: faker.number.int({ min: 100, max: 999 }), ...body },

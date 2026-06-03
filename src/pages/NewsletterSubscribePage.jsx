@@ -33,7 +33,8 @@ export default function NewsletterSubscribePage() {
     }
     setError('');
     dispatch(clearNewsletterActionState());
-    dispatch(subscribeNewsletter({ email: email.trim(), source: 'page' }));
+    // El backend (SubscribeSerializer) solo acepta `email`.
+    dispatch(subscribeNewsletter({ email: email.trim() }));
   };
 
   const handleAnother = () => {

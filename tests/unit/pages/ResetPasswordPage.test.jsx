@@ -52,8 +52,8 @@ describe('ResetPasswordPage', () => {
     expect(screen.getByText(/no coinciden/i)).toBeInTheDocument();
   });
 
-  it('llama al endpoint con el token al enviar contraseñas iguales', async () => {
-    apiService.post.mockResolvedValue({ detail: 'OK' });
+  it('llama al endpoint token-only con {token, new_password, new_password_confirm}', async () => {
+    apiService.post.mockResolvedValue({ data: { detail: 'OK' } });
     renderPage('abc123', 'valid-tok');
 
     const [next, confirm] = screen.getAllByDisplayValue('');
@@ -61,7 +61,21 @@ describe('ResetPasswordPage', () => {
     fireEvent.change(confirm, { target: { value: 'Oshun2026!' } });
     fireEvent.click(screen.getByRole('button', { name: /cambiar contraseña/i }));
 
-    await waitFor(() => expect(apiService.post).toHaveBeenCalled());
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/auth/password-reset/confirm/',
+        {
+          token: 'valid-tok',
+          new_password: 'Oshun2026!',
+          new_password_confirm: 'Oshun2026!',
+        },
+      ),
+    );
+    // El serializer es token-only: el uid NO se envia.
+    const [, payload] = apiService.post.mock.calls.find(
+      (c) => c[0] === '/api/v1/auth/password-reset/confirm/',
+    );
+    expect(payload).not.toHaveProperty('uid');
   });
 
   it('muestra error de token inválido cuando el backend falla', async () => {

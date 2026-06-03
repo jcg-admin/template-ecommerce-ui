@@ -78,3 +78,29 @@ Ver reportes: wishlist `product_id` lookup, reviews `average_rating`, variant
 ~46 hallazgos ALTA. Cada fix = slice + mock + test (TDD). Es un **programa
 multi-fase**, no un one-shot. Settings (CFG) ya cerrado como piloto del patrón.
 Ejecución recomendada: por dominio (B1→B6), suite verde por lote.
+
+## Estado de ejecución (2026-06-03)
+
+| Lote | Dominio | Estado |
+|------|---------|--------|
+| B1 | cart | ✅ (commit Fix cart endpoints) |
+| B2 | payments/checkout | ✅ |
+| B3 | auth/users | ✅ (4 agentes paralelos) |
+| B4 | logistics/static-content | ✅ |
+| B5 | catalogue/questions/reviews | ✅ |
+| B6 | vouchers/returns/support/contact/newsletter | ✅ |
+| settings/CFG | — | ✅ |
+| inventario | — | ✅ (UI ya correcto) |
+
+**Hallazgos relevantes del ciclo:** varios "endpoints" del UI eran **inventados**
+(no existen en el backend real) → se ELIMINARON, no se "alinearon":
+voucher `/{id}/usage/`, admin user `/role/`, product `activate/`, category
+`move/`, chartsize `bulk/regenerate/options`, logistics `tracking/` y
+`shipping-issue/`, static `versions/publish/restore/`. El resto eran drifts de
+path (`/admin/inventory`→`/inventory` NO; `/admin/couriers`→`/logistics/couriers`
+SÍ) o de nombre de campo (`confirm_password`→`new_password_confirm`,
+`order_id`→`order_number`, `message`→`body`, `is_internal`→`is_internal_note`,
+`html_body`→`body`+`audience_filter`, `asker_email`/`answer_body`).
+
+Verificación final: jest 1846 passed / 0 failed; check-scss 182 clean;
+build:demo EXIT=0.

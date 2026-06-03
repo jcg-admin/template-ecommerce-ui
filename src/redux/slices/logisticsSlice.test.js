@@ -53,12 +53,11 @@ describe('logisticsSlice', () => {
 import apiService from '@services/apiService';
 import logisticsReducer, {
   createShipmentGuide,
-  setTrackingNumber,
+  updateGuideStatus,
   fetchCouriers,
   createCourier,
   updateCourier,
   deleteCourier,
-  reportShippingIssue,
   clearLogisticsActionState,
 } from './logisticsSlice';
 
@@ -69,53 +68,53 @@ afterEach(() => jest.clearAllMocks());
 
 // ─── UC-LOG-01 — crear guia ─────────────────────────────────────────────────
 describe('logisticsSlice — createShipmentGuide (UC-LOG-01)', () => {
-  it('hace POST a la URL de guias con orderNumber y datos', async () => {
-    apiService.post.mockResolvedValue({ data: { guide_id: 'G-1', tracking: null } });
+  it('hace POST a /api/v1/logistics/guides/ con order_id, courier_id y tracking_number', async () => {
+    apiService.post.mockResolvedValue({ data: { id: 1, tracking_number: 'TRK-1', status: 'CREATED' } });
     const store = makeUcStore();
     await store.dispatch(createShipmentGuide({
-      orderNumber: 'PY-2026-000101', courierId: 3, weight_kg: 2.5,
+      orderId: 101, courierId: 3, trackingNumber: 'TRK-1', notes: 'frágil',
     }));
     expect(apiService.post).toHaveBeenCalledWith(
-      '/api/v1/admin/orders/PY-2026-000101/guide/',
-      expect.objectContaining({ courier_id: 3, weight_kg: 2.5 }),
+      '/api/v1/logistics/guides/',
+      expect.objectContaining({ order_id: 101, courier_id: 3, tracking_number: 'TRK-1', notes: 'frágil' }),
     );
     const s = store.getState().logistics;
     expect(s.lastAction).toBe('guide_created');
-    expect(s.currentGuide).toMatchObject({ guide_id: 'G-1' });
+    expect(s.currentGuide).toMatchObject({ id: 1 });
     expect(s.isActioning).toBe(false);
   });
 
   it('rejected — guarda actionError', async () => {
-    apiService.post.mockRejectedValue({ body: { detail: 'ORDEN_SIN_DIRECCION' }, message: '422' });
+    apiService.post.mockRejectedValue({ body: { detail: 'ORDER_NOT_IN_PREPARATION' }, message: '400' });
     const store = makeUcStore();
-    await store.dispatch(createShipmentGuide({ orderNumber: 'PY-X' }));
+    await store.dispatch(createShipmentGuide({ orderId: 1 }));
     expect(store.getState().logistics.actionError).toMatchObject({
-      message: 'ORDEN_SIN_DIRECCION',
+      message: 'ORDER_NOT_IN_PREPARATION',
     });
   });
 });
 
 // ─── UC-LOG-02 — registrar rastreo ──────────────────────────────────────────
-describe('logisticsSlice — setTrackingNumber (UC-LOG-02)', () => {
-  it('hace PATCH a la URL de tracking con el numero', async () => {
-    apiService.patch.mockResolvedValue({ data: { order_number: 'PY-1', tracking: 'TRK-99' } });
+describe('logisticsSlice — updateGuideStatus (UC-LOG-02)', () => {
+  it('hace PATCH a /api/v1/logistics/guides/:id/ con el status', async () => {
+    apiService.patch.mockResolvedValue({ data: { id: 5, status: 'IN_TRANSIT' } });
     const store = makeUcStore();
-    await store.dispatch(setTrackingNumber({ orderNumber: 'PY-1', tracking: 'TRK-99' }));
+    await store.dispatch(updateGuideStatus({ guideId: 5, status: 'IN_TRANSIT' }));
     expect(apiService.patch).toHaveBeenCalledWith(
-      '/api/v1/admin/orders/PY-1/tracking/',
-      { tracking: 'TRK-99' },
+      '/api/v1/logistics/guides/5/',
+      { status: 'IN_TRANSIT' },
     );
     const s = store.getState().logistics;
-    expect(s.lastAction).toBe('tracking_set');
-    expect(s.currentGuide).toMatchObject({ tracking: 'TRK-99' });
+    expect(s.lastAction).toBe('guide_status_updated');
+    expect(s.currentGuide).toMatchObject({ status: 'IN_TRANSIT' });
   });
 
   it('rejected — guarda actionError', async () => {
-    apiService.patch.mockRejectedValue({ body: { detail: 'GUIA_INEXISTENTE' }, message: '404' });
+    apiService.patch.mockRejectedValue({ body: { detail: 'INVALID_STATUS_TRANSITION' }, message: '400' });
     const store = makeUcStore();
-    await store.dispatch(setTrackingNumber({ orderNumber: 'PY-1', tracking: 'X' }));
+    await store.dispatch(updateGuideStatus({ guideId: 5, status: 'DELIVERED' }));
     expect(store.getState().logistics.actionError).toMatchObject({
-      message: 'GUIA_INEXISTENTE',
+      message: 'INVALID_STATUS_TRANSITION',
     });
   });
 });
@@ -129,7 +128,7 @@ describe('logisticsSlice — couriers CRUD (UC-LOG-06)', () => {
     ] } });
     const store = makeUcStore();
     await store.dispatch(fetchCouriers());
-    expect(apiService.get).toHaveBeenCalledWith('/api/v1/admin/couriers/');
+    expect(apiService.get).toHaveBeenCalledWith('/api/v1/logistics/couriers/');
     const s = store.getState().logistics;
     expect(s.couriers).toHaveLength(2);
     expect(s.couriers[0].name).toBe('DHL');
@@ -140,7 +139,7 @@ describe('logisticsSlice — couriers CRUD (UC-LOG-06)', () => {
     const store = makeUcStore();
     await store.dispatch(createCourier({ name: 'Estafeta', code: 'EST' }));
     expect(apiService.post).toHaveBeenCalledWith(
-      '/api/v1/admin/couriers/',
+      '/api/v1/logistics/couriers/',
       expect.objectContaining({ name: 'Estafeta', code: 'EST' }),
     );
     const s = store.getState().logistics;
@@ -155,7 +154,7 @@ describe('logisticsSlice — couriers CRUD (UC-LOG-06)', () => {
       payload: { results: [{ id: 1, name: 'DHL', code: 'DHL', is_active: true }] } });
     await store.dispatch(updateCourier({ id: 1, data: { name: 'DHL Express', is_active: false } }));
     expect(apiService.patch).toHaveBeenCalledWith(
-      '/api/v1/admin/couriers/1/',
+      '/api/v1/logistics/couriers/1/',
       expect.objectContaining({ name: 'DHL Express', is_active: false }),
     );
     const s = store.getState().logistics;
@@ -172,7 +171,7 @@ describe('logisticsSlice — couriers CRUD (UC-LOG-06)', () => {
         { id: 1, name: 'DHL' }, { id: 2, name: 'FedEx' },
       ] } });
     await store.dispatch(deleteCourier(1));
-    expect(apiService.delete).toHaveBeenCalledWith('/api/v1/admin/couriers/1/');
+    expect(apiService.delete).toHaveBeenCalledWith('/api/v1/logistics/couriers/1/');
     const s = store.getState().logistics;
     expect(s.couriers.some((c) => c.id === 1)).toBe(false);
     expect(s.couriers).toHaveLength(1);
@@ -184,33 +183,6 @@ describe('logisticsSlice — couriers CRUD (UC-LOG-06)', () => {
     const store = makeUcStore();
     await store.dispatch(fetchCouriers());
     expect(store.getState().logistics.error).toBeDefined();
-  });
-});
-
-// ─── UC-LOG-07 — reportar problema ──────────────────────────────────────────
-describe('logisticsSlice — reportShippingIssue (UC-LOG-07)', () => {
-  it('hace POST a la URL de incidencias con orderNumber y mensaje', async () => {
-    apiService.post.mockResolvedValue({ data: { id: 7, status: 'OPEN' } });
-    const store = makeUcStore();
-    await store.dispatch(reportShippingIssue({
-      orderNumber: 'PY-1', message: 'No llegó nada',
-    }));
-    expect(apiService.post).toHaveBeenCalledWith(
-      '/api/v1/orders/PY-1/shipping-issue/',
-      expect.objectContaining({ message: 'No llegó nada' }),
-    );
-    const s = store.getState().logistics;
-    expect(s.lastAction).toBe('issue_reported');
-    expect(s.isActioning).toBe(false);
-  });
-
-  it('rejected — guarda actionError', async () => {
-    apiService.post.mockRejectedValue({ body: { detail: 'MENSAJE_VACIO' }, message: '422' });
-    const store = makeUcStore();
-    await store.dispatch(reportShippingIssue({ orderNumber: 'PY-1', message: '' }));
-    expect(store.getState().logistics.actionError).toMatchObject({
-      message: 'MENSAJE_VACIO',
-    });
   });
 });
 

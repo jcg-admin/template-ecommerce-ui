@@ -15,7 +15,9 @@ import logoUrl from '@assets/practica-yoruba-logo.png';
 import styles from './AuthSimplePage.module.scss';
 
 export default function ResetPasswordPage() {
-  const { uid, token } = useParams();
+  // El reset es token-only en el backend (PasswordResetConfirmSerializer);
+  // el :uid de la ruta no se envia, el token identifica al usuario.
+  const { token } = useParams();
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [pwd, setPwd] = useState({ next: '', confirm: '' });
@@ -31,7 +33,11 @@ export default function ResetPasswordPage() {
     }
     setLoading(true);
     try {
-      await dispatch(confirmPasswordReset({ uid, token, new_password: pwd.next })).unwrap();
+      await dispatch(confirmPasswordReset({
+        token,
+        new_password: pwd.next,
+        new_password_confirm: pwd.confirm,
+      })).unwrap();
       navigate('/auth/login?reset=ok', { replace: true });
     } catch (err) {
       setError('Token inválido o expirado. Solicita un enlace nuevo.');

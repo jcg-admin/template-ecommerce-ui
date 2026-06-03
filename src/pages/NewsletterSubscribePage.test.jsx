@@ -54,11 +54,12 @@ describe('NewsletterSubscribePage (UC-NEW-01)', () => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/v1/newsletter/subscribe/',
         expect.objectContaining({
-          email:  'lector@example.com',
-          source: 'page',
+          email: 'lector@example.com',
         }),
       );
     });
+    // El backend (SubscribeSerializer) solo acepta `email`.
+    expect(apiService.post.mock.calls[0][1]).not.toHaveProperty('source');
   });
 
   it('muestra confirmacion tras el envio', async () => {

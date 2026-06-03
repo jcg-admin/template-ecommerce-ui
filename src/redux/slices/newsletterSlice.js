@@ -25,12 +25,10 @@ const ADMIN_BROADCAST_URL           = '/api/v1/admin/newsletter/campaigns/';
 /** UC-NEW-01: visitante se suscribe (doble optin). */
 export const subscribeNewsletter = createAsyncThunk(
   'newsletter/subscribe',
-  async ({ email, source }, { rejectWithValue }) => {
+  async ({ email }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(SUBSCRIBE_URL, {
-        email,
-        source: source ?? 'page',
-      });
+      // El backend (SubscribeSerializer) solo acepta `email`.
+      const res = await apiService.post(SUBSCRIBE_URL, { email });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
@@ -41,12 +39,10 @@ export const subscribeNewsletter = createAsyncThunk(
 /** UC-NEW-02: desuscripcion via token firmado (sin auth). */
 export const unsubscribeNewsletter = createAsyncThunk(
   'newsletter/unsubscribe',
-  async ({ token, reason }, { rejectWithValue }) => {
+  async ({ token }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(UNSUBSCRIBE_URL, {
-        token,
-        reason: reason || null,
-      });
+      // El backend (UnsubscribeSerializer) solo acepta `token`.
+      const res = await apiService.post(UNSUBSCRIBE_URL, { token });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
@@ -69,20 +65,18 @@ export const adminUnsubscribeSubscriber = createAsyncThunk(
   },
 );
 
-/** UC-NEW-04: el admin envia (o programa) una campana de newsletter. */
+/** UC-NEW-04: el admin envia una campana de newsletter. */
 export const sendNewsletterBroadcast = createAsyncThunk(
   'newsletter/sendBroadcast',
-  async (
-    { subject, htmlBody, textBody, segment, scheduledAt },
-    { rejectWithValue },
-  ) => {
+  async ({ subject, body, audienceFilter }, { rejectWithValue }) => {
     try {
+      // El backend (CampaignCreateSerializer) espera `subject`, `body` y
+      // `audience_filter` (uno de PENDING|CONFIRMED|UNSUBSCRIBED, default
+      // CONFIRMED). No existen `html_body`/`text_body`/`segment`/`scheduled_at`.
       const res = await apiService.post(ADMIN_BROADCAST_URL, {
         subject,
-        html_body:    htmlBody,
-        text_body:    textBody,
-        segment:      segment ?? 'ALL_ACTIVE',
-        scheduled_at: scheduledAt || null,
+        body,
+        audience_filter: audienceFilter ?? 'CONFIRMED',
       });
       return res.data;
     } catch (err) {

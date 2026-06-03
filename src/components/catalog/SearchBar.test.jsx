@@ -34,7 +34,7 @@ afterEach(() => jest.clearAllMocks());
 
 describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
   it('dispara onSearch en el submit clasico (fallback)', async () => {
-    apiService.get.mockResolvedValue({ data: { suggestions: [] } });
+    apiService.get.mockResolvedValue({ data: [] });
     const user = userEvent.setup();
     const { onSearch } = renderBar();
 
@@ -45,7 +45,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
   });
 
   it('muestra error y no busca con menos de 2 caracteres', async () => {
-    apiService.get.mockResolvedValue({ data: { suggestions: [] } });
+    apiService.get.mockResolvedValue({ data: [] });
     const user = userEvent.setup();
     const { onSearch } = renderBar();
 
@@ -58,7 +58,10 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
 
   it('al teclear aparecen sugerencias en vivo (UC-SRCH-02)', async () => {
     apiService.get.mockResolvedValue({
-      data: { suggestions: ['Collar Oshun', 'Collar Yemaya'] },
+      data: [
+        { id: 1, name: 'Collar Oshun', slug: 'collar-oshun' },
+        { id: 2, name: 'Collar Yemaya', slug: 'collar-yemaya' },
+      ],
     });
     const user = userEvent.setup();
     renderBar();
@@ -67,7 +70,7 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
 
     await waitFor(() =>
       expect(apiService.get).toHaveBeenCalledWith(
-        '/api/v1/catalogue/search/suggestions/',
+        '/api/v1/catalogue/autocomplete/',
         expect.objectContaining({ params: expect.objectContaining({ q: 'col' }) }),
       ),
     );
@@ -79,7 +82,10 @@ describe('SearchBar (UC-SRCH-01 / UC-SRCH-02)', () => {
 
   it('al elegir una sugerencia dispara onSearch con ese termino', async () => {
     apiService.get.mockResolvedValue({
-      data: { suggestions: ['Collar Oshun', 'Collar Yemaya'] },
+      data: [
+        { id: 1, name: 'Collar Oshun', slug: 'collar-oshun' },
+        { id: 2, name: 'Collar Yemaya', slug: 'collar-yemaya' },
+      ],
     });
     const user = userEvent.setup();
     const { onSearch } = renderBar();

@@ -113,7 +113,7 @@ describe('ChangePasswordPage (UC-AUTH-08)', () => {
         {
           current_password: 'OldPass1!',
           new_password: 'NewPass1!',
-          confirm_password: 'NewPass1!',
+          new_password_confirm: 'NewPass1!',
         },
       ),
     );

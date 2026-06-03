@@ -5,15 +5,17 @@
  *
  * Endpoints:
  *   GET   /admin/products/<id>/variants/
- *   PATCH /admin/products/<id>/variants/bulk/  { variants: [{ id, ...changes }] }
- *   POST  /admin/products/<id>/variants/regenerate/   → re-genera combinaciones
+ *   PATCH /admin/products/<id>/variants/<vid>/   (uno por variante editada)
+ *
+ * Nota: el backend no expone `variants/bulk/` ni `variants/regenerate/`.
+ * Los cambios se guardan con un PATCH por variante (saveVariantChanges).
  */
 
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
-  fetchProductVariants, bulkUpdateVariants, regenerateVariants,
+  fetchProductVariants, saveVariantChanges,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Price } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
@@ -44,7 +46,7 @@ export default function AdminProductVariantsPage() {
     if (payload.length === 0) return;
     setSaving(true);
     try {
-      await dispatch(bulkUpdateVariants({ productId, variants: payload })).unwrap();
+      await dispatch(saveVariantChanges({ productId, variants: payload })).unwrap();
       setEdited({});
     } finally { setSaving(false); }
   };
@@ -90,15 +92,6 @@ export default function AdminProductVariantsPage() {
           <Link to={`/admin/products/${productId}/tipos-variante`}>
             <Button variant="ghost">← Tipos de variante</Button>
           </Link>
-          <Button
-            variant="secondary"
-            onClick={() => {
-              setConfirm({
-      message: 'Re-generar combinaciones: se crearán nuevas variantes por cada combinación de opciones. ¿Continuar?',
-      action:  () => dispatch(generateVariants(productId)),
-    });
-            }}
-          >Re-generar combinaciones</Button>
           <Button variant="primary" onClick={handleSave} disabled={!hasChanges || saving}>
             {saving ? 'Guardando…' : `Guardar (${Object.keys(edited).length})`}
           </Button>

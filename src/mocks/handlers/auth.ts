@@ -119,10 +119,26 @@ export const authHandlers = [
   // Familia /api/v1/auth/  (la que usa authSlice.js)
   http.post('/api/v1/auth/login/',           ({ request }) => readLogin(request)),
   http.post('/api/v1/auth/logout/', () => { _activeSession = null; return HttpResponse.json({ detail: 'Sesion cerrada.' }); }),
+  // UC-AUTH-18 — cerrar todas las sesiones (LogoutAllSessionsView).
+  // Endpoint real /auth/logout-all/, distinto de /auth/logout/.
+  http.post('/api/v1/auth/logout-all/', () => HttpResponse.json({ message: 'Todas las sesiones han sido cerradas.' })),
   http.post('/api/v1/auth/register/',        ({ request }) => readRegister(request)),
   http.get('/api/v1/auth/profile/',          () => readMe()),
+  // PATCH /api/v1/auth/profile/ — UC-AUTH-06. Acepta JSON (campos de perfil)
+  // o multipart/form-data (subida de avatar bajo la clave `avatar`). No hay
+  // ruta /auth/profile/avatar/: el avatar viaja por este mismo endpoint.
   http.patch('/api/v1/auth/profile/',        async ({ request }) => {
-    const patch = (await request.json().catch(() => ({}))) as Partial<User>;
+    const ct = request.headers.get('content-type') || '';
+    let patch: Partial<User> = {};
+    if (ct.includes('application/json')) {
+      patch = (await request.json().catch(() => ({}))) as Partial<User>;
+    } else {
+      // multipart (avatar u otros): reflejar avatar_url si vino archivo.
+      const fd = await request.formData().catch(() => null);
+      if (fd && fd.get('avatar')) {
+        patch = { avatar_url: '/media/avatars/demo.webp' } as Partial<User>;
+      }
+    }
     faker.seed(1);
     const base = createUser({
       id: 1,
@@ -147,12 +163,21 @@ export const authHandlers = [
   http.post('/api/v1/auth/change-password/', () => HttpResponse.json({ detail: 'Contrasena actualizada.' })),
   http.post('/api/v1/auth/verify-email/',    () => HttpResponse.json({ detail: 'Email verificado.' })),
   http.post('/api/v1/auth/password-reset/',  () => HttpResponse.json({ detail: 'Si el email existe, se enviara un enlace.' })),
+  // PasswordResetConfirmSerializer es token-only: { token, new_password,
+  // new_password_confirm }. No usa uid.
   http.post('/api/v1/auth/password-reset/confirm/', async ({ request }) => {
     const body = (await request.json().catch(() => null)) as
-      | { token?: string; new_password?: string }
+      | { token?: string; new_password?: string; new_password_confirm?: string }
       | null;
     if (!body?.token || !body?.new_password) {
       return HttpResponse.json({ detail: 'token y new_password requeridos.' }, { status: 400 });
+    }
+    if (body.new_password_confirm !== undefined &&
+        body.new_password_confirm !== body.new_password) {
+      return HttpResponse.json(
+        { new_password_confirm: ['Las contrasenas no coinciden.'] },
+        { status: 400 },
+      );
     }
     return HttpResponse.json({ detail: 'Contrasena restablecida.' });
   }),

@@ -394,7 +394,7 @@ const adminSlice = createSlice({
         state.actionError = action.payload ?? null;
       })
 
-      // ── fetchAdminPages + fetchAdminPage + savePageDraft + publishPage ────
+      // ── fetchAdminPages + fetchAdminPage + savePageDraft ─────────────────
       .addCase(fetchAdminPages.pending,   (state) => {
         state.isLoadingPages = true;
       })
@@ -411,37 +411,20 @@ const adminSlice = createSlice({
       .addCase(fetchAdminPage.fulfilled, (state, action) => {
         state.isLoadingPages = false;
         state.currentPage    = action.payload ?? null;
+        // Las versiones vienen anidadas en el detail serializer (versions[]).
+        state.pageVersions   = action.payload?.versions ?? [];
       })
       .addCase(fetchAdminPage.rejected,  (state) => {
-        state.isLoadingPages = false;
-      })
-      .addCase(fetchPageVersions.pending,   (state) => {
-        state.isLoadingPages = true;
-      })
-      .addCase(fetchPageVersions.fulfilled, (state, action) => {
-        state.isLoadingPages = false;
-        state.pageVersions   = action.payload?.results ?? action.payload ?? [];
-      })
-      .addCase(fetchPageVersions.rejected,  (state) => {
         state.isLoadingPages = false;
       })
       .addCase(savePageDraft.pending,   (state) => { state.isActioning = true; })
       .addCase(savePageDraft.fulfilled, (state, action) => {
         state.isActioning = false;
         state.currentPage = action.payload ?? state.currentPage;
+        state.pageVersions = action.payload?.versions ?? state.pageVersions;
         state.lastAction  = 'draft_saved';
       })
       .addCase(savePageDraft.rejected,  (state, action) => {
-        state.isActioning = false;
-        state.actionError = action.payload ?? null;
-      })
-      .addCase(publishPage.pending,   (state) => { state.isActioning = true; })
-      .addCase(publishPage.fulfilled, (state, action) => {
-        state.isActioning = false;
-        state.currentPage = { ...state.currentPage, ...action.payload };
-        state.lastAction  = 'published';
-      })
-      .addCase(publishPage.rejected,  (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload ?? null;
       })
@@ -462,6 +445,9 @@ const adminSlice = createSlice({
         state.variants          = action.payload?.results ?? action.payload ?? [];
       })
       .addCase(fetchProductVariants.rejected,  (state) => { state.isLoadingVariants = false; })
+      .addCase(saveVariantChanges.pending,   (state) => { state.isActioning = true; })
+      .addCase(saveVariantChanges.fulfilled, (state) => { state.isActioning = false; })
+      .addCase(saveVariantChanges.rejected,  (state) => { state.isActioning = false; })
       .addCase(fetchVariantTypes.pending,   (state) => { state.isLoadingVariantTypes = true; })
       .addCase(fetchVariantTypes.fulfilled, (state, action) => {
         state.isLoadingVariantTypes = false;
@@ -559,24 +545,12 @@ const adminSlice = createSlice({
         if (action.payload?.typeId !== undefined) state.variantTypes = state.variantTypes.filter(t => t.id !== action.payload.typeId);
       })
       .addCase(deleteVariantType.rejected,  (state) => { state.isActioning = false; })
-      .addCase(createVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(createVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(createVariantOption.rejected,  (state) => { state.isActioning = false; })
-      .addCase(updateVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(updateVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(updateVariantOption.rejected,  (state) => { state.isActioning = false; })
-      .addCase(deleteVariantOption.pending,   (state) => { state.isActioning = true; })
-      .addCase(deleteVariantOption.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(deleteVariantOption.rejected,  (state) => { state.isActioning = false; })
       .addCase(deleteCategory.pending,   (state) => { state.isActioning = true; })
       .addCase(deleteCategory.fulfilled, (state, action) => {
         state.isActioning = false;
         state.categoryTree = state.categoryTree.filter(c => c.id !== action.payload?.id);
       })
       .addCase(deleteCategory.rejected,  (state) => { state.isActioning = false; })
-      .addCase(moveCategoryNode.pending,   (state) => { state.isActioning = true; })
-      .addCase(moveCategoryNode.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(moveCategoryNode.rejected,  (state) => { state.isActioning = false; })
       .addCase(setUserActiveStatus.pending,   (state) => { state.isActioning = true; })
       .addCase(setUserActiveStatus.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -598,11 +572,6 @@ const adminSlice = createSlice({
       .addCase(fetchPublicPage.pending,   (state) => { state.isLoadingPages = true; })
       .addCase(fetchPublicPage.fulfilled, (state, action) => { state.isLoadingPages = false; state.currentPage = action.payload ?? null; })
       .addCase(fetchPublicPage.rejected,  (state) => { state.isLoadingPages = false; })
-      .addCase(restorePageVersion.pending,   (state) => { state.isActioning = true; })
-      .addCase(restorePageVersion.fulfilled, (state, action) => {
-        state.isActioning = false; state.currentPage = action.payload ?? state.currentPage; state.lastAction = 'version_restored';
-      })
-      .addCase(restorePageVersion.rejected,  (state) => { state.isActioning = false; })
       .addCase(createAdminPage.pending,   (state) => { state.isActioning = true; })
       .addCase(createAdminPage.fulfilled, (state, action) => {
         state.isActioning = false;
@@ -621,12 +590,6 @@ const adminSlice = createSlice({
       .addCase(testGatewayConnection.pending,   (state) => { state.isActioning = true; })
       .addCase(testGatewayConnection.fulfilled, (state) => { state.isActioning = false; })
       .addCase(testGatewayConnection.rejected,  (state) => { state.isActioning = false; })
-      .addCase(bulkUpdateVariants.pending,   (state) => { state.isActioning = true; })
-      .addCase(bulkUpdateVariants.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(bulkUpdateVariants.rejected,  (state) => { state.isActioning = false; })
-      .addCase(regenerateVariants.pending,   (state) => { state.isActioning = true; })
-      .addCase(regenerateVariants.fulfilled, (state) => { state.isActioning = false; })
-      .addCase(regenerateVariants.rejected,  (state) => { state.isActioning = false; })
       // ── Grupo C: upload/import ────────────────────────────────────────────
       .addCase(uploadPriceCSV.pending,   (state) => { state.isActioning = true; })
       .addCase(uploadPriceCSV.fulfilled, (state, action) => {
@@ -729,7 +692,7 @@ export const fetchStockAlerts = createAsyncThunk(
 );
 export const fetchAdminPages = createAsyncThunk(
   'admin/pages', async (_a, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/pages/')).data; }
+    try { return (await apiService.get('/api/v1/admin/static-content/')).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -981,24 +944,26 @@ export const fetchProductVariants = createAsyncThunk(
   },
 );
 
-export const bulkUpdateVariants = createAsyncThunk(
-  'admin/bulkUpdateVariants',
+/**
+ * Guardar cambios de varias variantes.
+ *
+ * El backend (ProductVariantAdminViewSet) NO expone un endpoint
+ * `variants/bulk/`; cada variante se actualiza con un PATCH individual
+ * al detail `variants/<id>/` (ViewSet.partial_update). Este thunk
+ * recorre las variantes editadas y emite un PATCH por cada una.
+ */
+export const saveVariantChanges = createAsyncThunk(
+  'admin/saveVariantChanges',
   async ({ productId, variants }, { rejectWithValue }) => {
     try {
-      return (await apiService.patch(
-        `/api/v1/admin/products/${productId}/variants/bulk/`, { variants }
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const regenerateVariants = createAsyncThunk(
-  'admin/regenerateVariants',
-  async (productId, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/${productId}/variants/regenerate/`
-      )).data;
+      const results = [];
+      for (const { id, ...changes } of variants) {
+        const res = await apiService.patch(
+          `/api/v1/admin/products/${productId}/variants/${id}/`, changes,
+        );
+        results.push(res.data);
+      }
+      return results;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1040,40 +1005,6 @@ export const deleteVariantType = createAsyncThunk(
     try {
       await apiService.delete(`/api/v1/admin/products/${productId}/variant-types/${typeId}/`);
       return typeId;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const createVariantOption = createAsyncThunk(
-  'admin/createVariantOption',
-  async ({ productId, typeId, data }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/`, data
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const updateVariantOption = createAsyncThunk(
-  'admin/updateVariantOption',
-  async ({ productId, typeId, optionId, data }, { rejectWithValue }) => {
-    try {
-      return (await apiService.patch(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`, data
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const deleteVariantOption = createAsyncThunk(
-  'admin/deleteVariantOption',
-  async ({ productId, typeId, optionId }, { rejectWithValue }) => {
-    try {
-      await apiService.delete(
-        `/api/v1/admin/products/${productId}/variant-types/${typeId}/options/${optionId}/`
-      );
-      return optionId;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1141,10 +1072,13 @@ export const deleteShippingMethod = createAsyncThunk(
 // ── Páginas estáticas (CMS) ──────────────────────────────────────────────────
 
 
+// Real: StaticContentDetailView. La respuesta incluye las versiones anidadas
+// (campo `versions[]` del StaticContentSerializer); no hay endpoint separado
+// de versions/, ni de publish/ ni de restore/ (no existen en el backend).
 export const fetchAdminPage = createAsyncThunk(
   'admin/fetchAdminPage',
   async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    try { return (await apiService.get(`/api/v1/admin/static-content/${slug}/`)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1152,50 +1086,25 @@ export const fetchAdminPage = createAsyncThunk(
 export const fetchPublicPage = createAsyncThunk(
   'admin/fetchPublicPage',
   async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/`)).data; }
+    try { return (await apiService.get(`/api/v1/admin/static-content/${slug}/`)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
 
-export const fetchPageVersions = createAsyncThunk(
-  'admin/fetchPageVersions',
-  async (slug, { rejectWithValue }) => {
-    try { return (await apiService.get(`/api/v1/admin/pages/${slug}/versions/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
+// Real: PATCH /api/v1/admin/static-content/:slug/ — edita la pagina y bumpea
+// version (crea StaticContentVersion). No hay distincion borrador/publicado.
 export const savePageDraft = createAsyncThunk(
   'admin/savePageDraft',
   async ({ slug, data }, { rejectWithValue }) => {
-    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    try { return (await apiService.patch(`/api/v1/admin/static-content/${slug}/`, data)).data; }
     catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const publishPage = createAsyncThunk(
-  'admin/publishPage',
-  async (slug, { rejectWithValue }) => {
-    try { return (await apiService.post(`/api/v1/admin/pages/${slug}/publish/`)).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const restorePageVersion = createAsyncThunk(
-  'admin/restorePageVersion',
-  async ({ slug, versionId }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/pages/${slug}/restore/${versionId}/`
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
   },
 );
 
 export const createAdminPage = createAsyncThunk(
   'admin/createAdminPage',
   async (data, { rejectWithValue }) => {
-    try { return (await apiService.post('/api/v1/admin/pages/', data)).data; }
+    try { return (await apiService.post('/api/v1/admin/static-content/', data)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1203,7 +1112,7 @@ export const createAdminPage = createAsyncThunk(
 export const updateAdminPage = createAsyncThunk(
   'admin/updateAdminPage',
   async ({ slug, data }, { rejectWithValue }) => {
-    try { return (await apiService.patch(`/api/v1/admin/pages/${slug}/`, data)).data; }
+    try { return (await apiService.patch(`/api/v1/admin/static-content/${slug}/`, data)).data; }
     catch (e) { return rejectWithValue(e.message); }
   },
 );
@@ -1283,17 +1192,6 @@ export const deleteCategory = createAsyncThunk(
     try {
       await apiService.delete(`/api/v1/admin/categories/${id}/`);
       return id;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const moveCategoryNode = createAsyncThunk(
-  'admin/moveCategoryNode',
-  async ({ id, targetId, position }, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/categories/${id}/move/`, { target: targetId, position }
-      )).data;
     } catch (e) { return rejectWithValue(e.message); }
   },
 );

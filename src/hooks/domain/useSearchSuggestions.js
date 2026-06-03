@@ -6,9 +6,12 @@
  * evitar peticiones por cada tecla. Cuando el termino es demasiado corto la
  * query de React Query queda deshabilitada (sin red ni cache sucia).
  *
- * Endpoint:
- *   GET /api/v1/catalogue/search/suggestions/?q=<term>
- *     → { suggestions: string[] }
+ * Endpoint (AutocompleteView):
+ *   GET /api/v1/catalogue/autocomplete/?q=<term>
+ *     → [ { id, name, slug }, ... ]   (array de productos)
+ *
+ * El backend devuelve objetos de producto; este hook extrae el `name`
+ * para alimentar el SearchBar, que trabaja con strings.
  *
  * Retorna `{ suggestions, isLoading }` para alimentar el primitivo
  * Autocomplete / la lista de sugerencias del SearchBar.
@@ -17,8 +20,8 @@ import { useEffect, useState } from 'react';
 import { useQuery } from '@tanstack/react-query';
 import apiService from '@services/apiService';
 
-const SUGGESTIONS_URL = '/api/v1/catalogue/search/suggestions/';
-export const SUGGESTIONS_KEY = ['catalog', 'search', 'suggestions'];
+const SUGGESTIONS_URL = '/api/v1/catalogue/autocomplete/';
+export const SUGGESTIONS_KEY = ['catalog', 'search', 'autocomplete'];
 
 const MIN_LENGTH    = 2;
 const DEBOUNCE_MS   = 250;
@@ -51,8 +54,12 @@ export function useSearchSuggestions(rawQuery = '', options = {}) {
         params: { q: debounced },
         signal,
       });
-      const list = data?.suggestions ?? data?.results ?? [];
-      return Array.isArray(list) ? list : [];
+      // AutocompleteView devuelve un array de productos {id, name, slug}.
+      // El SearchBar consume strings, asi que extraemos `name`.
+      const list = Array.isArray(data) ? data : (data?.results ?? data?.suggestions ?? []);
+      return list
+        .map((item) => (typeof item === 'string' ? item : item?.name))
+        .filter(Boolean);
     },
     enabled,
     staleTime: 30_000,

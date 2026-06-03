@@ -31,39 +31,33 @@ import { CATALOG_PRODUCTS, CATALOG_CATEGORIES } from '../data/catalog';
 const PAGE_SIZE = 20;
 
 export const catalogHandlers = [
-  // GET /api/v1/catalogue/search/suggestions/?q=...  (UC-SRCH-02)
-  // Autocomplete con sugerencias en vivo: devuelve nombres de productos
-  // del catalogo cuyo nombre coincide (case-insensitive) con `q`.
+  // GET /api/v1/catalogue/autocomplete/?q=...  (UC-SRCH-02, AutocompleteView)
+  // Autocomplete con sugerencias en vivo: devuelve un array de productos
+  // {id, name, slug} cuyo nombre empieza (case-insensitive) con `q`,
+  // igual que el backend real (AutocompleteSerializer).
   // Se registra ANTES de /search/ y /:slug/ para que la ruta mas
   // especifica gane el match.
-  http.get('/api/v1/catalogue/search/suggestions/', ({ request }) => {
+  http.get('/api/v1/catalogue/autocomplete/', ({ request }) => {
     const url = new URL(request.url);
     const q   = (url.searchParams.get('q') ?? '').trim().toLowerCase();
 
     if (q.length < 2) {
-      return HttpResponse.json({ suggestions: [], count: 0 });
+      return HttpResponse.json([]);
     }
 
-    // Nombres unicos que contienen el termino, ordenados por
+    // Productos cuyo nombre coincide con el termino, ordenados por
     // relevancia simple (prefijo primero) y acotados a 8 resultados.
-    const seen = new Set<string>();
     const matches = CATALOG_PRODUCTS
       .filter(p => p.name.toLowerCase().includes(q))
-      .map(p => p.name)
-      .filter(name => {
-        const key = name.toLowerCase();
-        if (seen.has(key)) return false;
-        seen.add(key);
-        return true;
-      })
       .sort((a, b) => {
-        const ap = a.toLowerCase().startsWith(q) ? 0 : 1;
-        const bp = b.toLowerCase().startsWith(q) ? 0 : 1;
-        return ap - bp || a.localeCompare(b);
+        const ap = a.name.toLowerCase().startsWith(q) ? 0 : 1;
+        const bp = b.name.toLowerCase().startsWith(q) ? 0 : 1;
+        return ap - bp || a.name.localeCompare(b.name);
       })
-      .slice(0, 8);
+      .slice(0, 8)
+      .map(p => ({ id: p.id, name: p.name, slug: p.slug }));
 
-    return HttpResponse.json({ suggestions: matches, count: matches.length });
+    return HttpResponse.json(matches);
   }),
 
   // GET /api/v1/catalogue/search/?q=...&category=<slug>

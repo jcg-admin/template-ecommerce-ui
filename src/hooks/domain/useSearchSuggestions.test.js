@@ -4,7 +4,8 @@
  * Autocomplete con sugerencias en vivo. El hook:
  *   - aplica debounce (~250ms) al termino antes de consultar,
  *   - exige minimo 2 caracteres (query deshabilitada por debajo),
- *   - llama GET /api/v1/catalogue/search/suggestions/?q=,
+ *   - llama GET /api/v1/catalogue/autocomplete/?q=,
+ *   - mapea el array de productos {id,name,slug} a sus nombres,
  *   - expone { suggestions, isLoading }.
  *
  * TDD estricto: mock de apiService, timers falsos para el debounce.
@@ -53,8 +54,10 @@ describe('useSearchSuggestions (UC-SRCH-02)', () => {
     expect(apiService.get).not.toHaveBeenCalled();
   });
 
-  it('consulta GET /api/v1/catalogue/search/suggestions/ tras el debounce', async () => {
-    apiService.get.mockResolvedValue({ data: { suggestions: ['Collar Oshun'] } });
+  it('consulta GET /api/v1/catalogue/autocomplete/ tras el debounce', async () => {
+    apiService.get.mockResolvedValue({
+      data: [{ id: 1, name: 'Collar Oshun', slug: 'collar-oshun' }],
+    });
 
     const { result } = renderHook(() => useSearchSuggestions('col'), {
       wrapper: makeWrapper(),
@@ -68,7 +71,7 @@ describe('useSearchSuggestions (UC-SRCH-02)', () => {
     await waitFor(() => expect(apiService.get).toHaveBeenCalled());
 
     expect(apiService.get).toHaveBeenCalledWith(
-      '/api/v1/catalogue/search/suggestions/',
+      '/api/v1/catalogue/autocomplete/',
       expect.objectContaining({ params: expect.objectContaining({ q: 'col' }) }),
     );
 
@@ -78,7 +81,7 @@ describe('useSearchSuggestions (UC-SRCH-02)', () => {
   });
 
   it('aplica debounce: cambios rapidos solo consultan con el ultimo termino', async () => {
-    apiService.get.mockResolvedValue({ data: { suggestions: [] } });
+    apiService.get.mockResolvedValue({ data: [] });
 
     const { rerender } = renderHook(({ q }) => useSearchSuggestions(q), {
       wrapper: makeWrapper(),
@@ -92,7 +95,7 @@ describe('useSearchSuggestions (UC-SRCH-02)', () => {
 
     await waitFor(() => expect(apiService.get).toHaveBeenCalledTimes(1));
     expect(apiService.get).toHaveBeenCalledWith(
-      '/api/v1/catalogue/search/suggestions/',
+      '/api/v1/catalogue/autocomplete/',
       expect.objectContaining({ params: expect.objectContaining({ q: 'coll' }) }),
     );
   });

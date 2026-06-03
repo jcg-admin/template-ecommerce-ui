@@ -236,27 +236,8 @@ describe('OrderDetailPage — factura PDF (UC-ORD-PDF)', () => {
   });
 });
 
-// ─── UC-LOG-07 — reportar problema de envío ─────────────────────────────────
-describe('OrderDetailPage — reportar problema de envío (UC-LOG-07)', () => {
-  it('abre el modal y despacha reportShippingIssue con POST', async () => {
-    apiService.get.mockResolvedValue({ data: ORDER });
-    apiService.post.mockResolvedValue({ data: { id: 7, status: 'OPEN' } });
-    render(wrap(<OrderDetailPage />));
-    await screen.findByRole('heading', { name: /Seguimiento del envío/i });
-
-    fireEvent.click(screen.getByRole('button', { name: /Reportar problema de envío/i }));
-    fireEvent.change(screen.getByLabelText(/Describe el problema de envío/i), {
-      target: { value: 'No llegó nada' },
-    });
-    fireEvent.click(screen.getByRole('button', { name: /Enviar reporte/i }));
-
-    await waitFor(() => {
-      expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/orders/PY-2026-000001/shipping-issue/',
-        expect.objectContaining({ message: 'No llegó nada' }),
-      );
-    });
-  });
+// ─── UC-LOG-07 eliminado: endpoint /shipping-issue/ no existe en el backend ─
+describe('OrderDetailPage — factura PDF', () => {
 
   // UC-ORD-PDFGEN: generar la factura en el cliente (jsPDF) y verla en el visor.
   it('genera la factura en cliente al pulsar "Generar factura en PDF"', async () => {

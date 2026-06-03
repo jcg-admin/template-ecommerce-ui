@@ -64,7 +64,7 @@ describe('ContactPage (UC-COM-01)', () => {
           name:    'Visitante Uno',
           email:   'visitante@example.com',
           subject: 'Consulta de prueba',
-          message: 'Tengo una consulta sobre un producto del catalogo.',
+          body:    'Tengo una consulta sobre un producto del catalogo.',
         }),
       );
     });

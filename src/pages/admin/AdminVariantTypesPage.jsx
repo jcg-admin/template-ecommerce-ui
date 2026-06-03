@@ -6,7 +6,10 @@
  * Endpoints (chartsize):
  *   GET /admin/products/<id>/variant-types/
  *   POST/PATCH/DELETE /admin/products/<id>/variant-types/<typeId>/
- *   POST/PATCH/DELETE /admin/products/<id>/variant-types/<typeId>/options/[<optId>/]
+ *
+ * Nota: el backend (VariantTypeAdminViewSet) NO expone CRUD de opciones
+ * individuales — `options` viene anidado read-only en el tipo. Las
+ * opciones se muestran en modo lectura; su gestion no esta soportada.
  */
 
 import { useEffect, useState } from 'react';
@@ -14,7 +17,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams } from 'react-router-dom';
 import {
   fetchVariantTypes, createVariantType, updateVariantType, deleteVariantType,
-  createVariantOption, updateVariantOption, deleteVariantOption,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
@@ -67,7 +69,6 @@ export default function AdminVariantTypesPage() {
           <VariantTypeCard
             key={type.id}
             type={type}
-            productId={productId}
             onEdit={() => setEditingType(type)}
             onDelete={() => setConfirm({
               message: `¿Eliminar "${type.name}" y todas sus opciones?`,
@@ -103,11 +104,7 @@ export default function AdminVariantTypesPage() {
   );
 }
 
-function VariantTypeCard({ type, productId, onEdit, onDelete }) {
-  const dispatch = useDispatch();
-  const [adding, setAdding] = useState(false);
-  const [editingOpt, setEditingOpt] = useState(null);
-
+function VariantTypeCard({ type, onEdit, onDelete }) {
   return (
     <article className={styles.typeCard}>
       <header className={styles.typeHeader}>
@@ -131,45 +128,9 @@ function VariantTypeCard({ type, productId, onEdit, onDelete }) {
               <span className={styles.optionName}>{opt.label}</span>
               {opt.sub_label && <span className={styles.optionSub}>{opt.sub_label}</span>}
             </div>
-            <div className={styles.optionActions}>
-              <button type="button" onClick={() => setEditingOpt(opt)} className={styles.smallBtn}>✎</button>
-              <button
-                type="button"
-                className={`${styles.smallBtn} ${styles.smallBtnDelete}`}
-                onClick={() => setConfirm({
-                  message: `¿Eliminar opción "${opt.label}"?`,
-                  action:  () => dispatch(deleteVariantOption({ productId, typeId: type.id, optionId: opt.id })),
-                })}
-              >×</button>
-            </div>
           </div>
         ))}
-        {adding && (
-          <OptionInlineForm
-            onCancel={() => setAdding(false)}
-            onSave={async (data) => {
-              await dispatch(createVariantOption({ productId, typeId: type.id, data }));
-              setAdding(false);
-            }}
-          />
-        )}
-        {!adding && (
-          <button type="button" onClick={() => setAdding(true)} className={styles.addOption}>
-            + Añadir opción
-          </button>
-        )}
       </div>
-
-      {editingOpt && (
-        <OptionModal
-          option={editingOpt}
-          onClose={() => setEditingOpt(null)}
-          onSave={async (data) => {
-            await dispatch(updateVariantOption({ productId, typeId: type.id, optionId: editingOpt.id, data }));
-            setEditingOpt(null);
-          }}
-        />
-      )}
     </article>
   );
 }
@@ -201,42 +162,3 @@ function TypeModal({ type, onClose, onSave }) {
   );
 }
 
-function OptionModal({ option, onClose, onSave }) {
-  const [data, setData] = useState({
-    label: option.label || '',
-    sub_label: option.sub_label || '',
-    order: option.order || 0,
-  });
-  return (
-    <div className={styles.modalBackdrop} onClick={onClose}>
-      <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
-        <h3 className={styles.modalTitle}>Editar opción</h3>
-        <form onSubmit={(e) => { e.preventDefault(); onSave(data); }} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <Field label="Etiqueta" value={data.label} onChange={(e) => setData({ ...data, label: e.target.value })} required />
-          <Field label="Sub-etiqueta (opcional)" value={data.sub_label} onChange={(e) => setData({ ...data, sub_label: e.target.value })} hint="Ej. 'media · estándar'" />
-          <Field label="Orden" type="number" value={data.order} onChange={(e) => setData({ ...data, order: e.target.value })} />
-          <div className={styles.modalActions}>
-            <Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button>
-            <Button type="submit" variant="primary">Guardar</Button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
-
-function OptionInlineForm({ onCancel, onSave }) {
-  const [label, setLabel] = useState('');
-  const [subLabel, setSubLabel] = useState('');
-  return (
-    <form
-      onSubmit={(e) => { e.preventDefault(); if (label.trim()) onSave({ label, sub_label: subLabel }); }}
-      className={styles.inlineForm}
-    >
-      <input className={styles.inlineInput} placeholder="Etiqueta" value={label} onChange={(e) => setLabel(e.target.value)} aria-label="Etiqueta de variante" autoFocus />
-      <input className={styles.inlineInput} placeholder="Sub-etiqueta (opcional)" value={subLabel} aria-label="Sub-etiqueta de variante" onChange={(e) => setSubLabel(e.target.value)} />
-      <button type="submit" className={styles.smallBtn} disabled={!label.trim()}>✓</button>
-      <button type="button" onClick={onCancel} className={styles.smallBtn}>×</button>
-      </form>
-  );
-}

@@ -12,10 +12,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useParams, Navigate } from 'react-router-dom';
 import { fetchOrderDetail, cancelOrder } from '@redux/slices/ordersSlice';
-import { reportShippingIssue } from '@redux/slices/logisticsSlice';
 import { MetaTag, Price, Button, SumRow } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
-import Modal from '@components/common/Modal/Modal';
 import PdfViewer from '@components/common/PdfViewer';
 import { invoicePdfUrl } from '@utils/generateInvoicePdf';
 import styles from './OrderDetailPage.module.scss';
@@ -266,23 +264,10 @@ function SupportCard({ order, dispatch }) {
   // UC-ORD-04 — cancelar orden (cliente). Solo cancelable antes de despacho.
   const canCancel = ['PENDING', 'PROCESSING'].includes(order.status);
   const [showCancel, setShowCancel] = useState(false);
-  // UC-LOG-07 — reportar problema de envío
-  const [showIssue, setShowIssue] = useState(false);
-  const [issueMsg, setIssueMsg] = useState('');
-  const [issueSent, setIssueSent] = useState(false);
 
   const handleCancel = () => {
     dispatch(cancelOrder({ orderNumber: order.order_number, reason: '' }));
     setShowCancel(false);
-  };
-
-  const handleReport = async (e) => {
-    e.preventDefault();
-    if (!issueMsg.trim()) return;
-    await dispatch(reportShippingIssue({ orderNumber: order.order_number, message: issueMsg.trim() }));
-    setIssueSent(true);
-    setShowIssue(false);
-    setIssueMsg('');
   };
 
   return (
@@ -293,9 +278,6 @@ function SupportCard({ order, dispatch }) {
       </p>
       <div className={styles.supportActions}>
         <Button variant="secondary" block size="sm">Solicitar ayuda</Button>
-        <Button variant="secondary" block size="sm" onClick={() => setShowIssue(true)}>
-          Reportar problema de envío
-        </Button>
         {canRefund && (
           <Button variant="ghost" block size="sm">Solicitar reembolso</Button>
         )}
@@ -314,27 +296,6 @@ function SupportCard({ order, dispatch }) {
         onConfirm={handleCancel}
         onClose={() => setShowCancel(false)}
       />
-      {issueSent && (
-        <p className={styles.supportText}>Recibimos tu reporte. Te contactaremos pronto.</p>
-      )}
-
-      <Modal open={showIssue} onClose={() => setShowIssue(false)} size="sm" centered>
-        <h3 style={{ marginBottom: 14 }}>Reportar problema de envío</h3>
-        <form onSubmit={handleReport} style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
-          <textarea
-            aria-label="Describe el problema de envío"
-            placeholder="Describe qué pasó con tu envío"
-            value={issueMsg}
-            onChange={(e) => setIssueMsg(e.target.value)}
-            rows={4}
-            required
-          />
-          <div style={{ display: 'flex', gap: 12, justifyContent: 'flex-end' }}>
-            <Button type="button" variant="ghost" onClick={() => setShowIssue(false)}>Cancelar</Button>
-            <Button type="submit" variant="primary" disabled={!issueMsg.trim()}>Enviar reporte</Button>
-          </div>
-        </form>
-      </Modal>
     </div>
   );
 }

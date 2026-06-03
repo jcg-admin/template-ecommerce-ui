@@ -1,16 +1,16 @@
 /**
- * AdminVoucherDetailPage — sección "Uso del voucher" (UC-PRO-04)
+ * AdminVoucherDetailPage — render básico (UC-PRO-02)
  *
- * Verifica que la sección de uso renderice las métricas devueltas por el
- * endpoint GET /api/v1/admin/vouchers/:id/usage/ (usos totales, descuento
- * total otorgado y últimos canjes).
+ * El backend NO expone un endpoint de uso por-voucher
+ * (.../vouchers/:id/usage/): las acciones del VoucherViewSet son
+ * activate / deactivate / report (este último agregado, detail=False).
+ * La página de detalle ya no llama a ningún endpoint /usage/; el uso
+ * agregado vive en AdminVoucherReportPage (GET .../vouchers/report/).
  */
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { configureStore } from '@reduxjs/toolkit';
-import adminReducer    from '@redux/slices/adminSlice';
-import uiReducer       from '@redux/slices/uiSlice';
 import vouchersReducer from '@redux/slices/vouchersSlice';
 
 jest.mock('@services/apiService', () => ({
@@ -20,6 +20,17 @@ jest.mock('@services/apiService', () => ({
 
 import apiService from '@services/apiService';
 import AdminVoucherDetailPage from './AdminVoucherDetailPage';
+
+// Reducer admin mínimo: solo el sub-slice que consume la página
+// (currentVoucher + voucherChangelog), reaccionando a fetchAdminVoucher.
+// Desacopla este test del reducer admin completo.
+const adminReducer = (
+  state = { currentVoucher: null, voucherChangelog: [] },
+  action = {},
+) => (action.type === 'admin/fetchAdminVoucher/fulfilled'
+  ? { ...state, currentVoucher: action.payload }
+  : state);
+const uiReducer = (state = {}) => state;
 
 const VOUCHER = {
   id: 7,
@@ -31,15 +42,6 @@ const VOUCHER = {
   valid_from: '2026-01-01',
   valid_until: '2026-12-31',
   is_active: true,
-};
-
-const USAGE = {
-  total_uses: 12,
-  total_discount: 3450.5,
-  redemptions: [
-    { id: 1, order_number: 'OXY-1001', user_email: 'ana@example.com', discount_amount: 250, redeemed_at: '2026-05-01T10:00:00Z' },
-    { id: 2, order_number: 'OXY-1002', user_email: 'beto@example.com', discount_amount: 400, redeemed_at: '2026-05-02T11:00:00Z' },
-  ],
 };
 
 const makeStore = () => configureStore({
@@ -57,40 +59,22 @@ const wrap = () => (
 );
 
 beforeEach(() => {
-  apiService.get.mockImplementation((url) => {
-    if (String(url).endsWith('/usage/')) return Promise.resolve({ data: USAGE });
-    return Promise.resolve({ data: VOUCHER });
-  });
+  apiService.get.mockResolvedValue({ data: VOUCHER });
 });
 afterEach(() => jest.clearAllMocks());
 
-describe('AdminVoucherDetailPage — Uso del voucher (UC-PRO-04)', () => {
-  it('llama al endpoint de uso del voucher', async () => {
+describe('AdminVoucherDetailPage (UC-PRO-02)', () => {
+  it('renderiza el formulario del voucher', async () => {
     render(wrap());
-    await waitFor(() =>
-      expect(apiService.get).toHaveBeenCalledWith(
-        expect.stringMatching(/\/admin\/vouchers\/7\/usage\/$/),
-      ),
+    expect(await screen.findByDisplayValue('DEMO7')).toBeInTheDocument();
+  });
+
+  it('no llama a ningún endpoint /usage/ inexistente en el backend', async () => {
+    render(wrap());
+    await waitFor(() => expect(apiService.get).toHaveBeenCalled());
+    const usageCalls = apiService.get.mock.calls.filter(([url]) =>
+      String(url).includes('/usage/'),
     );
-  });
-
-  it('renderiza la sección "Uso del voucher"', async () => {
-    render(wrap());
-    expect(await screen.findByRole('heading', { name: /Uso del voucher/i }))
-      .toBeInTheDocument();
-  });
-
-  it('muestra usos totales y descuento total otorgado', async () => {
-    render(wrap());
-    expect(await screen.findByText('12')).toBeInTheDocument();
-    // Descuento total formateado en MXN
-    expect(await screen.findByText(/3,450/)).toBeInTheDocument();
-  });
-
-  it('lista los últimos canjes del endpoint', async () => {
-    render(wrap());
-    expect(await screen.findByText('OXY-1001')).toBeInTheDocument();
-    expect(await screen.findByText('ana@example.com')).toBeInTheDocument();
-    expect(await screen.findByText('OXY-1002')).toBeInTheDocument();
+    expect(usageCalls).toHaveLength(0);
   });
 });

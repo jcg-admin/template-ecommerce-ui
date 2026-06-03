@@ -29,11 +29,13 @@ export const sendContactMessage = createAsyncThunk(
   'contact/send',
   async ({ name, email, subject, message }, { rejectWithValue }) => {
     try {
+      // El backend (ContactMessageCreateSerializer) espera `body`
+      // (min 20 chars), no `message`.
       const res = await apiService.post(CONTACT_PUBLIC_URL, {
         name,
         email,
         subject,
-        message,
+        body: message,
       });
       return res.data;
     } catch (err) {
@@ -58,11 +60,11 @@ export const markContactMessageRead = createAsyncThunk(
 /** UC-COM-03: admin responde al mensaje del visitante. */
 export const replyContactMessage = createAsyncThunk(
   'contact/reply',
-  async ({ id, replyBody, internalNote }, { rejectWithValue }) => {
+  async ({ id, replyBody }, { rejectWithValue }) => {
     try {
+      // El backend (ContactMessageReplySerializer) solo acepta `reply_body`.
       const res = await apiService.post(ADMIN_CONTACT_REPLY_URL(id), {
-        reply_body:    replyBody,
-        internal_note: internalNote || null,
+        reply_body: replyBody,
       });
       return res.data;
     } catch (err) {

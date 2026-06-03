@@ -10,25 +10,24 @@ import {
 } from '@redux/slices/newsletterSlice';
 import styles from './AdminNewsletterComposePage.module.scss';
 
-const SEGMENTS = [
-  { value: 'ALL_ACTIVE', label: 'Todos los suscriptores activos' },
-  { value: 'NEW_30D',    label: 'Suscriptores nuevos (ultimos 30 dias)' },
-  { value: 'OLDEST',     label: 'Suscriptores antiguos (mas de 1 ano)' },
+// El backend (CampaignCreateSerializer.audience_filter) acepta uno de los
+// SubscriberStatus: PENDING | CONFIRMED | UNSUBSCRIBED (default CONFIRMED).
+const AUDIENCES = [
+  { value: 'CONFIRMED',    label: 'Suscriptores confirmados' },
+  { value: 'PENDING',      label: 'Pendientes de confirmar' },
+  { value: 'UNSUBSCRIBED', label: 'Dados de baja' },
 ];
 
 const INITIAL = {
-  subject:     '',
-  htmlBody:    '',
-  textBody:    '',
-  segment:     'ALL_ACTIVE',
-  scheduledAt: '',
+  subject:        '',
+  body:           '',
+  audienceFilter: 'CONFIRMED',
 };
 
 function validate(form) {
   const errors = {};
-  if (!form.subject.trim())   errors.subject  = 'El asunto es obligatorio.';
-  if (!form.htmlBody.trim())  errors.htmlBody = 'El contenido HTML es obligatorio.';
-  if (!form.textBody.trim())  errors.textBody = 'El contenido en texto plano es obligatorio.';
+  if (!form.subject.trim()) errors.subject = 'El asunto es obligatorio.';
+  if (!form.body.trim())    errors.body    = 'El contenido es obligatorio.';
   return errors;
 }
 
@@ -53,11 +52,9 @@ export default function AdminNewsletterComposePage() {
     }
     dispatch(clearNewsletterActionState());
     dispatch(sendNewsletterBroadcast({
-      subject:     form.subject.trim(),
-      htmlBody:    form.htmlBody,
-      textBody:    form.textBody,
-      segment:     form.segment,
-      scheduledAt: form.scheduledAt || null,
+      subject:        form.subject.trim(),
+      body:           form.body,
+      audienceFilter: form.audienceFilter,
     }));
   };
 
@@ -84,50 +81,28 @@ export default function AdminNewsletterComposePage() {
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="campaign-segment">Segmento</label>
+          <label htmlFor="campaign-audience">Audiencia</label>
           <select
-            id="campaign-segment"
-            value={form.segment}
-            onChange={setField('segment')}
+            id="campaign-audience"
+            value={form.audienceFilter}
+            onChange={setField('audienceFilter')}
           >
-            {SEGMENTS.map((s) => (
-              <option key={s.value} value={s.value}>{s.label}</option>
+            {AUDIENCES.map((a) => (
+              <option key={a.value} value={a.value}>{a.label}</option>
             ))}
           </select>
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="campaign-html">Contenido HTML</label>
+          <label htmlFor="campaign-body">Contenido</label>
           <textarea
-            id="campaign-html"
-            rows={6}
-            value={form.htmlBody}
-            onChange={setField('htmlBody')}
-            aria-invalid={Boolean(errors.htmlBody)}
+            id="campaign-body"
+            rows={8}
+            value={form.body}
+            onChange={setField('body')}
+            aria-invalid={Boolean(errors.body)}
           />
-          {errors.htmlBody && <span className={styles.fieldError}>{errors.htmlBody}</span>}
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="campaign-text">Contenido en texto plano</label>
-          <textarea
-            id="campaign-text"
-            rows={4}
-            value={form.textBody}
-            onChange={setField('textBody')}
-            aria-invalid={Boolean(errors.textBody)}
-          />
-          {errors.textBody && <span className={styles.fieldError}>{errors.textBody}</span>}
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="campaign-schedule">Programar para (opcional)</label>
-          <input
-            id="campaign-schedule"
-            type="datetime-local"
-            value={form.scheduledAt}
-            onChange={setField('scheduledAt')}
-          />
+          {errors.body && <span className={styles.fieldError}>{errors.body}</span>}
         </div>
 
         {actionError && (

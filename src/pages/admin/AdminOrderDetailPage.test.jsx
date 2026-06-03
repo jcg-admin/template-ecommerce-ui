@@ -43,6 +43,7 @@ const wrap = (ui, storeState = {}) => (
 
 
 const ORDER = {
+  id: 101,
   order_number: 'PY-2026-000101',
   // BUG-OD02: NEXT_STATES usa 'PENDING' (no 'PENDING_PAYMENT')
   status: 'PENDING',
@@ -159,36 +160,52 @@ describe('AdminOrderDetailPage — fulfillment Gantt (UC-LOG-GANTT)', () => {
 
 // ─── UC-LOG-01 / UC-LOG-02 — sección Envío ──────────────────────────────────
 describe('AdminOrderDetailPage — envío (UC-LOG-01 / UC-LOG-02)', () => {
-  it('crear guía dispara POST a /admin/orders/:n/guide/ (UC-LOG-01)', async () => {
+  it('crear guía dispara POST a /api/v1/logistics/guides/ (UC-LOG-01)', async () => {
     apiService.get.mockResolvedValue({ data: ORDER });
-    apiService.post.mockResolvedValue({ data: { guide_id: 'G-1', order_number: 'PY-2026-000101' } });
+    apiService.post.mockResolvedValue({ data: { id: 5, order_number: 'PY-2026-000101' } });
     renderWithOrder();
     await screen.findByRole('heading', { name: 'PY-2026-000101' });
 
     fireEvent.change(screen.getByLabelText(/ID del courier/i), { target: { value: '3' } });
+    fireEvent.change(screen.getByLabelText(/Número de rastreo/i), { target: { value: 'TRK-9' } });
     fireEvent.click(screen.getByRole('button', { name: /Crear guía/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/admin/orders/PY-2026-000101/guide/',
-        expect.objectContaining({ courier_id: 3 }),
+        '/api/v1/logistics/guides/',
+        expect.objectContaining({ order_id: 101, courier_id: 3, tracking_number: 'TRK-9' }),
       );
     });
   });
 
-  it('guardar rastreo dispara PATCH a /admin/orders/:n/tracking/ (UC-LOG-02)', async () => {
+  it('actualizar estado dispara PATCH a /api/v1/logistics/guides/:id/ (UC-LOG-02)', async () => {
     apiService.get.mockResolvedValue({ data: ORDER });
-    apiService.patch.mockResolvedValue({ data: { order_number: 'PY-2026-000101', tracking: 'TRK-9' } });
-    renderWithOrder();
+    apiService.patch.mockResolvedValue({ data: { id: 5, status: 'IN_TRANSIT' } });
+    const store = makeStore({
+      admin: { currentOrder: ORDER, isLoadingOrder: false },
+      logistics: { currentGuide: { id: 5, status: 'CREATED' } },
+    });
+    const client = new QueryClient({ defaultOptions: { queries: { retry: false } } });
+    render(
+      <Provider store={store}>
+        <QueryClientProvider client={client}>
+          <MemoryRouter initialEntries={['/admin/orders/PY-2026-000101']}>
+            <Routes>
+              <Route path="/admin/orders/:order_number" element={<AdminOrderDetailPage />} />
+            </Routes>
+          </MemoryRouter>
+        </QueryClientProvider>
+      </Provider>
+    );
     await screen.findByRole('heading', { name: 'PY-2026-000101' });
 
-    fireEvent.change(screen.getByLabelText(/Número de rastreo/i), { target: { value: 'TRK-9' } });
-    fireEvent.click(screen.getByRole('button', { name: /Guardar rastreo/i }));
+    fireEvent.change(screen.getByLabelText(/Estado de la guía/i), { target: { value: 'IN_TRANSIT' } });
+    fireEvent.click(screen.getByRole('button', { name: /Actualizar estado/i }));
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/v1/admin/orders/PY-2026-000101/tracking/',
-        { tracking: 'TRK-9' },
+        '/api/v1/logistics/guides/5/',
+        { status: 'IN_TRANSIT' },
       );
     });
   });

@@ -56,19 +56,6 @@ export const deactivateVoucher = createAsyncThunk(
   }
 );
 
-/** UC-PRO-04: Reporte de uso de un voucher (métricas + canjes) */
-export const fetchVoucherUsage = createAsyncThunk(
-  'vouchers/fetchUsage',
-  async (id, { rejectWithValue }) => {
-    try {
-      const res = await apiService.get(`${ADMIN_VOUCHERS_URL}${id}/usage/`);
-      return res.data;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  }
-);
-
 // UC-PRO-04: reporte agregado de uso de vouchers (ranking + ROI).
 export const fetchVoucherReport = createAsyncThunk(
   'vouchers/fetchReport',
@@ -95,11 +82,10 @@ const vouchersSlice = createSlice({
     error:        null,
     actionError:  null,
     lastAction:   null,    // 'created' | 'deactivated'
-    // UC-PRO-04: reporte de uso del voucher actualmente abierto
-    usage:        null,    // { total_uses, total_discount, redemptions[] }
-    isLoadingUsage: false,
-    usageError:   null,
-    // UC-PRO-04: reporte agregado (lista de vouchers con metricas + ROI)
+    // UC-PRO-04: reporte agregado (lista de vouchers con metricas + ROI).
+    // El backend solo expone el reporte agregado en GET .../vouchers/report/
+    // (detail=False). No existe un endpoint de uso por-voucher
+    // (.../vouchers/{id}/usage/), por eso no se modela aqui.
     report:         [],
     isLoadingReport: false,
     reportError:    null,
@@ -162,21 +148,6 @@ const vouchersSlice = createSlice({
       .addCase(deactivateVoucher.rejected, (state, action) => {
         state.isActioning = false;
         state.actionError = action.payload;
-      });
-
-    // fetchVoucherUsage (UC-PRO-04)
-    builder
-      .addCase(fetchVoucherUsage.pending, (state) => {
-        state.isLoadingUsage = true;
-        state.usageError     = null;
-      })
-      .addCase(fetchVoucherUsage.fulfilled, (state, action) => {
-        state.isLoadingUsage = false;
-        state.usage          = action.payload ?? null;
-      })
-      .addCase(fetchVoucherUsage.rejected, (state, action) => {
-        state.isLoadingUsage = false;
-        state.usageError     = action.payload;
       });
 
     // fetchVoucherReport (UC-PRO-04 agregado)

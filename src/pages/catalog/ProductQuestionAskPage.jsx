@@ -17,6 +17,7 @@ export default function ProductQuestionAskPage() {
   const { isActioning, actionError, lastAction } =
     useSelector((s) => s.questions);
   const [body, setBody]   = useState('');
+  const [name, setName]   = useState('');
   const [email, setEmail] = useState('');
   const [error, setError] = useState('');
 
@@ -30,8 +31,9 @@ export default function ProductQuestionAskPage() {
     dispatch(clearQuestionsActionState());
     dispatch(askProductQuestion({
       productId,
-      body:  body.trim(),
-      email: email.trim() || null,
+      body:       body.trim(),
+      askerName:  name.trim(),
+      askerEmail: email.trim(),
     }));
   };
 
@@ -71,7 +73,18 @@ export default function ProductQuestionAskPage() {
         </div>
 
         <div className={styles.field}>
-          <label htmlFor="question-email">Email (opcional)</label>
+          <label htmlFor="question-name">Tu nombre</label>
+          <input
+            id="question-name"
+            type="text"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            placeholder="como quieres que te identifiquemos"
+          />
+        </div>
+
+        <div className={styles.field}>
+          <label htmlFor="question-email">Email</label>
           <input
             id="question-email"
             type="email"

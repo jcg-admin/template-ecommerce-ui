@@ -6,7 +6,7 @@
  *   UC-CAT-09  — Crear producto       (POST   /api/v1/admin/products/)
  *   UC-CAT-10  — Editar producto      (PATCH  /api/v1/admin/products/:id/)
  *   UC-CAT-11  — Desactivar producto  (POST   /api/v1/admin/products/:id/deactivate/)
- *                Reactivar producto   (POST   /api/v1/admin/products/:id/activate/)
+ *                Reactivar producto   (PATCH  /api/v1/admin/products/:id/ {is_active:true})
  *
  * La lectura del listado vive en `useAdminProducts` (React Query). Las
  * mutaciones se centralizan aqui para reutilizar `isActioning`,
@@ -61,12 +61,19 @@ export const deactivateProduct = createAsyncThunk(
   },
 );
 
-/** UC-CAT-11 (alt C): Reactivar producto previamente desactivado. */
+/**
+ * UC-CAT-11 (alt C): Reactivar producto previamente desactivado.
+ *
+ * El backend (ProductAdminViewSet) no expone un action `activate/`;
+ * solo `deactivate/`, `toggle-featured/` y `price-history/`. La
+ * reactivacion se realiza con un PATCH al detail enviando
+ * `is_active: true` (ViewSet.partial_update).
+ */
 export const activateProduct = createAsyncThunk(
   'products/activate',
   async (id, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(`${URL_BASE}${id}/activate/`);
+      const res = await apiService.patch(`${URL_BASE}${id}/`, { is_active: true });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));

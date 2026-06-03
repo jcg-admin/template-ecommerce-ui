@@ -1,6 +1,10 @@
 /**
  * Tests — AdminNewsletterComposePage
- * UC-NEW-04: el admin compone y envia (o programa) una campana.
+ * UC-NEW-04: el admin compone y envia una campana.
+ *
+ * El backend (CampaignCreateSerializer) acepta `subject`, `body` y
+ * `audience_filter` (PENDING|CONFIRMED|UNSUBSCRIBED, default CONFIRMED).
+ * No existen `html_body`/`text_body`/`segment`/`scheduled_at`.
  */
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Provider }     from 'react-redux';
@@ -35,14 +39,15 @@ describe('AdminNewsletterComposePage (UC-NEW-04)', () => {
     ).toBeInTheDocument();
   });
 
-  it('exige asunto, html y texto plano antes de enviar', () => {
+  it('exige asunto y contenido antes de enviar', () => {
     render(wrap(<AdminNewsletterComposePage />, makeStore()));
     fireEvent.click(screen.getByRole('button', { name: /Enviar campa[nñ]a/i }));
     expect(apiService.post).not.toHaveBeenCalled();
     expect(screen.getByText(/El asunto es obligatorio/i)).toBeInTheDocument();
+    expect(screen.getByText(/El contenido es obligatorio/i)).toBeInTheDocument();
   });
 
-  it('al enviar, hace POST a /api/v1/admin/newsletter/campaigns/', async () => {
+  it('al enviar, hace POST con subject, body y audience_filter', async () => {
     apiService.post.mockResolvedValue({
       data: { id: 5, status: 'QUEUED', recipients_count: 120 },
     });
@@ -50,21 +55,44 @@ describe('AdminNewsletterComposePage (UC-NEW-04)', () => {
 
     fireEvent.change(screen.getByLabelText(/Asunto/i),
       { target: { value: 'Boletin de mayo' } });
-    fireEvent.change(screen.getByLabelText(/Contenido HTML/i),
-      { target: { value: '<p>Hola</p>' } });
-    fireEvent.change(screen.getByLabelText(/Contenido en texto plano/i),
-      { target: { value: 'Hola' } });
+    fireEvent.change(screen.getByLabelText(/Contenido/i),
+      { target: { value: 'Hola a todos, novedades del mes.' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar campa[nñ]a/i }));
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
         '/api/v1/admin/newsletter/campaigns/',
         expect.objectContaining({
-          subject:   'Boletin de mayo',
-          html_body: '<p>Hola</p>',
-          text_body: 'Hola',
-          segment:   'ALL_ACTIVE',
+          subject:         'Boletin de mayo',
+          body:            'Hola a todos, novedades del mes.',
+          audience_filter: 'CONFIRMED',
         }),
+      );
+    });
+    // Campos inventados que el backend no acepta NO deben enviarse.
+    const payload = apiService.post.mock.calls[0][1];
+    expect(payload).not.toHaveProperty('html_body');
+    expect(payload).not.toHaveProperty('text_body');
+    expect(payload).not.toHaveProperty('segment');
+    expect(payload).not.toHaveProperty('scheduled_at');
+  });
+
+  it('permite elegir la audiencia de la campana', async () => {
+    apiService.post.mockResolvedValue({ data: { id: 6, status: 'QUEUED' } });
+    render(wrap(<AdminNewsletterComposePage />, makeStore()));
+
+    fireEvent.change(screen.getByLabelText(/Asunto/i),
+      { target: { value: 'Reengage' } });
+    fireEvent.change(screen.getByLabelText(/Contenido/i),
+      { target: { value: 'Vuelve con nosotros, te extranamos.' } });
+    fireEvent.change(screen.getByLabelText(/Audiencia/i),
+      { target: { value: 'PENDING' } });
+    fireEvent.click(screen.getByRole('button', { name: /Enviar campa[nñ]a/i }));
+
+    await waitFor(() => {
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/admin/newsletter/campaigns/',
+        expect.objectContaining({ audience_filter: 'PENDING' }),
       );
     });
   });
@@ -77,38 +105,12 @@ describe('AdminNewsletterComposePage (UC-NEW-04)', () => {
 
     fireEvent.change(screen.getByLabelText(/Asunto/i),
       { target: { value: 'Boletin' } });
-    fireEvent.change(screen.getByLabelText(/Contenido HTML/i),
-      { target: { value: '<p>x</p>' } });
-    fireEvent.change(screen.getByLabelText(/Contenido en texto plano/i),
-      { target: { value: 'x' } });
+    fireEvent.change(screen.getByLabelText(/Contenido/i),
+      { target: { value: 'Contenido de la campana de prueba.' } });
     fireEvent.click(screen.getByRole('button', { name: /Enviar campa[nñ]a/i }));
 
     expect(
       await screen.findByText(/120 destinatarios/i),
     ).toBeInTheDocument();
-  });
-
-  it('permite programar el envio futuro', async () => {
-    apiService.post.mockResolvedValue({ data: { id: 6, status: 'SCHEDULED' } });
-    render(wrap(<AdminNewsletterComposePage />, makeStore()));
-
-    fireEvent.change(screen.getByLabelText(/Asunto/i),
-      { target: { value: 'Programada' } });
-    fireEvent.change(screen.getByLabelText(/Contenido HTML/i),
-      { target: { value: '<p>x</p>' } });
-    fireEvent.change(screen.getByLabelText(/Contenido en texto plano/i),
-      { target: { value: 'x' } });
-    fireEvent.change(screen.getByLabelText(/Programar para/i),
-      { target: { value: '2026-06-01T10:00' } });
-    fireEvent.click(screen.getByRole('button', { name: /Enviar campa[nñ]a/i }));
-
-    await waitFor(() => {
-      expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/admin/newsletter/campaigns/',
-        expect.objectContaining({
-          scheduled_at: '2026-06-01T10:00',
-        }),
-      );
-    });
   });
 });

@@ -1,14 +1,15 @@
 /**
  * logisticsSlice — dominio de logistica
  *
- * UCs de acciones operacionales y de gestion:
- *   UC-LOG-01  createShipmentGuide  POST  /api/v1/admin/orders/:orderNumber/guide/
- *   UC-LOG-02  setTrackingNumber    PATCH /api/v1/admin/orders/:orderNumber/tracking/
- *   UC-LOG-06  fetchCouriers        GET    /api/v1/admin/couriers/
- *              createCourier        POST   /api/v1/admin/couriers/
- *              updateCourier        PATCH  /api/v1/admin/couriers/:id/
- *              deleteCourier        DELETE /api/v1/admin/couriers/:id/
- *   UC-LOG-07  reportShippingIssue  POST   /api/v1/orders/:orderNumber/shipping-issue/
+ * Endpoints alineados con el backend real (apps.logistics, P-13):
+ *   UC-LOG-01  createShipmentGuide  POST   /api/v1/logistics/guides/
+ *                                   body { order_id, courier_id, tracking_number, notes }
+ *   UC-LOG-02  updateGuideStatus    PATCH  /api/v1/logistics/guides/:guideId/
+ *                                   body { status, description }
+ *   UC-LOG-06  fetchCouriers        GET    /api/v1/logistics/couriers/
+ *              createCourier        POST   /api/v1/logistics/couriers/
+ *              updateCourier        PATCH  /api/v1/logistics/couriers/:id/
+ *              deleteCourier        DELETE /api/v1/logistics/couriers/:id/
  *   UC-LOG-08  confirmDelivery      POST   /api/v1/logistics/guides/:guideId/confirm-delivery/
  *
  * La lectura del panel (grupos A y B) la expone `useLogistics`.
@@ -34,14 +35,18 @@ export const confirmDelivery = createAsyncThunk(
 );
 
 // ─── UC-LOG-01 — crear guia de envio (admin) ────────────────────────────────
+// Real: POST /api/v1/logistics/guides/ con { order_id, courier_id,
+// tracking_number, notes } (ShipmentGuideCreateSerializer).
 export const createShipmentGuide = createAsyncThunk(
   'logistics/createShipmentGuide',
-  async ({ orderNumber, courierId, ...rest }, { rejectWithValue }) => {
+  async ({ orderId, courierId, trackingNumber, notes }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(
-        `/api/v1/admin/orders/${orderNumber}/guide/`,
-        { ...(courierId != null ? { courier_id: courierId } : {}), ...rest },
-      );
+      const res = await apiService.post('/api/v1/logistics/guides/', {
+        ...(orderId != null ? { order_id: orderId } : {}),
+        ...(courierId != null ? { courier_id: courierId } : {}),
+        ...(trackingNumber != null ? { tracking_number: trackingNumber } : {}),
+        ...(notes != null ? { notes } : {}),
+      });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
@@ -49,14 +54,17 @@ export const createShipmentGuide = createAsyncThunk(
   },
 );
 
-// ─── UC-LOG-02 — registrar numero de rastreo (admin) ────────────────────────
-export const setTrackingNumber = createAsyncThunk(
-  'logistics/setTrackingNumber',
-  async ({ orderNumber, tracking }, { rejectWithValue }) => {
+// ─── UC-LOG-02 — actualizar estado de la guia (admin) ───────────────────────
+// Real: PATCH /api/v1/logistics/guides/:guideId/ con { status, description }
+// (ShipmentGuideDetailView). El tracking_number se fija al crear la guia y es
+// inmutable; no existe endpoint para "registrar rastreo" por separado.
+export const updateGuideStatus = createAsyncThunk(
+  'logistics/updateGuideStatus',
+  async ({ guideId, status, description }, { rejectWithValue }) => {
     try {
       const res = await apiService.patch(
-        `/api/v1/admin/orders/${orderNumber}/tracking/`,
-        { tracking },
+        `/api/v1/logistics/guides/${guideId}/`,
+        { status, ...(description != null ? { description } : {}) },
       );
       return res.data;
     } catch (err) {
@@ -66,7 +74,7 @@ export const setTrackingNumber = createAsyncThunk(
 );
 
 // ─── UC-LOG-06 — CRUD de couriers / paqueterias (admin) ─────────────────────
-const COURIERS_URL = '/api/v1/admin/couriers/';
+const COURIERS_URL = '/api/v1/logistics/couriers/';
 
 export const fetchCouriers = createAsyncThunk(
   'logistics/fetchCouriers',
@@ -110,22 +118,6 @@ export const deleteCourier = createAsyncThunk(
     try {
       await apiService.delete(`${COURIERS_URL}${id}/`);
       return id;
-    } catch (err) {
-      return rejectWithValue(serializeApiError(err));
-    }
-  },
-);
-
-// ─── UC-LOG-07 — reportar problema de envio (comprador) ─────────────────────
-export const reportShippingIssue = createAsyncThunk(
-  'logistics/reportShippingIssue',
-  async ({ orderNumber, message, category }, { rejectWithValue }) => {
-    try {
-      const res = await apiService.post(
-        `/api/v1/orders/${orderNumber}/shipping-issue/`,
-        { message, ...(category ? { category } : {}) },
-      );
-      return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));
     }
@@ -176,16 +168,16 @@ const logisticsSlice = createSlice({
         state.isActioning = false; state.actionError = action.payload;
       })
 
-      // UC-LOG-02 setTrackingNumber
-      .addCase(setTrackingNumber.pending, (state) => {
+      // UC-LOG-02 updateGuideStatus
+      .addCase(updateGuideStatus.pending, (state) => {
         state.isActioning = true; state.actionError = null;
       })
-      .addCase(setTrackingNumber.fulfilled, (state, action) => {
+      .addCase(updateGuideStatus.fulfilled, (state, action) => {
         state.isActioning  = false;
-        state.lastAction   = 'tracking_set';
+        state.lastAction   = 'guide_status_updated';
         state.currentGuide = { ...(state.currentGuide ?? {}), ...(action.payload ?? {}) };
       })
-      .addCase(setTrackingNumber.rejected, (state, action) => {
+      .addCase(updateGuideStatus.rejected, (state, action) => {
         state.isActioning = false; state.actionError = action.payload;
       })
 
@@ -244,17 +236,6 @@ const logisticsSlice = createSlice({
         state.couriers    = state.couriers.filter((c) => c.id !== action.payload);
       })
       .addCase(deleteCourier.rejected, (state, action) => {
-        state.isActioning = false; state.actionError = action.payload;
-      })
-
-      // UC-LOG-07 reportShippingIssue
-      .addCase(reportShippingIssue.pending, (state) => {
-        state.isActioning = true; state.actionError = null;
-      })
-      .addCase(reportShippingIssue.fulfilled, (state) => {
-        state.isActioning = false; state.lastAction = 'issue_reported';
-      })
-      .addCase(reportShippingIssue.rejected, (state, action) => {
         state.isActioning = false; state.actionError = action.payload;
       });
   },

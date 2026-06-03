@@ -22,14 +22,21 @@ const ADMIN_MODERATE_REJECT_URL   = (id) => `/api/v1/admin/questions/${id}/rejec
 // Thunks
 // =============================================================================
 
-/** UC-QST-01: visitante envia una pregunta sobre un producto. */
+/**
+ * UC-QST-01: visitante envia una pregunta sobre un producto.
+ *
+ * El backend (PublicQuestionCreateSerializer) espera `body`, `asker_name`
+ * y `asker_email`. Para usuarios anonimos `asker_name` y `asker_email`
+ * son obligatorios (400 si faltan).
+ */
 export const askProductQuestion = createAsyncThunk(
   'questions/ask',
-  async ({ productId, body, email }, { rejectWithValue }) => {
+  async ({ productId, body, askerName, askerEmail }, { rejectWithValue }) => {
     try {
       const res = await apiService.post(PUBLIC_ASK_URL(productId), {
         body,
-        email: email || null,
+        asker_name:  askerName || '',
+        asker_email: askerEmail || '',
       });
       return res.data;
     } catch (err) {
@@ -38,12 +45,16 @@ export const askProductQuestion = createAsyncThunk(
   },
 );
 
-/** UC-QST-03: admin responde la pregunta. */
+/**
+ * UC-QST-03: admin responde la pregunta.
+ *
+ * El backend (AdminAnswerSerializer) exige el campo `answer_body`.
+ */
 export const answerProductQuestion = createAsyncThunk(
   'questions/answer',
   async ({ id, body }, { rejectWithValue }) => {
     try {
-      const res = await apiService.post(ADMIN_ANSWER_URL(id), { body });
+      const res = await apiService.post(ADMIN_ANSWER_URL(id), { answer_body: body });
       return res.data;
     } catch (err) {
       return rejectWithValue(serializeApiError(err));

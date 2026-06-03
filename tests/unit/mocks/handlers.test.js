@@ -137,9 +137,11 @@ describe('mocks/handlers/returns (UC-RET-01..06)', () => {
     expect(r.data.detail).toMatch(/no encontrada/i);
   });
 
-  it('POST /api/v1/returns/ crea (201) con order_id + reason', async () => {
+  it('POST /api/v1/returns/ crea (201) con order_number + reason', async () => {
+    // El backend (ReturnCreateSerializer) valida `order_number` en el body;
+    // la representación de lectura expone `order_id`.
     const r = await post('http://localhost/api/v1/returns/', {
-      order_id: 'ORD-9999',
+      order_number: 'ORD-9999',
       reason: 'WRONG_ITEM',
     });
     expect(r.status).toBe(201);
@@ -149,7 +151,7 @@ describe('mocks/handlers/returns (UC-RET-01..06)', () => {
 
   it('POST sin reason devuelve 400', async () => {
     const r = await post('http://localhost/api/v1/returns/', {
-      order_id: 'ORD-9999',
+      order_number: 'ORD-9999',
     });
     expect(r.status).toBe(400);
   });

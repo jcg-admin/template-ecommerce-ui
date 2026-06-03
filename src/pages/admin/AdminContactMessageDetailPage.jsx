@@ -34,7 +34,6 @@ export default function AdminContactMessageDetailPage() {
     useSelector((s) => s.contact);
 
   const [replyBody, setReplyBody] = useState('');
-  const [internalNote, setInternalNote] = useState('');
   const [error, setError] = useState('');
 
   // Marca el mensaje como leido al abrirlo (UC-COM-02 paso 5).
@@ -54,8 +53,7 @@ export default function AdminContactMessageDetailPage() {
     dispatch(clearContactActionState());
     dispatch(replyContactMessage({
       id,
-      replyBody:    replyBody.trim(),
-      internalNote: internalNote.trim() || null,
+      replyBody: replyBody.trim(),
     }));
   };
 
@@ -95,7 +93,7 @@ export default function AdminContactMessageDetailPage() {
 
       <article className={styles.original}>
         <h2 className={styles.sectionTitle}>Mensaje original</h2>
-        <p className={styles.body}>{message.message}</p>
+        <p className={styles.body}>{message.body ?? message.message}</p>
       </article>
 
       <form onSubmit={handleSubmit} noValidate className={styles.form}>
@@ -111,16 +109,6 @@ export default function AdminContactMessageDetailPage() {
             aria-invalid={Boolean(error)}
           />
           {error && <span className={styles.fieldError}>{error}</span>}
-        </div>
-
-        <div className={styles.field}>
-          <label htmlFor="internal-note">Nota interna (opcional)</label>
-          <textarea
-            id="internal-note"
-            rows={3}
-            value={internalNote}
-            onChange={(e) => setInternalNote(e.target.value)}
-          />
         </div>
 
         {actionError && (

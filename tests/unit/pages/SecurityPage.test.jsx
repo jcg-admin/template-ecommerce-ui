@@ -70,4 +70,18 @@ describe('SecurityPage', () => {
     fireEvent.click(screen.getByRole('button', { name: /cambiar contraseña/i }));
     await waitFor(() => expect(apiService.post).toHaveBeenCalled());
   });
+
+  it('cerrar todas las sesiones pega a /api/v1/auth/logout-all/', async () => {
+    apiService.post.mockResolvedValue({ data: { message: 'ok' } });
+    renderPage();
+    fireEvent.click(
+      screen.getByRole('button', { name: /cerrar todas las sesiones/i }),
+    );
+    await waitFor(() =>
+      expect(apiService.post).toHaveBeenCalledWith(
+        '/api/v1/auth/logout-all/',
+        {},
+      ),
+    );
+  });
 });

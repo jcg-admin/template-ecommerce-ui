@@ -12,7 +12,7 @@ import {
 } from '@redux/selectors';
 import {
   loginUser, logoutUser, registerUser,
-  getCurrentUser, clearError, updateUser,
+  fetchProfile, clearError, updateUser,
 } from '@redux/slices/authSlice';
 
 export function useAuth() {
@@ -28,7 +28,7 @@ export function useAuth() {
   const login    = useCallback((creds) => dispatch(loginUser(creds)),    [dispatch]);
   const logout   = useCallback(()      => dispatch(logoutUser()),         [dispatch]);
   const register = useCallback((data)  => dispatch(registerUser(data)),   [dispatch]);
-  const refresh  = useCallback(()      => dispatch(getCurrentUser()),      [dispatch]);
+  const refresh  = useCallback(()      => dispatch(fetchProfile()),        [dispatch]);
   const clear    = useCallback(()      => dispatch(clearError()),          [dispatch]);
   const update   = useCallback((data)  => dispatch(updateUser(data)),      [dispatch]);
 

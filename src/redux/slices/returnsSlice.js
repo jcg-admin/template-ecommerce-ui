@@ -24,9 +24,12 @@ const ADMIN_URL    = '/api/v1/admin/returns/';
  * UC-RET-01: crea una nueva solicitud de devolucion.
  *
  * Acepta dos formas:
- *   - payload JSON (sin fotos): `{ order_id, reason, description }`.
- *   - payload con fotos (UC-RET-01 Alt A): `{ order_id, reason,
+ *   - payload JSON (sin fotos): `{ order_number, reason, description }`.
+ *   - payload con fotos (UC-RET-01 Alt A): `{ order_number, reason,
  *     description, photos: File[] }` — se serializa como `multipart/form-data`.
+ *
+ * El backend (ReturnCreateSerializer) valida `order_number` (el
+ * identificador visible al comprador), no el PK interno.
  *
  * Cuando hay fotos, el thunk arma un `FormData` con los campos planos +
  * cada `File` bajo la clave `photos`. apiService delega en axios, que

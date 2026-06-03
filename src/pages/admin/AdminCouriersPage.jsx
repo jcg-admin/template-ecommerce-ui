@@ -3,10 +3,10 @@
  * CRUD de couriers / paqueterías (admin).
  *
  * Endpoints (logisticsSlice):
- *   GET    /api/v1/admin/couriers/
- *   POST   /api/v1/admin/couriers/
- *   PATCH  /api/v1/admin/couriers/:id/
- *   DELETE /api/v1/admin/couriers/:id/
+ *   GET    /api/v1/logistics/couriers/
+ *   POST   /api/v1/logistics/couriers/
+ *   PATCH  /api/v1/logistics/couriers/:id/
+ *   DELETE /api/v1/logistics/couriers/:id/
  */
 
 import { useEffect, useState } from 'react';

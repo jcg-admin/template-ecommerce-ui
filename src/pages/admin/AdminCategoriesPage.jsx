@@ -7,7 +7,6 @@
  *   POST   /admin/categories/
  *   PATCH  /admin/categories/<id>/
  *   DELETE /admin/categories/<id>/
- *   PATCH  /admin/categories/<id>/move/   { new_parent_id, new_order }
  */
 
 import { useEffect, useState } from 'react';
@@ -15,7 +14,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import {
   fetchAdminCategories, createCategory, updateCategory,
-  deleteCategory, moveCategoryNode,
+  deleteCategory,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
@@ -76,8 +75,6 @@ export default function AdminCategoriesPage() {
   const renderActions = (node) => (
     <div className={styles.nodeActions}>
       {!node.is_active && <span className={styles.inactive}>Inactiva</span>}
-      <button type="button" onClick={() => dispatch(moveCategoryNode({ id: node.id, direction: 'up' }))} className={styles.iconBtn} aria-label="Mover arriba">↑</button>
-      <button type="button" onClick={() => dispatch(moveCategoryNode({ id: node.id, direction: 'down' }))} className={styles.iconBtn} aria-label="Mover abajo">↓</button>
       <button type="button" onClick={() => setCreating(node.id)} className={styles.iconBtn} aria-label="Añadir hija">+</button>
       <button type="button" onClick={() => setEditing(node)} className={styles.iconBtn} aria-label="Editar">✎</button>
       <button type="button" onClick={() => handleDelete(node)} className={`${styles.iconBtn} ${styles.iconBtnDelete}`} aria-label="Eliminar">×</button>

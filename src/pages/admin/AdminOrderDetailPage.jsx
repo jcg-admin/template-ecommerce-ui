@@ -16,7 +16,7 @@ import {
   fetchAdminOrder, updateOrderStatus, adminCancelOrder,
 } from '@redux/slices/adminSlice';
 import {
-  createShipmentGuide, setTrackingNumber,
+  createShipmentGuide, updateGuideStatus,
 } from '@redux/slices/logisticsSlice';
 import RefundModal from '@components/admin/RefundModal';
 import GanttChart from '@components/common/GanttChart';
@@ -55,8 +55,8 @@ export default function AdminOrderDetailPage() {
   const [showCancel, setShowCancel] = useState(false);
   // UC-LOG-01 / UC-LOG-02 — envío
   const [guideCourier, setGuideCourier] = useState('');
-  const [guideWeight, setGuideWeight] = useState('');
-  const [tracking, setTracking] = useState('');
+  const [guideTracking, setGuideTracking] = useState('');
+  const [guideStatus, setGuideStatus] = useState('');
   const currentGuide = useSelector((s) => s.logistics?.currentGuide);
 
   useEffect(() => { dispatch(fetchAdminOrder(order_number)); }, [dispatch, order_number]);
@@ -93,22 +93,26 @@ export default function AdminOrderDetailPage() {
   };
 
   // UC-LOG-01 — crear guía de envío
+  // Real: POST /api/v1/logistics/guides/ con { order_id, courier_id,
+  // tracking_number }. tracking_number es requerido por el backend.
   const handleCreateGuide = async (e) => {
     e.preventDefault();
+    if (!guideTracking.trim()) return;
     await dispatch(createShipmentGuide({
-      orderNumber: order_number,
+      orderId: order?.id,
       ...(guideCourier ? { courierId: Number(guideCourier) } : {}),
-      ...(guideWeight ? { weight_kg: Number(guideWeight) } : {}),
+      trackingNumber: guideTracking.trim(),
     }));
-    setGuideCourier(''); setGuideWeight('');
+    setGuideCourier(''); setGuideTracking('');
   };
 
-  // UC-LOG-02 — registrar número de rastreo
-  const handleSetTracking = async (e) => {
+  // UC-LOG-02 — actualizar estado de la guía
+  // Real: PATCH /api/v1/logistics/guides/:id/ con { status }.
+  const handleUpdateStatus = async (e) => {
     e.preventDefault();
-    if (!tracking.trim()) return;
-    await dispatch(setTrackingNumber({ orderNumber: order_number, tracking: tracking.trim() }));
-    setTracking('');
+    if (!currentGuide?.id || !guideStatus) return;
+    await dispatch(updateGuideStatus({ guideId: currentGuide.id, status: guideStatus }));
+    setGuideStatus('');
   };
 
   return (
@@ -210,10 +214,11 @@ export default function AdminOrderDetailPage() {
         {/* Envío — guía (UC-LOG-01) y rastreo (UC-LOG-02) */}
         <section className={styles.card}>
           <header className={styles.cardHeader}><h2 className={styles.cardTitle}>Envío</h2></header>
-          {currentGuide?.guide_id && (
+          {currentGuide?.id && (
             <p className={styles.muted} style={{ padding: '0 16px' }}>
-              Guía actual: <strong>{currentGuide.guide_id}</strong>
-              {currentGuide.tracking && <> · Rastreo: <strong>{currentGuide.tracking}</strong></>}
+              Guía actual: <strong>#{currentGuide.id}</strong>
+              {currentGuide.tracking_number && <> · Rastreo: <strong>{currentGuide.tracking_number}</strong></>}
+              {currentGuide.status && <> · Estado: <strong>{currentGuide.status}</strong></>}
             </p>
           )}
           <form onSubmit={handleCreateGuide} className={styles.transitionForm}>
@@ -228,33 +233,40 @@ export default function AdminOrderDetailPage() {
                 className={styles.input}
               />
               <input
-                type="number"
-                step="0.1"
-                aria-label="Peso en kg"
-                placeholder="Peso (kg)"
-                value={guideWeight}
-                onChange={(e) => setGuideWeight(e.target.value)}
-                className={styles.input}
-              />
-              <Button type="submit" variant="primary" size="sm">Crear guía</Button>
-            </div>
-          </form>
-          <form onSubmit={handleSetTracking} className={styles.transitionForm}>
-            <MetaTag tone="bronze">Registrar número de rastreo</MetaTag>
-            <div className={styles.transitionRow}>
-              <input
                 type="text"
                 aria-label="Número de rastreo"
                 placeholder="Número de rastreo"
-                value={tracking}
-                onChange={(e) => setTracking(e.target.value)}
+                value={guideTracking}
+                onChange={(e) => setGuideTracking(e.target.value)}
                 className={styles.input}
               />
-              <Button type="submit" variant="secondary" size="sm" disabled={!tracking.trim()}>
-                Guardar rastreo
+              <Button type="submit" variant="primary" size="sm" disabled={!guideTracking.trim()}>
+                Crear guía
               </Button>
             </div>
           </form>
+          {currentGuide?.id && (
+            <form onSubmit={handleUpdateStatus} className={styles.transitionForm}>
+              <MetaTag tone="bronze">Actualizar estado de la guía</MetaTag>
+              <div className={styles.transitionRow}>
+                <select
+                  aria-label="Estado de la guía"
+                  value={guideStatus}
+                  onChange={(e) => setGuideStatus(e.target.value)}
+                  className={styles.input}
+                >
+                  <option value="">Selecciona estado…</option>
+                  <option value="PICKED_UP">Recolectado</option>
+                  <option value="IN_TRANSIT">En tránsito</option>
+                  <option value="INCIDENT">Incidencia</option>
+                  <option value="CANCELLED">Cancelada</option>
+                </select>
+                <Button type="submit" variant="secondary" size="sm" disabled={!guideStatus}>
+                  Actualizar estado
+                </Button>
+              </div>
+            </form>
+          )}
         </section>
 
         {/* Items */}

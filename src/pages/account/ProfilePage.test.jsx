@@ -101,13 +101,13 @@ describe('ProfilePage — avatar FileUpload', () => {
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/v1/auth/profile/avatar/',
+        '/api/v1/auth/profile/',
         expect.any(FormData),
       );
     });
     // El FormData incluye el archivo bajo la clave "avatar".
     const [, fd] = apiService.patch.mock.calls.find(
-      (c) => c[0] === '/api/v1/auth/profile/avatar/',
+      (c) => c[0] === '/api/v1/auth/profile/',
     );
     expect(fd.get('avatar')).toBe(file);
   });

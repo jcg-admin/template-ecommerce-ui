@@ -5,7 +5,10 @@
  * Endpoints:
  *   GET / POST / PATCH / DELETE /admin/vouchers/<id>/
  *   GET /admin/vouchers/<id>/changelog/
- *   GET /admin/vouchers/<id>/usage/        (UC-PRO-04)
+ *
+ * El uso agregado por campaña vive en el reporte global
+ * GET /admin/vouchers/report/ (AdminVoucherReportPage). El backend no
+ * expone un endpoint de uso por-voucher (.../vouchers/<id>/usage/).
  */
 
 import { useEffect, useState } from 'react';
@@ -14,21 +17,9 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import {
   fetchAdminVoucher, createVoucher, updateVoucher, deleteVoucher,
 } from '@redux/slices/adminSlice';
-import { fetchVoucherUsage } from '@redux/slices/vouchersSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
-import DataGrid from '@components/common/DataGrid';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
 import styles from './AdminVoucherDetailPage.module.scss';
-
-const MXN = new Intl.NumberFormat('es-MX', { style: 'currency', currency: 'MXN' });
-
-// UC-PRO-04: columnas de la tabla de últimos canjes
-const USAGE_COLUMNS = [
-  { key: 'order_number', label: 'Pedido', sortable: true },
-  { key: 'user_email', label: 'Cliente', sortable: true },
-  { key: 'discount_amount', label: 'Descuento', sortable: true },
-  { key: 'redeemed_at', label: 'Fecha', sortable: true },
-];
 
 const TYPES = [
   { id: 'FIXED',         label: 'Monto fijo' },
@@ -44,8 +35,6 @@ export default function AdminVoucherDetailPage() {
   const navigate = useNavigate();
   const voucher = useSelector((s) => s.admin?.currentVoucher);
   const changelog = useSelector((s) => s.admin?.voucherChangelog || []);
-  // UC-PRO-04: métricas de uso del voucher
-  const usage = useSelector((s) => s.vouchers?.usage);
 
   const [form, setForm] = useState({
     code: '', voucher_type: 'PERCENTAGE',
@@ -58,8 +47,6 @@ export default function AdminVoucherDetailPage() {
   const [saving, setSaving] = useState(false);
 
   useEffect(() => { if (!isNew) dispatch(fetchAdminVoucher(id)); }, [dispatch, id, isNew]);
-  // UC-PRO-04: cargar el reporte de uso del voucher
-  useEffect(() => { if (!isNew) dispatch(fetchVoucherUsage(id)); }, [dispatch, id, isNew]);
   useEffect(() => { if (voucher && !isNew) setForm(voucher); }, [voucher, isNew]);
 
   const set = (k) => (e) => {
@@ -181,41 +168,6 @@ export default function AdminVoucherDetailPage() {
           </aside>
         )}
       </div>
-
-      {!isNew && (
-        /* UC-PRO-04: Reporte de uso del voucher */
-        <section className={styles.usage} aria-labelledby="voucher-usage-title">
-          <header className={styles.cardHeader}>
-            <h2 id="voucher-usage-title" className={styles.cardTitle}>Uso del voucher</h2>
-          </header>
-
-          <div className={styles.metrics}>
-            <div className={styles.metric}>
-              <span className={styles.metricLabel}>Usos totales</span>
-              <span className={styles.metricValue}>{usage?.total_uses ?? 0}</span>
-            </div>
-            <div className={styles.metric}>
-              <span className={styles.metricLabel}>Descuento total otorgado</span>
-              <span className={styles.metricValue}>{MXN.format(usage?.total_discount ?? 0)}</span>
-            </div>
-          </div>
-
-          <h3 className={styles.subTitle}>Últimos canjes</h3>
-          <DataGrid
-            ariaLabel="Últimos canjes del voucher"
-            columns={USAGE_COLUMNS}
-            rows={(usage?.redemptions ?? []).map((r) => ({
-              ...r,
-              discount_amount: MXN.format(r.discount_amount ?? 0),
-              redeemed_at: r.redeemed_at
-                ? new Date(r.redeemed_at).toLocaleString('es-MX', { day: '2-digit', month: 'short', hour: '2-digit', minute: '2-digit' })
-                : '—',
-            }))}
-            pageSize={5}
-            emptyText="Sin canjes registrados"
-          />
-        </section>
-      )}
       </div>
       <ConfirmModal
         open={confirm !== null}

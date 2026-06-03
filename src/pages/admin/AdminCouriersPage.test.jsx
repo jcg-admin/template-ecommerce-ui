@@ -32,7 +32,7 @@ describe('AdminCouriersPage (UC-LOG-06)', () => {
       { id: 1, name: 'DHL Express', code: 'DHL', is_active: true },
     ] } });
     render(wrap(<AdminCouriersPage />, makeStore()));
-    expect(apiService.get).toHaveBeenCalledWith('/api/v1/admin/couriers/');
+    expect(apiService.get).toHaveBeenCalledWith('/api/v1/logistics/couriers/');
     expect(await screen.findByText('DHL Express')).toBeInTheDocument();
   });
 
@@ -48,7 +48,7 @@ describe('AdminCouriersPage (UC-LOG-06)', () => {
 
     await waitFor(() => {
       expect(apiService.post).toHaveBeenCalledWith(
-        '/api/v1/admin/couriers/',
+        '/api/v1/logistics/couriers/',
         expect.objectContaining({ name: 'Estafeta', code: 'EST' }),
       );
     });
@@ -67,7 +67,7 @@ describe('AdminCouriersPage (UC-LOG-06)', () => {
 
     await waitFor(() => {
       expect(apiService.patch).toHaveBeenCalledWith(
-        '/api/v1/admin/couriers/1/',
+        '/api/v1/logistics/couriers/1/',
         expect.objectContaining({ name: 'DHL Express' }),
       );
     });
@@ -85,7 +85,7 @@ describe('AdminCouriersPage (UC-LOG-06)', () => {
     fireEvent.click(screen.getByRole('button', { name: /^Confirmar$/i }));
 
     await waitFor(() => {
-      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/admin/couriers/1/');
+      expect(apiService.delete).toHaveBeenCalledWith('/api/v1/logistics/couriers/1/');
     });
   });
 });

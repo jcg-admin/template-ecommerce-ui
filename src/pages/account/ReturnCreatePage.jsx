@@ -85,9 +85,11 @@ export default function ReturnCreatePage() {
       return;
     }
     dispatch(createReturnRequest({
-      order_id:    fields.order_id.trim(),
-      reason:      fields.reason,
-      description: fields.description.trim(),
+      // El backend (ReturnCreateSerializer) espera `order_number`, el
+      // identificador visible al comprador (p.ej. "PY-AB12CD34"), no el PK.
+      order_number: fields.order_id.trim(),
+      reason:       fields.reason,
+      description:  fields.description.trim(),
       photos,
     }));
   };
