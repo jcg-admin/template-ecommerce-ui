@@ -466,12 +466,6 @@ const adminSlice = createSlice({
         state.shippingMethods   = action.payload?.results ?? action.payload ?? [];
       })
       .addCase(fetchShippingMethods.rejected,  (state) => { state.isLoadingShipping = false; })
-      .addCase(fetchImportStatus.pending,   (state) => { state.isActioning = true; })
-      .addCase(fetchImportStatus.fulfilled, (state, action) => {
-        state.isActioning = false;
-        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
-      })
-      .addCase(fetchImportStatus.rejected,  (state) => { state.isActioning = false; })
       // ── Grupo B: mutaciones ───────────────────────────────────────────────
       .addCase(createProduct.pending,   (state) => { state.isActioning = true; })
       .addCase(createProduct.fulfilled, (state, action) => {
@@ -600,15 +594,6 @@ const adminSlice = createSlice({
       .addCase(confirmPriceSync.pending,   (state) => { state.isActioning = true; })
       .addCase(confirmPriceSync.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'price_sync_confirmed'; })
       .addCase(confirmPriceSync.rejected,  (state) => { state.isActioning = false; })
-      .addCase(uploadProductCSV.pending,   (state) => { state.isActioning = true; })
-      .addCase(uploadProductCSV.fulfilled, (state, action) => {
-        state.isActioning = false;
-        if (action.payload) state.csvImport = { ...state.csvImport, ...action.payload };
-      })
-      .addCase(uploadProductCSV.rejected,  (state, action) => { state.isActioning = false; state.actionError = action.payload ?? null; })
-      .addCase(confirmProductImport.pending,   (state) => { state.isActioning = true; })
-      .addCase(confirmProductImport.fulfilled, (state) => { state.isActioning = false; state.csvImport = { status: 'idle', result: null, errors: [] }; state.lastAction = 'product_import_confirmed'; })
-      .addCase(confirmProductImport.rejected,  (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.pending,   (state) => { state.isActioning = true; })
       .addCase(uploadProductImage.fulfilled, (state) => { state.isActioning = false; })
       .addCase(uploadProductImage.rejected,  (state) => { state.isActioning = false; })
@@ -895,45 +880,11 @@ export const reorderProductImages = createAsyncThunk(
   },
 );
 
-// ── Importación de productos ─────────────────────────────────────────────────
-export const uploadProductCSV = createAsyncThunk(
-  'admin/uploadProductCSV',
-  async (file, { rejectWithValue }) => {
-    try {
-      const fd = new FormData();
-      fd.append('file', file);
-      return (await apiService.post('/api/v1/admin/products/import/', fd)).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const confirmProductImport = createAsyncThunk(
-  'admin/confirmProductImport',
-  async (importId, { rejectWithValue }) => {
-    try {
-      return (await apiService.post(
-        `/api/v1/admin/products/import/${importId}/confirm/`
-      )).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const fetchImportStatus = createAsyncThunk(
-  'admin/fetchImportStatus',
-  async (importId, { rejectWithValue }) => {
-    try {
-      return (await apiService.get(`/api/v1/admin/products/import/${importId}/`)).data;
-    } catch (e) { return rejectWithValue(e.message); }
-  },
-);
-
-export const downloadImportTemplate = createAsyncThunk(
-  'admin/downloadImportTemplate',
-  async (_, { rejectWithValue }) => {
-    try { return (await apiService.get('/api/v1/admin/products/import/template/')).data; }
-    catch (e) { return rejectWithValue(e.message); }
-  },
-);
+// Importación de productos: la página admin/products/import delega en
+// inventorySlice.importProductsCsv → POST /api/v1/admin/inventory/import/
+// (single-shot real). Los thunks products/import/* (upload/confirm/status/
+// template) eran endpoints inventados sin respaldo en el backend real y se
+// eliminaron junto con sus mocks.
 
 // ── Variantes ────────────────────────────────────────────────────────────────
 export const fetchProductVariants = createAsyncThunk(

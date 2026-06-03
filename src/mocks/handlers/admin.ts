@@ -665,39 +665,10 @@ export const adminHandlers = [
     });
   }),
 
-  // ── Import de productos ────────────────────────────────────────────────────
-  // F5-T11 GET /api/v1/admin/products/import/template/
-  http.get('/api/v1/admin/products/import/template/', () =>
-    new HttpResponse(
-      'sku,name,price,stock,category\nEJEMPLO-001,Producto ejemplo,100,10,collares-y-pulseras\n',
-      { headers: { 'Content-Type': 'text/csv', 'Content-Disposition': 'attachment; filename="import-template.csv"' } }
-    )
-  ),
-
-  // F5-T10 GET /api/v1/admin/products/import/:jobId/
-  http.get('/api/v1/admin/products/import/:jobId/', ({ params }) =>
-    HttpResponse.json({
-      id:             Number(params.jobId),
-      status:         'completed',
-      total_rows:     50,
-      imported:       48,
-      errors:         2,
-      error_rows:     [
-        { line: 12, sku: 'SKU-ERR-01', message: 'SKU duplicado' },
-        { line: 27, sku: 'SKU-ERR-02', message: 'Precio inválido' },
-      ],
-      created_at:     new Date().toISOString(),
-    })
-  ),
-
-
-  // F5-T20 POST /api/v1/admin/products/import/
-  http.post('/api/v1/admin/products/import/', async () =>
-    HttpResponse.json(
-      { id: faker.number.int({ min: 1, max: 999 }), status: 'processing', queued_at: new Date().toISOString() },
-      { status: 202 }
-    )
-  ),
+  // Import de productos: el endpoint real es POST /api/v1/admin/inventory/import/
+  // (single-shot), manejado en src/mocks/handlers/inventory.ts. Los handlers
+  // products/import/* (template/status/upload) correspondían a endpoints
+  // inventados sin respaldo en el backend real y se eliminaron.
 
   // ── Price sync ────────────────────────────────────────────────────────────
   // F5-T07 GET /api/v1/admin/price-sync/template/

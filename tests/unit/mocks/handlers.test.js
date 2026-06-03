@@ -104,12 +104,15 @@ describe('mocks/handlers/inventory (UC-INV-01..05)', () => {
     expect(r.status).toBe(404);
   });
 
-  it('POST /api/v1/admin/inventory/import/ devuelve 201 con reporte', async () => {
+  it('POST /api/v1/admin/inventory/import/ devuelve 200 con reporte single-shot', async () => {
+    // Shape real del backend (apps/inventory/views.py ProductImportView):
+    // { created, failed, products_created, products_failed, error_report, download_url }
     const r = await post('http://localhost/api/v1/admin/inventory/import/');
-    expect(r.status).toBe(201);
+    expect(r.status).toBe(200);
     expect(r.data).toHaveProperty('created');
-    expect(r.data).toHaveProperty('updated');
-    expect(r.data).toHaveProperty('errors');
+    expect(r.data).toHaveProperty('failed');
+    expect(r.data).toHaveProperty('products_created');
+    expect(r.data).toHaveProperty('products_failed');
     expect(r.data).toHaveProperty('download_url');
   });
 });

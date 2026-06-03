@@ -39,8 +39,9 @@ interface InventoryMovement {
 interface ImportReport {
   id: number;
   created: number;
-  updated: number;
-  errors: number;
+  failed: number;
+  products_created: number;
+  products_failed: number;
   error_report: string | null;
   download_url: string | null;
 }
@@ -146,27 +147,21 @@ export const inventoryHandlers = [
   }),
 
   http.post('/api/v1/admin/inventory/import/', () => {
+    // Shape real (apps/inventory/views.py ProductImportView):
+    // { created, failed, products_created, products_failed, error_report, download_url }
     const report: ImportReport = {
       id: state.importReports.length + 1,
       created: 3,
-      updated: 2,
-      errors: 0,
+      failed: 0,
+      products_created: 3,
+      products_failed: 0,
       error_report: null,
       download_url: null,
     };
     state.importReports.push(report);
-    return HttpResponse.json(report, { status: 201 });
+    return HttpResponse.json(report, { status: 200 });
   }),
-];
 
-// Exportados para tests. Permiten resetear estado entre casos.
-// Antes vivian como `__resetInventoryState` del interceptor heredado
-// en `src/mocks/interceptors/inventory.js`, eliminado en T-018.
-export const __inventoryState = state;
-export const __resetInventoryState = () => {
-  state.items = initialItems();
-  state.movements = initialMovements();
-  state.importReports = [
   // ── Stock-Alerts — SKUs con stock bajo o agotado ───────────────────
   http.get('/api/v1/admin/inventory/alerts/', () => {
     const alerts = state.items
@@ -184,4 +179,13 @@ export const __resetInventoryState = () => {
     return HttpResponse.json({ count: alerts.length, results: alerts });
   }),
 ];
+
+// Exportados para tests. Permiten resetear estado entre casos.
+// Antes vivian como `__resetInventoryState` del interceptor heredado
+// en `src/mocks/interceptors/inventory.js`, eliminado en T-018.
+export const __inventoryState = state;
+export const __resetInventoryState = () => {
+  state.items = initialItems();
+  state.movements = initialMovements();
+  state.importReports = [];
 };
