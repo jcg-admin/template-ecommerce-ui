@@ -11,7 +11,13 @@ jest.mock('@services/apiService', () => ({
   default: { get: jest.fn(), post: jest.fn() },
 }));
 
+jest.mock('@utils/exportWorkbook', () => ({
+  __esModule: true,
+  exportXlsx: jest.fn(),
+}));
+
 import apiService from '@services/apiService';
+import { exportXlsx } from '@utils/exportWorkbook';
 import AdminReportTopSellersPage from './AdminReportTopSellersPage';
 
 const RESPONSE = {
@@ -85,7 +91,31 @@ describe('AdminReportTopSellersPage (UC-REP-02)', () => {
     apiService.get.mockResolvedValue({ data: RESPONSE });
     render(wrap(<AdminReportTopSellersPage />));
     expect(await screen.findByRole('link', { name: /Exportar CSV/i })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: /Exportar Excel/i })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /Exportar PDF/i })).toBeInTheDocument();
+  });
+
+  it('exporta el ranking a Excel via exportXlsx (UC-ADM-XLSX)', async () => {
+    apiService.get.mockResolvedValue({ data: RESPONSE });
+    render(wrap(<AdminReportTopSellersPage />));
+    await screen.findByText('Falda');
+
+    fireEvent.click(screen.getByRole('button', { name: /Exportar Excel/i }));
+
+    expect(exportXlsx).toHaveBeenCalledTimes(1);
+    const arg = exportXlsx.mock.calls[0][0];
+    expect(arg.filename).toBe('reporte-top-sellers.xlsx');
+    expect(arg.sheetName).toBe('Top sellers');
+    expect(arg.columns).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ key: 'name' }),
+        expect.objectContaining({ key: 'sku' }),
+        expect.objectContaining({ key: 'units' }),
+        expect.objectContaining({ key: 'revenue' }),
+        expect.objectContaining({ key: 'share_pct' }),
+      ]),
+    );
+    expect(arg.rows).toEqual(RESPONSE.results);
   });
 
   it('estado vacio cuando no hay ventas', async () => {

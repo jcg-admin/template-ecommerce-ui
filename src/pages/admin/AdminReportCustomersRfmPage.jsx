@@ -8,7 +8,18 @@ import {
   useCustomersRfmReport,
   buildReportExportUrl,
 } from '@hooks/domain/useReports';
+import { exportXlsx } from '@utils/exportWorkbook';
 import styles from './AdminReportPage.module.scss';
+
+// Columnas del export RFM (UC-ADM-XLSX). Espejan la tabla en pantalla.
+const EXPORT_COLUMNS = [
+  { key: 'name',      label: 'Cliente' },
+  { key: 'email',     label: 'Email' },
+  { key: 'segment',   label: 'Segmento' },
+  { key: 'recency',   label: 'Recencia (días)' },
+  { key: 'frequency', label: 'Frecuencia' },
+  { key: 'monetary',  label: 'Monetario' },
+];
 
 const PERIOD_OPTIONS = [
   { value: 'month',   label: 'Mes' },
@@ -51,6 +62,15 @@ export default function AdminReportCustomersRfmPage() {
   const csvHref = buildReportExportUrl('customers-rfm', { ...params, format: 'csv' });
   const pdfHref = buildReportExportUrl('customers-rfm', { ...params, format: 'pdf' });
 
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: 'reporte-clientes-rfm.xlsx',
+      sheetName: 'Clientes RFM',
+      columns: EXPORT_COLUMNS,
+      rows: results,
+    });
+  };
+
   return (
     <section className={styles.page} aria-labelledby="report-rfm-title">
       <header className={styles.header}>
@@ -59,6 +79,14 @@ export default function AdminReportCustomersRfmPage() {
         </h1>
         <div className={styles.exportGroup}>
           <a href={csvHref} className={styles.exportLink}>Exportar CSV</a>
+          <button
+            type="button"
+            className={styles.exportLink}
+            onClick={handleExportXlsx}
+            disabled={results.length === 0}
+          >
+            Exportar Excel
+          </button>
           <a href={pdfHref} className={styles.exportLink}>Exportar PDF</a>
         </div>
       </header>

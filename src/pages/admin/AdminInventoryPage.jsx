@@ -5,7 +5,19 @@
 import { useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useInventory } from '@hooks/domain/useInventory';
+import { exportSheet } from '@utils/exportSheet';
+import { exportXlsx } from '@utils/exportWorkbook';
+import { Button } from '@components/common/primitives';
 import styles from './AdminInventoryPage.module.scss';
+
+// Columnas del export del listado de stock (UC-DB-RPT-02).
+const EXPORT_COLUMNS = [
+  { key: 'sku',           label: 'SKU' },
+  { key: 'product_name',  label: 'Producto' },
+  { key: 'stock',         label: 'Stock' },
+  { key: 'min_threshold', label: 'Umbral' },
+  { key: 'status',        label: 'Estado' },
+];
 
 const STATUS_OPTIONS = [
   { value: '',         label: 'Todos los estados' },
@@ -39,6 +51,23 @@ export default function AdminInventoryPage() {
     agotados: summary?.productos_agotados   ?? 0,
   }), [summary]);
 
+  const handleExportCsv = () => {
+    exportSheet({
+      filename: 'inventario.csv',
+      columns: EXPORT_COLUMNS,
+      rows: items,
+    });
+  };
+
+  const handleExportXlsx = () => {
+    exportXlsx({
+      filename: 'inventario.xlsx',
+      sheetName: 'Inventario',
+      columns: EXPORT_COLUMNS,
+      rows: items,
+    });
+  };
+
   return (
     <section className={styles.page} aria-labelledby="admin-inventory-title">
       <header className={styles.header}>
@@ -46,6 +75,20 @@ export default function AdminInventoryPage() {
           Inventario
         </h1>
         <div className={styles.headerActions}>
+          <Button
+            variant="secondary"
+            onClick={handleExportCsv}
+            disabled={items.length === 0}
+          >
+            Exportar CSV
+          </Button>
+          <Button
+            variant="secondary"
+            onClick={handleExportXlsx}
+            disabled={items.length === 0}
+          >
+            Exportar Excel
+          </Button>
           <Link to="/admin/inventory/dashboard" className={styles.importLink}>
             Dashboard
           </Link>
