@@ -138,3 +138,25 @@ inventory import (`inventory/import/`), variant adjust.
 3. **UC-CAT-12 ALTA** — price-sync contrato preview/apply (`session_id` vs `sync_id`).
 4. **UC-LOG-09 MEDIA** — hueco de cobertura (decidir narrativa/UI o server-only).
 5. **H-DOC-01/02 BAJA** — reconciliar snapshot + conteos de la matriz.
+
+--------
+
+## Resolución de pendientes (2026-06-03)
+
+- **UC-LOG-09 (hueco)** — RESUELTO: fabricado como feature del template
+  (el backend de referencia no la expone; contrato definido + mock MSW + UC
+  documentado en `docs/pm/iniciativas/implementar-uc-log-09-costo-envio/`).
+  `ShippingCalculator` en CartPage + `cartSlice.fetchShippingQuote`.
+  `template-ecommerce-ui@bf9b960`.
+- **H-DOC-01 (CITA-1, snapshot stale)** — RESUELTO: verificadas y reconciliadas
+  a IMPLEMENTADO las filas UC-SRCH-02, UC-PRO-05, UC-LOG-01/02, UC-LOG-06 (con
+  cita file:line del cableado real, no "el archivo existe").
+- **H-DOC-02 (CITA-2, conteos)** — RESUELTO: resumen recontado por fila a
+  **132 IMPLEMENTADO / 1 AUSENTE-UI / 26 BACKEND-OPS**; eliminada la prosa
+  contradictoria (131/23/0 vs 123/23/8).
+- **priceSyncSlice redundante + variante percentage** — RESUELTO en
+  `template-ecommerce-ui@b947c39`: modo porcentaje (preview/apply-percentage)
+  añadido a la página; `priceSyncSlice.js` (muerto, no cableado) eliminado.
+
+**Pendiente único restante:** UC-LOG-07 (reportar problema de envío,
+buyer-facing) — verificado sin UI real; candidato a fabricar como UC-LOG-09.

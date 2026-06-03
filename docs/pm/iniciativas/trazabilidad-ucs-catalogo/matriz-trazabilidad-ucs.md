@@ -19,29 +19,27 @@ las familias en paralelo (5 agentes) con evidencia de código.
 > eran drift documental (citas de test con ruta vieja — los tests existen
 > colocados en `src/`).
 >
-> **Cierre (2026-06-02, `cerrar-gaps-ucs-auditoria`):** los **4 gaps**
-> funcionales se resolvieron con TDD (F1 ORD-04, F2 AUTH-16, F3 PRO-04, F4
-> CFG-05). Las 4 filas pasan a IMPLEMENTADO. Conteo final: **131 IMPLEMENTADO /
-> 23 BACKEND-OPS / 0 AUSENTE-UI / 0 PARCIAL.**
->
-> **Actualización (cierre de iniciativa):** los 8 AUSENTE-UI fueron
-> implementados con TDD + MSW + test. El conteo final es **131 IMPLEMENTADO /
-> 23 BACKEND-OPS / 0 AUSENTE-UI** (con 4 de esos 131 en estado **PARCIAL** según
-> la auditoría). Los 8 cerrados:
-> UC-AUTH-16 (`SecurityPage`+`deleteAccount`), UC-SRCH-02 (`SearchBar`+
-> `useSearchSuggestions`), UC-PRO-04 (`AdminVoucherDetailPage` uso),
-> UC-PRO-05 (`ReferralPage`+`referralSlice`), UC-LOG-01/02 (`AdminOrderDetailPage`
-> envío), UC-LOG-06 (`AdminCouriersPage`), UC-LOG-07 (`OrderDetailPage` incidencia).
-> Las tablas por familia abajo conservan la clasificación original (snapshot).
+> **Reconciliación (2026-06-03, barrido de UCs):** las tablas por familia se
+> alinearon con la realidad verificada del código (antes conservaban un snapshot
+> con filas AUSENTE-UI ya implementadas — hallazgo CITA-1). Se verificaron y
+> pasaron a IMPLEMENTADO: UC-SRCH-02 (`SearchBar`+`useSearchSuggestions`, listbox
+> en vivo), UC-PRO-05 (`ReferralPage`+`referralSlice`+ruta), UC-LOG-01/02
+> (`createShipmentGuide`+formulario en `AdminOrderDetailPage`), UC-LOG-06
+> (`AdminCouriersPage`+ruta). Se fabricó e implementó UC-LOG-09 (calcular costo
+> de envío). Los gaps funcionales previos (ORD-04, AUTH-16, PRO-04, CFG-05) ya
+> estaban cerrados en `cerrar-gaps-ucs-auditoria`.
+
+Conteo verificado por fila (`grep -cE` sobre las filas `| UC-… | … | ESTADO |`
+de este archivo, 2026-06-03):
 
 | Estado | Total | Significado |
 |--------|-------|-------------|
-| IMPLEMENTADO | 123 | Existe en el UI (con evidencia: componente/página/slice/test) |
-| BACKEND-OPS | 23 | No es asunto del UI (emails, webhooks, cron, SSL/SSH, reportes DB) → `template-ecommerce-server` |
-| AUSENTE-UI | 8 | Hueco real de UI → alcance de esta iniciativa |
+| IMPLEMENTADO | 132 | Existe en el UI (con evidencia: componente/página/slice/test) |
+| BACKEND-OPS | 26 | No es asunto del UI (emails, webhooks, cron, SSL/SSH, reportes DB) → `template-ecommerce-server` |
+| AUSENTE-UI | 1 | Hueco real de UI → alcance pendiente |
 
-**Huecos AUSENTE-UI (8):** UC-AUTH-16, UC-SRCH-02, UC-PRO-04, UC-PRO-05,
-UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
+**Hueco AUSENTE-UI restante (1):** UC-LOG-07 (reportar problema de envío,
+buyer-facing) — verificado sin UI real al 2026-06-03.
 
 
 ## AUTH / CART / WISH / SRCH / COM
@@ -74,7 +72,7 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-WISH-02 | ver lista deseos | IMPLEMENTADO | `src/pages/account/WishlistPage.jsx`, `src/hooks/domain/useWishlist.js`, `wishlistSlice.js`; tests `WishlistPage.test.jsx`, `useWishlist.test.jsx`. |
 | UC-WISH-03 | mover wishlist carrito | IMPLEMENTADO | Acción de mover a carrito en `wishlistSlice.js`; cubierto en `WishlistPage.test.jsx` y `wishlistSlice.test.js`. |
 | UC-SRCH-01 | fulltext search | IMPLEMENTADO | `src/components/catalog/SearchBar.jsx` + `src/hooks/domain/useSearch.js` (GET `/api/v1/catalogue/search/`). |
-| UC-SRCH-02 | autocomplete | AUSENTE-UI | Existe el primitivo genérico `src/components/common/Autocomplete/Autocomplete.jsx` y se importa en `SearchBar.jsx`, pero el campo real es un `<input type="search">` con búsqueda solo al submit; ni `SearchBar` ni `SearchModal` cablean sugerencias en vivo a un endpoint. Faltaría: conectar el Autocomplete a un thunk/endpoint de sugerencias con debounce. |
+| UC-SRCH-02 | autocomplete | IMPLEMENTADO | `SearchBar.jsx` usa `useSearchSuggestions(value)` (`src/hooks/domain/useSearchSuggestions.js`, endpoint `catalogue/autocomplete/`) y renderiza sugerencias en vivo con debounce, `role="listbox"`/`option` y navegación por teclado (`SearchBar.jsx:25,127`). Reconciliado 2026-06-03 (snapshot previo marcaba AUSENTE-UI). |
 | UC-SRCH-03 | historial busquedas | IMPLEMENTADO | `src/pages/account/SearchHistoryPage.jsx`, `src/hooks/domain/useSearchHistory.js`, `src/redux/slices/searchHistorySlice.js`; ruta en `AppRouter.jsx`. |
 | UC-COM-01 | formulario contacto | IMPLEMENTADO | `src/pages/ContactPage.jsx` + `src/redux/slices/contactSlice.js`; ruta en `AppRouter.jsx`; test `ContactPage.test.jsx`. |
 | UC-COM-02 | ver mensajes contacto | IMPLEMENTADO | `src/pages/admin/AdminContactMessagesPage.jsx` + `src/hooks/domain/useContactMessages.js` + `contactSlice.js`; test asociado. |
@@ -103,7 +101,7 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 | UC-PRO-02 | Editar voucher (admin) | IMPLEMENTADO | `src/pages/admin/AdminVoucherDetailPage.jsx` (`updateVoucher` / PATCH). |
 | UC-PRO-03 | Desactivar voucher (admin) | IMPLEMENTADO | `src/pages/admin/AdminVoucherDetailPage.jsx` (toggle `is_active` + `deleteVoucher`). |
 | UC-PRO-04 | Reporte de uso de vouchers | IMPLEMENTADO | Per-voucher en `AdminVoucherDetailPage` + **reporte agregado** `AdminVoucherReportPage` (ranking por -usos, ROI, filtros, export CSV) → `GET /admin/vouchers/report/`. Cerrado en `cerrar-gaps-ucs-auditoria` F3. |
-| UC-PRO-05 | Código referral | AUSENTE-UI | Sin coincidencias de `referral`/`referido` en lógica de promociones; los únicos matches son no relacionados (PdfViewer, securityConfig, páginas de orden). No hay UI ni hook de referidos. |
+| UC-PRO-05 | Código referral | IMPLEMENTADO | `src/pages/account/ReferralPage.jsx` + `src/redux/slices/referralSlice.js` + ruta `account/referral` (lazy en `AppRouter.jsx:56,214`). Reconciliado 2026-06-03 (snapshot previo marcaba AUSENTE-UI). |
 | UC-QST-01 | Hacer pregunta | IMPLEMENTADO | `src/pages/catalog/ProductQuestionAskPage.jsx`, `src/hooks/domain/useProductQuestions.js`, ruta `catalog/:productId/ask`. |
 | UC-QST-02 | Ver preguntas | IMPLEMENTADO | `src/pages/catalog/ProductQuestionsListPage.jsx`, `useProductQuestions`, ruta `catalog/:productId/questions`. |
 | UC-QST-03 | Responder pregunta (admin) | IMPLEMENTADO | `src/pages/admin/AdminQuestionsAnswerPage.jsx`, `useAdminQuestionsPendingAnswer`, ruta `admin/questions/answer`. |
@@ -159,14 +157,15 @@ UC-LOG-01, UC-LOG-02, UC-LOG-06, UC-LOG-07.
 
 | UC | Título | Estado | Evidencia / Motivo |
 |----|--------|--------|--------------------|
-| UC-LOG-01 | Crear guía de envío | AUSENTE-UI | Flujo admin. `AdminLogisticsPage.jsx` solo lista ordenes pendientes y enlaza «Crear guia» a `/admin/orders/:id`, pero `pages/admin/AdminOrderDetailPage.jsx` no tiene formulario de creacion de guia (solo transiciones de estado, cancelar, reembolso). No existe componente ni thunk para crear ShipmentGuide. |
-| UC-LOG-02 | Registrar número de rastreo | AUSENTE-UI | Flujo admin. No existe UI ni thunk para registrar tracking number manual; `logisticsSlice.js` solo expone `confirmDelivery`. |
+| UC-LOG-01 | Crear guía de envío | IMPLEMENTADO | `logisticsSlice.createShipmentGuide` → `POST /api/v1/logistics/guides/` `{order_id, courier_id, tracking_number, notes}`; formulario en `pages/admin/AdminOrderDetailPage.jsx:57-104` (courier/tracking/status). Reconciliado 2026-06-03. |
+| UC-LOG-02 | Registrar número de rastreo | IMPLEMENTADO | El `tracking_number` se fija al crear la guía (`createShipmentGuide`, `AdminOrderDetailPage.jsx:104`); el backend lo trata inmutable (no hay endpoint separado de registro). Reconciliado 2026-06-03. |
 | UC-LOG-03 | Ver estado de envío | IMPLEMENTADO | Actor comprador. `pages/account/OrderDetailPage.jsx` muestra `status_label`, enlace `tracking_url` y `Timeline`. Vista admin en `AdminLogisticsPage.jsx` grupo B (courier, tracking, ultimo estado). |
 | UC-LOG-04 | Procesar webhook actualización envío | BACKEND-OPS | Procesamiento server-side de webhook del courier (transportista = sistema externo). Sin contraparte UI. |
 | UC-LOG-05 | Confirmar entrega manual | IMPLEMENTADO | `redux/slices/logisticsSlice.js` `confirmDelivery` → POST `/api/v1/logistics/guides/:id/confirm-delivery/`; boton «Confirmar entrega» en `AdminLogisticsPage.jsx` (grupo B). |
-| UC-LOG-06 | Gestionar couriers (admin) | AUSENTE-UI | Flujo admin de configuracion de couriers. No existe pagina/CRUD de couriers; `AdminLogisticsPage` solo muestra `courier_name` en lectura. Ninguna ruta `admin/.../couriers`. |
+| UC-LOG-06 | Gestionar couriers (admin) | IMPLEMENTADO | `src/pages/admin/AdminCouriersPage.jsx` + ruta `admin/couriers` (lazy en `AppRouter.jsx:115,267`), con `fetchCouriers` en `logisticsSlice.js`. Reconciliado 2026-06-03 (snapshot previo marcaba AUSENTE-UI). |
 | UC-LOG-07 | Reportar problema de envío | AUSENTE-UI | Actor comprador. No existe UI de «reportar problema/incidencia de envio» (grep sin coincidencias en `pages/`/`components/`). |
 | UC-LOG-08 | Ver envíos pendientes despacho (admin) | IMPLEMENTADO | `pages/admin/AdminLogisticsPage.jsx` + `hooks/domain/useLogistics.js` (grupos A/B); ruta `admin/logistics` en `router/AppRouter.jsx`. |
+| UC-LOG-09 | Calcular costo de envío | IMPLEMENTADO | **Feature fabricada del template** (el backend de referencia no la expone; contrato definido y mockeado). `src/components/cart/ShippingCalculator/` (buyer-facing, accesible) montado en `pages/cart/CartPage.jsx`; thunk `fetchShippingQuote` en `cartSlice.js` → `POST /api/v1/logistics/shipping-quote/` `{postal_code, subtotal}` → `{zone, cost, estimated_days, qualifies_free_shipping}` (mock en `logistics.ts`). UC documentado en `docs/pm/iniciativas/implementar-uc-log-09-costo-envio/`. Implementado 2026-06-03 (`template-ecommerce-ui@bf9b960`). |
 | UC-LOG-10 | Crear guía de remisión | BACKEND-OPS | Documento de acompanamiento generado server-side (modulo ORDERS). Sin UI de emision; `remision` no aparece en el codigo. |
 | UC-NOT-01 | Email confirmación orden | BACKEND-OPS | Envio transaccional server-side (regla). |
 | UC-NOT-02 | Email estado orden | BACKEND-OPS | Envio transaccional server-side (regla). |
