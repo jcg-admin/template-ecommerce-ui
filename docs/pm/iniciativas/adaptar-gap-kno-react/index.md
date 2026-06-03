@@ -89,10 +89,41 @@ jest 1850 passed / 0 failed; check-scss 182 clean; build:demo (ver commit).
 Rating, NumericTextBox, Switch, Badge, Skeleton, Avatar, Checkbox, RadioGroup,
 Breadcrumb, TimeLine, Sparkline, LinearGauge, ButtonGroup, DropDownButton, **Card**.
 
-Cableados: Rating→reseñas, NumericTextBox→carrito, Switch→(disponible), Badge→header,
-Skeleton→Wishlist/Orders, Avatar→Header/Profile, Checkbox→Register, RadioGroup→ReturnCreate,
-Breadcrumb→Catalog/Product, TimeLine→OrderDetail, Sparkline/LinearGauge→AdminDashboard,
-ButtonGroup→AdminOrders filtro, DropDownButton→AdminOrders acciones, Card→(disponible).
+Cableados: Rating→reseñas, NumericTextBox→carrito, Switch→**CABLEADO** (ver abajo),
+Badge→header, Skeleton→Wishlist/Orders, Avatar→Header/Profile, Checkbox→Register,
+RadioGroup→ReturnCreate, Breadcrumb→Catalog/Product, TimeLine→OrderDetail,
+Sparkline/LinearGauge→AdminDashboard, ButtonGroup→AdminOrders filtro,
+DropDownButton→AdminOrders acciones, Card→**aún NO cableado** (ver corrección abajo).
+
+## F2 — Cableado de Switch en superficies admin (2026-06-03)
+
+`Switch` (`src/components/common/Switch/index.jsx`, `role="switch"`) reemplaza
+checkboxes boolean crudos en admin:
+
+- **CABLEADO (live):** `src/pages/admin/AdminProductDetailPage.jsx:161-174` —
+  toggles `is_published` ("Publicado en catálogo") y `is_featured`
+  ("Destacar en home"). Setter `setBool` (`:70`). Tests:
+  `AdminProductDetailPage.test.jsx` +2 (Switch presente con `aria-checked`
+  reflejando estado; alternar dispara el mismo `is_published:false` en el PATCH).
+- **CABLEADO (estructural, rama inactiva):**
+  `src/pages/admin/AdminSystemSettingsPage.jsx:100-105` — la rama
+  `f.type === 'checkbox'` renderiza `Switch`. **Hallazgo H-UI-01:** el
+  `SiteSettingsAdminSerializer` real (`apps/settings_app/serializers.py:45-67`)
+  NO tiene campos boolean, así que los `FIELDS` actuales no activan esa rama
+  (queda lista para un futuro campo boolean de dominio). Test +1: garantiza
+  que el formulario nunca emite un `<input type="checkbox">` crudo.
+
+**No convertido (correcto):** el checkbox `auto-slug`
+(`AdminProductDetailPage.jsx:142`) NO es un boolean de dominio (controla el
+auto-derivado del slug en el cliente) → se mantiene como checkbox.
+
+**Corrección a la nota previa "Card→(disponible)":** la premisa de la tarea
+decía que `Card` ya estaba cableado en `SecurityPage.jsx` (3 usos). **Es
+incorrecto:** esos 3 usos son un componente `Card` **local** definido en
+`src/pages/account/SecurityPage.jsx:152`, no el `Card` compartido de
+`@components/common`. El `Card` compartido del barrel **no tiene ningún
+consumidor** en `src/` (verificado: 0 imports `from '@components/common'` de
+`Card`). Hallazgo H-UI-02. Card sigue pendiente de cableado real.
 
 **Backlog de componentes GAP de alto valor: AGOTADO.** Los restantes del catálogo son:
 - **Genéricos de bajo valor** (no perseguidos): AppBar, FloatingLabel, Animation,

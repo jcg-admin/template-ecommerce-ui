@@ -17,6 +17,7 @@ import {
   uploadProductImage, deleteProductImage, reorderProductImages,
 } from '@redux/slices/adminSlice';
 import { MetaTag, Button, Field } from '@components/common/primitives';
+import { Switch } from '@components/common';
 import FileUpload from '@components/common/FileUpload';
 import SortableList from '@components/common/SortableList';
 import ConfirmModal from '@components/shared/ConfirmModal/ConfirmModal';
@@ -64,6 +65,9 @@ export default function AdminProductDetailPage() {
     if (k === 'name' && autoSlug) updates.slug = slugify(value);
     setForm({ ...form, ...updates });
   };
+
+  // Setter para toggles boolean (Switch emite el booleano resultante, no un evento).
+  const setBool = (k) => (next) => setForm({ ...form, [k]: next });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -154,11 +158,19 @@ export default function AdminProductDetailPage() {
             <Field label="Descripción larga (HTML)" value={form.description} onChange={set('description')} textarea hint="Acepta HTML básico. Editor rich-text en próxima iteración." />
             <div className={styles.toggles}>
               <label className={styles.toggle}>
-                <input type="checkbox" checked={form.is_published} onChange={set('is_published')} />
+                <Switch
+                  checked={Boolean(form.is_published)}
+                  onChange={setBool('is_published')}
+                  ariaLabel="Publicado en catálogo"
+                />
                 <span>Publicado en catálogo</span>
               </label>
               <label className={styles.toggle}>
-                <input type="checkbox" checked={form.is_featured} onChange={set('is_featured')} />
+                <Switch
+                  checked={Boolean(form.is_featured)}
+                  onChange={setBool('is_featured')}
+                  ariaLabel="Destacar en home"
+                />
                 <span>Destacar en home</span>
               </label>
             </div>

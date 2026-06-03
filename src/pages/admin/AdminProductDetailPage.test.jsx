@@ -82,6 +82,45 @@ beforeAll(() => {
 
 afterEach(() => jest.clearAllMocks());
 
+describe('AdminProductDetailPage — toggles (Switch)', () => {
+  // El toggle "Publicado en catálogo" usa el componente Switch nativo
+  // (role="switch"), no un <input type="checkbox"> crudo. Refleja el
+  // estado del producto (is_published=true en el fixture).
+  it('renderiza Switch para is_published/is_featured reflejando el estado', async () => {
+    apiService.get.mockResolvedValue({ data: PRODUCT });
+    renderPage();
+
+    const pub = await screen.findByRole('switch', { name: 'Publicado en catálogo' });
+    const feat = screen.getByRole('switch', { name: 'Destacar en home' });
+    // PRODUCT.is_published=true, PRODUCT.is_featured=false.
+    expect(pub).toHaveAttribute('aria-checked', 'true');
+    expect(feat).toHaveAttribute('aria-checked', 'false');
+  });
+
+  it('alternar el Switch is_published cambia el estado y se envia en el PATCH', async () => {
+    apiService.get.mockResolvedValue({ data: PRODUCT });
+    apiService.patch.mockResolvedValue({ data: PRODUCT });
+    const user = userEvent.setup();
+    renderPage();
+
+    const pub = await screen.findByRole('switch', { name: 'Publicado en catálogo' });
+    expect(pub).toHaveAttribute('aria-checked', 'true');
+    await user.click(pub);
+    // El estado se invierte tras el toggle (mismo cambio que el checkbox previo).
+    expect(pub).toHaveAttribute('aria-checked', 'false');
+
+    // Guardar dispara updateProduct → PATCH con is_published=false: el toggle
+    // del Switch alimenta el mismo payload que alimentaba el checkbox crudo.
+    fireEvent.submit(document.getElementById('product-form'));
+    await waitFor(() => {
+      expect(apiService.patch).toHaveBeenCalledWith(
+        '/api/v1/admin/products/7/',
+        expect.objectContaining({ is_published: false }),
+      );
+    });
+  });
+});
+
 describe('AdminProductDetailPage — pestaña Imágenes', () => {
   it('muestra el FileUpload de subida en la pestaña Imágenes', async () => {
     apiService.get.mockResolvedValue({ data: PRODUCT });

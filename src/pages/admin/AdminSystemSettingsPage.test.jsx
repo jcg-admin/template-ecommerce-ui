@@ -87,6 +87,19 @@ describe('AdminSystemSettingsPage (UC-ADM-04)', () => {
     });
   });
 
+  // Cableado de Switch: la rama `f.type === 'checkbox'` renderiza el
+  // componente Switch nativo (role="switch"), nunca un <input type="checkbox">
+  // crudo. Los FIELDS actuales del AdminSiteSettingsSerializer real no incluyen
+  // ningun campo boolean (todos son text/number/email), por lo que hoy la rama
+  // no se activa; la prueba bloquea la regresion de reintroducir un checkbox
+  // crudo si en el futuro se agrega un campo boolean de dominio.
+  it('no renderiza ningun <input type="checkbox"> crudo en el formulario', async () => {
+    apiService.get.mockResolvedValue({ data: SETTINGS });
+    const { container } = render(wrap());
+    await screen.findByDisplayValue('ecommerce-ui');
+    expect(container.querySelectorAll('input[type="checkbox"]')).toHaveLength(0);
+  });
+
   // Campos reales del AdminSiteSettingsSerializer (alineados al backend).
   it('expone los campos reales del serializer (iva, timeouts, stock, devolucion)', async () => {
     apiService.get.mockResolvedValue({ data: SETTINGS });

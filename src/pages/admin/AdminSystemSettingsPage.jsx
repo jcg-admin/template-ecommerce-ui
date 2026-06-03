@@ -19,6 +19,7 @@ import {
   updateSettings, clearSettingsActionState,
 } from '@redux/slices/settingsSlice';
 import { Button } from '@components/common/primitives';
+import { Switch } from '@components/common';
 import styles from './AdminSystemSettingsPage.module.scss';
 
 // Campos alineados al AdminSiteSettingsSerializer real
@@ -60,6 +61,9 @@ export default function AdminSystemSettingsPage() {
     }));
   };
 
+  // Toggle boolean (Switch emite el booleano resultante, no un evento).
+  const setBool = (name) => (next) => setForm((p) => ({ ...p, [name]: next }));
+
   // UC-CFG-05 — redes sociales (social_links es un dict anidado)
   const handleSocial = (platform) => (e) => {
     const { value } = e.target;
@@ -94,12 +98,10 @@ export default function AdminSystemSettingsPage() {
           <div key={f.key} className={styles.field}>
             <label htmlFor={`set-${f.key}`}>{f.label}</label>
             {f.type === 'checkbox' ? (
-              <input
-                id={`set-${f.key}`}
-                name={f.key}
-                type="checkbox"
+              <Switch
                 checked={Boolean(form[f.key])}
-                onChange={handleChange}
+                onChange={setBool(f.key)}
+                ariaLabel={f.label}
               />
             ) : (
               <input
