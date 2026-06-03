@@ -78,12 +78,23 @@ PaymentReturnPage, PaymentFailedPage, AdminStaticPagesPage; raíz en
 (suite verde) pero son deuda de higiene de tests. **Recomendación:** envolver
 las actualizaciones async en `act`/`waitFor` o cancelar el setState tras unmount.
 
-### D-4 — Drift de contrato del carrito (MEDIA)
-El `CartItemSerializer` real expone `product_name`, `unit_price` y **no tiene
-campo de imagen**; el UI/mocks usan `name`, `price` e `image_url`. Funciona en
-demo pero diverge del backend. **Recomendación:** iniciativa para alinear el
-contrato del carrito (renombrar a `product_name`/`unit_price`, decidir si la
-imagen es extensión del template) tocando UI + slice + mocks + tests con TDD.
+### D-4 — Drift de contrato del carrito — **RESUELTO en `0acb559`**
+El UI usaba `name`/`price` por item y computaba totales en cliente con modelo
+**tax-EXCLUSIVO** (`total = subtotal + 16%`, sobre-cobraba IVA), divergiendo del
+backend real (`product_name`/`unit_price`, **tax-INCLUSIVO**: `total =
+subtotal_net`, `tax_included` informativo). Alineado:
+- Items → `product_name`, `unit_price`, `subtotal` (+ product_slug,
+  variant_label, sku, available_stock, is_available, price_changed); `image_url`
+  conservado como extensión documentada del template (el backend real no la tiene).
+- Mock devuelve el objeto Cart real `{id, cart_token, items, totals}` con las 10
+  keys de `totals`; `cartSlice` consume `cart.totals` (eliminado el
+  `calculateTotals` cliente). Modelo tax-inclusivo correcto.
+- Consumidores (CartPage, Checkout, ExpressCheckout, Header, generateInvoicePdf,
+  selectors) leen los campos alineados; `CartItem` type actualizado.
+
+Verificado (árbol canónico): jest 1886/0, eslint 0, tsc 0, check-scss 185,
+build:demo EXIT=0, **e2e carrito 3/0/0** (add-to-cart, cart-freeship,
+cart-shipping-calc). Detalle en `docs/pm/iniciativas/alinear-contrato-carrito/`.
 
 ## Verificación
 - `tsc --noEmit` → 0 errores.
