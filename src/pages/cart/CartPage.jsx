@@ -22,6 +22,7 @@ import {
 import { LoadingButton } from '@components/common';
 import ProgressBar from '@components/common/ProgressBar';
 import NumericTextBox from '@components/common/NumericTextBox';
+import ShippingCalculator from '@components/cart/ShippingCalculator';
 import styles from './CartPage.module.scss';
 
 const FREE_SHIPPING_THRESHOLD = 1500;
@@ -83,6 +84,7 @@ export default function CartPage() {
           <div className={styles.itemsCol}>
             <ItemList items={items} dispatch={dispatch} />
             <VoucherBox voucher={voucher} dispatch={dispatch} />
+            <ShippingCalculator subtotal={subtotal} />
           </div>
 
           <CartSummary

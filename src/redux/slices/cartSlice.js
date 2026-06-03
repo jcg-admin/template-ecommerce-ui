@@ -30,6 +30,7 @@ const CART_ITEM_URL     = (id) => `/api/v1/cart/items/${id}/`;
 const CART_VOUCHER_URL  = '/api/v1/cart/voucher/';
 const CART_SAVE_URL     = '/api/v1/cart/save/';
 const CART_MERGE_URL    = '/api/v1/cart/merge/';
+const SHIPPING_QUOTE_URL = '/api/v1/logistics/shipping-quote/';
 
 // ─── Thunks ───────────────────────────────────────────────────────────
 
@@ -139,6 +140,28 @@ export const syncCartOnLogin = createAsyncThunk(
   },
 );
 
+/**
+ * UC-LOG-09 — Calcular Costo de Envio.
+ *
+ * Cotiza el envio para un codigo postal y subtotal dados. El backend
+ * (mockeado en MSW) deriva zona, costo, ETA y si el pedido califica a
+ * envio gratis por umbral. Feature FABRICADA del template.
+ */
+export const fetchShippingQuote = createAsyncThunk(
+  'cart/fetchShippingQuote',
+  async ({ postal_code, subtotal }, { rejectWithValue }) => {
+    try {
+      const res = await apiService.post(SHIPPING_QUOTE_URL, {
+        postal_code,
+        subtotal,
+      });
+      return res.data;
+    } catch (err) {
+      return rejectWithValue(serializeApiError(err));
+    }
+  },
+);
+
 // ─── Helpers ──────────────────────────────────────────────────────────
 
 const calculateTotals = (items, voucher, taxRate = 0.16) => {
@@ -173,6 +196,10 @@ const cartSlice = createSlice({
     isActioning: false,
     actionError: null,
     lastAction:  null,
+    // UC-LOG-09 — cotizacion de envio.
+    shippingQuote: null,
+    isQuoting:     false,
+    quoteError:    null,
   },
   reducers: {
     clearCart(state) {
@@ -185,6 +212,10 @@ const cartSlice = createSlice({
       state.isActioning = false;
       state.actionError = null;
       state.lastAction  = null;
+    },
+    clearShippingQuote(state) {
+      state.shippingQuote = null;
+      state.quoteError    = null;
     },
   },
   extraReducers: (builder) => {
@@ -267,10 +298,27 @@ const cartSlice = createSlice({
         state.isActioning = false;
         state.actionError = a.payload;
       });
+
+    builder
+      .addCase(fetchShippingQuote.pending, (state) => {
+        state.isQuoting  = true;
+        state.quoteError = null;
+      })
+      .addCase(fetchShippingQuote.fulfilled, (state, action) => {
+        state.isQuoting     = false;
+        state.shippingQuote = action.payload;
+        state.quoteError    = null;
+      })
+      .addCase(fetchShippingQuote.rejected, (state, a) => {
+        state.isQuoting     = false;
+        state.shippingQuote = null;
+        state.quoteError    = a.payload;
+      });
   },
 });
 
-export const { clearCart, clearCartActionState } = cartSlice.actions;
+export const { clearCart, clearCartActionState, clearShippingQuote } =
+  cartSlice.actions;
 export default cartSlice.reducer;
 
 // addCartItem: alias de addToCart para compatibilidad con el sistema de

@@ -8,10 +8,23 @@
  *   POST   /api/v1/logistics/couriers/         — UC-LOG-06 crear
  *   PATCH  /api/v1/logistics/couriers/:id/     — UC-LOG-06 actualizar
  *   DELETE /api/v1/logistics/couriers/:id/     — UC-LOG-06 eliminar
+ *   POST   /api/v1/logistics/shipping-quote/   — UC-LOG-09 calcular costo de envio
  *
  * Identificadores y campos en ingles (DEC-DOC-005). La forma de la guia
  * replica ShipmentGuideSerializer: id, order_number, courier (anidado),
  * tracking_number, status.
+ *
+ * UC-LOG-09 (shipping-quote) es una feature FABRICADA del template: el
+ * catalogo de UCs (`catalogo-ucs.rst:2073`) la marca pendiente y el backend
+ * de referencia no expone la ruta. El contrato vive aqui como mock
+ * deterministico, sin libs nuevas ni estado entre requests:
+ *   - `postal_code` debe ser 5 digitos -> 400 POSTAL_CODE_INVALID si no.
+ *   - `zone` por el primer digito del CP:
+ *       0-1 -> metropolitana   (cost 99,  ETA 2-4 dias)
+ *       2-5 -> nacional        (cost 149, ETA 3-6 dias)
+ *       6-9 -> extendida       (cost 199, ETA 5-9 dias)
+ *   - `free_shipping_threshold` = 999.
+ *   - `subtotal >= 999` -> qualifies_free_shipping y cost 0.
  */
 
 import { http, HttpResponse } from 'msw';
@@ -32,6 +45,29 @@ const _couriers: Courier[] = [
 ];
 let _nextCourierId = 4;
 let _guideSeq = 1000;
+
+// ─── UC-LOG-09 — derivacion de zona / costo / ETA por codigo postal ─────────
+const FREE_SHIPPING_THRESHOLD = 999;
+const POSTAL_CODE_RE = /^\d{5}$/;
+
+interface ZoneConfig {
+  zone: string;
+  cost: number;
+  estimated_days_min: number;
+  estimated_days_max: number;
+}
+
+/** Deriva la zona logistica a partir del primer digito del CP. */
+function zoneForPostalCode(postalCode: string): ZoneConfig {
+  const firstDigit = Number(postalCode[0]);
+  if (firstDigit <= 1) {
+    return { zone: 'metropolitana', cost: 99, estimated_days_min: 2, estimated_days_max: 4 };
+  }
+  if (firstDigit <= 5) {
+    return { zone: 'nacional', cost: 149, estimated_days_min: 3, estimated_days_max: 6 };
+  }
+  return { zone: 'extendida', cost: 199, estimated_days_min: 5, estimated_days_max: 9 };
+}
 
 export const logisticsHandlers = [
   // ─── UC-LOG-01 — crear guia de envio ──────────────────────────────────────
@@ -106,5 +142,40 @@ export const logisticsHandlers = [
     const idx = _couriers.findIndex((c) => c.id === id);
     if (idx >= 0) _couriers[idx] = { ..._couriers[idx], is_active: false };
     return HttpResponse.json({ deactivated: true });
+  }),
+
+  // ─── UC-LOG-09 — calcular costo de envio ──────────────────────────────────
+  http.post('/api/v1/logistics/shipping-quote/', async ({ request }) => {
+    const body = (await request.json().catch(() => null)) as
+      | { postal_code?: string; subtotal?: number }
+      | null;
+
+    const postalCode = body?.postal_code ?? '';
+    if (!POSTAL_CODE_RE.test(postalCode)) {
+      return HttpResponse.json(
+        {
+          detail: 'El codigo postal debe tener 5 digitos.',
+          codigo_error: 'POSTAL_CODE_INVALID',
+        },
+        { status: 400 },
+      );
+    }
+
+    const subtotal = Number(body?.subtotal ?? 0);
+    const { zone, cost, estimated_days_min, estimated_days_max } =
+      zoneForPostalCode(postalCode);
+
+    const qualifies = subtotal >= FREE_SHIPPING_THRESHOLD;
+
+    return HttpResponse.json({
+      postal_code: postalCode,
+      zone,
+      cost: qualifies ? 0 : cost,
+      currency: 'MXN',
+      estimated_days_min,
+      estimated_days_max,
+      free_shipping_threshold: FREE_SHIPPING_THRESHOLD,
+      qualifies_free_shipping: qualifies,
+    });
   }),
 ];

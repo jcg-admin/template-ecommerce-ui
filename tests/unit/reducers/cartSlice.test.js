@@ -20,6 +20,10 @@ const INITIAL_STATE = {
   isActioning: false,
   actionError: null,
   lastAction: null,
+  // UC-LOG-09 — cotizacion de envio.
+  shippingQuote: null,
+  isQuoting: false,
+  quoteError: null,
 };
 
 const ITEM_A = { id: 1, product_id: 10, name: 'Collar Oshun', price: 350, quantity: 2 };

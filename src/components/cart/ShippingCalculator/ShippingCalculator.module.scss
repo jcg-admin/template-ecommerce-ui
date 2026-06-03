@@ -1,0 +1,130 @@
+@use '@styles/abstracts' as *;
+
+.calculator {
+  background: $bg-surface;
+  border: 1px solid $border-color;
+  border-radius: $border-radius-xl;
+  padding: $spacing-5 $spacing-6;
+  margin-top: $spacing-6;
+}
+
+.title {
+  font-family: $font-family-display;
+  font-size: $font-size-xl;
+  font-weight: $font-weight-normal;
+  color: $text-primary;
+  margin: 0;
+}
+
+.hint {
+  color: $text-secondary;
+  font-size: $font-size-sm;
+  margin: $spacing-2 0 $spacing-4;
+}
+
+.form {
+  display: flex;
+  gap: $spacing-3;
+  align-items: flex-end;
+  flex-wrap: wrap;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: $spacing-2;
+  flex: 1 1 160px;
+}
+
+.fieldLabel {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  letter-spacing: $ls-wide;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.input {
+  background: $bg-sunken;
+  border: 1px solid $border-medium;
+  border-radius: $border-radius-lg;
+  color: $text-primary;
+  font-family: $font-family-mono;
+  font-size: $font-size-md;
+  letter-spacing: 0.1em;
+  padding: $spacing-3 $spacing-4;
+
+  &:focus {
+    outline: none;
+    border-color: $lime;
+    box-shadow: $shadow-glow-lime;
+  }
+
+  &[aria-invalid='true'] {
+    border-color: $coral;
+  }
+}
+
+.submit {
+  background: $lime;
+  color: $text-inverse;
+  border: none;
+  border-radius: $border-radius-lg;
+  font-family: $font-family-base;
+  font-size: $font-size-base;
+  font-weight: $font-weight-semibold;
+  padding: $spacing-3 $spacing-6;
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    background: $lime-soft;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: progress;
+  }
+}
+
+.error {
+  color: $coral-soft;
+  font-size: $font-size-sm;
+  margin: $spacing-3 0 0;
+}
+
+.result {
+  margin-top: $spacing-4;
+  padding-top: $spacing-4;
+  border-top: 1px solid $border-color;
+}
+
+.resultZone {
+  font-family: $font-family-mono;
+  font-size: $font-size-xs;
+  letter-spacing: $ls-wide;
+  text-transform: uppercase;
+  color: $text-muted;
+}
+
+.resultCost {
+  font-family: $font-family-display;
+  font-size: $font-size-3xl;
+  color: $text-primary;
+  margin-top: $spacing-2;
+
+  &.free {
+    color: $lime;
+  }
+}
+
+.resultEta {
+  color: $text-secondary;
+  font-size: $font-size-base;
+  margin-top: $spacing-2;
+}
+
+.resultThreshold {
+  color: $text-muted;
+  font-size: $font-size-sm;
+  margin-top: $spacing-2;
+}
