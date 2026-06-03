@@ -46,7 +46,9 @@ H-UI-PRO-03 — Vouchers `duplicate/` y `toggle/` no existen en el backend
 - **Impacto:** es la única forma de activar/desactivar un voucher desde la lista.
 - **Fix sugerido:** `toggleVoucherActive` → usar `activate`/`deactivate` según
   estado; `duplicateVoucher` → eliminar (no hay respaldo) o crear vía POST normal
-  pre-poblado. **Estado:** DOCUMENTADO (sin fix inmediato).
+  pre-poblado. **Estado:** RESUELTO en `template-ecommerce-ui@b116fb4` —
+  `toggleVoucherActive` ahora usa activate/deactivate según `is_active`;
+  `duplicateVoucher` eliminado (thunk + botón + reducers + mock).
 
 H-UI-CAT-12 — price-sync: ruta de template y contrato preview/apply divergentes
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
@@ -68,7 +70,11 @@ H-UI-CAT-12 — price-sync: ruta de template y contrato preview/apply divergente
 - **Fix sugerido:** cablear `AdminPriceSyncPage` al `priceSyncSlice` canónico,
   alinear payload a `{session_id}` y el shape de lectura a `{session_id, preview,
   valid_count}`, corregir `template.csv`, y considerar exponer `apply-percentage`.
-  **Estado:** DOCUMENTADO (sin fix inmediato).
+  **Estado:** RESUELTO en `template-ecommerce-ui@b116fb4` — `apply-csv` envía
+  `{session_id}`, `template.csv` corregido, preview-csv normalizado al shape real
+  y eliminada la edición de precios en cliente (no soportada por apply-csv). La
+  variante `percentage` sigue sin exponerse en UI; `priceSyncSlice.js` (no
+  cableado a ninguna página) queda como impl. paralela redundante a depurar.
 
 ## HUECO DE COBERTURA — UC del catálogo canónico ausente de la matriz
 
